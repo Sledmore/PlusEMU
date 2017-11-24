@@ -1,0 +1,56 @@
+Revision: PRODUCTION-201701242205-837386173
+
+PLEASE READ 'RELEASE NOTES' AND 'README' FILES.
+
+Change Log:
+- Fixed 'open since' in tickets.
+- Fixed an overflow in tickets, this shouldn't occur again.
+- If a user has already sent a ticket, they will get the fancy packet asking them if they'd like to cancel their current request.
+- Re-coded ignoring users, they now work properly & load upon login.
+- Re-coded room banning, it now has a component.
+- Re-coded room trading, it now has a component.
+- Adjusted namespaces, renamed navigator.
+- Group badge parts have been massively improved, they now are 'rendered' better.
+- Removal of the old ticket system, and finally worked on the new one.
+- The entire HabboHotel/Support no longer exists.
+- Catalog badge items will now be given to users @Core
+- Floor plan editor now adds the last row to the height map @Core
+- Replaced the roller fix, after pickall @Bjork.
+- Changes to disposal of rooms, more logical isn't as much of a mess now.
+- Pets only have one interaction now, not 30.
+- Refactored the Quests logic, most of it lives in the packets now and not clogging up the manager.
+- IDE suggestions towards classes.
+- Room bundles have been added @Damien
+- Catalog item bundles have been added @Damien
+- Further improvements to pet interactions @Damien
+- Moved ServerStatusUpdater away from HabboHotel folder.
+- Removal of the old logging system, log4net is now used properly.
+- PlusStaticGameSettings no longer exists, a SettingsManager has replaced it.
+- Language locales now have a LanguageManager.
+- The 'Core' directory is now a lot more logical.
+- New figuredata checker, should stop scripting pretty well.
+- A setting for automatically exchanging credits on trade has been added.
+- Refactored a lot of areas in the source, the packet 'system' is now mainly referred to 'packet' or 'packets' rather than 'message' or 'messages'.
+- Badges will now run a 'REPLACE INTO' rather than an 'INSERT INTO' to prevent duplicates.
+- MUS has been removed, and replaced with RCON, it has the following commands:
+	- reload_bans
+	- reload_quests
+	- reload_server_settings
+	- reload_vouchers
+	- reload_ranks
+	- reload_navigator
+	- reload_items
+	- reload_catalog
+	- reload_filter
+	- alert_user
+	- disconnect_user
+	- reload_user_motto
+	- give_user_currency (This will update their REAL TIME currency and give them credits, and update it in the database).
+	- take_user_currency (This will take their REAL TIME currency down, and update it in the database).
+	- sync_user_currency (This will sync their current REAL TIME currency into the database.).
+	- reload_user_currency (This updates their currency to the database value).
+	- reload_user_rank (Reloads their rank and permissions, gives them the mod tool if they have the right).
+	- reload_user_vip_rank
+	- progress_user_achievement
+	- give_user_badge
+	- take_user_badge

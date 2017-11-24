@@ -1,0 +1,1097 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0160374F-61DA-40E9-AEE9-624D234C66A3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Plus</RootNamespace>
+    <AssemblyName>Plus Emulator</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>50</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Plus.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="AStar">
+      <HintPath>libs\AStar.dll</HintPath>
+    </Reference>
+    <Reference Include="HabboEncryption, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libs\HabboEncryption.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MoreLinq, Version=2.0.20029.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>packages\morelinq.2.1.0\lib\net35\MoreLinq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Communication\Interfaces\IServerPacket.cs" />
+    <Compile Include="Communication\Packets\Incoming\Avatar\GetWardrobeEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Avatar\SaveWardrobeOutfitEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\CheckGnomeNameEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\CheckPetNameEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetCatalogIndexEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetCatalogModeEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetCatalogOfferEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetCatalogPageEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetClubGiftsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetGiftWrappingConfigurationEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetMarketplaceConfigurationEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetPromotableRoomsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetRecyclerRewardsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetSellablePetBreedsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\PurchaseFromCatalogAsGiftEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\PurchaseFromCatalogEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\PurchaseRoomPromotionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\RedeemVoucherEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetCatalogRoomPromotionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\ClientPacketHeader.cs" />
+    <Compile Include="Communication\Packets\Incoming\GameCenter\Game2GetWeeklyLeaderboardEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\GameCenter\GetGameListingEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\GameCenter\GetPlayableGamesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\GameCenter\InitializeGameCenterEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\GameCenter\JoinPlayerQueueEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\AcceptGroupMembershipEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\DeclineGroupMembershipEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\DeleteGroupEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\GetBadgeEditorPartsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\GetGroupCreationWindowEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\GetGroupInfoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\GetGroupMembersEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\GiveAdminRightsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\JoinGroupEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\ManageGroupEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\PurchaseGroupEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\RemoveGroupFavouriteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\RemoveGroupMemberEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\SetGroupFavouriteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\TakeAdminRightsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\UpdateGroupBadgeEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\UpdateGroupColoursEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\UpdateGroupIdentityEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Groups\UpdateGroupSettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Handshake\GenerateSecretKeyEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Handshake\GetClientVersionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Handshake\InfoRetrieveEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Handshake\InitCryptoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Handshake\PingEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Help\GetSanctionStatusEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Help\OnBullyClickEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Help\SendBullyReportEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Help\SubmitBullyReportEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\AvatarEffects\AvatarEffectActivatedEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Furni\RequestFurniInventoryEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Purse\GetHabboClubWindowEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\InitTradeEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingAcceptEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingCancelConfirmEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingCancelEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingConfirmEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingModifyEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingOfferItemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingOfferItemsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Trading\TradingRemoveItemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\LandingView\RefreshCampaignEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Handshake\SSOTicketEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Handshake\UniqueIDEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Achievements\GetAchievementsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\AvatarEffects\AvatarEffectSelectedEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Badges\GetBadgesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Badges\SetActivatedBadgesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Purse\GetCreditsInfoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\LandingView\GetPromoArticlesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\BuyOfferEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\CancelOfferEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\GetMarketplaceCanMakeOfferEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\GetMarketplaceItemStatsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\GetOffersEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\GetOwnOffersEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\MakeOfferEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Marketplace\RedeemOfferCreditsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\AcceptBuddyEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\DeclineBuddyEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\FindNewFriendsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\FriendListUpdateEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\GetBuddyRequestsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\HabboSearchEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\MessengerInitEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\RemoveBuddyEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\RequestBuddyEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\SendMsgEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\SendRoomInviteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Misc\MemoryPerformanceEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Misc\SetFriendBarStateEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\CallForHelpPendingCallsDeletedEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\CloseIssueDefaultActionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\CloseTicketEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\GetModeratorRoomChatlogEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\GetModeratorRoomInfoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\GetModeratorTicketChatlogsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\GetModeratorUserChatlogEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\GetModeratorUserInfoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\GetModeratorUserRoomVisitsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModerateRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModerationBanEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModerationCautionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModerationKickEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModerationMsgEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModerationMuteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModerationTradeLockEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ModeratorActionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\OpenHelpToolEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\PickTicketEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\ReleaseTicketEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Moderation\SubmitNewTicketEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\EditRoomEventEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\GetNavigatorFlatsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\FindRandomFriendingRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\InitializeNewNavigatorEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\NavigatorSearchEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Quests\GetDailyQuestEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\RemoveMyRightsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\LoveLocks\ConfirmLoveLockEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\GetGroupFurniSettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\UseSellableClothingEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\YouTubeTelevisions\YouTubeGetNextVideo.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Polls\PollStartEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\SaveEnforcedCategorySettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Sound\GetSongInfoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Talents\GetTalentTrackEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\GetIgnoredUsersEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\GetUserTagsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\SetUserFocusPreferenceEvent.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Availability\MaintenanceStatusComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\BuildersClub\BCBorrowedItemsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\BuildersClub\BuildersClubMembershipComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Campaigns\CampaignCalendarDataComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\CheckGnomeNameComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\ClubGiftsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\Game1WeeklyLeaderboardComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\Game2WeeklyLeaderboardComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\Game3WeeklyLeaderboardComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\GameAccountStatusComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\GameAchievementListComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\JoinQueueComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\LoadGameComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\PlayableGamesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\GroupFurniSettingsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\GroupMembershipRequestedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\UnknownGroupComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\GroupMemberUpdatedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\PongComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Help\SanctionStatusComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\AvatarEffects\FigureSetIdsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingAcceptComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingClosedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingCompleteComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingConfirmedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingErrorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingFinishComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingStartComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\LandingView\ConcurrentUsersGoalProgressComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\FindFriendsProcessResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\FriendNotificationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Misc\VideoOffersRewardsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Furni\FurniListAddComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\FriendListUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\HabboSearchResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\InstantMessageErrorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\NewConsoleMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\BuddyListComposer.cs" />
+    <Compile Include="Communication\Packets\Incoming\Quests\CancelQuestEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Quests\GetCurrentQuestEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Quests\StartQuestEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\AssignRightsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\BanUserEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\GiveHandItemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\IgnoreUserEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\KickUserEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\MuteUserEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\RemoveAllRightsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\RemoveRightsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\UnIgnoreUserEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Bots\OpenBotActionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Bots\PickUpBotEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Bots\PlaceBotEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Bots\SaveBotActionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\GetPetTrainingPanelEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\Horse\ApplyHorseEffectEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\Horse\ModifyWhoCanRideHorseEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\Horse\RemoveSaddleFromHorseEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\Horse\RideHorseEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\PickUpPetEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\PlacePetEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\RespectPetEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\AI\Pets\GetPetInformationEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\ApplyDecorationEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\GiveRoomScoreEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\MoveObjectEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\MoveWallItemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\PlaceObjectEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\UseFurnitureEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\UseWallItemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\FloorPlan\FloorPlanEditorRoomPropertiesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\FloorPlan\InitializeFloorPlanSessionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\FloorPlan\SaveFloorPlanModelEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\CreditFurniRedeemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\DiceOffEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Moodlight\GetMoodlightConfigEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Moodlight\MoodlightUpdateEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Moodlight\ToggleMoodlightEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\OpenGiftEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\SaveBrandingItemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\SetMannequinFigureEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\SetMannequinNameEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\SetTonerEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Stickys\AddStickyNoteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Stickys\DeleteStickyNoteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Stickys\GetStickyNoteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Stickys\UpdateStickyNoteEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\ThrowDiceEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\SaveWiredConfigEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\YouTubeTelevisions\GetYouTubeTelevisionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\YouTubeTelevisions\ToggleYouTubeVideoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\RentableSpaces\GetRentableSpaceEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\UpdateMagicTileEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\YouTubeTelevisions\YouTubeVideoInformationEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\GetRoomBannedUsersEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\GetRoomFilterListEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\GetRoomRightsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\GetRoomSettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\ModifyRoomFilterListEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\SaveRoomSettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\ToggleMuteToolEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\UnbanUserFromRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\ChangeNameEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\CheckValidNameEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\SetMessengerInviteStatusEvent.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogOfferComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogUpdatedComposer.cs" />
+    <Compile Include="Communication\Packets\Incoming\Catalog\GetGroupFurniConfigEvent.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\GiftWrappingErrorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\GroupFurniConfigComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\PresentDeliverErrorMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\PurchaseErrorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\GameCenter\GameListComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\BadgeEditorPartsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\GroupCreationWindowComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\GroupInfoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\GroupMembersComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\ManageGroupComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\NewGroupInfoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\SetGroupIdComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Help\SendBullyReportComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Help\SubmitBullyReportComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Achievements\AchievementProgressedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Achievements\AchievementsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Achievements\AchievementUnlockedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\AvatarEffects\AvatarEffectAddedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\AvatarEffects\AvatarEffectExpiredComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Furni\FurniListComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Furni\FurniListNotificationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Furni\FurniListRemoveComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Furni\FurniListUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Marketplace\MarketplaceCancelOfferResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Marketplace\MarketplaceCanMakeOfferResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Marketplace\MarketplaceItemStatsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Marketplace\MarketplaceMakeOfferResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Marketplace\MarketPlaceOffersComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Marketplace\MarketPlaceOwnOffersComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\BuddyRequestsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\FollowFriendFailedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\MessengerErrorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\MessengerInitComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\NewBuddyRequestComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\RoomInviteComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\BroadcastMessageAlertComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\CallForHelpPendingCallsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\CfhTopicsInitComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorInitComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorRoomChatlogComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorRoomInfoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorSupportTicketComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorSupportTicketResponseComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorTicketChatlogComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserChatlogComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserInfoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserRoomVisitsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\MutedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\OpenHelpToolComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\GuestRoomSearchResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorCollapsedCategoriesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorLiftedRoomsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorMetaDataParserComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorPreferencesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorSearchResultSetComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\PopularRoomTagsResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\UserFlatCatsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\NavigatorFlatCatsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Notifications\MOTDNotificationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Pets\PetBreedingComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Quests\QuestAbortedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Quests\QuestCompletedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Quests\QuestCompletedCompser.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Quests\QuestStartedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Action\IgnoreStatusComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\AI\Bots\OpenBotActionComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\AI\Pets\AddExperiencePointsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\AI\Pets\PetHorseFigureInformationComposer.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\FollowFriendEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Misc\ClientVariablesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Misc\DisconnectEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Misc\EventTrackerEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Misc\LatencyTestEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\AddFavouriteRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\CanCreateRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\CreateFlatEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\GetGuestRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\GetUserFlatCatsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\GoToHotelViewEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\RemoveFavouriteRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Navigator\UpdateNavigatorSettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Quests\GetQuestListEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Action\LetUserInEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Avatar\ActionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Avatar\ApplySignEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Avatar\ChangeMottoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Avatar\DanceEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Avatar\DropHandItemEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Avatar\LookToEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Avatar\SitEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Chat\CancelTypingEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Chat\ChatEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Chat\ShoutEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Chat\StartTypingEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Chat\WhisperEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Connection\GoToFlatEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Connection\OpenFlatConnectionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\GetFurnitureAliasesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\GetRoomEntryDataEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\MoveAvatarEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Settings\DeleteRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Sound\SetSoundSettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\GetHabboGroupBadgesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\GetRelationshipsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\GetSelectedBadgesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\OpenPlayerProfileEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\RespectUserEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\ScrGetUserInfoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\SetRelationshipEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\SetChatPreferenceEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\UpdateFigureDataEvent.cs" />
+    <Compile Include="Communication\Packets\IPacketEvent.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Avatar\WardrobeComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogIndexComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogItemDiscountComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogPageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\CheckPetNameComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\GiftWrappingConfigurationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\MarketplaceConfigurationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\PromotableRoomsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\GetCatalogRoomPromotionComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\PurchaseOKComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\RecyclerRewardsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\SellablePetBreedsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\VoucherRedeemErrorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Catalog\VoucherRedeemOkComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\RefreshFavouriteGroupComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Groups\UpdateFavouriteGroupComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\AuthenticationOKComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\AvailabilityStatusComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\GenericErrorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\InitCryptoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\LandingView\PromoArticlesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\LandingView\CampaignComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\SecretKeyComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\SetUniqueIdComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\UserObjectComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\UserPerksComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Handshake\UserRightsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Achievements\AchievementScoreComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Achievements\BadgeDefinitionsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\AvatarEffects\AvatarEffectActivatedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\AvatarEffects\AvatarEffectsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Badges\BadgesComposer.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Bots\GetBotInventoryEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Inventory\Pets\GetPetInventoryEvent.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Bots\BotInventoryComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Pets\PetInventoryComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Purse\ActivityPointsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Purse\CreditBalanceComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Purse\HabboActivityPointNotificationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Misc\LatencyTestComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\CanCreateRoomComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\DoorbellComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\FavouritesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\FlatAccessDeniedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\FlatCreatedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\GetGuestRoomResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\NavigatorSettingsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\RoomInfoUpdatedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\RoomRatingComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Navigator\UpdateFavouriteRoomComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Pets\RespectPetNotificationMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Quests\QuestListComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\AI\Pets\PetInformationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\AI\Pets\PetTrainingPanelComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Avatar\ActionComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Avatar\AvatarAspectUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Avatar\AvatarEffectComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Avatar\CarryObjectComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Avatar\DanceComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Avatar\SleepComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Chat\ChatComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Chat\FloodControlComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Chat\ShoutComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Chat\UserTypingComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Chat\WhisperComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\FloorHeightMapComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\FurnitureAliasesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\HeightMapComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ItemAddComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ItemRemoveComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ItemsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ItemUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ObjectAddComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ObjectRemoveComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ObjectsComposer.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\PickupObjectEvent.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ObjectUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomEntryInfoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomEventComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomPropertyComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomVisualizationSettingsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\SlideObjectBundleComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\UserNameChangeComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\UserChangeComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\UserRemoveComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\UsersComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\UserUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\FloorPlan\FloorPlanFloorMapComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\FloorPlan\FloorPlanSendDoorComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Freeze\UpdateFreezeLivesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\GnomeBoxComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\LoveLocks\LoveLockDialogueCloseMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\LoveLocks\LoveLockDialogueMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\LoveLocks\LoveLockDialogueSetLockedMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Moodlight\MoodlightConfigComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\OpenGiftComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Stickys\StickyNoteComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Wired\HideWiredConfigComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Wired\WiredConditionConfigComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Wired\WiredEffectConfigComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Wired\WiredTriggerConfigComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\YouTubeTelevisions\GetYouTubeVideoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\YouTubeTelevisions\GetYouTubePlaylistComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\RentableSpaces\RentableSpaceComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\UpdateMagicTileComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Notifications\RoomErrorNotifComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Notifications\RoomNotificationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreControllerMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreNotControllerComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreOwnerComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Polls\PollContentsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Polls\PollOfferComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Polls\Questions\QuestionParserComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Session\CantConnectComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Session\CloseConnectionComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Session\FlatAccessibleComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Session\OpenConnectionComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Session\RoomForwardComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Session\RoomReadyComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\FlatControllerAddedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\FlatControllerRemovedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\GetRoomBannedUsersComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\GetRoomFilterListComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\RoomMuteSettingsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\RoomRightsListComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\RoomSettingsDataComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\RoomSettingsSavedComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\UnbanUserFromRoomComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\ServerPacket.cs" />
+    <Compile Include="Communication\Packets\Outgoing\ServerPacketHeader.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Sound\SoundSettingsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Sound\TraxSongInfoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Talents\TalentLevelUpComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Talents\TalentTrackComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Talents\TalentTrackLevelComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\GetRelationshipsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\HabboGroupBadgesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\HabboUserBadgesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\IgnoredUsersComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\NameChangeUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\ProfileInformationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\RespectNotificationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\ScrSendUserInfoComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\UpdateUsernameComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\UserTagsComposer.cs" />
+    <Compile Include="Communication\Packets\PacketManager.cs" />
+    <Compile Include="Communication\RCON\Commands\CommandManager.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadBansCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadCatalogCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadFilterCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadItemsCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadNavigatorCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadRanksCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadServerSettingsCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadQuestsCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\Hotel\ReloadVouchersCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\IRCONCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\AlertUserCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\DisconnectUserCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\GiveUserBadgeCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\GiveUserCurrencyCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\ProgressUserAchievementCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\ReloadUserCurrencyCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\ReloadUserMottoCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\ReloadUserRankCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\ReloadUserVIPRankCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\SyncUserCurrencyCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\TakeUserBadgeCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\TakeUserCurrencyCommand.cs" />
+    <Compile Include="Communication\RCON\RCONConnection.cs" />
+    <Compile Include="Communication\RCON\RCONSocket.cs" />
+    <Compile Include="Core\FigureData\Types\Color.cs" />
+    <Compile Include="Core\FigureData\FigureDataManager.cs" />
+    <Compile Include="Core\FigureData\Types\FigureSet.cs" />
+    <Compile Include="Core\FigureData\Types\Palette.cs" />
+    <Compile Include="Core\FigureData\Types\Part.cs" />
+    <Compile Include="Core\FigureData\Types\Set.cs" />
+    <Compile Include="Core\FigureData\Types\SetType.cs" />
+    <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
+    <Compile Include="Core\Language\LanguageManager.cs" />
+    <Compile Include="Core\ExceptionLogger.cs" />
+    <Compile Include="Core\Settings\SettingsManager.cs" />
+    <Compile Include="Database\Adapter\NormalQueryReactor.cs" />
+    <Compile Include="Database\DatabaseConnection.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="HabboHotel\Badges\BadgeDefinition.cs" />
+    <Compile Include="HabboHotel\Badges\BadgeManager.cs" />
+    <Compile Include="HabboHotel\Cache\CacheManager.cs" />
+    <Compile Include="HabboHotel\Cache\Process\ProcessComponent.cs" />
+    <Compile Include="HabboHotel\Cache\Type\UserCache.cs" />
+    <Compile Include="HabboHotel\Catalog\CatalogDeal.cs" />
+    <Compile Include="HabboHotel\Catalog\CatalogPromotion.cs" />
+    <Compile Include="HabboHotel\Catalog\Clothing\ClothingItem.cs" />
+    <Compile Include="HabboHotel\Catalog\Clothing\ClothingManager.cs" />
+    <Compile Include="HabboHotel\Catalog\Marketplace\MarketOffer.cs" />
+    <Compile Include="HabboHotel\Catalog\Marketplace\MarketplaceManager.cs" />
+    <Compile Include="HabboHotel\Catalog\Utilities\ItemUtility.cs" />
+    <Compile Include="HabboHotel\Catalog\Vouchers\Voucher.cs" />
+    <Compile Include="HabboHotel\Catalog\Vouchers\VoucherManager.cs" />
+    <Compile Include="HabboHotel\Catalog\Vouchers\VoucherType.cs" />
+    <Compile Include="HabboHotel\Catalog\Vouchers\VoucherUtility.cs" />
+    <Compile Include="HabboHotel\Groups\BadgePartUtility.cs" />
+    <Compile Include="HabboHotel\Groups\GroupColours.cs" />
+    <Compile Include="HabboHotel\Groups\GroupBadgeParts.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorCounter.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorLoveLock.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\ActorHasHandItemBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\ActorIsInTeamBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\FurniHasNoFurniBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\AddActorToTeamBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\BotChangesClothesBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\BotCommunicatesToAllBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\BotFollowsUserBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\BotGivesHandItemBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\BotMovesToFurniBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\GiveUserBadgeBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\RegenerateMapBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\RemoveActorFromTeamBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\SetRollerSpeedBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\TeleportBotToFurniBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\ExecuteWiredStacksBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\MoveFurniFromUserBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\MoveFurniToUserBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\UserFurniCollision.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\UserSaysCommandBox.cs" />
+    <Compile Include="HabboHotel\LandingView\Promotions\Promotion.cs" />
+    <Compile Include="HabboHotel\Moderation\BanTypeUtility.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationPresetActions.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorCategoryType.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorCategoryTypeUtility.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorSearchAllowance.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorSearchAllowanceUtility.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorViewMode.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorViewModeUtility.cs" />
+    <Compile Include="HabboHotel\Navigator\SearchResultList.cs" />
+    <Compile Include="HabboHotel\Navigator\TopLevelItem.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorHandler.cs" />
+    <Compile Include="HabboHotel\Permissions\Permission.cs" />
+    <Compile Include="HabboHotel\Permissions\PermissionCommand.cs" />
+    <Compile Include="HabboHotel\Permissions\PermissionGroup.cs" />
+    <Compile Include="HabboHotel\Permissions\PermissionManager.cs" />
+    <Compile Include="HabboHotel\Bots\BotManager.cs" />
+    <Compile Include="HabboHotel\Rewards\Reward.cs" />
+    <Compile Include="HabboHotel\Rewards\RewardManager.cs" />
+    <Compile Include="HabboHotel\Rewards\RewardType.cs" />
+    <Compile Include="HabboHotel\Rewards\RewardTypeUtility.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Types\BartenderBot.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\ChatManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Administrator\BubbleCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Administrator\CarryCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Administrator\DeleteGroupCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Administrator\HALCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Events\EventAlertCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\DisableForcedFXCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\FlagUserCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\MakeSayCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\SuperFastwalkCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\GOTOCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\DisableMimicCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\PetCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Administrator\UpdateCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\CommandManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\IChatCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\AlertCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\BanCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\DisconnectCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\AllAroundMeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\AllEyesOnMeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\CoordsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\FastwalkCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\ForceSitCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\FreezeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\GoBoomCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\MassDanceCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\MassEnableCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\OverrideCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\SummonCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\SuperPullCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\TeleportCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\UnFreezeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\GiveBadgeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\GiveCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\HotelAlertCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\IgnoreWhispersCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\IPBanCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\KickCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\MassBadgeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\MIPCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\MuteCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\RoomAlertCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\RoomBadgeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\RoomKickCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\RoomMuteCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\RoomUnmuteCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\StaffAlertCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\TradeBanCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\UnmuteCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\UserInfoCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\ConvertCreditsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\DisableDiagonalCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\DisableGiftsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\DisableWhispersCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\DNDCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\EjectAllCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\EmptyItems.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\FlagMeCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\DanceCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\EnableCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\FacelessCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\FollowCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\MimicCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\MoonwalkCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\PullCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\PushCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\SuperPushCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\InfoCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\KickBotsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\KickPetsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\LayCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\MuteBotsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\MutePetsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\PickAllCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\RegenMaps.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\RoomCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\SellRoomCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\SetMaxCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\SetSpeedCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\SitCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\StandCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\StatsCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\User\UnloadCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Emotions\ChatEmotions.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Emotions\ChatEmotionsManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Filter\WordFilter.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Filter\WordFilterManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Logs\ChatlogEntry.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Logs\ChatlogManager.cs" />
+    <Compile Include="HabboHotel\Games\GameData.cs" />
+    <Compile Include="HabboHotel\Games\GameDataManager.cs" />
+    <Compile Include="Core\ServerStatusUpdater.cs" />
+    <Compile Include="HabboHotel\Groups\GroupType.cs" />
+    <Compile Include="HabboHotel\Items\Data\Moodlight\MoodlightPreset.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorCannon.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorSwitch.cs" />
+    <Compile Include="HabboHotel\Items\ItemBehaviourUtility.cs" />
+    <Compile Include="HabboHotel\Items\ItemFactory.cs" />
+    <Compile Include="HabboHotel\Items\ItemLoader.cs" />
+    <Compile Include="HabboHotel\Items\Televisions\TelevisionItem.cs" />
+    <Compile Include="HabboHotel\Items\Televisions\TelevisionManager.cs" />
+    <Compile Include="HabboHotel\Catalog\Utilities\BotUtility.cs" />
+    <Compile Include="HabboHotel\Catalog\Utilities\PetUtility.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Add-ons\AddonRandomEffectBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\FurniDoesntMatchStateAndPositionBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\FurniHasFurniBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\FurniHasNoUsersBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\FurniHasUsersBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\FurniMatchStateAndPositionBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\IsGroupMemberBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\IsNotGroupMemberBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\IsNotWearingBadgeBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\IsNotWearingFXBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\IsWearingBadgeBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\IsWearingFXBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\TriggererNotOnFurniBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\TriggererOnFurniBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\UserCountDoesntInRoomBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Conditions\UserCountInRoomBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\MuteTriggererBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\GiveRewardBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\KickUserBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\MatchPositionBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\MoveAndRotateBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\ShowMessageBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\TeleportUserBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\ToggleFurniBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\GameEndsBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\GameStartsBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\RepeaterBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\RoomEnterBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\StateChangesBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\UserSaysBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\UserWalksOffBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\UserWalksOnBox.cs" />
+    <Compile Include="HabboHotel\Items\Wired\IWiredCycle.cs" />
+    <Compile Include="HabboHotel\Items\Wired\IWiredItem.cs" />
+    <Compile Include="HabboHotel\Items\Wired\WiredBoxType.cs" />
+    <Compile Include="HabboHotel\Items\Wired\WiredBoxTypeUtility.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationBanType.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationManager.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationPreset.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationPresetActionCategories.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationPresetActionMessages.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationTicket.cs" />
+    <Compile Include="HabboHotel\Catalog\Pets\PetRace.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\BotAIType.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Styles\ChatStyle.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Styles\ChatStyleManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\Freeze\FreezePowerUp.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\Teams\Team.cs" />
+    <Compile Include="HabboHotel\Rooms\Instance\BansComponent.cs" />
+    <Compile Include="HabboHotel\Rooms\Instance\FilterComponent.cs" />
+    <Compile Include="HabboHotel\Rooms\Instance\TradingComponent.cs" />
+    <Compile Include="HabboHotel\Rooms\Instance\WiredComponent.cs" />
+    <Compile Include="HabboHotel\Rooms\Polls\RoomPollManager.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomAccess.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomAccessUtility.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomAppender.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomPromotion.cs" />
+    <Compile Include="HabboHotel\Rooms\Trading\TradeUser.cs" />
+    <Compile Include="HabboHotel\Subscriptions\SubscriptionData.cs" />
+    <Compile Include="HabboHotel\Subscriptions\SubscriptionManager.cs" />
+    <Compile Include="HabboHotel\Surveys\Question.cs" />
+    <Compile Include="HabboHotel\Surveys\SurveyManager.cs" />
+    <Compile Include="HabboHotel\Talents\TalentTrackSubLevel.cs" />
+    <Compile Include="HabboHotel\Talents\TalentTrackManager.cs" />
+    <Compile Include="HabboHotel\Talents\TalentTrackLevel.cs" />
+    <Compile Include="HabboHotel\Talents\TalentType.cs" />
+    <Compile Include="HabboHotel\Users\Calendar\CalendarComponent.cs" />
+    <Compile Include="HabboHotel\Users\Clothing\ClothingComponent.cs" />
+    <Compile Include="HabboHotel\Users\Clothing\Parts\ClothingParts.cs" />
+    <Compile Include="HabboHotel\Users\Effects\AvatarEffect.cs" />
+    <Compile Include="HabboHotel\Users\Effects\AvatarEffectFactory.cs" />
+    <Compile Include="HabboHotel\Users\Effects\EffectsComponent.cs" />
+    <Compile Include="HabboHotel\Users\Ignores\IgnoresComponent.cs" />
+    <Compile Include="HabboHotel\Users\Inventory\Bots\Bot.cs" />
+    <Compile Include="HabboHotel\Users\Inventory\Bots\BotLoader.cs" />
+    <Compile Include="HabboHotel\Users\Inventory\Pets\PetLoader.cs" />
+    <Compile Include="Communication\ConnectionManager\ConnectionState.cs" />
+    <Compile Include="Communication\ConnectionManager\ConnectionInformation.cs" />
+    <Compile Include="Communication\ConnectionManager\GameSocketManager.cs" />
+    <Compile Include="Communication\ConnectionManager\GameSocketManagerStatics.cs" />
+    <Compile Include="Communication\ConnectionManager\IDataParser.cs" />
+    <Compile Include="Communication\ConnectionManager\Socket Exceptions\SocketInitializationException.cs" />
+    <Compile Include="Database\Interfaces\IDatabaseClient.cs" />
+    <Compile Include="Database\Interfaces\IQueryAdapter.cs" />
+    <Compile Include="Database\Adapter\QueryAdapter.cs" />
+    <Compile Include="Database\Interfaces\IRegularQueryAdapter.cs" />
+    <Compile Include="HabboHotel\Catalog\CatalogBot.cs" />
+    <Compile Include="HabboHotel\Groups\Group.cs" />
+    <Compile Include="HabboHotel\Groups\GroupManager.cs" />
+    <Compile Include="HabboHotel\Items\ItemHopperFinder.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\IFurniInteractor.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorAlert.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorBanzaiScoreCounter.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorBanzaiTimer.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorDice.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorFreezeTile.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorFreezeTimer.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorGate.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorGenericSwitch.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorHabboWheel.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorHopper.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorLoveShuffler.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorMannequin.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorOneWayGate.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorPuzzleBox.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorScoreboard.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorScoreCounter.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorSpinningBottle.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorTeleport.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorVendor.cs" />
+    <Compile Include="HabboHotel\Items\Interactor\InteractorWired.cs" />
+    <Compile Include="HabboHotel\Items\Data\Toner\TonerData.cs" />
+    <Compile Include="HabboHotel\LandingView\LandingViewManager.cs" />
+    <Compile Include="HabboHotel\Rooms\PathFinding\MinHeap.cs" />
+    <Compile Include="HabboHotel\Rooms\PathFinding\PathFinder.cs" />
+    <Compile Include="HabboHotel\Rooms\PathFinding\PathFinderNode.cs" />
+    <Compile Include="HabboHotel\Rooms\PathFinding\Vector2D.cs" />
+    <Compile Include="HabboHotel\Rooms\PathFinding\Vector3D.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\FriendBar\FriendBarState.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\FriendBar\FriendBarStateUtility.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\MessengerEventTypes.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\MessengerEventTypesUtility.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\MessengerMessageErrors.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\MessengerMessageErrorsUtility.cs" />
+    <Compile Include="HabboHotel\Users\Navigator\SavedSearches\SavedSearch.cs" />
+    <Compile Include="HabboHotel\Users\Navigator\SavedSearches\SearchesComponent.cs" />
+    <Compile Include="HabboHotel\Users\Permissions\PermissionComponent.cs" />
+    <Compile Include="HabboHotel\Users\Process\ProcessComponent.cs" />
+    <Compile Include="HabboHotel\Users\Relationships\Relationship.cs" />
+    <Compile Include="HabboHotel\Users\HabboStats.cs" />
+    <Compile Include="PlusEnvironment.cs" />
+    <Compile Include="Core\ConfigurationData.cs" />
+    <Compile Include="Communication\ConnectionManager\ConnectionHandling.cs" />
+    <Compile Include="Core\ConsoleCommands.cs" />
+    <Compile Include="HabboHotel\Achievements\Achievement.cs" />
+    <Compile Include="HabboHotel\Achievements\AchievementLevel.cs" />
+    <Compile Include="HabboHotel\Achievements\AchievementLevelFactory.cs" />
+    <Compile Include="HabboHotel\Achievements\AchievementManager.cs" />
+    <Compile Include="HabboHotel\Catalog\Pets\PetRaceManager.cs" />
+    <Compile Include="HabboHotel\Achievements\UserAchievement.cs" />
+    <Compile Include="HabboHotel\Catalog\CatalogManager.cs" />
+    <Compile Include="HabboHotel\Catalog\CatalogItem.cs" />
+    <Compile Include="HabboHotel\Catalog\CatalogPage.cs" />
+    <Compile Include="HabboHotel\Game.cs" />
+    <Compile Include="HabboHotel\GameClients\GameClient.cs" />
+    <Compile Include="HabboHotel\GameClients\GameClientManager.cs" />
+    <Compile Include="HabboHotel\Items\InteractionType.cs" />
+    <Compile Include="HabboHotel\Items\ItemData.cs" />
+    <Compile Include="HabboHotel\Items\ItemDataManager.cs" />
+    <Compile Include="HabboHotel\Items\Data\Moodlight\MoodlightData.cs" />
+    <Compile Include="HabboHotel\Items\Item.cs" />
+    <Compile Include="HabboHotel\Items\ItemTeleporterFinder.cs" />
+    <Compile Include="HabboHotel\Navigator\NavigatorManager.cs" />
+    <Compile Include="HabboHotel\Navigator\FeaturedRoom.cs" />
+    <Compile Include="HabboHotel\Rooms\PathFinding\Coord.cs" />
+    <Compile Include="HabboHotel\Rooms\PathFinding\Rotation.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Pet.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Pets\Commands\PetCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Pets\Commands\PetCommandManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Pets\Locale\PetLocale.cs" />
+    <Compile Include="HabboHotel\Quests\Quest.cs" />
+    <Compile Include="HabboHotel\Quests\QuestManager.cs" />
+    <Compile Include="HabboHotel\Quests\QuestType.cs" />
+    <Compile Include="HabboHotel\Quests\QuestTypeUtillity.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\BotAI.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Responses\BotResponse.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Types\GenericBot.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Types\PetBot.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Speech\RandomSpeech.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\RoomBot.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\Freeze\Freeze.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\GameItemHandler.cs" />
+    <Compile Include="HabboHotel\Rooms\DynamicRoomModel.cs" />
+    <Compile Include="HabboHotel\Rooms\GameMap.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\Banzai\BattleBanzai.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\Game.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\Football\Soccer.cs" />
+    <Compile Include="HabboHotel\Rooms\Games\Teams\Teams.cs" />
+    <Compile Include="HabboHotel\Rooms\Room.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomData.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomItemHandling.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomManager.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomModel.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomUser.cs" />
+    <Compile Include="HabboHotel\Rooms\Trading\Trade.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomUserManager.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationBan.cs" />
+    <Compile Include="HabboHotel\Users\Authenticator\Authenticator.cs" />
+    <Compile Include="HabboHotel\Users\Authenticator\IncorrectLoginException.cs" />
+    <Compile Include="HabboHotel\Users\Badges\Badge.cs" />
+    <Compile Include="HabboHotel\Users\Badges\BadgeComponent.cs" />
+    <Compile Include="HabboHotel\Users\Habbo.cs" />
+    <Compile Include="HabboHotel\Users\Inventory\InventoryComponent.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\HabboMessenger.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\MessengerBuddy.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\MessengerRequest.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\SearchResult.cs" />
+    <Compile Include="HabboHotel\Users\Messenger\SearchResultFactory.cs" />
+    <Compile Include="HabboHotel\Users\UserData\UserData.cs" />
+    <Compile Include="HabboHotel\Users\UserData\UserDataFactory.cs" />
+    <Compile Include="HabboHotel\Users\UserData\UserDataNotFoundException.cs" />
+    <Compile Include="Communication\Packets\Incoming\ClientPacket.cs" />
+    <Compile Include="Communication\GamePacketParser.cs" />
+    <Compile Include="Communication\InitialPacketParser.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Communication\Encryption\Crypto\Prng\ARC4.cs" />
+    <Compile Include="Communication\Encryption\Crypto\RSA\RSAKey.cs" />
+    <Compile Include="Communication\Encryption\HabboEncryptionV2.cs" />
+    <Compile Include="Communication\Encryption\KeyExchange\DiffieHellman.cs" />
+    <Compile Include="Communication\Encryption\Keys\RSAKeys.cs" />
+    <Compile Include="Utilities\Converter.cs" />
+    <Compile Include="Utilities\HabboEncoding.cs" />
+    <Compile Include="Utilities\Randomizer.cs" />
+    <Compile Include="Utilities\Enclosure\Algorithm\GametileUpdate.cs" />
+    <Compile Include="Utilities\Enclosure\GameField.cs" />
+    <Compile Include="Utilities\Enclosure\PointField.cs" />
+    <Compile Include="Utilities\RandomNumber.cs" />
+    <Compile Include="Utilities\StringCharFilter.cs" />
+    <Compile Include="Utilities\TextHandling.cs" />
+    <Compile Include="Utilities\UnixTimestamp.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Communication\Packets\Incoming\Rooms\Groups\" />
+    <Folder Include="HabboHotel\Rooms\Chat\Commands\Roleplay\Generic\" />
+    <Folder Include="HabboHotel\Rooms\Chat\Moderation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
