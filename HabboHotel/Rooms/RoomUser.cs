@@ -134,7 +134,7 @@ namespace Plus.HabboHotel.Rooms
             this.SqState = 3;
 
             this.InternalRoomID = 0;
-            this.CurrentItemEffect = ItemEffectType.NONE;
+            this.CurrentItemEffect = ItemEffectType.None;
 
             this.FreezeLives = 0;
             this.InteractingGate = false;
@@ -740,49 +740,4 @@ namespace Plus.HabboHotel.Rooms
             return mRoom;
         }
     }
-
-    public enum ItemEffectType
-    {
-        NONE,
-        SWIM,
-        SwimLow,
-        SwimHalloween,
-        Iceskates,
-        Normalskates,
-        PublicPool,
-        //Skateboard?
-    }
-
-    public static class ByteToItemEffectEnum
-    {
-        public static ItemEffectType Parse(byte pByte)
-        {
-            switch (pByte)
-            {
-                case 0:
-                    return ItemEffectType.NONE;
-                case 1:
-                    return ItemEffectType.SWIM;
-                case 2:
-                    return ItemEffectType.Normalskates;
-                case 3:
-                    return ItemEffectType.Iceskates;
-                case 4:
-                    return ItemEffectType.SwimLow;
-                case 5:
-                    return ItemEffectType.SwimHalloween;
-                case 6:
-                    return ItemEffectType.PublicPool;
-                //case 7:
-                //return ItemEffectType.Custom;
-                default:
-                    return ItemEffectType.NONE;
-            }
-        }
-    }
-
-    //0 = none
-    //1 = pool
-    //2 = normal skates
-    //3 = ice skates
 }

@@ -31,7 +31,6 @@ namespace Plus.HabboHotel.Rooms
 
         public string StaticFurniMap;
 
-        public bool gotPublicPool;
         public byte[,] mRoomModelfx;
 
         public int WallHeight;
@@ -54,7 +53,6 @@ namespace Plus.HabboHotel.Rooms
                 this.Heightmap = Heightmap.ToLower();
                 this.StaticFurniMap = StaticFurniMap;
 
-                this.gotPublicPool = !string.IsNullOrEmpty(Poolmap);
                 string[] tmpHeightmap = Heightmap.Split(Convert.ToChar(13));
                 string[] tmpFxMap = Poolmap.Split(Convert.ToChar(13));
 
@@ -65,8 +63,6 @@ namespace Plus.HabboHotel.Rooms
                 SqState = new SquareState[MapSizeX, MapSizeY];
                 SqFloorHeight = new short[MapSizeX, MapSizeY];
                 SqSeatRot = new byte[MapSizeX, MapSizeY];
-                if (gotPublicPool)
-                    mRoomModelfx = new byte[MapSizeX, MapSizeY];
 
                 //this.Furnis = Furnis;
 

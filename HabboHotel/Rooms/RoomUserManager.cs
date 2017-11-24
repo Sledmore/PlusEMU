@@ -328,7 +328,7 @@ namespace Plus.HabboHotel.Rooms
 
                     RemoveRoomUser(User);
 
-                    if (User.CurrentItemEffect != ItemEffectType.NONE)
+                    if (User.CurrentItemEffect != ItemEffectType.None)
                     {
                         if (Session.GetHabbo().Effects() != null)
                             Session.GetHabbo().Effects().CurrentEffect = -1;
@@ -1333,7 +1333,7 @@ namespace Plus.HabboHotel.Rooms
                 if (NewCurrentUserItemEffect > 0)
                 {
                     if (User.GetClient().GetHabbo().Effects().CurrentEffect == 0)
-                        User.CurrentItemEffect = ItemEffectType.NONE;
+                        User.CurrentItemEffect = ItemEffectType.None;
 
                     ItemEffectType Type = ByteToItemEffectEnum.Parse(NewCurrentUserItemEffect);
                     if (Type != User.CurrentItemEffect)
@@ -1353,7 +1353,7 @@ namespace Plus.HabboHotel.Rooms
                                     User.CurrentItemEffect = Type;
                                     break;
                                 }
-                            case ItemEffectType.SWIM:
+                            case ItemEffectType.Swim:
                                 {
                                     User.GetClient().GetHabbo().Effects().ApplyEffect(29);
                                     User.CurrentItemEffect = Type;
@@ -1372,7 +1372,7 @@ namespace Plus.HabboHotel.Rooms
                                     break;
                                 }
 
-                            case ItemEffectType.NONE:
+                            case ItemEffectType.None:
                                 {
                                     User.GetClient().GetHabbo().Effects().ApplyEffect(-1);
                                     User.CurrentItemEffect = Type;
@@ -1381,10 +1381,10 @@ namespace Plus.HabboHotel.Rooms
                         }
                     }
                 }
-                else if (User.CurrentItemEffect != ItemEffectType.NONE && NewCurrentUserItemEffect == 0)
+                else if (User.CurrentItemEffect != ItemEffectType.None && NewCurrentUserItemEffect == 0)
                 {
                     User.GetClient().GetHabbo().Effects().ApplyEffect(-1);
-                    User.CurrentItemEffect = ItemEffectType.NONE;
+                    User.CurrentItemEffect = ItemEffectType.None;
                 }
             }
             catch

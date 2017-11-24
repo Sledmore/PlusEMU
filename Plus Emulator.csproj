@@ -1040,6 +1040,8 @@
     <Compile Include="Utilities\StringCharFilter.cs" />
     <Compile Include="Utilities\TextHandling.cs" />
     <Compile Include="Utilities\UnixTimestamp.cs" />
+    <Compile Include="HabboHotel\Rooms\ItemEffectType.cs" />
+    <Compile Include="HabboHotel\Rooms\ByteToItemEffectEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

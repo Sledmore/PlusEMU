@@ -22,7 +22,6 @@ namespace Plus.HabboHotel.Rooms
         private Room _room;
         private byte[,] mGameMap;//0 = none, 1 = pool, 2 = normal skates, 3 = ice skates
 
-        public bool gotPublicPool;
         public bool DiagonalEnabled;
         private RoomModel mStaticModel;
         private byte[,] mUserItemEffect;
@@ -51,7 +50,6 @@ namespace Plus.HabboHotel.Rooms
             mCoordinatedItems = new ConcurrentDictionary<Point, List<int>>();
 
 
-            gotPublicPool = room.RoomData.Model.gotPublicPool;
             mGameMap = new byte[Model.MapSizeX, Model.MapSizeY];
             mItemHeightMap = new double[Model.MapSizeX, Model.MapSizeY];
 
@@ -218,7 +216,6 @@ namespace Plus.HabboHotel.Rooms
                 items = null;
             }
 
-            #region Dynamic game map handling
 
             if (MaxY > (Model.MapSizeY - 1) || MaxX > (Model.MapSizeX - 1))
             {
@@ -267,50 +264,14 @@ namespace Plus.HabboHotel.Rooms
                         }
                     }
                 }
-
-                if (gotPublicPool)
-                {
-                    for (int y = 0; y < StaticModel.MapSizeY; y++)
-                    {
-                        for (int x = 0; x < StaticModel.MapSizeX; x++)
-                        {
-                            if (StaticModel.mRoomModelfx[x, y] != 0)
-                            {
-                                mUserItemEffect[x, y] = StaticModel.mRoomModelfx[x, y];
-                            }
-                        }
-                    }
-                }
-
-                /** COMENTADO YA QUE SALAS PUBLICAS NUEVA CRYPTO NO NECESARIO
-                if (!string.IsNullOrEmpty(StaticModel.StaticFurniMap)) 
-                {
-                     * foreach (PublicRoomSquare square in StaticModel.Furnis)
-                    {
-                        if (square.Content.Contains("chair") || square.Content.Contains("sofa"))
-                        {
-                            mGameMap[square.X, square.Y] = 1;
-                        } else {
-                            mGameMap[square.X, square.Y] = 0;
-                        }
-                    }
-                }*/
             }
-            #endregion
-
-            #region Static game map handling
-
             else
             {
-                //mGameMap
-                //mUserItemEffect
                 mUserItemEffect = new byte[Model.MapSizeX, Model.MapSizeY];
                 mGameMap = new byte[Model.MapSizeX, Model.MapSizeY];
 
 
                 mItemHeightMap = new double[Model.MapSizeX, Model.MapSizeY];
-                //if (modelRemap)
-                //    Model.Generate(); //Clears model
 
                 for (int line = 0; line < Model.MapSizeY; line++)
                 {
@@ -337,36 +298,7 @@ namespace Plus.HabboHotel.Rooms
                         }
                     }
                 }
-
-                if (gotPublicPool)
-                {
-                    for (int y = 0; y < StaticModel.MapSizeY; y++)
-                    {
-                        for (int x = 0; x < StaticModel.MapSizeX; x++)
-                        {
-                            if (StaticModel.mRoomModelfx[x, y] != 0)
-                            {
-                                mUserItemEffect[x, y] = StaticModel.mRoomModelfx[x, y];
-                            }
-                        }
-                    }
-                }
-
-                /** COMENTADO YA QUE SALAS PUBLICAS NUEVA CRYPTO NO NECESARIO
-                 * foreach (PublicRoomSquare square in StaticModel.Furnis)
-                {
-                    if (square.Content.Contains("chair") || square.Content.Contains("sofa"))
-                    {
-                        mGameMap[square.X, square.Y] = 1;
-                    }
-                    else
-                    {
-                        mGameMap[square.X, square.Y] = 0;
-                    }
-                }*/
             }
-
-            #endregion
 
             Item[] tmpItems = _room.GetRoomItemHandler().GetFloor.ToArray();
             foreach (Item Item in tmpItems.ToList())
@@ -1007,20 +939,6 @@ namespace Plus.HabboHotel.Rooms
             else
                 return Item.Coordinate;
         }
-
-        /*internal bool IsValidMovement(int CoordX, int CoordY)
-        {
-            if (CoordX < 0 || CoordY < 0 || CoordX >= Model.MapSizeX || CoordY >= Model.MapSizeY)
-                return false;
-
-            if (SquareHasUsers(CoordX, CoordY))
-                return false;
-
-            if (GetCoordinatedItems(new Point(CoordX, CoordY)).Count > 0 && !SquareIsOpen(CoordX, CoordY, false))
-                return false;
-
-            return Model.SqState[CoordX, CoordY] == SquareState.OPEN;
-        }*/
 
         public bool IsValidStep2(RoomUser User, Vector2D From, Vector2D To, bool EndOfPath, bool Override)
         {
