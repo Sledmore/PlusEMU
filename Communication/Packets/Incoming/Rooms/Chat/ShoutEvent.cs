@@ -84,7 +84,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Chat
             if (!Session.GetHabbo().GetPermissions().HasRight("word_filter_override"))
                 Message = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_CHAT);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialChat);
 
             User.UnIdle();
             User.OnChat(User.LastBubble, Message, true);

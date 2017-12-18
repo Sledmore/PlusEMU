@@ -44,7 +44,7 @@ namespace Plus.Communication.Packets.Incoming.Users
                 return;
             }
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_LOOK);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.ProfileChangeLook);
 
             Session.GetHabbo().Look = PlusEnvironment.FilterFigure(Look);
             Session.GetHabbo().Gender = Gender.ToLower();
@@ -60,7 +60,7 @@ namespace Plus.Communication.Packets.Incoming.Users
             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_AvatarLooks", 1);
             Session.SendPacket(new AvatarAspectUpdateComposer(Look, Gender));
             if (Session.GetHabbo().Look.Contains("ha-1006"))
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.WEAR_HAT);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.WearHat);
 
             if (Session.GetHabbo().InRoom)
             {

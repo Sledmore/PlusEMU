@@ -56,7 +56,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                     Room.Floor = Item.ExtraData;
                     Room.RoomData.Floor = Item.ExtraData;
 
-                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_DECORATION_FLOOR);
+                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniDecoFloor);
                     PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomDecoFloor", 1);
                     break;
 
@@ -64,7 +64,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                     Room.Wallpaper = Item.ExtraData;
                     Room.RoomData.Wallpaper = Item.ExtraData;
 
-                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_DECORATION_WALL);
+                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniDecoWall);
                     PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomDecoWallpaper", 1);
                     break;
 

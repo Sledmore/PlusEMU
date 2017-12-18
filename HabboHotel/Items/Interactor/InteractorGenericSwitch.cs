@@ -24,7 +24,7 @@ namespace Plus.HabboHotel.Items.Interactor
                 return;
             }
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_SWITCH);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniSwitch);
 
             int CurrentMode = 0;
             int NewMode = 0;

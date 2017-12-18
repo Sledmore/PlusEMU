@@ -41,9 +41,9 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
 
             Room.SendPacket(new DanceComposer(User, DanceId));
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_DANCE);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialDance);
             if (Room.GetRoomUserManager().GetRoomUsers().Count > 19)
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.MASS_DANCE);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.MassDance);
         }
     }
 }

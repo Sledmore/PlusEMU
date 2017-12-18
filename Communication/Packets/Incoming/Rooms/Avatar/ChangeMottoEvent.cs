@@ -60,7 +60,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
                 dbClient.RunQuery();
             }
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_MOTTO);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.ProfileChangeMotto);
             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_Motto", 1);
 
             if (Session.GetHabbo().InRoom)

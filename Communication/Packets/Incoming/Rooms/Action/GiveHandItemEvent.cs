@@ -32,7 +32,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
                 if (User.CarryItemID > 0 && User.CarryTimer > 0)
                 {
                     if (User.CarryItemID == 8)
-                        PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.GIVE_COFFEE);
+                        PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.GiveCoffee);
                     TargetUser.CarryItem(User.CarryItemID);
                     User.CarryItem(0);
                     TargetUser.DanceId = 0;

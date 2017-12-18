@@ -15,7 +15,7 @@ namespace Plus.Communication.Packets.Incoming.Messenger
                 return;
 
             if (Session.GetHabbo().GetMessenger().RequestBuddy(Packet.PopString()))
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_FRIEND);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialFriend);
         }
     }
 }

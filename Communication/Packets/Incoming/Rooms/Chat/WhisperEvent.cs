@@ -93,7 +93,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Chat
             }
 
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_CHAT);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialChat);
 
             User.UnIdle();
             User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, Message, 0, User.LastBubble));

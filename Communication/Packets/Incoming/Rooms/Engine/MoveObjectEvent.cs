@@ -59,10 +59,10 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
             int Rotation = Packet.PopInt();
 
             if (x != Item.GetX || y != Item.GetY)
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_MOVE);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniMove);
 
             if (Rotation != Item.Rotation)
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_ROTATE);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniRotate);
 
             if (!Room.GetRoomItemHandler().SetFloorItem(Session, Item, x, y, Rotation, false, false, true))
             {
@@ -71,7 +71,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
             }
 
             if (Item.GetZ >= 0.1)
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_STACK);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniStack);
         }
     }
 }

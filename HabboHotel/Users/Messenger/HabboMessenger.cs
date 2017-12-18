@@ -299,7 +299,7 @@ namespace Plus.HabboHotel.Users.Messenger
                 dbClient.RunQuery("REPLACE INTO `messenger_requests` (`from_id`,`to_id`) VALUES ('" + _userId + "','" + ToId + "')");
             }
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(GetClient(), QuestType.ADD_FRIENDS);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(GetClient(), QuestType.AddFriends);
 
             GameClient ToUser = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
             if (ToUser == null || ToUser.GetHabbo() == null)

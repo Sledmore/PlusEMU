@@ -32,7 +32,7 @@ namespace Plus.Communication.Packets.Incoming.Users
             if (ThisUser == null)
                 return;
            
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_RESPECT);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialRespect);
             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RespectGiven", 1);
             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User.GetClient(), "ACH_RespectEarned", 1);
 

@@ -97,7 +97,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                     }
                 }
 
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_PICK);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniPick);
             }
         }
     }

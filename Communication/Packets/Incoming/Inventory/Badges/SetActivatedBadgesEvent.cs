@@ -47,7 +47,7 @@ namespace Plus.Communication.Packets.Incoming.Inventory.Badges
                 }
             }
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_BADGE);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.ProfileBadge);
 
             Room Room;
 

@@ -47,7 +47,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
                 }
 
                 //And boom! Let us send some respect points.
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_RESPECT);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialRespect);
                 PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RespectGiven", 1);
                 PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(TargetUser.GetClient(), "ACH_RespectEarned", 1);
 

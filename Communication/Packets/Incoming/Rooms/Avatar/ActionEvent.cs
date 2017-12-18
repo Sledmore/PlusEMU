@@ -38,7 +38,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
                 Room.SendPacket(new SleepComposer(User, true));
             }
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_WAVE);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialWave);
         }
     }
 }

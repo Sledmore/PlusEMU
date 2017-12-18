@@ -37,7 +37,7 @@ namespace Plus.HabboHotel.Items.Interactor
                 if (Modes <= 0)
                     return;
 
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_SWITCH);
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniSwitch);
 
                 int CurrentMode = 0;
                 int NewMode = 0;

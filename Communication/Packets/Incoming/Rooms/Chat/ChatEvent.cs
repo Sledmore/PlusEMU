@@ -88,7 +88,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Chat
                 Message = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
 
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_CHAT);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialChat);
 
             User.OnChat(User.LastBubble, Message, false);
         }

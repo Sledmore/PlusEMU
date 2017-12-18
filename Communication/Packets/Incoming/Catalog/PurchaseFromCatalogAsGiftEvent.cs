@@ -249,7 +249,7 @@ namespace Plus.Communication.Packets.Incoming.Catalog
                     PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_GiftGiver", 1);
                     if (Receiver != null)
                         PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Receiver, "ACH_GiftReceiver", 1);
-                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.GIFT_OTHERS);
+                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.GiftOthers);
                 }
             }
        

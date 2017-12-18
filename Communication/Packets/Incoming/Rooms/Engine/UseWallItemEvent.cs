@@ -39,7 +39,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
             Item.Interactor.OnTrigger(Session, Item, request, hasRights);
             Item.GetRoom().GetWired().TriggerEvent(WiredBoxType.TriggerStateChanges, Session.GetHabbo(), Item);
         
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, Item.GetBaseItem().Id);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.ExploreFindItem, Item.GetBaseItem().Id);
         }
     }
 }
