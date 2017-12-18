@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.HabboHotel.Groups
 {
@@ -24,6 +25,8 @@ namespace Plus.HabboHotel.Groups
         private List<int> _members;
         private List<int> _requests;
         private List<int> _administrators;
+
+        private RoomData _room;
 
         public Group(int Id, string Name, string Description, string Badge, int RoomId, int Owner, int Time, int Type, int Colour1, int Colour2, int AdminOnlyDeco, bool HasForum)
         {
@@ -276,6 +279,21 @@ namespace Plus.HabboHotel.Groups
             if (this._requests.Contains(Id))
                 this._requests.Remove(Id);
         }
+
+        public RoomData GetRoom()
+        {
+            if (this._room == null)
+            {
+                if (!RoomFactory.TryGetData(this.RoomId, out RoomData data))
+                    return null;
+
+                this._room = data;
+                return data;
+            }
+
+            return this._room;
+        }
+
 
         public void ClearRequests()
         {

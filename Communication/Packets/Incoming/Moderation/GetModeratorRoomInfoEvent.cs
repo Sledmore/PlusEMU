@@ -15,18 +15,16 @@ namespace Plus.Communication.Packets.Incoming.Moderation
             if (!Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            int RoomId = Packet.PopInt();
+            int roomId = Packet.PopInt();
 
-            RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-            if (Data == null)
+            RoomData data = null;
+            if (!RoomFactory.TryGetData(roomId, out data))
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(RoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room Room))
                 return;
 
-            Session.SendPacket(new ModeratorRoomInfoComposer(Data, (Room.GetRoomUserManager().GetRoomUserByHabbo(Data.OwnerName) != null)));
+            Session.SendPacket(new ModeratorRoomInfoComposer(data, (Room.GetRoomUserManager().GetRoomUserByHabbo(data.OwnerName) != null)));
         }
     }
 }

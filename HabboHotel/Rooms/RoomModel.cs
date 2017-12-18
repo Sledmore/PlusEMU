@@ -4,6 +4,8 @@ namespace Plus.HabboHotel.Rooms
 {
     public class RoomModel
     {
+        public string Id { get; set; }
+
         public bool ClubOnly;
         public int DoorOrientation;
         public int DoorX;
@@ -25,10 +27,11 @@ namespace Plus.HabboHotel.Rooms
 
         public int WallHeight;
 
-        public RoomModel(int DoorX, int DoorY, double DoorZ, int DoorOrientation, string Heightmap, string StaticFurniMap, bool ClubOnly, string Poolmap, int WallHeight)
+        public RoomModel(string id, int DoorX, int DoorY, double DoorZ, int DoorOrientation, string Heightmap, bool ClubOnly, int WallHeight, bool custom)
         {
             try
             {
+                this.Id = id;
                 this.DoorX = DoorX;
                 this.DoorY = DoorY;
                 this.DoorZ = DoorZ;
@@ -37,10 +40,8 @@ namespace Plus.HabboHotel.Rooms
                 this.WallHeight = WallHeight;
 
                 this.Heightmap = Heightmap.ToLower();
-                this.StaticFurniMap = StaticFurniMap;
 
                 string[] tmpHeightmap = Heightmap.Split(Convert.ToChar(13));
-                string[] tmpFxMap = Poolmap.Split(Convert.ToChar(13));
 
                 this.MapSizeX = tmpHeightmap[0].Length;
                 this.MapSizeY = tmpHeightmap.Length;

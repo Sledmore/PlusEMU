@@ -24,22 +24,11 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             get { return "Unload the current room."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient session, Rooms.Room room, string[] Params)
         {
-            if (Session.GetHabbo().GetPermissions().HasRight("room_unload_any"))
+            if (room.CheckRights(session, true) || session.GetHabbo().GetPermissions().HasRight("room_unload_any"))
             {
-                Room R = null;
-                if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Room.Id, out R))
-                    return;
-
-                PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(R, true);
-            }
-            else
-            {
-                if (Room.CheckRights(Session, true))
-                {
-                    PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
-                }
+                PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(room.Id);
             }
         }
     }

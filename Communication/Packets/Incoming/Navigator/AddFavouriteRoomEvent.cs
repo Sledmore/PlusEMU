@@ -1,11 +1,8 @@
-﻿
-using Plus.Communication.Packets.Outgoing.Navigator;
+﻿using Plus.Communication.Packets.Outgoing.Navigator;
 
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
-using Plus.HabboHotel.Users;
-using Plus.Communication.Packets.Incoming;
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {
@@ -18,7 +15,9 @@ namespace Plus.Communication.Packets.Incoming.Navigator
 
             int RoomId = Packet.PopInt();
 
-            RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+            RoomData Data = null;
+            if (!RoomFactory.TryGetData(RoomId, out Data))
+                return;
 
             if (Data == null || Session.GetHabbo().FavoriteRooms.Count >= 30 || Session.GetHabbo().FavoriteRooms.Contains(RoomId))
             {

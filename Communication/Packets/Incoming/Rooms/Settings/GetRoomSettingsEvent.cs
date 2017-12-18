@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
 
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Settings;
@@ -10,13 +7,18 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 {
     class GetRoomSettingsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            Room Room = PlusEnvironment.GetGame().GetRoomManager().LoadRoom(Packet.PopInt());
-            if (Room == null || !Room.CheckRights(Session, true))
+            int roomId = packet.PopInt();
+
+            Room room = null;
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryLoadRoom(roomId, out room))
                 return;
 
-            Session.SendPacket(new RoomSettingsDataComposer(Room));
+            if (!room.CheckRights(session, true))
+                return;
+
+            session.SendPacket(new RoomSettingsDataComposer(room));
         }
     }
 }

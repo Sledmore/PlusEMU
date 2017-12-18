@@ -33,12 +33,12 @@ namespace Plus.Communication.Packets.Incoming.Moderation
                 {
                     foreach (DataRow Row in Table.Rows)
                     {
-                        RoomData RData = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(Convert.ToInt32(Row["room_id"]));
-                        if (RData == null)
-                            return;
+                        RoomData data = null;
+                        if (!RoomFactory.TryGetData(Convert.ToInt32(Row["room_id"]), out data))
+                            continue;
 
                         if (!Visits.ContainsKey(Convert.ToDouble(Row["entry_timestamp"])))
-                            Visits.Add(Convert.ToDouble(Row["entry_timestamp"]), RData);
+                            Visits.Add(Convert.ToDouble(Row["entry_timestamp"]), data);
                     }
                 }
             }

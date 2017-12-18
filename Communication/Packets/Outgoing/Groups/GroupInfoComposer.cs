@@ -23,7 +23,7 @@ namespace Plus.Communication.Packets.Outgoing.Groups
             base.WriteString(Group.Description);
             base.WriteString(Group.Badge);
             base.WriteInteger(Group.RoomId);
-            base.WriteString((PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId) == null) ? "No room found.." : PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId).Name);    // room name
+            base.WriteString(Group.GetRoom() != null ? Group.GetRoom().Name : "No room found..");    // room name
             base.WriteInteger(Group.CreatorId == Session.GetHabbo().Id ? 3 : Group.HasRequest(Session.GetHabbo().Id) ? 2 : Group.IsMember(Session.GetHabbo().Id) ? 1 : 0);
             base.WriteInteger(Group.MemberCount); // Members
             base.WriteBoolean(false);//?? CHANGED

@@ -6,22 +6,22 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class GetModeratorTicketChatlogsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().GetPermissions().HasRight("mod_tickets"))
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().GetPermissions().HasRight("mod_tickets"))
                 return;
 
-            int TicketId = Packet.PopInt();
+            int ticketId = packet.PopInt();
 
-            ModerationTicket Ticket = null;
-            if (!PlusEnvironment.GetGame().GetModerationManager().TryGetTicket(TicketId, out Ticket) || Ticket.Room == null)
+            ModerationTicket ticket = null;
+            if (!PlusEnvironment.GetGame().GetModerationManager().TryGetTicket(ticketId, out ticket) || ticket.Room == null)
                 return;
 
-            RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(Ticket.Room.Id);
-            if (Data == null)
+            RoomData data = null;
+            if (!RoomFactory.TryGetData(ticket.Room.Id, out data))
                 return;
 
-            Session.SendPacket(new ModeratorTicketChatlogComposer(Ticket, Data, Ticket.Timestamp));
+            session.SendPacket(new ModeratorTicketChatlogComposer(ticket, data, ticket.Timestamp));
         }
     }
 }

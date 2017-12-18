@@ -1,13 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Text;
 
-
-
-using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Plus.Database.Interfaces;
+using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 namespace Plus.HabboHotel.Rooms.Chat.Commands.User
 {
@@ -53,8 +48,8 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
                     List.AppendLine("Pet Morphs: " + (Room.PetMorphsAllowed == true ? "enabled" : "disabled"));
                     List.AppendLine("Pull: " + (Room.PullEnabled == true ? "enabled" : "disabled"));
                     List.AppendLine("Push: " + (Room.PushEnabled == true ? "enabled" : "disabled"));
-                    List.AppendLine("Super Pull: " + (Room.SPullEnabled == true ? "enabled" : "disabled"));
-                    List.AppendLine("Super Push: " + (Room.SPushEnabled == true ? "enabled" : "disabled"));
+                    List.AppendLine("Super Pull: " + (Room.SuperPullEnabled == true ? "enabled" : "disabled"));
+                    List.AppendLine("Super Push: " + (Room.SuperPushEnabled == true ? "enabled" : "disabled"));
                     List.AppendLine("Respect: " + (Room.RespectNotificationsEnabled == true ? "enabled" : "disabled"));
                     List.AppendLine("Enables: " + (Room.EnablesEnabled == true ? "enabled" : "disabled"));
                     Session.SendNotification(List.ToString());
@@ -77,29 +72,29 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
 
                 case "spush":
                     {
-                        Room.SPushEnabled = !Room.SPushEnabled;
+                        Room.SuperPushEnabled = !Room.SuperPushEnabled;
                         using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             dbClient.SetQuery("UPDATE `rooms` SET `spush_enabled` = @PushEnabled WHERE `id` = '" + Room.Id + "' LIMIT 1");
-                            dbClient.AddParameter("PushEnabled", PlusEnvironment.BoolToEnum(Room.SPushEnabled));
+                            dbClient.AddParameter("PushEnabled", PlusEnvironment.BoolToEnum(Room.SuperPushEnabled));
                             dbClient.RunQuery();
                         }
 
-                        Session.SendWhisper("Super Push mode is now " + (Room.SPushEnabled == true ? "enabled!" : "disabled!"));
+                        Session.SendWhisper("Super Push mode is now " + (Room.SuperPushEnabled == true ? "enabled!" : "disabled!"));
                         break;
                     }
 
                 case "spull":
                     {
-                        Room.SPullEnabled = !Room.SPullEnabled;
+                        Room.SuperPullEnabled = !Room.SuperPullEnabled;
                         using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             dbClient.SetQuery("UPDATE `rooms` SET `spull_enabled` = @PullEnabled WHERE `id` = '" + Room.Id + "' LIMIT 1");
-                            dbClient.AddParameter("PullEnabled", PlusEnvironment.BoolToEnum(Room.SPullEnabled));
+                            dbClient.AddParameter("PullEnabled", PlusEnvironment.BoolToEnum(Room.SuperPullEnabled));
                             dbClient.RunQuery();
                         }
 
-                        Session.SendWhisper("Super Pull mode is now " + (Room.SPullEnabled == true ? "enabled!" : "disabled!"));
+                        Session.SendWhisper("Super Pull mode is now " + (Room.SuperPullEnabled == true ? "enabled!" : "disabled!"));
                         break;
                     }
 

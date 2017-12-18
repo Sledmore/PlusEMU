@@ -42,8 +42,6 @@ namespace Plus.HabboHotel.Rooms
         public DateTime lastTimerReset;
         public DateTime lastRegeneration;
 
-
-
         public Task ProcessTask;
         public ArrayList ActiveTrades;
 
@@ -51,7 +49,6 @@ namespace Plus.HabboHotel.Rooms
         public MoodlightData MoodlightData;
 
         public Dictionary<int, double> MutedUsers;
-
 
         private Dictionary<int, List<RoomUser>> Tents;
 
@@ -63,8 +60,7 @@ namespace Plus.HabboHotel.Rooms
 
         private Gamemap _gamemap;
         private GameItemHandler _gameItemHandler;
-
-        private RoomData _roomData;
+        
         public TeamManager teambanzai;
         public TeamManager teamfreeze;
 
@@ -79,94 +75,40 @@ namespace Plus.HabboHotel.Rooms
         private TradingComponent _tradingComponent = null;
 
         public int IsLagging { get; set; }
+        public bool Unloaded { get; set; }
         public int IdleTime { get; set; }
 
         public Room(RoomData data)
+         : base(data)
         {
-            this.IsLagging = 0;
-            this.IdleTime = 0;
+            IsLagging = 0;
+            Unloaded = false;
+            IdleTime = 0;
 
-            this._roomData = data;
             RoomMuted = false;
-            mDisposed = false;
 
-            this.Id = data.Id;
-            this.Name = data.Name;
-            this.Description = data.Description;
-            this.OwnerName = data.OwnerName;
-            this.OwnerId = data.OwnerId;
+            MutedUsers = new Dictionary<int, double>();
+            Tents = new Dictionary<int, List<RoomUser>>();
 
-            this.Category = data.Category;
-            this.Type = data.Type;
-            this.Access = data.Access;
-            this.UsersNow = 0;
-            this.UsersMax = data.UsersMax;
-            this.ModelName = data.ModelName;
-            this.Score = data.Score;
-            this.Tags = new List<string>();
-            foreach (string tag in data.Tags)
-            {
-                Tags.Add(tag);
-            }
+            _gamemap = new Gamemap(this, data.Model);
+            _roomItemHandling = new RoomItemHandling(this);
 
-            this.AllowPets = data.AllowPets;
-            this.AllowPetsEating = data.AllowPetsEating;
-            this.RoomBlockingEnabled = data.RoomBlockingEnabled;
-            this.Hidewall = data.Hidewall;
-            this.Group = data.Group;
-
-            this.Password = data.Password;
-            this.Wallpaper = data.Wallpaper;
-            this.Floor = data.Floor;
-            this.Landscape = data.Landscape;
-
-            this.WallThickness = data.WallThickness;
-            this.FloorThickness = data.FloorThickness;
-
-            this.chatMode = data.chatMode;
-            this.chatSize = data.chatSize;
-            this.chatSpeed = data.chatSpeed;
-            this.chatDistance = data.chatDistance;
-            this.extraFlood = data.extraFlood;
-
-            this.TradeSettings = data.TradeSettings;
-
-            this.WhoCanBan = data.WhoCanBan;
-            this.WhoCanKick = data.WhoCanKick;
-            this.WhoCanBan = data.WhoCanBan;
-
-            this.PushEnabled = data.PushEnabled;
-            this.PullEnabled = data.PullEnabled;
-            this.SPullEnabled = data.SPullEnabled;
-            this.SPushEnabled = data.SPushEnabled;
-            this.EnablesEnabled = data.EnablesEnabled;
-            this.RespectNotificationsEnabled = data.RespectNotificationsEnabled;
-            this.PetMorphsAllowed = data.PetMorphsAllowed;
-
-            this.ActiveTrades = new ArrayList();
-            this.MutedUsers = new Dictionary<int, double>();
-            this.Tents = new Dictionary<int, List<RoomUser>>();
-
-            _gamemap = new Gamemap(this);
-            if (_roomItemHandling == null)
-                _roomItemHandling = new RoomItemHandling(this);
             _roomUserManager = new RoomUserManager(this);
-
-            this._filterComponent = new FilterComponent(this);
-            this._wiredComponent = new WiredComponent(this);
-            this._bansComponent = new BansComponent(this);
-            this._tradingComponent = new TradingComponent(this);
+            _filterComponent = new FilterComponent(this);
+            _wiredComponent = new WiredComponent(this);
+            _bansComponent = new BansComponent(this);
+            _tradingComponent = new TradingComponent(this);
 
             GetRoomItemHandler().LoadFurniture();
             GetGameMap().GenerateMaps();
 
-            this.LoadPromotions();
-            this.LoadRights();
-            this.LoadFilter();
-            this.InitBots();
-            this.InitPets();
+            LoadPromotions();
+            LoadRights();
+            LoadFilter();
+            InitBots();
+            InitPets();
 
-            data.UsersNow = 1;
+            lastRegeneration = DateTime.Now;
         }
 
         public List<string> WordFilterList
@@ -188,11 +130,6 @@ namespace Plus.HabboHotel.Rooms
         public bool CanTradeInRoom
         {
             get { return true; }
-        }
-
-        public RoomData RoomData
-        {
-            get { return _roomData; }
         }
 
         public Gamemap GetGameMap()
@@ -363,22 +300,6 @@ namespace Plus.HabboHotel.Rooms
             return this._tradingComponent;
         }
 
-        public void LoadPromotions()
-        {
-            DataRow GetPromotion = null;
-            using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT * FROM `room_promotions` WHERE `room_id` = " + this.Id + " LIMIT 1;");
-                GetPromotion = dbClient.GetRow();
-
-                if (GetPromotion != null)
-                {
-                    if (Convert.ToDouble(GetPromotion["timestamp_expire"]) > PlusEnvironment.GetUnixTimestamp())
-                        RoomData._promotion = new RoomPromotion(Convert.ToString(GetPromotion["title"]), Convert.ToString(GetPromotion["description"]), Convert.ToDouble(GetPromotion["timestamp_start"]), Convert.ToDouble(GetPromotion["timestamp_expire"]), Convert.ToInt32(GetPromotion["category_id"]));
-                }
-            }
-        }
-
         public void LoadRights()
         {
             UsersWithRights = new List<int>();
@@ -522,14 +443,14 @@ namespace Plus.HabboHotel.Rooms
                 else if (this.IdleTime > 0)
                     this.IdleTime = 0;
 
-                if (this.RoomData.HasActivePromotion && this.RoomData.Promotion.HasExpired)
+                if (this.HasActivePromotion && this.Promotion.HasExpired)
                 {
-                    this.RoomData.EndPromotion();
+                    this.EndPromotion();
                 }
 
-                if (this.IdleTime >= 60 && !this.RoomData.HasActivePromotion)
+                if (this.IdleTime >= 60 && !this.HasActivePromotion)
                 {
-                    PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+                    PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Id);
                     return;
                 }
 
@@ -608,7 +529,7 @@ namespace Plus.HabboHotel.Rooms
             }
 
             isCrashed = true;
-            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(this, true);
+            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Id);
         }
 
 

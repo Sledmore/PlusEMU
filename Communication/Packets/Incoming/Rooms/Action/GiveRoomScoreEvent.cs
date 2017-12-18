@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Navigator;
 
 using Plus.Database.Interfaces;
@@ -13,32 +8,28 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class GiveRoomScoreEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (Session.GetHabbo().RatedRooms.Contains(Room.RoomId) || Room.CheckRights(Session, true))
+            if (session.GetHabbo().RatedRooms.Contains(room.RoomId) || room.CheckRights(session, true))
                 return;
 
-            int Rating = Packet.PopInt();
+            int Rating = packet.PopInt();
             switch (Rating)
             {
                 case -1:
 
-                    Room.Score--;
-                    Room.RoomData.Score--;
+                    room.Score--;
                     break;
 
                 case 1:
 
-                    Room.Score++;
-                    Room.RoomData.Score++;
+                    room.Score++;
                     break;
 
                 default:
@@ -49,11 +40,11 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
           
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE rooms SET score = '" + Room.Score + "' WHERE id = '" + Room.RoomId + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE rooms SET score = '" + room.Score + "' WHERE id = '" + room.RoomId + "' LIMIT 1");
             }
 
-            Session.GetHabbo().RatedRooms.Add(Room.RoomId);        
-            Session.SendPacket(new RoomRatingComposer(Room.Score, !(Session.GetHabbo().RatedRooms.Contains(Room.RoomId) || Room.CheckRights(Session, true))));
+            session.GetHabbo().RatedRooms.Add(room.RoomId);        
+            session.SendPacket(new RoomRatingComposer(room.Score, !(session.GetHabbo().RatedRooms.Contains(room.RoomId) || room.CheckRights(session, true))));
         }
     }
 }

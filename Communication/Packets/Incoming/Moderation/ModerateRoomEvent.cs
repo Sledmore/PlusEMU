@@ -28,18 +28,18 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 
             if (SetName)
             {
-                Room.RoomData.Name = "Inappropriate to Hotel Management";
-                Room.RoomData.Description = "Inappropriate to Hotel Management";
+                Room.Name = "Inappropriate to Hotel Management";
+                Room.Description = "Inappropriate to Hotel Management";
             }
 
             if (SetLock)
-                Room.RoomData.Access = RoomAccess.Doorbell;
+                Room.Access = RoomAccess.Doorbell;
 
             if (Room.Tags.Count > 0)
                 Room.ClearTags();
 
-            if (Room.RoomData.HasActivePromotion)
-                Room.RoomData.EndPromotion();
+            if (Room.HasActivePromotion)
+                Room.EndPromotion();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {

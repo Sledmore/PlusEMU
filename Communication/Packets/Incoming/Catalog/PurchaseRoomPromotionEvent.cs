@@ -28,8 +28,8 @@ namespace Plus.Communication.Packets.Incoming.Catalog
             string Desc = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
             int CategoryId = Packet.PopInt();
 
-            RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-            if (Data == null)
+            RoomData Data = null;
+            if (!RoomFactory.TryGetData(RoomId, out Data))
                 return;
 
             if (Data.OwnerId != Session.GetHabbo().Id)

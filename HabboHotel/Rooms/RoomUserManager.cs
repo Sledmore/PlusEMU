@@ -470,7 +470,6 @@ namespace Plus.HabboHotel.Rooms
         public void UpdateUserCount(int count)
         {
             userCount = count;
-            _room.RoomData.UsersNow = count;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -1404,7 +1403,7 @@ namespace Plus.HabboHotel.Rooms
             this.UpdatePets();
             this.UpdateBots();
 
-            this._room.RoomData.UsersNow = 0;
+            this._room.UsersNow = 0;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.RunQuery("UPDATE `rooms` SET `users_now` = '0' WHERE `id` = '" + this._room.Id + "' LIMIT 1");

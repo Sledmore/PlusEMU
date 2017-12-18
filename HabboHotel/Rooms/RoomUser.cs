@@ -404,7 +404,7 @@ namespace Plus.HabboHotel.Rooms
                     if (User == null || User.GetClient() == null || User.GetClient().GetHabbo() == null || User.GetClient().GetHabbo().GetIgnores().IgnoredUserIds().Contains(mClient.GetHabbo().Id))
                         continue;
 
-                    if (mRoom.chatDistance > 0 && Gamemap.TileDistance(this.X, this.Y, User.X, User.Y) > mRoom.chatDistance)
+                    if (mRoom.ChatDistance > 0 && Gamemap.TileDistance(this.X, this.Y, User.X, User.Y) > mRoom.ChatDistance)
                         continue;
 
                     User.GetClient().SendPacket(Packet);

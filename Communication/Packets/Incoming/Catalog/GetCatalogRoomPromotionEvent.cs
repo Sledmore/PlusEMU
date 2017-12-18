@@ -1,17 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Plus.Communication.Packets.Outgoing.Catalog;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Catalog
 {
     class GetCatalogRoomPromotionEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new GetCatalogRoomPromotionComposer(Session.GetHabbo().UsersRooms));
+            List<RoomData> rooms = RoomFactory.GetRoomsDataByOwnerSortByName(session.GetHabbo().Id);
+
+            session.SendPacket(new GetCatalogRoomPromotionComposer(rooms));
         }
     }
 }

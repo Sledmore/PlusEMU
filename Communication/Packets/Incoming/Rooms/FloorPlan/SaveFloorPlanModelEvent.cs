@@ -154,14 +154,14 @@ namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
                 dbClient.RunQuery();
             }
 
-            Room.RoomData.ModelName = ModelName;
-            Room.RoomData.WallThickness = WallThick;
-            Room.RoomData.FloorThickness = FloorThick;
+            Room.ModelName = ModelName;
+            Room.WallThickness = WallThick;
+            Room.FloorThickness = FloorThick;
 
             List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();
 
             PlusEnvironment.GetGame().GetRoomManager().ReloadModel(ModelName);
-            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room.Id);
 
 
             foreach (RoomUser User in UsersToReturn)

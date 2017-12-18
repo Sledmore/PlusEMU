@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
 
 using Plus.HabboHotel.Rooms;
@@ -9,16 +7,16 @@ namespace Plus.Communication.Packets.Outgoing.Groups
 {
     class GroupCreationWindowComposer : ServerPacket
     {
-        public GroupCreationWindowComposer(ICollection<RoomData> Rooms)
+        public GroupCreationWindowComposer(ICollection<RoomData> rooms)
             : base(ServerPacketHeader.GroupCreationWindowMessageComposer)
         {
             base.WriteInteger(Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("catalog.group.purchase.cost")));//Price
 
-            base.WriteInteger(Rooms.Count);//Room count that the user has.
-            foreach (RoomData Room in Rooms)
+            base.WriteInteger(rooms.Count);//Room count that the user has.
+            foreach (RoomData room in rooms)
             {
-                base.WriteInteger(Room.Id);//Room Id
-                base.WriteString(Room.Name);//Room Name
+                base.WriteInteger(room.Id);//Room Id
+                base.WriteString(room.Name);//Room Name
                 base.WriteBoolean(false);//What?
             }
 

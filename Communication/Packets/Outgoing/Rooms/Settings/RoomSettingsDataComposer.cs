@@ -1,50 +1,45 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
 {
     class RoomSettingsDataComposer : ServerPacket
     {
-        public RoomSettingsDataComposer(Room Room)
+        public RoomSettingsDataComposer(Room room)
             : base(ServerPacketHeader.RoomSettingsDataMessageComposer)
         {
-            base.WriteInteger(Room.RoomId);
-            base.WriteString(Room.Name);
-            base.WriteString(Room.Description);
-            base.WriteInteger(RoomAccessUtility.GetRoomAccessPacketNum(Room.Access));
-            base.WriteInteger(Room.Category);
-            base.WriteInteger(Room.UsersMax);
-            base.WriteInteger(((Room.RoomData.Model.MapSizeX * Room.RoomData.Model.MapSizeY) > 100) ? 50 : 25);
+            base.WriteInteger(room.RoomId);
+            base.WriteString(room.Name);
+            base.WriteString(room.Description);
+            base.WriteInteger(RoomAccessUtility.GetRoomAccessPacketNum(room.Access));
+            base.WriteInteger(room.Category);
+            base.WriteInteger(room.UsersMax);
+            base.WriteInteger(((room.Model.MapSizeX * room.Model.MapSizeY) > 100) ? 50 : 25);
 
-            base.WriteInteger(Room.Tags.Count);
-            foreach (string Tag in Room.Tags.ToArray())
+            base.WriteInteger(room.Tags.Count);
+            foreach (string Tag in room.Tags.ToArray())
             {
                 base.WriteString(Tag);
             }
 
-            base.WriteInteger(Room.TradeSettings); //Trade
-            base.WriteInteger(Room.AllowPets); // allows pets in room - pet system lacking, so always off
-            base.WriteInteger(Room.AllowPetsEating);// allows pets to eat your food - pet system lacking, so always off
-            base.WriteInteger(Room.RoomBlockingEnabled);
-            base.WriteInteger(Room.Hidewall);
-            base.WriteInteger(Room.WallThickness);
-            base.WriteInteger(Room.FloorThickness);
+            base.WriteInteger(room.TradeSettings); //Trade
+            base.WriteInteger(room.AllowPets); // allows pets in room - pet system lacking, so always off
+            base.WriteInteger(room.AllowPetsEating);// allows pets to eat your food - pet system lacking, so always off
+            base.WriteInteger(room.RoomBlockingEnabled);
+            base.WriteInteger(room.Hidewall);
+            base.WriteInteger(room.WallThickness);
+            base.WriteInteger(room.FloorThickness);
 
-            base.WriteInteger(Room.chatMode);//Chat mode
-            base.WriteInteger(Room.chatSize);//Chat size
-            base.WriteInteger(Room.chatSpeed);//Chat speed
-            base.WriteInteger(Room.chatDistance);//Hearing Distance
-            base.WriteInteger(Room.extraFlood);//Additional Flood
+            base.WriteInteger(room.chatMode);//Chat mode
+            base.WriteInteger(room.ChatSize);//Chat size
+            base.WriteInteger(room.ChatSpeed);//Chat speed
+            base.WriteInteger(room.ChatDistance);//Hearing Distance
+            base.WriteInteger(room.ExtraFlood);//Additional Flood
 
             base.WriteBoolean(true);
 
-            base.WriteInteger(Room.WhoCanMute); // who can mute
-            base.WriteInteger(Room.WhoCanKick); // who can kick
-            base.WriteInteger(Room.WhoCanBan); // who can ban
+            base.WriteInteger(room.WhoCanMute); // who can mute
+            base.WriteInteger(room.WhoCanKick); // who can kick
+            base.WriteInteger(room.WhoCanBan); // who can ban
         }
     }
 }

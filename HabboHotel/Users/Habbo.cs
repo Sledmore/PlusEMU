@@ -148,7 +148,6 @@ namespace Plus.HabboHotel.Users
         private bool _sessionClothingBlocked;
 
         public List<int> RatedRooms;
-        public List<RoomData> UsersRooms;
 
         private GameClient _client;
         private HabboStats _habboStats;
@@ -295,7 +294,6 @@ namespace Plus.HabboHotel.Users
             this.Achievements = new ConcurrentDictionary<string, UserAchievement>();
             this.Relationships = new Dictionary<int, Relationship>();
             this.RatedRooms = new List<int>();
-            this.UsersRooms = new List<RoomData>();
 
             //TODO: Nope.
             this.InitPermissions();
@@ -966,7 +964,6 @@ namespace Plus.HabboHotel.Users
             Messenger.Init(data.friends, data.requests);
             this._friendCount = Convert.ToInt32(data.friends.Count);
             this._disconnected = false;
-            UsersRooms = data.rooms;
             Relationships = data.Relations;
 
             this.InitSearches();
@@ -1024,9 +1021,6 @@ namespace Plus.HabboHotel.Users
         {
             if (this.InventoryComponent != null)
                 this.InventoryComponent.SetIdleState();
-
-            if (this.UsersRooms != null)
-                UsersRooms.Clear();
 
             if (this.InRoom && this.CurrentRoom != null)
                 this.CurrentRoom.GetRoomUserManager().RemoveUserFromRoom(this._client, false, false);
@@ -1151,7 +1145,7 @@ namespace Plus.HabboHotel.Users
             }
         }
 
-        public void PrepareRoom(int Id, string Password)
+        public void PrepareRoom(int id, string password)
         {
             if (this.GetClient() == null || this.GetClient().GetHabbo() == null)
                 return;
@@ -1166,14 +1160,14 @@ namespace Plus.HabboHotel.Users
                     OldRoom.GetRoomUserManager().RemoveUserFromRoom(this.GetClient(), false, false);
             }
 
-            if (this.GetClient().GetHabbo().IsTeleporting && this.GetClient().GetHabbo().TeleportingRoomID != Id)
+            if (this.GetClient().GetHabbo().IsTeleporting && this.GetClient().GetHabbo().TeleportingRoomID != id)
             {
                 this.GetClient().SendPacket(new CloseConnectionComposer());
                 return;
             }
 
-            Room Room = PlusEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
-            if (Room == null)
+            Room Room = null;
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryLoadRoom(id, out Room))
             {
                 this.GetClient().SendPacket(new CloseConnectionComposer());
                 return;
@@ -1225,7 +1219,7 @@ namespace Plus.HabboHotel.Users
                 }
                 else if (Room.Access == RoomAccess.Password && !this.GetClient().GetHabbo().GetPermissions().HasRight("room_enter_locked"))
                 {
-                    if (Password.ToLower() != Room.Password.ToLower() || String.IsNullOrWhiteSpace(Password))
+                    if (password.ToLower() != Room.Password.ToLower() || String.IsNullOrWhiteSpace(password))
                     {
                         this.GetClient().SendPacket(new GenericErrorComposer(-100002));
                         this.GetClient().SendPacket(new CloseConnectionComposer());

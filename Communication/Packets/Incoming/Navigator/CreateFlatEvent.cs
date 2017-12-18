@@ -1,35 +1,34 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
 
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Navigator;
-using Plus.Communication.Packets.Outgoing.Moderation;
 using Plus.HabboHotel.Navigator;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {
     class CreateFlatEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
-            
-            if (Session.GetHabbo().UsersRooms.Count >= 500)
+
+            List<RoomData> rooms = RoomFactory.GetRoomsDataByOwnerSortByName(session.GetHabbo().Id);
+            if (rooms.Count >= 500)
             {
-                Session.SendPacket(new CanCreateRoomComposer(true, 500));
+                session.SendPacket(new CanCreateRoomComposer(true, 500));
                 return;
             }
 
-            string Name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-            string Description = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-            string ModelName = Packet.PopString();
+            string Name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string Description = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string ModelName = packet.PopString();
 
-            int Category = Packet.PopInt();
-            int MaxVisitors = Packet.PopInt();//10 = min, 25 = max.
-            int TradeSettings = Packet.PopInt();//2 = All can trade, 1 = owner only, 0 = no trading.
+            int Category = packet.PopInt();
+            int MaxVisitors = packet.PopInt();//10 = min, 25 = max.
+            int TradeSettings = packet.PopInt();//2 = All can trade, 1 = owner only, 0 = no trading.
 
             if (Name.Length < 3)
                 return;
@@ -37,15 +36,15 @@ namespace Plus.Communication.Packets.Incoming.Navigator
             if (Name.Length > 25)
                 return;
 
-            RoomModel RoomModel = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetModel(ModelName, out RoomModel))
+            RoomModel model = null;
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetModel(ModelName, out model))
                 return;
 
             SearchResultList SearchResultList = null;
             if (!PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(Category, out SearchResultList))
                 Category = 36;
-            
-            if (SearchResultList.CategoryType != NavigatorCategoryType.Category || SearchResultList.RequiredRank > Session.GetHabbo().Rank)
+
+            if (SearchResultList.CategoryType != NavigatorCategoryType.Category || SearchResultList.RequiredRank > session.GetHabbo().Rank)
                 Category = 36;
 
             if (MaxVisitors < 10 || MaxVisitors > 25)
@@ -54,11 +53,14 @@ namespace Plus.Communication.Packets.Incoming.Navigator
             if (TradeSettings < 0 || TradeSettings > 2)
                 TradeSettings = 0;
 
-            RoomData NewRoom = PlusEnvironment.GetGame().GetRoomManager().CreateRoom(Session, Name, Description, ModelName, Category, MaxVisitors, TradeSettings);
+            RoomData NewRoom = PlusEnvironment.GetGame().GetRoomManager().CreateRoom(session, Name, Description, Category, MaxVisitors, TradeSettings, model);
             if (NewRoom != null)
             {
-                Session.SendPacket(new FlatCreatedComposer(NewRoom.Id, Name));
+                session.SendPacket(new FlatCreatedComposer(NewRoom.Id, Name));
             }
+
+            if (session.GetHabbo() != null && session.GetHabbo().GetMessenger() != null)
+                session.GetHabbo().GetMessenger().OnStatusChanged(true);
         }
     }
 }

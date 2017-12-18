@@ -879,6 +879,7 @@
     <Compile Include="HabboHotel\Rooms\RoomAccess.cs" />
     <Compile Include="HabboHotel\Rooms\RoomAccessUtility.cs" />
     <Compile Include="HabboHotel\Rooms\RoomAppender.cs" />
+    <Compile Include="HabboHotel\Rooms\RoomFactory.cs" />
     <Compile Include="HabboHotel\Rooms\RoomPromotion.cs" />
     <Compile Include="HabboHotel\Rooms\SquareState.cs" />
     <Compile Include="HabboHotel\Rooms\Trading\TradeUser.cs" />

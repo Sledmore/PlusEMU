@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Groups;
 
@@ -11,54 +8,57 @@ namespace Plus.Communication.Packets.Incoming.Groups
 {
     class DeleteGroupEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group))
+            Group group = null;
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out group))
             {
-                Session.SendNotification("Oops, we couldn't find that group!");
+                session.SendNotification("Oops, we couldn't find that group!");
                 return;
             }
 
-            if (Group.CreatorId != Session.GetHabbo().Id && !Session.GetHabbo().GetPermissions().HasRight("group_delete_override"))//Maybe a FUSE check for staff override?
+            if (group.CreatorId != session.GetHabbo().Id && !session.GetHabbo().GetPermissions().HasRight("group_delete_override"))//Maybe a FUSE check for staff override?
             {
-                Session.SendNotification("Oops, only the group owner can delete a group!");
+                session.SendNotification("Oops, only the group owner can delete a group!");
                 return;
             }
 
-            if (Group.MemberCount >= Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("group.delete.member.limit")) && !Session.GetHabbo().GetPermissions().HasRight("group_delete_limit_override"))
+            if (group.MemberCount >= Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("group.delete.member.limit")) && !session.GetHabbo().GetPermissions().HasRight("group_delete_limit_override"))
             {
-                Session.SendNotification("Oops, your group exceeds the maximum amount of members (" + Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("group.delete.member.limit")) + ") a group can exceed before being eligible for deletion. Seek assistance from a staff member.");
+                session.SendNotification("Oops, your group exceeds the maximum amount of members (" + Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("group.delete.member.limit")) + ") a group can exceed before being eligible for deletion. Seek assistance from a staff member.");
                 return;
             }
 
-            Room Room = PlusEnvironment.GetGame().GetRoomManager().LoadRoom(Group.RoomId);
+            Room room = null;
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out room))
+                return;
 
-            if (Room != null)
-            {
-                Room.Group = null;
-                Room.RoomData.Group = null;//I'm not sure if this is needed or not, becauseof inheritance, but oh well.
-            }
+            RoomData data = null;
+            if (!RoomFactory.TryGetData(group.RoomId, out data))
+                return;
+
+            room.Group = null;
+
 
             //Remove it from the cache.
-            PlusEnvironment.GetGame().GetGroupManager().DeleteGroup(Group.Id);
+            PlusEnvironment.GetGame().GetGroupManager().DeleteGroup(group.Id);
 
             //Now the :S stuff.
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("DELETE FROM `groups` WHERE `id` = '" + Group.Id + "'");
-                dbClient.RunQuery("DELETE FROM `group_memberships` WHERE `group_id` = '" + Group.Id + "'");
-                dbClient.RunQuery("DELETE FROM `group_requests` WHERE `group_id` = '" + Group.Id + "'");
-                dbClient.RunQuery("UPDATE `rooms` SET `group_id` = '0' WHERE `group_id` = '" + Group.Id + "' LIMIT 1");
-                dbClient.RunQuery("UPDATE `user_stats` SET `groupid` = '0' WHERE `groupid` = '" + Group.Id + "' LIMIT 1");
-                dbClient.RunQuery("DELETE FROM `items_groups` WHERE `group_id` = '" + Group.Id + "'");
+                dbClient.RunQuery("DELETE FROM `groups` WHERE `id` = '" + group.Id + "'");
+                dbClient.RunQuery("DELETE FROM `group_memberships` WHERE `group_id` = '" + group.Id + "'");
+                dbClient.RunQuery("DELETE FROM `group_requests` WHERE `group_id` = '" + group.Id + "'");
+                dbClient.RunQuery("UPDATE `rooms` SET `group_id` = '0' WHERE `group_id` = '" + group.Id + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE `user_stats` SET `groupid` = '0' WHERE `groupid` = '" + group.Id + "' LIMIT 1");
+                dbClient.RunQuery("DELETE FROM `items_groups` WHERE `group_id` = '" + group.Id + "'");
             }
 
             //Unload it last.
-            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room, true);
+            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(room.Id);
 
             //Say hey!
-            Session.SendNotification("You have successfully deleted your group.");
+            session.SendNotification("You have successfully deleted your group.");
             return;
         }
     }

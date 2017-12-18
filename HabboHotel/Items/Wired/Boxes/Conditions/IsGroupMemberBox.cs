@@ -42,10 +42,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             if (Player == null)
                 return false;
 
-            if (Instance.RoomData.Group == null)
+            if (Instance.Group == null)
                 return false;
 
-            if (!Instance.RoomData.Group.IsMember(Player.Id))
+            if (!Instance.Group.IsMember(Player.Id))
                 return false;
 
             return true;

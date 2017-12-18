@@ -46,12 +46,11 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Administrator
                 dbClient.RunQuery("DELETE FROM `items_groups` WHERE `group_id` = '" + Room.Group.Id + "'");
             }
 
-            PlusEnvironment.GetGame().GetGroupManager().DeleteGroup(Room.RoomData.Group.Id);
+            PlusEnvironment.GetGame().GetGroupManager().DeleteGroup(Room.Group.Id);
 
             Room.Group = null;
-            Room.RoomData.Group = null;
 
-            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room, true);
+            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room.Id);
 
             Session.SendNotification("Success, group deleted.");
             return;

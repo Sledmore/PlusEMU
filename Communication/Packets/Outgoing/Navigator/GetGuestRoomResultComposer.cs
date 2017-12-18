@@ -77,10 +77,10 @@ namespace Plus.Communication.Packets.Outgoing.Navigator
 
             base.WriteBoolean(Session.GetHabbo().GetPermissions().HasRight("mod_tool") || Data.OwnerName == Session.GetHabbo().Username);//Room muting.
             base.WriteInteger(Data.chatMode);
-            base.WriteInteger(Data.chatSize);
-            base.WriteInteger(Data.chatSpeed);
-            base.WriteInteger(Data.extraFlood);//Hearing distance
-            base.WriteInteger(Data.chatDistance);//Flood!!
+            base.WriteInteger(Data.ChatSize);
+            base.WriteInteger(Data.ChatSpeed);
+            base.WriteInteger(Data.ExtraFlood);//Hearing distance
+            base.WriteInteger(Data.ChatDistance);//Flood!!
         }
     }
 }

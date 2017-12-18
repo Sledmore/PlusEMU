@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
-using System.Collections.Generic;
 
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users;
@@ -16,32 +14,32 @@ namespace Plus.Communication.Packets.Incoming.Users
 {
     class ChangeNameEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = session.GetHabbo().CurrentRoom;
             if (Room == null)
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Username);
+            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Username);
             if (User == null)
                 return;
 
-            string NewName = Packet.PopString();
-            string OldName = Session.GetHabbo().Username;
+            string NewName = packet.PopString();
+            string OldName = session.GetHabbo().Username;
 
             if (NewName == OldName)
             {
-                Session.GetHabbo().ChangeName(OldName);
-                Session.SendPacket(new UpdateUsernameComposer(NewName));
+                session.GetHabbo().ChangeName(OldName);
+                session.SendPacket(new UpdateUsernameComposer(NewName));
                 return;
             }
 
-            if (!CanChangeName(Session.GetHabbo()))
+            if (!CanChangeName(session.GetHabbo()))
             {
-                Session.SendNotification("Oops, it appears you currently cannot change your username!");
+                session.SendNotification("Oops, it appears you currently cannot change your username!");
                 return;
             }
 
@@ -64,10 +62,10 @@ namespace Plus.Communication.Packets.Incoming.Users
                 }
             }
 
-            if (!Session.GetHabbo().GetPermissions().HasRight("mod_tool") && NewName.ToLower().Contains("mod") || NewName.ToLower().Contains("adm") || NewName.ToLower().Contains("admin")
+            if (!session.GetHabbo().GetPermissions().HasRight("mod_tool") && NewName.ToLower().Contains("mod") || NewName.ToLower().Contains("adm") || NewName.ToLower().Contains("admin")
                 || NewName.ToLower().Contains("m0d") || NewName.ToLower().Contains("mob") || NewName.ToLower().Contains("m0b"))
                 return;
-            else if (!NewName.ToLower().Contains("mod") && (Session.GetHabbo().Rank == 2 || Session.GetHabbo().Rank == 3))
+            else if (!NewName.ToLower().Contains("mod") && (session.GetHabbo().Rank == 2 || session.GetHabbo().Rank == 3))
                 return;
             else if (NewName.Length > 15)
                 return;
@@ -77,52 +75,42 @@ namespace Plus.Communication.Packets.Incoming.Users
                 return;
             else
             {
-                if (!PlusEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session, OldName, NewName))
+                if (!PlusEnvironment.GetGame().GetClientManager().UpdateClientUsername(session, OldName, NewName))
                 {
-                    Session.SendNotification("Oops! An issue occoured whilst updating your username.");
+                    session.SendNotification("Oops! An issue occoured whilst updating your username.");
                     return;
                 }
 
-                Session.GetHabbo().ChangingName = false;
+                session.GetHabbo().ChangingName = false;
 
-                Room.GetRoomUserManager().RemoveUserFromRoom(Session, true, false);
+                Room.GetRoomUserManager().RemoveUserFromRoom(session, true, false);
 
-                Session.GetHabbo().ChangeName(NewName);
-                Session.GetHabbo().GetMessenger().OnStatusChanged(true);
+                session.GetHabbo().ChangeName(NewName);
+                session.GetHabbo().GetMessenger().OnStatusChanged(true);
 
-                Session.SendPacket(new UpdateUsernameComposer(NewName));
+                session.SendPacket(new UpdateUsernameComposer(NewName));
                 Room.SendPacket(new UserNameChangeComposer(Room.Id, User.VirtualId, NewName));
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO `logs_client_namechange` (`user_id`,`new_name`,`old_name`,`timestamp`) VALUES ('" + Session.GetHabbo().Id + "', @name, '" + OldName + "', '" + PlusEnvironment.GetUnixTimestamp() + "')");
+                    dbClient.SetQuery("INSERT INTO `logs_client_namechange` (`user_id`,`new_name`,`old_name`,`timestamp`) VALUES ('" + session.GetHabbo().Id + "', @name, '" + OldName + "', '" + PlusEnvironment.GetUnixTimestamp() + "')");
                     dbClient.AddParameter("name", NewName);
                     dbClient.RunQuery();
                 }
 
-                ICollection<RoomData> Rooms = Session.GetHabbo().UsersRooms;
-                foreach (RoomData Data in Rooms)
+
+                foreach (Room room in PlusEnvironment.GetGame().GetRoomManager().GetRooms().ToList())
                 {
-                    if (Data == null)
+                    if (room == null || room.OwnerId != session.GetHabbo().Id || room.OwnerName == NewName)
                         continue;
 
-                    Data.OwnerName = NewName;
+                    room.OwnerName = NewName;
+                    room.SendPacket(new RoomInfoUpdatedComposer(room.Id));
                 }
 
-                foreach (Room UserRoom in PlusEnvironment.GetGame().GetRoomManager().GetRooms().ToList())
-                {
-                    if (UserRoom == null || UserRoom.RoomData.OwnerName != NewName)
-                        continue;
+                PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_Name", 1);
 
-                    UserRoom.OwnerName = NewName;
-                    UserRoom.RoomData.OwnerName = NewName;
-
-                    UserRoom.SendPacket(new RoomInfoUpdatedComposer(UserRoom.RoomId));
-                }
-
-                PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_Name", 1);
-
-               Session.SendPacket(new RoomForwardComposer(Room.Id));
+               session.SendPacket(new RoomForwardComposer(Room.Id));
             }
         }
 

@@ -13,8 +13,11 @@ namespace Plus.HabboHotel.Navigator
 {
     static class NavigatorHandler
     {
-        public static void Search(ServerPacket Message, SearchResultList SearchResult, string SearchData, GameClient Session, int FetchLimit)
+        public static void Search(ServerPacket Message, SearchResultList SearchResult, string query, GameClient session, int FetchLimit)
         {
+            if (session == null)
+                return;
+
             //Switching by categorys.
             switch (SearchResult.CategoryType)
             {
@@ -25,18 +28,18 @@ namespace Plus.HabboHotel.Navigator
                 case NavigatorCategoryType.Query:
                     {
                         #region Query
-                        if (SearchData.ToLower().StartsWith("owner:"))
+                        if (query.ToLower().StartsWith("owner:"))
                         {
-                            if (SearchData.Length > 0)
+                            if (query.Length > 0)
                             {
                                 int UserId = 0;
                                 DataTable GetRooms = null;
                                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                                 {
-                                    if (SearchData.ToLower().StartsWith("owner:"))
+                                    if (query.ToLower().StartsWith("owner:"))
                                     {
                                         dbClient.SetQuery("SELECT `id` FROM `users` WHERE `username` = @username LIMIT 1");
-                                        dbClient.AddParameter("username", SearchData.Remove(0, 6));
+                                        dbClient.AddParameter("username", query.Remove(0, 6));
                                         UserId = dbClient.GetInteger();
 
                                         dbClient.SetQuery("SELECT * FROM `rooms` WHERE `owner` = '" + UserId + "' and `state` != 'invisible' ORDER BY `users_now` DESC LIMIT 50");
@@ -49,10 +52,15 @@ namespace Plus.HabboHotel.Navigator
                                 {
                                     foreach (DataRow Row in GetRooms.Rows)
                                     {
-                                        RoomData RoomData = PlusEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(Row["id"]), Row);
-                                        if (RoomData != null && !Results.Contains(RoomData))
-                                            Results.Add(RoomData);
+                                        RoomData Data = null;
+                                        if (!RoomFactory.TryGetData(Convert.ToInt32(Row["id"]), out Data))
+                                            continue;
+
+                                        if (!Results.Contains(Data))
+                                            Results.Add(Data);
                                     }
+
+                                    GetRooms = null;
                                 }
 
                                 Message.WriteInteger(Results.Count);
@@ -60,39 +68,45 @@ namespace Plus.HabboHotel.Navigator
                                 {
                                     RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                                 }
+
+                                Results = null;
                             }
                         }
-                        else if (SearchData.ToLower().StartsWith("tag:"))
+                        else if (query.ToLower().StartsWith("tag:"))
                         {
-                            SearchData = SearchData.Remove(0, 4);
-                            ICollection<RoomData> TagMatches = PlusEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(SearchData);
+                            query = query.Remove(0, 4);
+                            ICollection<Room> TagMatches = PlusEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(query);
 
                             Message.WriteInteger(TagMatches.Count);
                             foreach (RoomData Data in TagMatches.ToList())
                             {
                                 RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                             }
+
+                            TagMatches = null;
                         }
-                        else if (SearchData.ToLower().StartsWith("group:"))
+                        else if (query.ToLower().StartsWith("group:"))
                         {
-                            SearchData = SearchData.Remove(0, 6);
-                            ICollection<RoomData> GroupRooms = PlusEnvironment.GetGame().GetRoomManager().SearchGroupRooms(SearchData);
+                            query = query.Remove(0, 6);
+                            ICollection<Room> GroupRooms = PlusEnvironment.GetGame().GetRoomManager().SearchGroupRooms(query);
 
                             Message.WriteInteger(GroupRooms.Count);
                             foreach (RoomData Data in GroupRooms.ToList())
                             {
                                 RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                             }
+
+                            GroupRooms = null;
                         }
                         else
                         {
-                            if (SearchData.Length > 0)
+                            if (query.Length > 0)
                             {
                                 DataTable Table = null;
                                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                                 {
-                                    dbClient.SetQuery("SELECT `id`,`caption`,`description`,`roomtype`,`owner`,`state`,`category`,`users_now`,`users_max`,`model_name`,`score`,`allow_pets`,`allow_pets_eat`,`room_blocking_disabled`,`allow_hidewall`,`password`,`wallpaper`,`floor`,`landscape`,`floorthick`,`wallthick`,`mute_settings`,`kick_settings`,`ban_settings`,`chat_mode`,`chat_speed`,`chat_size`,`trade_settings`,`group_id`,`tags`,`push_enabled`,`pull_enabled`,`enables_enabled`,`respect_notifications_enabled`,`pet_morphs_allowed`,`spush_enabled`,`spull_enabled` FROM rooms WHERE `caption` LIKE @query ORDER BY `users_now` DESC LIMIT 50");
-                                    dbClient.AddParameter("query", "%" + SearchData + "%");
+                                    dbClient.SetQuery("SELECT `id`,`caption`,`description`,`roomtype`,`owner`,`state`,`category`,`users_now`,`users_max`,`model_name`,`score`,`allow_pets`,`allow_pets_eat`,`room_blocking_disabled`,`allow_hidewall`,`password`,`wallpaper`,`floor`,`landscape`,`floorthick`,`wallthick`,`mute_settings`,`kick_settings`,`ban_settings`,`chat_mode`,`chat_speed`,`chat_size`,`trade_settings`,`group_id`,`tags`,`push_enabled`,`pull_enabled`,`enables_enabled`,`respect_notifications_enabled`,`pet_morphs_allowed`,`spush_enabled`,`spull_enabled`,`sale_price` FROM rooms WHERE `caption` LIKE @query ORDER BY `users_now` DESC LIMIT 50");
+                                    dbClient.AddParameter("query", query + "%");
                                     Table = dbClient.GetTable();
                                 }
 
@@ -104,10 +118,15 @@ namespace Plus.HabboHotel.Navigator
                                         if (Convert.ToString(Row["state"]) == "invisible")
                                             continue;
 
-                                        RoomData RData = PlusEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(Row["id"]), Row);
-                                        if (RData != null && !Results.Contains(RData))
-                                            Results.Add(RData);
+                                        RoomData Data = null;
+                                        if (!RoomFactory.TryGetData(Convert.ToInt32(Row["id"]), out Data))
+                                            continue;
+
+                                        if (!Results.Contains(Data))
+                                            Results.Add(Data);
                                     }
+
+                                    Table = null;
                                 }
 
                                 Message.WriteInteger(Results.Count);
@@ -115,6 +134,8 @@ namespace Plus.HabboHotel.Navigator
                                 {
                                     RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                                 }
+
+                                Results = null;
                             }
                         }
                         #endregion
@@ -123,189 +144,197 @@ namespace Plus.HabboHotel.Navigator
                     }
 
                 case NavigatorCategoryType.Featured:
-                    #region Featured
-                    List<RoomData> Rooms = new List<RoomData>();
-                    ICollection<FeaturedRoom> Featured = PlusEnvironment.GetGame().GetNavigator().GetFeaturedRooms();
-                    foreach (FeaturedRoom FeaturedItem in Featured.ToList())
                     {
-                        if (FeaturedItem == null)
-                            continue;
-
-                        RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(FeaturedItem.RoomId);
-                        if (Data == null)
-                            continue;
-
-                        if (!Rooms.Contains(Data))
-                            Rooms.Add(Data);
+                        break;
                     }
-
-                    Message.WriteInteger(Rooms.Count);
-                    foreach (RoomData Data in Rooms.ToList())
-                    {
-                        RoomAppender.WriteRoom(Message, Data, Data.Promotion);
-                    }
-                    #endregion
-                    break;
 
                 case NavigatorCategoryType.Popular:
                     {
-                        List<RoomData> PopularRooms = PlusEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, FetchLimit);
+                        List<Room> PopularRooms = PlusEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, FetchLimit);
 
                         Message.WriteInteger(PopularRooms.Count);
                         foreach (RoomData Data in PopularRooms.ToList())
                         {
                             RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                         }
+
+                        PopularRooms = null;
                         break;
                     }
 
                 case NavigatorCategoryType.Recommended:
                     {
-                        List<RoomData> RecommendedRooms = PlusEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(FetchLimit);
+                        List<Room> RecommendedRooms = PlusEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(FetchLimit);
 
                         Message.WriteInteger(RecommendedRooms.Count);
                         foreach (RoomData Data in RecommendedRooms.ToList())
                         {
                             RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                         }
+
+                        RecommendedRooms = null;
                         break;
                     }
 
                 case NavigatorCategoryType.Category:
                     {
-                        List<RoomData> GetRoomsByCategory = PlusEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(SearchResult.Id, FetchLimit);
+                        List<Room> GetRoomsByCategory = PlusEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(SearchResult.Id, FetchLimit);
 
                         Message.WriteInteger(GetRoomsByCategory.Count);
                         foreach (RoomData Data in GetRoomsByCategory.ToList())
                         {
                             RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                         }
+
+                        GetRoomsByCategory = null;
                         break;
                     }
 
                 case NavigatorCategoryType.MyRooms:
-
-                    Message.WriteInteger(Session.GetHabbo().UsersRooms.Count);
-                    foreach (RoomData Data in Session.GetHabbo().UsersRooms.ToList())
                     {
-                        RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                        ICollection<RoomData> rooms = RoomFactory.GetRoomsDataByOwnerSortByName(session.GetHabbo().Id).OrderByDescending(x => x.UsersNow).ToList();
+
+                        Message.WriteInteger(rooms.Count);
+                        foreach (RoomData Data in rooms.ToList())
+                        {
+                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                        }
+
+                        break;
                     }
-                    break;
 
                 case NavigatorCategoryType.MyFavourites:
-                    List<RoomData> Favourites = new List<RoomData>();
-                    foreach (int Id in Session.GetHabbo().FavoriteRooms.ToArray())
                     {
-                        RoomData Room = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(Id);
-                        if (Room == null)
-                            continue;
-
-                        if (!Favourites.Contains(Room))
-                            Favourites.Add(Room);
+                        break;
                     }
-
-                    Favourites = Favourites.Take(FetchLimit).ToList();
-
-                    Message.WriteInteger(Favourites.Count);
-                    foreach (RoomData Data in Favourites.ToList())
-                    {
-                        RoomAppender.WriteRoom(Message, Data, Data.Promotion);
-                    }
-                    break;
 
                 case NavigatorCategoryType.MyGroups:
-                    List<RoomData> MyGroups = new List<RoomData>();
-
-                    foreach (Group Group in PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(Session.GetHabbo().Id).ToList())
                     {
-                        if (Group == null)
-                            continue;
+                        List<RoomData> MyGroups = new List<RoomData>();
 
-                        RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId);
-                        if (Data == null)
-                            continue;
-
-                        if (!MyGroups.Contains(Data))
-                            MyGroups.Add(Data);
-                    }
-
-                    MyGroups = MyGroups.Take(FetchLimit).ToList();
-
-                    Message.WriteInteger(MyGroups.Count);
-                    foreach (RoomData Data in MyGroups.ToList())
-                    {
-                        RoomAppender.WriteRoom(Message, Data, Data.Promotion);
-                    }
-                    break;
-
-                case NavigatorCategoryType.MyFriendsRooms:
-                    List<RoomData> MyFriendsRooms = new List<RoomData>();
-                    foreach (MessengerBuddy buddy in Session.GetHabbo().GetMessenger().GetFriends().Where(p => p.InRoom))
-                    {
-                        if (buddy == null || !buddy.InRoom || buddy.UserId == Session.GetHabbo().Id)
-                            continue;
-
-                        if (!MyFriendsRooms.Contains(buddy.CurrentRoom.RoomData))
-                            MyFriendsRooms.Add(buddy.CurrentRoom.RoomData);
-                    }
-
-                    Message.WriteInteger(MyFriendsRooms.Count);
-                    foreach (RoomData Data in MyFriendsRooms.ToList())
-                    {
-                        RoomAppender.WriteRoom(Message, Data, Data.Promotion);
-                    }
-                    break;
-
-                case NavigatorCategoryType.MyRights:
-                    List<RoomData> MyRights = new List<RoomData>();
-
-                    DataTable GetRights = null;
-                    using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        dbClient.SetQuery("SELECT `room_id` FROM `room_rights` WHERE `user_id` = @UserId LIMIT @FetchLimit");
-                        dbClient.AddParameter("UserId", Session.GetHabbo().Id);
-                        dbClient.AddParameter("FetchLimit", FetchLimit);
-                        GetRights = dbClient.GetTable();
-
-                        foreach (DataRow Row in GetRights.Rows)
+                        foreach (Group Group in PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(session.GetHabbo().Id).ToList())
                         {
-                            RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(Convert.ToInt32(Row["room_id"]));
-                            if (Data == null)
+                            if (Group == null)
                                 continue;
 
-                            if (!MyRights.Contains(Data))
-                                MyRights.Add(Data);
+                            RoomData Data = null;
+                            if (!RoomFactory.TryGetData(Group.RoomId, out Data))
+                                continue;
+
+                            if (!MyGroups.Contains(Data))
+                                MyGroups.Add(Data);
                         }
+
+                        MyGroups = MyGroups.Take(FetchLimit).ToList();
+
+                        Message.WriteInteger(MyGroups.Count);
+                        foreach (RoomData Data in MyGroups.ToList())
+                        {
+                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                        }
+
+                        MyGroups = null;
+
+                        break;
                     }
 
-                    Message.WriteInteger(MyRights.Count);
-                    foreach (RoomData Data in MyRights.ToList())
+                case NavigatorCategoryType.MyFriendsRooms:
                     {
-                        RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                        List<int> RoomIds = new List<int>();
+
+                        if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null || session.GetHabbo().GetMessenger().GetFriends() == null)
+                            return;
+
+                        foreach (MessengerBuddy buddy in session.GetHabbo().GetMessenger().GetFriends().Where(p => p.InRoom))
+                        {
+                            if (buddy == null || !buddy.InRoom || buddy.UserId == session.GetHabbo().Id)
+                                continue;
+
+                            if (!RoomIds.Contains(buddy.CurrentRoom.Id))
+                                RoomIds.Add(buddy.CurrentRoom.Id);
+                        }
+
+                        List<Room> MyFriendsRooms = PlusEnvironment.GetGame().GetRoomManager().GetRoomsByIds(RoomIds.ToList());
+
+                        Message.WriteInteger(MyFriendsRooms.Count);
+                        foreach (RoomData Data in MyFriendsRooms.ToList())
+                        {
+                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                        }
+
+                        MyFriendsRooms = null;
+                        break;
                     }
-                    break;
+
+                case NavigatorCategoryType.MyRights:
+                    {
+                        List<RoomData> MyRights = new List<RoomData>();
+
+                        if (session != null)
+                        {
+                            DataTable GetRights = null;
+                            using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
+                            {
+                                dbClient.SetQuery("SELECT `room_id` FROM `room_rights` WHERE `user_id` = @UserId LIMIT @FetchLimit");
+                                dbClient.AddParameter("UserId", session.GetHabbo().Id);
+                                dbClient.AddParameter("FetchLimit", FetchLimit);
+                                GetRights = dbClient.GetTable();
+
+                                foreach (DataRow Row in GetRights.Rows)
+                                {
+                                    RoomData Data = null;
+                                    if (!RoomFactory.TryGetData(Convert.ToInt32(Row["room_id"]), out Data))
+                                        continue;
+
+                                    if (!MyRights.Contains(Data))
+                                        MyRights.Add(Data);
+                                }
+                            }
+                        }
+
+                        Message.WriteInteger(MyRights.Count);
+                        foreach (RoomData Data in MyRights.ToList())
+                        {
+                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                        }
+
+                        MyRights = null;
+                        break;
+                    }
 
                 case NavigatorCategoryType.TopPromotions:
                     {
-                        List<RoomData> GetPopularPromotions = PlusEnvironment.GetGame().GetRoomManager().GetOnGoingRoomPromotions(16, FetchLimit);
+                        List<Room> GetPopularPromotions = PlusEnvironment.GetGame().GetRoomManager().GetOnGoingRoomPromotions(16, FetchLimit);
 
                         Message.WriteInteger(GetPopularPromotions.Count);
                         foreach (RoomData Data in GetPopularPromotions.ToList())
                         {
                             RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                         }
+
+                        GetPopularPromotions = null;
+
+                        break;
+                    }
+
+                case NavigatorCategoryType.MyHistory:
+                    {
+                       
                         break;
                     }
 
                 case NavigatorCategoryType.PromotionCategory:
                     {
-                        List<RoomData> GetPromotedRooms = PlusEnvironment.GetGame().GetRoomManager().GetPromotedRooms(SearchResult.Id, FetchLimit);
+                        List<Room> GetPromotedRooms = PlusEnvironment.GetGame().GetRoomManager().GetPromotedRooms(SearchResult.OrderId, FetchLimit);
 
                         Message.WriteInteger(GetPromotedRooms.Count);
                         foreach (RoomData Data in GetPromotedRooms.ToList())
                         {
                             RoomAppender.WriteRoom(Message, Data, Data.Promotion);
                         }
+
+                        GetPromotedRooms = null;
+
                         break;
                     }
             }

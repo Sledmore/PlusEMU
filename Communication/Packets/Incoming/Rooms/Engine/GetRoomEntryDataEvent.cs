@@ -64,7 +64,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
             if (ThisUser != null && Session.GetHabbo().PetId == 0)
                 Room.SendPacket(new UserChangeComposer(ThisUser, false));
 
-            Session.SendPacket(new RoomEventComposer(Room.RoomData, Room.RoomData.Promotion));
+            Session.SendPacket(new RoomEventComposer(Room, Room.Promotion));
 
             if (Room.GetWired() != null)
                 Room.GetWired().TriggerEvent(WiredBoxType.TriggerRoomEnter, Session.GetHabbo());

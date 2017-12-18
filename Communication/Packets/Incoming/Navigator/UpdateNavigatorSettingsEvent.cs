@@ -1,27 +1,23 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Navigator;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {
     class UpdateNavigatorSettingsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int roomID = Packet.PopInt();
-            if (roomID == 0)
+            int roomId = packet.PopInt();
+            if (roomId == 0)
                 return;
 
-            RoomData Data = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomID);
-            if (Data == null)
+            RoomData data = null;
+            if (!RoomFactory.TryGetData(roomId, out data))
                 return;
 
-            Session.GetHabbo().HomeRoom = roomID;
-            Session.SendPacket(new NavigatorSettingsComposer(roomID));
+            session.GetHabbo().HomeRoom = roomId;
+            session.SendPacket(new NavigatorSettingsComposer(roomId));
         }
     }
 }

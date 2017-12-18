@@ -37,7 +37,10 @@ namespace Plus.Communication.Packets.Incoming.Groups
                 session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
             }
 
-            RoomData Room = PlusEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+            RoomData Room = null;
+            if (!RoomFactory.TryGetData(RoomId, out Room))
+                return;
+            
             if (Room == null || Room.OwnerId != session.GetHabbo().Id || Room.Group != null)
                 return;
 
