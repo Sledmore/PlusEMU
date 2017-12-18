@@ -1,6 +1,4 @@
-﻿using log4net;
-
-using Plus.Communication.Packets;
+﻿using Plus.Communication.Packets;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Moderation;
 using Plus.HabboHotel.Catalog;
@@ -27,14 +25,11 @@ using Plus.HabboHotel.Subscriptions;
 using System.Threading;
 using System.Threading.Tasks;
 using Plus.Core;
-using Plus.Core.Language;
 
 namespace Plus.HabboHotel
 {
     public class Game
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Game");
-        
         private readonly PacketManager _packetManager;
         private readonly GameClientManager _clientManager;
         private readonly ModerationManager _moderationManager;

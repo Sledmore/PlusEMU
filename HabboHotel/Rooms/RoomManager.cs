@@ -149,23 +149,17 @@ namespace Plus.HabboHotel.Rooms
             return this._roomModels.TryGetValue(Id, out Model);
         }
 
-        public void UnloadRoom(Room Room, bool RemoveData = false)
+        public void UnloadRoom(Room room)
         {
-            if (Room == null)
+            if (room == null)
                 return;
 
-            Room room = null;
-            if (this._rooms.TryRemove(Room.RoomId, out room))
+            if (this._rooms.TryRemove(room.RoomId, out Room r))
             {
-                Room.Dispose();
+                room.Dispose();
 
-                if (RemoveData)
-                {
-                    RoomData Data = null;
-                    this._loadedRoomData.TryRemove(Room.Id, out Data);
-                }
+                _loadedRoomData.TryRemove(room.Id, out RoomData Data);
             }
-            //Logging.WriteLine("[RoomMgr] Unloaded room: \"" + Room.Name + "\" (ID: " + Room.RoomId + ")");
         }
 
         public List<RoomData> SearchGroupRooms(string Query)
@@ -350,42 +344,42 @@ namespace Plus.HabboHotel.Rooms
                 return null;
         }
 
-        public RoomModel GetModel(string Model)
+        public RoomModel GetModel(string model)
         {
-            if (_roomModels.ContainsKey(Model))
-                return (RoomModel)_roomModels[Model];
+            if (_roomModels.ContainsKey(model))
+                return (RoomModel)_roomModels[model];
 
             return null;
         }
 
-        public RoomData GenerateRoomData(int RoomId)
+        public RoomData GenerateRoomData(int roomId)
         {
-            if (_loadedRoomData.ContainsKey(RoomId))
-                return (RoomData)_loadedRoomData[RoomId];
+            if (_loadedRoomData.ContainsKey(roomId))
+                return (RoomData)_loadedRoomData[roomId];
 
-            RoomData Data = new RoomData();
+            RoomData data = new RoomData();
 
-            Room Room;
+            Room room;
 
-            if (TryGetRoom(RoomId, out Room))
-                return Room.RoomData;
+            if (TryGetRoom(roomId, out room))
+                return room.RoomData;
 
             DataRow Row = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM rooms WHERE id = " + RoomId + " LIMIT 1");
+                dbClient.SetQuery("SELECT * FROM rooms WHERE id = " + roomId + " LIMIT 1");
                 Row = dbClient.GetRow();
             }
 
             if (Row == null)
                 return null;
 
-            Data.Fill(Row);
+            data.Fill(Row);
 
-            if (!_loadedRoomData.ContainsKey(RoomId))
-                _loadedRoomData.TryAdd(RoomId, Data);
+            if (!_loadedRoomData.ContainsKey(roomId))
+                _loadedRoomData.TryAdd(roomId, data);
 
-            return Data;
+            return data;
         }
 
         public RoomData FetchRoomData(int RoomId, DataRow dRow)
@@ -404,23 +398,21 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public Room LoadRoom(int Id)
+        public Room LoadRoom(int id)
         {
-            Room Room = null;
+            if (TryGetRoom(id, out Room room))
+                return room;
 
-            if (TryGetRoom(Id, out Room))
-                return Room;
-
-            RoomData Data = GenerateRoomData(Id);
-            if (Data == null)
+            RoomData data = GenerateRoomData(id);
+            if (data == null)
                 return null;
 
-            Room = new Room(Data);
+            room = new Room(data);
 
-            if (!_rooms.ContainsKey(Room.RoomId))
-                _rooms.TryAdd(Room.RoomId, Room);
+            if (!_rooms.ContainsKey(room.RoomId))
+                _rooms.TryAdd(room.RoomId, room);
 
-            return Room;
+            return room;
         }
 
         public bool TryGetRoom(int RoomId, out Room Room)

@@ -21,14 +21,15 @@ namespace Plus.Core.FigureData
 
         public FigureDataManager()
         {
-            this._palettes = new Dictionary<int, Palette>();
-            this._setTypes = new Dictionary<string, FigureSet>();
+            _palettes = new Dictionary<int, Palette>();
+            _setTypes = new Dictionary<string, FigureSet>();
 
-            this._requirements = new List<string>();
-
-            this._requirements.Add("hd");
-            this._requirements.Add("ch");
-            this._requirements.Add("lg");
+            _requirements = new List<string>
+            {
+                "hd",
+                "ch",
+                "lg"
+            };
         }
 
         public void Init()
@@ -102,15 +103,13 @@ namespace Plus.Core.FigureData
             {
                 string type = part.Split('-')[0];
 
-                FigureSet figureSet = null;
-                if (this._setTypes.TryGetValue(type, out figureSet))
+                if (this._setTypes.TryGetValue(type, out FigureSet figureSet))
                 {
                     int partId = Convert.ToInt32(part.Split('-')[1]);
                     int colorId = 0;
                     int secondColorId = 0;
 
-                    Set set = null;
-                    if (figureSet.Sets.TryGetValue(partId, out set))
+                    if (figureSet.Sets.TryGetValue(partId, out Set set))
                     {
                         #region Gender Check
                         if (set.Gender != gender && set.Gender != "U")
@@ -230,15 +229,14 @@ namespace Plus.Core.FigureData
             #endregion
 
             #region Check Required Clothing
-            foreach (string requirement in this._requirements)
+            foreach (string requirement in _requirements)
             {
                 if (!rebuildFigure.Contains(requirement))
                 {
                     if (requirement == "ch" && gender == "M")
                         continue;
 
-                    FigureSet figureSet = null;
-                    if (this._setTypes.TryGetValue(requirement, out figureSet))
+                    if (_setTypes.TryGetValue(requirement, out FigureSet figureSet))
                     {
                         Set set = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || x.Value.Gender == "U").Value;
                         if (set != null)
@@ -268,8 +266,7 @@ namespace Plus.Core.FigureData
                         {
                             string type = part.Split('-')[0];
 
-                            FigureSet figureSet = null;
-                            if (this._setTypes.TryGetValue(type, out figureSet))
+                            if (this._setTypes.TryGetValue(type, out FigureSet figureSet))
                             {
                                 Set set = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || x.Value.Gender == "U").Value;
                                 if (set != null)

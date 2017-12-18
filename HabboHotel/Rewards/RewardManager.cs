@@ -98,7 +98,7 @@ namespace Plus.HabboHotel.Rewards
                 if (this.HasReward(Session.GetHabbo().Id, Id))
                     continue;
 
-                if (Reward.isActive())
+                if (Reward.Active)
                 {
                     switch (Reward.Type)
                     {

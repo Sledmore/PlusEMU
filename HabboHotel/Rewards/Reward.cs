@@ -9,19 +9,23 @@ namespace Plus.HabboHotel.Rewards
         public RewardType Type { get; set; }
         public string RewardData { get; set; }
         public string Message { get; set; }
-        public Reward(double Start, double End, string Type, string RewardData, string Message)
+
+        public Reward(double start, double end, string type, string rewardData, string message)
         {
-            this.RewardStart = Start;
-            this.RewardEnd = End;
-            this.Type = RewardTypeUtility.GetType(Type);
-            this.RewardData = RewardData;
-            this.Message = Message;
+            RewardStart = start;
+            RewardEnd = end;
+            Type = RewardTypeUtility.GetType(type);
+            RewardData = rewardData;
+            Message = message;
         }
 
-        public bool isActive()
+        public bool Active
         {
-            double Now = UnixTimestamp.GetNow();
-            return (Now >= RewardStart && Now <= RewardEnd);
+            get
+            {
+                double Now = UnixTimestamp.GetNow();
+                return (Now >= RewardStart && Now <= RewardEnd);
+            }
         }
     }
 }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Rewards
+﻿namespace Plus.HabboHotel.Rewards
 {
     public class RewardTypeUtility
     {
-        public static RewardType GetType(string Type)
+        public static RewardType GetType(string type)
         {
-            switch (Type.ToLower())
+            switch (type.ToLower())
             {
                 case "badge":
                     return RewardType.Badge;
