@@ -1,0 +1,9 @@
+Thanks for downloading PlusEMU.
+
+If you're starting a hotel from scratch please run 'Original Database', no other SQL files are needed to be ran.
+
+For other downloads you can visit our website at https://projectplus.io/ alternatively visit https://devbest.com
+
+- For future releases please visit https://devbest.com/threads/81595/
+- To follow the development please visit https://devbest.com/threads/81566/
+- For help and support please visit https://devbest.com/threads/81596/
