@@ -10,7 +10,7 @@ namespace Plus.HabboHotel.Items.Interactor
     {
         public void OnPlace(GameClient Session, Item Item)
         {
-            if (Item.team == TEAM.None)
+            if (Item.team == Team.None)
                 return;
 
             Item.ExtraData = Item.GetRoom().GetGameManager().Points[Convert.ToInt32(Item.team)].ToString();

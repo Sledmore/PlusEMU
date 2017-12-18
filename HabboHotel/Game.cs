@@ -60,84 +60,97 @@ namespace Plus.HabboHotel
 
         public Game()
         {
-            this._packetManager = new PacketManager();
-            this._clientManager = new GameClientManager();
+            _packetManager = new PacketManager();
+            _clientManager = new GameClientManager();
 
-            this._moderationManager = new ModerationManager();
-            this._moderationManager.Init();
+            _moderationManager = new ModerationManager();
+            _moderationManager.Init();
 
-            this._itemDataManager = new ItemDataManager();
-            this._itemDataManager.Init();
+            _itemDataManager = new ItemDataManager();
+            _itemDataManager.Init();
 
-            this._catalogManager = new CatalogManager();
-            this._catalogManager.Init(this._itemDataManager);
+            _catalogManager = new CatalogManager();
+            _catalogManager.Init(_itemDataManager);
 
-            this._televisionManager = new TelevisionManager();
+            _televisionManager = new TelevisionManager();
+            _televisionManager.Init();
 
-            this._navigatorManager = new NavigatorManager();
-            this._roomManager = new RoomManager();
-            this._chatManager = new ChatManager();
-            this._groupManager = new GroupManager();
-            this._groupManager.Init();
+            _navigatorManager = new NavigatorManager();
+            _navigatorManager.Init();
 
-            this._questManager = new QuestManager();
-            this._questManager.Init();
+            _roomManager = new RoomManager();
 
-            this._achievementManager = new AchievementManager();
-            this._talentTrackManager = new TalentTrackManager();
+            _chatManager = new ChatManager();
 
-            this._landingViewManager = new LandingViewManager();
-            this._gameDataManager = new GameDataManager();
+            _groupManager = new GroupManager();
+            _groupManager.Init();
 
-            this._globalUpdater = new ServerStatusUpdater();
-            this._globalUpdater.Init();
+            _questManager = new QuestManager();
+            _questManager.Init();
+
+            _achievementManager = new AchievementManager();
+            _achievementManager.Init();
+
+            _talentTrackManager = new TalentTrackManager();
+            _talentTrackManager.Init();
+
+            _landingViewManager = new LandingViewManager();
+            _landingViewManager.Init();
+
+            _gameDataManager = new GameDataManager();
+            _gameDataManager.Init();
+
+            _globalUpdater = new ServerStatusUpdater();
+            _globalUpdater.Init();
             
-            this._botManager = new BotManager();
-            this._botManager.Init();
+            _botManager = new BotManager();
+            _botManager.Init();
 
-            this._cacheManager = new CacheManager();
-            this._rewardManager = new RewardManager();
+            _cacheManager = new CacheManager();
 
-            this._badgeManager = new BadgeManager();
-            this._badgeManager.Init();
+            _rewardManager = new RewardManager();
+            _rewardManager.Init();
 
-            this._permissionManager = new PermissionManager();
-            this._permissionManager.Init();
+            _badgeManager = new BadgeManager();
+            _badgeManager.Init();
 
-            this._subscriptionManager = new SubscriptionManager();
-            this._subscriptionManager.Init();
+            _permissionManager = new PermissionManager();
+            _permissionManager.Init();
+
+            _subscriptionManager = new SubscriptionManager();
+            _subscriptionManager.Init();
 
         }
 
         public void StartGameLoop()
         {
-            this._gameCycle = new Task(GameCycle);
-            this._gameCycle.Start();
+            _gameCycle = new Task(GameCycle);
+            _gameCycle.Start();
 
-            this._cycleActive = true;
+            _cycleActive = true;
         }
 
         private void GameCycle()
         {
-            while (this._cycleActive)
+            while (_cycleActive)
             {
-                this._cycleEnded = false;
+                _cycleEnded = false;
 
                 PlusEnvironment.GetGame().GetRoomManager().OnCycle();
                 PlusEnvironment.GetGame().GetClientManager().OnCycle();
 
-                this._cycleEnded = true;
-                Thread.Sleep(this._cycleSleepTime);
+                _cycleEnded = true;
+                Thread.Sleep(_cycleSleepTime);
             }
         }
 
         public void StopGameLoop()
         {
-            this._cycleActive = false;
+            _cycleActive = false;
 
-            while (!this._cycleEnded)
+            while (!_cycleEnded)
             {
-                Thread.Sleep(this._cycleSleepTime);
+                Thread.Sleep(_cycleSleepTime);
             }
         }
 
@@ -183,22 +196,22 @@ namespace Plus.HabboHotel
 
         public ModerationManager GetModerationManager()
         {
-            return this._moderationManager;
+            return _moderationManager;
         }
 
         public PermissionManager GetPermissionManager()
         {
-            return this._permissionManager;
+            return _permissionManager;
         }
 
         public SubscriptionManager GetSubscriptionManager()
         {
-            return this._subscriptionManager;
+            return _subscriptionManager;
         }
 
         public QuestManager GetQuestManager()
         {
-            return this._questManager;
+            return _questManager;
         }
 
         public GroupManager GetGroupManager()
@@ -218,32 +231,32 @@ namespace Plus.HabboHotel
 
         public ChatManager GetChatManager()
         {
-            return this._chatManager;
+            return _chatManager;
         }
 
         public GameDataManager GetGameDataManager()
         {
-            return this._gameDataManager;
+            return _gameDataManager;
         }
 
         public BotManager GetBotManager()
         {
-            return this._botManager;
+            return _botManager;
         }
 
         public CacheManager GetCacheManager()
         {
-            return this._cacheManager;
+            return _cacheManager;
         }
 
         public RewardManager GetRewardManager()
         {
-            return this._rewardManager;
+            return _rewardManager;
         }
 
         public BadgeManager GetBadgeManager()
         {
-            return this._badgeManager;
+            return _badgeManager;
         }
     }
 }

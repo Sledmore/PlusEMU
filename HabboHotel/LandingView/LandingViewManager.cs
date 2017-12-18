@@ -15,12 +15,10 @@ namespace Plus.HabboHotel.LandingView
 
         public LandingViewManager()
         {
-            this._promotionItems = new Dictionary<int, Promotion>();
-
-            this.LoadPromotions();
+            _promotionItems = new Dictionary<int, Promotion>();
         }
 
-        public void LoadPromotions()
+        public void Init()
         {
             if (this._promotionItems.Count > 0)
                 this._promotionItems.Clear();

@@ -9,7 +9,7 @@ namespace Plus.HabboHotel.Users.UserData
 {
     public class UserData
     {
-        public int userID;
+        public int UserId { get; private set; }
         public Habbo user;
 
         public Dictionary<int, Relationship> Relations;
@@ -24,7 +24,7 @@ namespace Plus.HabboHotel.Users.UserData
             List<Badge> badges, Dictionary<int, MessengerBuddy> friends, Dictionary<int, MessengerRequest> requests, Dictionary<int, int> quests, Habbo user, 
             Dictionary<int, Relationship> Relations)
         {
-            this.userID = userID;
+            this.UserId = userID;
             this.achievements = achievements;
             this.favouritedRooms = favouritedRooms;
             this.badges = badges;

@@ -27,7 +27,7 @@ namespace Plus.HabboHotel.Items.Interactor
             if (User == null)
                 return;
 
-            if (User.Team != TEAM.None)
+            if (User.Team != Team.None)
             {
                 User.FreezeInteracting = true;
                 Item.InteractingUser = Session.GetHabbo().Id;

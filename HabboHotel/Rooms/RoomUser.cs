@@ -83,7 +83,7 @@ namespace Plus.HabboHotel.Rooms
         public bool moonwalkEnabled = false;
         public bool shieldActive;
         public int shieldCounter;
-        public TEAM Team;
+        public Team Team;
         public bool FreezeInteracting;
         public int UserId;
         public bool IsJumping;

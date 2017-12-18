@@ -31,8 +31,6 @@ namespace Plus.HabboHotel.Navigator
             this._topLevelItems.Add(4, new TopLevelItem(4, "myworld_view", "", ""));
 
             this._featuredRooms = new Dictionary<int, FeaturedRoom>();
-
-            this.Init();
         }
 
         public void Init()

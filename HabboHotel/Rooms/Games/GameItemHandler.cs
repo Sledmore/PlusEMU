@@ -8,18 +8,18 @@ namespace Plus.HabboHotel.Rooms.Games
 {
     public class GameItemHandler
     {
-        private Room room;
+        private Room _room;
         private Random rnd;
         private ConcurrentDictionary<int, Item> _banzaiPyramids;
         private ConcurrentDictionary<int, Item> _banzaiTeleports;
 
         public GameItemHandler(Room room)
         {
-            this.room = room;
+            this._room = room;
             this.rnd = new Random();
 
-            this._banzaiPyramids = new ConcurrentDictionary<int, Item>();
-            this._banzaiTeleports = new ConcurrentDictionary<int, Item>();
+            _banzaiPyramids = new ConcurrentDictionary<int, Item>();
+            _banzaiTeleports = new ConcurrentDictionary<int, Item>();
         }
 
         public void OnCycle()
@@ -38,7 +38,7 @@ namespace Plus.HabboHotel.Rooms.Games
 
                 if (item.interactionCountHelper == 0 && item.ExtraData == "1")
                 {
-                    room.GetGameMap().RemoveFromMap(item, false);
+                    _room.GetGameMap().RemoveFromMap(item, false);
                     item.interactionCountHelper = 1;
                 }
 
@@ -52,52 +52,50 @@ namespace Plus.HabboHotel.Rooms.Games
                     {
                         item.ExtraData = "1";
                         item.UpdateState();
-                        room.GetGameMap().RemoveFromMap(item, false);
+                        _room.GetGameMap().RemoveFromMap(item, false);
                     }
                     else
                     {
-                        if (room.GetGameMap().itemCanBePlacedHere(item.GetX, item.GetY))
+                        if (_room.GetGameMap().itemCanBePlacedHere(item.GetX, item.GetY))
                         {
                             item.ExtraData = "0";
                             item.UpdateState();
-                            room.GetGameMap().AddItemToMap(item);
+                            _room.GetGameMap().AddItemToMap(item);
                         }
                     }
                 }
             }
         }
 
-        public void AddPyramid(Item item, int itemID)
+        public void AddPyramid(Item item, int itemId)
         {
-            if (_banzaiPyramids.ContainsKey(itemID))
-                _banzaiPyramids[itemID] = item;
+            if (_banzaiPyramids.ContainsKey(itemId))
+                _banzaiPyramids[itemId] = item;
             else
-                _banzaiPyramids.TryAdd(itemID, item);
+                _banzaiPyramids.TryAdd(itemId, item);
         }
 
-        public void RemovePyramid(int itemID)
+        public void RemovePyramid(int itemId)
         {
-            Item Item = null;
-            _banzaiPyramids.TryRemove(itemID, out Item);
+            _banzaiPyramids.TryRemove(itemId, out Item Item);
         }
 
-        public void AddTeleport(Item item, int itemID)
+        public void AddTeleport(Item item, int itemId)
         {
-            if (_banzaiTeleports.ContainsKey(itemID))
-                _banzaiTeleports[itemID] = item;
+            if (_banzaiTeleports.ContainsKey(itemId))
+                _banzaiTeleports[itemId] = item;
             else
-                _banzaiTeleports.TryAdd(itemID, item);
+                _banzaiTeleports.TryAdd(itemId, item);
         }
 
-        public void RemoveTeleport(int itemID)
+        public void RemoveTeleport(int itemId)
         {
-            Item Item = null;
-            _banzaiTeleports.TryRemove(itemID, out Item);
+            _banzaiTeleports.TryRemove(itemId, out Item Item);
         }
 
-        public void onTeleportRoomUserEnter(RoomUser User, Item Item)
+        public void OnTeleportRoomUserEnter(RoomUser user, Item item)
         {
-            IEnumerable<Item> items = _banzaiTeleports.Values.Where(p => p.Id != Item.Id);
+            IEnumerable<Item> items = _banzaiTeleports.Values.Where(p => p.Id != item.Id);
 
             int count = items.Count();
 
@@ -107,22 +105,22 @@ namespace Plus.HabboHotel.Rooms.Games
             if (count == 0)
                 return;
 
-            foreach (Item item in items.ToList())
+            foreach (Item i in items.ToList())
             {
-                if (item == null)
+                if (i == null)
                     continue;
 
                 if (countAmount == countID)
                 {
-                    item.ExtraData = "1";
-                    item.UpdateNeeded = true;
+                    i.ExtraData = "1";
+                    i.UpdateNeeded = true;
 
-                    room.GetGameMap().TeleportToItem(User, item);
+                    _room.GetGameMap().TeleportToItem(user, item);
 
-                    Item.ExtraData = "1";
-                    Item.UpdateNeeded = true;
-                    item.UpdateState();
-                    Item.UpdateState();
+                    i.ExtraData = "1";
+                    i.UpdateNeeded = true;
+                    i.UpdateState();
+                    i.UpdateState();
                 }
 
                 countAmount++;
@@ -137,7 +135,7 @@ namespace Plus.HabboHotel.Rooms.Games
                 this._banzaiPyramids.Clear();
             this._banzaiPyramids = null;
             this._banzaiTeleports = null;
-            this.room = null;
+            this._room = null;
             this.rnd = null;
         }
     }

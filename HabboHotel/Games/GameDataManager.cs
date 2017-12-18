@@ -18,8 +18,6 @@ namespace Plus.HabboHotel.Games
         public GameDataManager()
         {
             this._games = new Dictionary<int, GameData>();
-
-            this.Init();
         }
 
         public void Init()

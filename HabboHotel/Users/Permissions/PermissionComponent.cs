@@ -27,8 +27,8 @@ namespace Plus.HabboHotel.Users.Permissions
         /// <summary>
         /// Initialize the PermissionComponent.
         /// </summary>
-        /// <param name="Player"></param>
-        public bool Init(Habbo Player)
+        /// <param name="habbo"></param>
+        public bool Init(Habbo habbo)
         {
             if (this._permissions.Count > 0)
                 this._permissions.Clear();
@@ -36,8 +36,8 @@ namespace Plus.HabboHotel.Users.Permissions
             if (this._commands.Count > 0)
                 this._commands.Clear();
 
-            this._permissions.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetPermissionsForPlayer(Player));
-            this._commands.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetCommandsForPlayer(Player));
+            this._permissions.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetPermissionsForPlayer(habbo));
+            this._commands.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetCommandsForPlayer(habbo));
             return true;
         }
 

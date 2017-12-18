@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using Plus.Communication.Packets.Outgoing.Rooms.Avatar;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Items;
-
-using Plus.Communication.Packets.Incoming;
 
 using Plus.Utilities.Enclosure;
 using System.Linq;
@@ -37,21 +34,20 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
             this._banzaiTiles = new ConcurrentDictionary<int, Item>();
         }
 
-        public bool isBanzaiActive
+        public bool IsBanzaiActive
         {
             get { return banzaiStarted; }
         }
 
-        public void AddTile(Item item, int itemID)
+        public void AddTile(Item item, int itemId)
         {
-            if (!_banzaiTiles.ContainsKey(itemID))
-                _banzaiTiles.TryAdd(itemID, item);
+            if (!_banzaiTiles.ContainsKey(itemId))
+                _banzaiTiles.TryAdd(itemId, item);
         }
 
-        public void RemoveTile(int itemID)
+        public void RemoveTile(int itemId)
         {
-            Item Item = null;
-            _banzaiTiles.TryRemove(itemID, out Item);
+            _banzaiTiles.TryRemove(itemId, out Item Item);
         }
 
         public void AddPuck(Item item)
@@ -60,119 +56,118 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                 _pucks.TryAdd(item.Id, item);
         }
 
-        public void RemovePuck(int itemID)
+        public void RemovePuck(int itemId)
         {
-            Item Item = null;
-            _pucks.TryRemove(itemID, out Item);
+            _pucks.TryRemove(itemId, out Item Item);
         }
 
-        public void OnUserWalk(RoomUser User)
+        public void OnUserWalk(RoomUser user)
         {
-            if (User == null)
+            if (user == null)
                 return;
 
             foreach (Item item in _pucks.Values.ToList())
             {
                 int NewX = 0;
                 int NewY = 0;
-                int differenceX = User.X - item.GetX;
-                int differenceY = User.Y - item.GetY;
+                int differenceX = user.X - item.GetX;
+                int differenceY = user.Y - item.GetY;
 
                 if (differenceX == 0 && differenceY == 0)
                 {
-                    if (User.RotBody == 4)
+                    if (user.RotBody == 4)
                     {
-                        NewX = User.X;
-                        NewY = User.Y + 2;
+                        NewX = user.X;
+                        NewY = user.Y + 2;
 
                     }
-                    else if (User.RotBody == 6)
+                    else if (user.RotBody == 6)
                     {
-                        NewX = User.X - 2;
-                        NewY = User.Y;
+                        NewX = user.X - 2;
+                        NewY = user.Y;
 
                     }
-                    else if (User.RotBody == 0)
+                    else if (user.RotBody == 0)
                     {
-                        NewX = User.X;
-                        NewY = User.Y - 2;
+                        NewX = user.X;
+                        NewY = user.Y - 2;
 
                     }
-                    else if (User.RotBody == 2)
+                    else if (user.RotBody == 2)
                     {
-                        NewX = User.X + 2;
-                        NewY = User.Y;
+                        NewX = user.X + 2;
+                        NewY = user.Y;
 
                     }
-                    else if (User.RotBody == 1)
+                    else if (user.RotBody == 1)
                     {
-                        NewX = User.X + 2;
-                        NewY = User.Y - 2;
+                        NewX = user.X + 2;
+                        NewY = user.Y - 2;
 
                     }
-                    else if (User.RotBody == 7)
+                    else if (user.RotBody == 7)
                     {
-                        NewX = User.X - 2;
-                        NewY = User.Y - 2;
+                        NewX = user.X - 2;
+                        NewY = user.Y - 2;
 
                     }
-                    else if (User.RotBody == 3)
+                    else if (user.RotBody == 3)
                     {
-                        NewX = User.X + 2;
-                        NewY = User.Y + 2;
+                        NewX = user.X + 2;
+                        NewY = user.Y + 2;
 
                     }
-                    else if (User.RotBody == 5)
+                    else if (user.RotBody == 5)
                     {
-                        NewX = User.X - 2;
-                        NewY = User.Y + 2;
+                        NewX = user.X - 2;
+                        NewY = user.Y + 2;
                     }
 
-                    if (!this._room.GetRoomItemHandler().CheckPosItem(User.GetClient(), item, NewX, NewY, item.Rotation, false, false))
+                    if (!this._room.GetRoomItemHandler().CheckPosItem(user.GetClient(), item, NewX, NewY, item.Rotation, false, false))
                     {
-                        if (User.RotBody == 0)
+                        if (user.RotBody == 0)
                         {
-                            NewX = User.X;
-                            NewY = User.Y + 1;
+                            NewX = user.X;
+                            NewY = user.Y + 1;
                         }
-                        else if (User.RotBody == 2)
+                        else if (user.RotBody == 2)
                         {
-                            NewX = User.X - 1;
-                            NewY = User.Y;
+                            NewX = user.X - 1;
+                            NewY = user.Y;
                         }
-                        else if (User.RotBody == 4)
+                        else if (user.RotBody == 4)
                         {
-                            NewX = User.X;
-                            NewY = User.Y - 1;
+                            NewX = user.X;
+                            NewY = user.Y - 1;
                         }
-                        else if (User.RotBody == 6)
+                        else if (user.RotBody == 6)
                         {
-                            NewX = User.X + 1;
-                            NewY = User.Y;
+                            NewX = user.X + 1;
+                            NewY = user.Y;
                         }
-                        else if (User.RotBody == 5)
+                        else if (user.RotBody == 5)
                         {
-                            NewX = User.X + 1;
-                            NewY = User.Y - 1;
+                            NewX = user.X + 1;
+                            NewY = user.Y - 1;
                         }
-                        else if (User.RotBody == 3)
+                        else if (user.RotBody == 3)
                         {
-                            NewX = User.X - 1;
-                            NewY = User.Y - 1;
+                            NewX = user.X - 1;
+                            NewY = user.Y - 1;
                         }
-                        else if (User.RotBody == 7)
+                        else if (user.RotBody == 7)
                         {
-                            NewX = User.X + 1;
-                            NewY = User.Y + 1;
+                            NewX = user.X + 1;
+                            NewY = user.Y + 1;
                         }
-                        else if (User.RotBody == 1)
+                        else if (user.RotBody == 1)
                         {
-                            NewX = User.X - 1;
-                            NewY = User.Y + 1;
+                            NewX = user.X - 1;
+                            NewY = user.Y + 1;
                         }
                     }
                 }
-                else if (differenceX <= 1 && differenceX >= -1 && differenceY <= 1 && differenceY >= -1 && VerifyPuck(User, item.Coordinate.X, item.Coordinate.Y))//VERYFIC BALL CHECAR SI ESTA EN DIRECCION ASIA LA PELOTA
+                else if (differenceX <= 1 && differenceX >= -1 && differenceY <= 1 && differenceY >= -1 && VerifyPuck(user, item.Coordinate.X, item.Coordinate.Y))//VERYFIC BALL CHECAR SI ESTA EN DIRECCION ASIA LA PELOTA
                 {
                     NewX = differenceX * -1;
                     NewY = differenceY * -1;
@@ -183,13 +178,13 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
                 if (item.GetRoom().GetGameMap().ValidTile(NewX, NewY))
                 {
-                    MovePuck(item, User.GetClient(), NewX, NewY, User.Team);
+                    MovePuck(item, user.GetClient(), NewX, NewY, user.Team);
                 }
             }
 
             if (banzaiStarted)
             {
-                HandleBanzaiTiles(User.Coordinate, User.Team, User);
+                HandleBanzaiTiles(user.Coordinate, user.Team, user);
             }
         }
 
@@ -216,7 +211,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
             {
                 tile.ExtraData = "1";
                 tile.value = 0;
-                tile.team = TEAM.None;
+                tile.team = Team.None;
                 tile.UpdateState();
             }
 
@@ -252,17 +247,16 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
             }
         }
 
-        public void BanzaiEnd(bool userTriggered = false)
+        public void BanzaiEnd(bool triggeredByUser = false)
         {
-            //TODO
             banzaiStarted = false;
             _room.GetGameManager().StopGame();
             floorMap = null;
 
-            if (!userTriggered)
+            if (!triggeredByUser)
                 _room.GetWired().TriggerEvent(WiredBoxType.TriggerGameEnds, null);
 
-            TEAM winners = _room.GetGameManager().GetWinningTeam();
+            Team winners = _room.GetGameManager().GetWinningTeam();
             _room.GetGameManager().UnlockGates();
             foreach (Item tile in _banzaiTiles.Values)
             {
@@ -272,20 +266,20 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                     tile.interactionCountHelper = 0;
                     tile.UpdateNeeded = true;
                 }
-                else if (tile.team == TEAM.None)
+                else if (tile.team == Team.None)
                 {
                     tile.ExtraData = "0";
                     tile.UpdateState();
                 }
             }
 
-            if (winners != TEAM.None)
+            if (winners != Team.None)
             {
                 List<RoomUser> Winners = _room.GetRoomUserManager().GetRoomUsers();
 
                 foreach (RoomUser User in Winners.ToList())
                 {
-                    if (User.Team != TEAM.None)
+                    if (User.Team != Team.None)
                     {
                         if (PlusEnvironment.GetUnixTimestamp() - timestarted > 5)
                         {
@@ -293,7 +287,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User.GetClient(), "ACH_BattleBallPlayer", 1);
                         }
                     }
-                    if (winners == TEAM.Blue)
+                    if (winners == Team.Blue)
                     {
                         if (User.CurrentEffect == 35)
                         {
@@ -302,7 +296,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             _room.SendPacket(new ActionComposer(User.VirtualId, 1));
                         }
                     }
-                    else if (winners == TEAM.Red)
+                    else if (winners == Team.Red)
                     {
                         if (User.CurrentEffect == 33)
                         {
@@ -311,7 +305,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             _room.SendPacket(new ActionComposer(User.VirtualId, 1));
                         }
                     }
-                    else if (winners == TEAM.Green)
+                    else if (winners == Team.Green)
                     {
                         if (User.CurrentEffect == 34)
                         {
@@ -320,7 +314,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             _room.SendPacket(new ActionComposer(User.VirtualId, 1));
                         }
                     }
-                    else if (winners == TEAM.Yellow)
+                    else if (winners == Team.Yellow)
                     {
                         if (User.CurrentEffect == 36)
                         {
@@ -335,7 +329,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
             }
         }
 
-        public void MovePuck(Item item, GameClient mover, int newX, int newY, TEAM team)
+        public void MovePuck(Item item, GameClient mover, int newX, int newY, Team team)
         {
             if (!_room.GetGameMap().itemCanBePlacedHere(newX, newY))
                 return;
@@ -367,7 +361,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
         }
 
-        private void SetTile(Item item, TEAM team, RoomUser user)
+        private void SetTile(Item item, Team team, RoomUser user)
         {
             if (item.team == team)
             {
@@ -380,10 +374,10 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                         _room.GetGameManager().AddPointToTeam(item.team, 1);
                         field.updateLocation(item.GetX, item.GetY, (byte)team);
                         List<PointField> gfield = field.doUpdate();
-                        TEAM t;
+                        Team t;
                         foreach (PointField gameField in gfield)
                         {
-                            t = (TEAM)gameField.forValue;
+                            t = (Team)gameField.forValue;
                             foreach (Point p in gameField.getPoints())
                             {
                                 HandleMaxBanzaiTiles(new Point(p.X, p.Y), t);
@@ -407,9 +401,9 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
             item.ExtraData = newColor.ToString();
         }
 
-        private void HandleBanzaiTiles(Point coord, TEAM team, RoomUser user)
+        private void HandleBanzaiTiles(Point coord, Team team, RoomUser user)
         {
-            if (team == TEAM.None)
+            if (team == Team.None)
                 return;
 
             List<Item> items = _room.GetGameMap().GetCoordinatedItems(coord);
@@ -421,7 +415,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
                 if (_item.GetBaseItem().InteractionType != InteractionType.banzaifloor)
                 {
-                    user.Team = TEAM.None;
+                    user.Team = Team.None;
                     user.ApplyEffect(0);
                     continue;
                 }
@@ -446,9 +440,9 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                 BanzaiEnd();
         }
 
-        private void HandleMaxBanzaiTiles(Point coord, TEAM team)
+        private void HandleMaxBanzaiTiles(Point coord, Team team)
         {
-            if (team == TEAM.None)
+            if (team == Team.None)
                 return;
 
             List<Item> items = _room.GetGameMap().GetCoordinatedItems(coord);
@@ -470,7 +464,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
             }
         }
 
-        private static void SetMaxForTile(Item item, TEAM team)
+        private static void SetMaxForTile(Item item, Team team)
         {
             if (item.value < 3)
             {

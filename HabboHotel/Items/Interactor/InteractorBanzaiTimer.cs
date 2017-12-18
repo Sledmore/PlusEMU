@@ -34,7 +34,7 @@ namespace Plus.HabboHotel.Items.Interactor
             }
             else if (Request == 2)
             {
-                if (Item.GetRoom().GetBanzai().isBanzaiActive && Item.pendingReset && oldValue > 0)
+                if (Item.GetRoom().GetBanzai().IsBanzaiActive && Item.pendingReset && oldValue > 0)
                 {
                     oldValue = 0;
                     Item.pendingReset = false;
@@ -66,7 +66,7 @@ namespace Plus.HabboHotel.Items.Interactor
                     oldValue = 30;
                 }
 
-                if (!Item.GetRoom().GetBanzai().isBanzaiActive)
+                if (!Item.GetRoom().GetBanzai().IsBanzaiActive)
                 {
                     Item.UpdateNeeded = !Item.UpdateNeeded;
 
@@ -97,7 +97,7 @@ namespace Plus.HabboHotel.Items.Interactor
 
         public void OnWiredTrigger(Item Item)
         {
-            if (Item.GetRoom().GetBanzai().isBanzaiActive)
+            if (Item.GetRoom().GetBanzai().IsBanzaiActive)
                 Item.GetRoom().GetBanzai().BanzaiEnd(true);
 
             Item.pendingReset = true;
@@ -105,7 +105,7 @@ namespace Plus.HabboHotel.Items.Interactor
             Item.ExtraData = "30";
             Item.UpdateState();
 
-            if (!Item.GetRoom().GetBanzai().isBanzaiActive)
+            if (!Item.GetRoom().GetBanzai().IsBanzaiActive)
                 Item.GetRoom().GetBanzai().BanzaiStart();
         }
     }

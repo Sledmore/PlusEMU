@@ -50,13 +50,13 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             if (User == null)
                 return false;
 
-            if (int.Parse(this.StringData) == 1 && User.Team == TEAM.Red)
+            if (int.Parse(this.StringData) == 1 && User.Team == Team.Red)
                 return true;
-            else if (int.Parse(this.StringData) == 2 && User.Team == TEAM.Green)
+            else if (int.Parse(this.StringData) == 2 && User.Team == Team.Green)
                 return true;
-            else if (int.Parse(this.StringData) == 3 && User.Team == TEAM.Blue)
+            else if (int.Parse(this.StringData) == 3 && User.Team == Team.Blue)
                 return true;
-            else if (int.Parse(this.StringData) == 4 && User.Team == TEAM.Yellow)
+            else if (int.Parse(this.StringData) == 4 && User.Team == Team.Yellow)
                 return true;
             return false;
         }

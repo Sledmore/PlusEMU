@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Data;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Plus.Database.Interfaces;
-
 
 namespace Plus.HabboHotel.Users.Navigator.SavedSearches
 {
@@ -18,7 +15,7 @@ namespace Plus.HabboHotel.Users.Navigator.SavedSearches
             this._savedSearches = new ConcurrentDictionary<int, SavedSearch>();
         }
 
-        public bool Init(Habbo Player)
+        public bool Init(Habbo habbo)
         {
             if (this._savedSearches.Count > 0)
                 this._savedSearches.Clear();
@@ -27,7 +24,7 @@ namespace Plus.HabboHotel.Users.Navigator.SavedSearches
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `id`,`filter`,`search_code` FROM `user_saved_searches` WHERE `user_id` = @UserId");
-                dbClient.AddParameter("UserId", Player.Id);
+                dbClient.AddParameter("UserId", habbo.Id);
                 GetSearches = dbClient.GetTable();
 
                 if (GetSearches != null)

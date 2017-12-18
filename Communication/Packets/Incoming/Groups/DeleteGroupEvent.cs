@@ -10,8 +10,7 @@ namespace Plus.Communication.Packets.Incoming.Groups
     {
         public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            Group group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out Group group))
             {
                 session.SendNotification("Oops, we couldn't find that group!");
                 return;
@@ -29,16 +28,13 @@ namespace Plus.Communication.Packets.Incoming.Groups
                 return;
             }
 
-            Room room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out Room room))
                 return;
-
-            RoomData data = null;
-            if (!RoomFactory.TryGetData(group.RoomId, out data))
+            
+            if (!RoomFactory.TryGetData(group.RoomId, out RoomData data))
                 return;
 
             room.Group = null;
-
 
             //Remove it from the cache.
             PlusEnvironment.GetGame().GetGroupManager().DeleteGroup(group.Id);

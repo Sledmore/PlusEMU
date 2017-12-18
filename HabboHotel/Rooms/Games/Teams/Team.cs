@@ -1,6 +1,6 @@
 ﻿namespace Plus.HabboHotel.Rooms.Games.Teams
 {
-    public enum TEAM
+    public enum Team
     {
         None = 0,
         Red = 1,

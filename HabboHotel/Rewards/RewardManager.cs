@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using Plus.HabboHotel.GameClients;
 using Plus.Communication.Packets.Outgoing.Inventory.Purse;
@@ -18,13 +15,11 @@ namespace Plus.HabboHotel.Rewards
 
         public RewardManager()
         {
-            this._rewards = new ConcurrentDictionary<int, Reward>();
-            this._rewardLogs = new ConcurrentDictionary<int, List<int>>();
-
-            this.Reload();   
+            _rewards = new ConcurrentDictionary<int, Reward>();
+            _rewardLogs = new ConcurrentDictionary<int, List<int>>();
         }
 
-        public void Reload()
+        public void Init()
         {
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {

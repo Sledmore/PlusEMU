@@ -1,13 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Collections.Generic;
 
-using Plus.HabboHotel.Users;
 using Plus.HabboHotel.Groups;
 using Plus.Communication.Packets.Outgoing.Groups;
-using Plus.HabboHotel.Users.Authenticator;
-using Plus.HabboHotel.Cache;
 using Plus.HabboHotel.Cache.Type;
 
 namespace Plus.Communication.Packets.Incoming.Groups
@@ -21,8 +16,7 @@ namespace Plus.Communication.Packets.Incoming.Groups
             string SearchVal = Packet.PopString();
             int RequestType = Packet.PopInt();
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
                 return;
 
             List<UserCache> Members = new List<UserCache>();

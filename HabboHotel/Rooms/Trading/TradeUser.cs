@@ -10,28 +10,28 @@ namespace Plus.HabboHotel.Rooms.Trading
         private bool _accepted;
         private Dictionary<int, Item> _offeredItems;
 
-        public TradeUser(RoomUser User)
+        public TradeUser(RoomUser user)
         {
-            this._user = User;
-            this._accepted = false;
-            this._offeredItems = new Dictionary<int, Item>();
+            _user = user;
+            _accepted = false;
+            _offeredItems = new Dictionary<int, Item>();
         }
 
         public RoomUser RoomUser
         {
-            get { return this._user; }
+            get { return _user; }
         }
 
         public bool HasAccepted
         {
-            get { return this._accepted; }
-            set { this._accepted = value; }
+            get { return _accepted; }
+            set { _accepted = value; }
         }
 
         public Dictionary<int, Item> OfferedItems
         {
-            get { return this._offeredItems; }
-            set { this._offeredItems = value; }
+            get { return _offeredItems; }
+            set { _offeredItems = value; }
         }
     }
 }

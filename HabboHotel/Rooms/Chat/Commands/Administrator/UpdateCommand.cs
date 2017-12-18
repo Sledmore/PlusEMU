@@ -89,7 +89,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Administrator
                             break;
                         }
 
-                        PlusEnvironment.GetGame().GetLandingManager().LoadPromotions();
+                        PlusEnvironment.GetGame().GetLandingManager().Init();
                         Session.SendWhisper("Landing view promotions successfully updated.");
                         break;
                     }
@@ -205,7 +205,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Administrator
                             break;
                         }
 
-                        PlusEnvironment.GetGame().GetAchievementManager().LoadAchievements();
+                        PlusEnvironment.GetGame().GetAchievementManager().Init();
                         Session.SendWhisper("Achievement definitions bans successfully updated.");
                         break;
                     }
@@ -313,7 +313,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Administrator
                             break;
                         }
 
-                        PlusEnvironment.GetGame().GetRewardManager().Reload();
+                        PlusEnvironment.GetGame().GetRewardManager().Init();
                         Session.SendWhisper("Rewards managaer successfully reloaded.");
                         break;
                     }

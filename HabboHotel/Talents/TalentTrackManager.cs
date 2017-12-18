@@ -20,8 +20,6 @@ namespace Plus.HabboHotel.Talents
         public TalentTrackManager()
         {
             this._citizenshipLevels = new Dictionary<int, TalentTrackLevel>();
-
-            this.Init();
         }
 
         public void Init()

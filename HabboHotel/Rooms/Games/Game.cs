@@ -34,7 +34,7 @@ namespace Plus.HabboHotel.Rooms.Games
             set { this._teamPoints = value; }
         }
 
-        public TEAM GetWinningTeam()
+        public Team GetWinningTeam()
         {
             int winning = 1;
             int highestScore = 0;
@@ -47,10 +47,10 @@ namespace Plus.HabboHotel.Rooms.Games
                     winning = i;
                 }
             }
-            return (TEAM)winning;
+            return (Team)winning;
         }
 
-        public void AddPointToTeam(TEAM team, int points)
+        public void AddPointToTeam(Team team, int points)
         {
             int newPoints = this._teamPoints[Convert.ToInt32(team)] += points;
             if (newPoints < 0)
@@ -69,22 +69,22 @@ namespace Plus.HabboHotel.Rooms.Games
 
             foreach (Item item in _room.GetRoomItemHandler().GetFloor.ToList())
             {
-                if (team == TEAM.Blue && item.Data.InteractionType == InteractionType.banzaiscoreblue)
+                if (team == Team.Blue && item.Data.InteractionType == InteractionType.banzaiscoreblue)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
                 }
-                else if (team == TEAM.Red && item.Data.InteractionType == InteractionType.banzaiscorered)
+                else if (team == Team.Red && item.Data.InteractionType == InteractionType.banzaiscorered)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
                 }
-                else if (team == TEAM.Green && item.Data.InteractionType == InteractionType.banzaiscoregreen)
+                else if (team == Team.Green && item.Data.InteractionType == InteractionType.banzaiscoregreen)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
                 }
-                else if (team == TEAM.Yellow && item.Data.InteractionType == InteractionType.banzaiscoreyellow)
+                else if (team == Team.Yellow && item.Data.InteractionType == InteractionType.banzaiscoreyellow)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
@@ -94,30 +94,30 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public void Reset()
         {
-            AddPointToTeam(TEAM.Blue, GetScoreForTeam(TEAM.Blue) * (-1));
-            AddPointToTeam(TEAM.Green, GetScoreForTeam(TEAM.Green) * (-1));
-            AddPointToTeam(TEAM.Red, GetScoreForTeam(TEAM.Red) * (-1));
-            AddPointToTeam(TEAM.Yellow, GetScoreForTeam(TEAM.Yellow) * (-1));
+            AddPointToTeam(Team.Blue, GetScoreForTeam(Team.Blue) * (-1));
+            AddPointToTeam(Team.Green, GetScoreForTeam(Team.Green) * (-1));
+            AddPointToTeam(Team.Red, GetScoreForTeam(Team.Red) * (-1));
+            AddPointToTeam(Team.Yellow, GetScoreForTeam(Team.Yellow) * (-1));
         }
 
-        private int GetScoreForTeam(TEAM team)
+        private int GetScoreForTeam(Team team)
         {
             return _teamPoints[Convert.ToInt32(team)];
         }
 
-        private ConcurrentDictionary<int, Item> GetFurniItems(TEAM team)
+        private ConcurrentDictionary<int, Item> GetFurniItems(Team team)
         {
             switch (team)
             {
                 default:
                     return new ConcurrentDictionary<int, Item>();
-                case TEAM.Blue:
+                case Team.Blue:
                     return this._blueTeamItems;
-                case TEAM.Green:
+                case Team.Green:
                     return this._greenTeamItems;
-                case TEAM.Red:
+                case Team.Red:
                     return this._redTeamItems;
-                case TEAM.Yellow:
+                case Team.Yellow:
                     return this._yellowTeamItems;
             }
         }
@@ -127,39 +127,39 @@ namespace Plus.HabboHotel.Rooms.Games
             return (type == InteractionType.FOOTBALL_GOAL_BLUE || type == InteractionType.FOOTBALL_GOAL_GREEN || type == InteractionType.FOOTBALL_GOAL_RED || type == InteractionType.FOOTBALL_GOAL_YELLOW);
         }
 
-        public void AddFurnitureToTeam(Item item, TEAM team)
+        public void AddFurnitureToTeam(Item item, Team team)
         {
             switch (team)
             {
-                case TEAM.Blue:
+                case Team.Blue:
                     _blueTeamItems.TryAdd(item.Id, item);
                     break;
-                case TEAM.Green:
+                case Team.Green:
                     _greenTeamItems.TryAdd(item.Id, item);
                     break;
-                case TEAM.Red:
+                case Team.Red:
                     _redTeamItems.TryAdd(item.Id, item);
                     break;
-                case TEAM.Yellow:
+                case Team.Yellow:
                     _yellowTeamItems.TryAdd(item.Id, item);
                     break;
             }
         }
 
-        public void RemoveFurnitureFromTeam(Item item, TEAM team)
+        public void RemoveFurnitureFromTeam(Item item, Team team)
         {
             switch (team)
             {
-                case TEAM.Blue:
+                case Team.Blue:
                     _blueTeamItems.TryRemove(item.Id, out item);
                     break;
-                case TEAM.Green:
+                case Team.Green:
                     _greenTeamItems.TryRemove(item.Id, out item);
                     break;
-                case TEAM.Red:
+                case Team.Red:
                     _redTeamItems.TryRemove(item.Id, out item);
                     break;
-                case TEAM.Yellow:
+                case Team.Yellow:
                     _yellowTeamItems.TryRemove(item.Id, out item);
                     break;
             }

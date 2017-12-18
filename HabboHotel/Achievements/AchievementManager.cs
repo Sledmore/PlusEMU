@@ -21,12 +21,9 @@ namespace Plus.HabboHotel.Achievements
         public AchievementManager()
         {
             this._achievements = new Dictionary<string, Achievement>();
-            this.LoadAchievements();
-
-            log.Info("Achievement Manager -> LOADED");
         }
 
-        public void LoadAchievements()
+        public void Init()
         {
             AchievementLevelFactory.GetAchievementLevels(out _achievements);
         }

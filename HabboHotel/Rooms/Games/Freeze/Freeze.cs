@@ -99,7 +99,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 }
             }
 
-            TEAM Winners = this._room.GetGameManager().GetWinningTeam();
+            Team Winners = this._room.GetGameManager().GetWinningTeam();
             foreach (RoomUser User in this._room.GetRoomUserManager().GetUserList().ToList())
             {
                 User.FreezeLives = 0;
@@ -185,7 +185,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         public void OnUserWalk(RoomUser User)
         {
-            if (!this._gameStarted || User.Team == TEAM.None)
+            if (!this._gameStarted || User.Team == Team.None)
                 return;
 
             foreach (Item Item in this._freezeTiles.Values.ToList())
@@ -233,7 +233,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
             foreach (RoomUser User in this._room.GetRoomUserManager().GetUserList().ToList())
             {
-                if (User.IsBot || User.Team == TEAM.None || User.GetClient() == null)
+                if (User.IsBot || User.Team == Team.None || User.GetClient() == null)
                     continue;
 
                 User.banzaiPowerUp = FreezePowerUp.None;
@@ -447,7 +447,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         private void FreezeUser(RoomUser User)
         {
-            if (User.IsBot || User.shieldActive || User.Team == TEAM.None || User.Freezed)
+            if (User.IsBot || User.shieldActive || User.Team == Team.None || User.Freezed)
                 return;
 
             User.Freezed = true;
@@ -462,7 +462,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 _room.GetGameManager().AddPointToTeam(User.Team, -10);
                 TeamManager t = _room.GetTeamManagerForFreeze();
                 t.OnUserLeave(User);
-                User.Team = TEAM.None;
+                User.Team = Team.None;
                 if (_exitTeleports.Count > 0)
                     _room.GetGameMap().TeleportToItem(User, this.GetRandomExitTile());
 

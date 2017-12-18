@@ -47,7 +47,7 @@ namespace Plus.HabboHotel.Items
         private int _coordY;
         private double _coordZ;
 
-        public TEAM team;
+        public Team team;
         public bool pendingReset = false;
         public FreezePowerUp freezePowerUp;
 
@@ -120,7 +120,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigateblue:
                     case InteractionType.FREEZE_BLUE_GATE:
                     case InteractionType.freezebluecounter:
-                        team = TEAM.Blue;
+                        team = Team.Blue;
                         break;
 
                     case InteractionType.banzaiscoregreen:
@@ -128,7 +128,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigategreen:
                     case InteractionType.freezegreencounter:
                     case InteractionType.FREEZE_GREEN_GATE:
-                        team = TEAM.Green;
+                        team = Team.Green;
                         break;
 
                     case InteractionType.banzaiscorered:
@@ -136,7 +136,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigatered:
                     case InteractionType.freezeredcounter:
                     case InteractionType.FREEZE_RED_GATE:
-                        team = TEAM.Red;
+                        team = Team.Red;
                         break;
 
                     case InteractionType.banzaiscoreyellow:
@@ -144,7 +144,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigateyellow:
                     case InteractionType.freezeyellowcounter:
                     case InteractionType.FREEZE_YELLOW_GATE:
-                        team = TEAM.Yellow;
+                        team = Team.Yellow;
                         break;
 
                     case InteractionType.banzaitele:
@@ -1112,7 +1112,7 @@ namespace Plus.HabboHotel.Items
                                         seconds--;
                                         interactionCountHelper = 0;
 
-                                        if (GetRoom().GetBanzai().isBanzaiActive)
+                                        if (GetRoom().GetBanzai().IsBanzaiActive)
                                         {
                                             ExtraData = seconds.ToString();
                                             UpdateState();
@@ -1155,25 +1155,25 @@ namespace Plus.HabboHotel.Items
 
                                         switch (team)
                                         {
-                                            case TEAM.Blue:
+                                            case Team.Blue:
                                                 {
                                                     ExtraData = "11";
                                                     break;
                                                 }
 
-                                            case TEAM.Green:
+                                            case Team.Green:
                                                 {
                                                     ExtraData = "8";
                                                     break;
                                                 }
 
-                                            case TEAM.Red:
+                                            case Team.Red:
                                                 {
                                                     ExtraData = "5";
                                                     break;
                                                 }
 
-                                            case TEAM.Yellow:
+                                            case Team.Yellow:
                                                 {
                                                     ExtraData = "14";
                                                     break;

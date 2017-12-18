@@ -1,51 +1,42 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.Core;
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 
 using Plus.Communication.Packets.Outgoing.Rooms.Permissions;
 using Plus.Communication.Packets.Outgoing.Rooms.Settings;
-using Plus.HabboHotel.Users;
 
 using Plus.Database.Interfaces;
-using Plus.HabboHotel.Cache;
 using Plus.HabboHotel.Cache.Type;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class AssignRightsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
-            int UserId = Packet.PopInt();
+            int userId = packet.PopInt();
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session, true))
+            if (!room.CheckRights(session, true))
                 return;
 
-            if (Room.UsersWithRights.Contains(UserId))
+            if (room.UsersWithRights.Contains(userId))
             {
-                Session.SendNotification(PlusEnvironment.GetLanguageManager().TryGetValue("room.rights.user.has_rights"));
+                session.SendNotification(PlusEnvironment.GetLanguageManager().TryGetValue("room.rights.user.has_rights"));
                 return;
             }
 
-            Room.UsersWithRights.Add(UserId);
+            room.UsersWithRights.Add(userId);
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("INSERT INTO `room_rights` (`room_id`,`user_id`) VALUES ('" + Room.RoomId + "','" + UserId + "')");
+                dbClient.RunQuery("INSERT INTO `room_rights` (`room_id`,`user_id`) VALUES ('" + room.RoomId + "','" + userId + "')");
             }
 
-            RoomUser RoomUser = Room.GetRoomUserManager().GetRoomUserByHabbo(UserId);
+            RoomUser RoomUser = room.GetRoomUserManager().GetRoomUserByHabbo(userId);
             if (RoomUser != null && !RoomUser.IsBot)
             {
                 RoomUser.SetStatus("flatctrl 1", "");
@@ -53,13 +44,13 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
                 if (RoomUser.GetClient() != null)
                     RoomUser.GetClient().SendPacket(new YouAreControllerComposer(1));
 
-                Session.SendPacket(new FlatControllerAddedComposer(Room.RoomId, RoomUser.GetClient().GetHabbo().Id, RoomUser.GetClient().GetHabbo().Username));
+                session.SendPacket(new FlatControllerAddedComposer(room.RoomId, RoomUser.GetClient().GetHabbo().Id, RoomUser.GetClient().GetHabbo().Username));
             }
             else
             {
-                UserCache User =  PlusEnvironment.GetGame().GetCacheManager().GenerateUser(UserId);
-                if (User != null)
-                    Session.SendPacket(new FlatControllerAddedComposer(Room.RoomId, User.Id, User.Username));
+                UserCache user =  PlusEnvironment.GetGame().GetCacheManager().GenerateUser(userId);
+                if (user != null)
+                    session.SendPacket(new FlatControllerAddedComposer(room.RoomId, user.Id, user.Username));
             }
         }
     }

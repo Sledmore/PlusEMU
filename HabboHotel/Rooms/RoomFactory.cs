@@ -22,15 +22,13 @@ namespace Plus.HabboHotel.Rooms
                 {
                     foreach (DataRow row in rooms.Rows)
                     {
-                        Room room = null;
-                        if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Convert.ToInt32(row["id"]), out room))
+                        if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Convert.ToInt32(row["id"]), out Room room))
                         {
                             data.Add(room);
                         }
                         else
                         {
-                            RoomModel model = null;
-                            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetModel(Convert.ToString(row["model_name"]), out model))
+                            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetModel(Convert.ToString(row["model_name"]), out RoomModel model))
                             {
                                 continue;
                             }
@@ -54,8 +52,7 @@ namespace Plus.HabboHotel.Rooms
 
         public static bool TryGetData(int roomId, out RoomData data)
         {
-            Room room = null;
-            if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out room))
+            if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
             {
                 data = room;
                 return true;

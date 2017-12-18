@@ -19,8 +19,6 @@ namespace Plus.HabboHotel.Items.Televisions
         public TelevisionManager()
         {
             this._televisions =  new Dictionary<int, TelevisionItem>();
-
-            this.Init();
         }
 
         public void Init()

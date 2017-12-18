@@ -638,21 +638,21 @@ namespace Plus.HabboHotel.Rooms
                         newZ = Item.GetZ;
 
                     // Are there any higher objects in the stack!?
-                    foreach (Item I in ItemsComplete.ToList())
+                    foreach (Item i in ItemsComplete.ToList())
                     {
-                        if (I == null)
+                        if (i == null)
                             continue;
-                        if (I.Id == Item.Id)
+                        if (i.Id == Item.Id)
                             continue;
 
-                        if (I.GetBaseItem().InteractionType == InteractionType.STACKTOOL)
+                        if (i.GetBaseItem().InteractionType == InteractionType.STACKTOOL)
                         {                       
-                            newZ = I.GetZ;
+                            newZ = i.GetZ;
                             break;
                         }
-                        if (I.TotalHeight > newZ)
+                        if (i.TotalHeight > newZ)
                         {
-                            newZ = I.TotalHeight;
+                            newZ = i.TotalHeight;
                         }
                     }
                 }
@@ -721,62 +721,62 @@ namespace Plus.HabboHotel.Rooms
 
 
 
-        public List<Item> GetFurniObjects(int X, int Y)
+        public List<Item> GetFurniObjects(int x, int y)
         {
-            return _room.GetGameMap().GetCoordinatedItems(new Point(X, Y));
+            return _room.GetGameMap().GetCoordinatedItems(new Point(x, y));
         }
 
-        public bool SetFloorItem(Item Item, int newX, int newY, Double newZ)
+        public bool SetFloorItem(Item item, int newX, int newY, Double newZ)
         {
             if (_room == null)
                 return false;
 
-            _room.GetGameMap().RemoveFromMap(Item);
+            _room.GetGameMap().RemoveFromMap(item);
 
-            Item.SetState(newX, newY, newZ, Gamemap.GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, newX, newY, Item.Rotation));
-            if (Item.GetBaseItem().InteractionType == InteractionType.TONER)
+            item.SetState(newX, newY, newZ, Gamemap.GetAffectedTiles(item.GetBaseItem().Length, item.GetBaseItem().Width, newX, newY, item.Rotation));
+            if (item.GetBaseItem().InteractionType == InteractionType.TONER)
             {
                 if (_room.TonerData == null)
                 {
-                    _room.TonerData = new TonerData(Item.Id);
+                    _room.TonerData = new TonerData(item.Id);
                 }
             }
-            UpdateItem(Item);
-            _room.GetGameMap().AddItemToMap(Item);
+            UpdateItem(item);
+            _room.GetGameMap().AddItemToMap(item);
             return true;
         }
 
-        public bool SetWallItem(GameClient Session, Item Item)
+        public bool SetWallItem(GameClient session, Item item)
         {
-            if (!Item.IsWallItem || _wallItems.ContainsKey(Item.Id))
+            if (!item.IsWallItem || _wallItems.ContainsKey(item.Id))
                 return false;
 
-            if (_floorItems.ContainsKey(Item.Id))
+            if (_floorItems.ContainsKey(item.Id))
             {
-                Session.SendNotification(PlusEnvironment.GetLanguageManager().TryGetValue("room.item.already_placed"));
+                session.SendNotification(PlusEnvironment.GetLanguageManager().TryGetValue("room.item.already_placed"));
                 return true;
             }
 
-            Item.Interactor.OnPlace(Session, Item);
-            if (Item.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
+            item.Interactor.OnPlace(session, item);
+            if (item.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
             {
                 if (_room.MoodlightData == null)
                 {
-                    _room.MoodlightData = new MoodlightData(Item.Id);
-                    Item.ExtraData = _room.MoodlightData.GenerateExtraData();
+                    _room.MoodlightData = new MoodlightData(item.Id);
+                    item.ExtraData = _room.MoodlightData.GenerateExtraData();
                 }
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `items` SET `room_id` = '" + _room.RoomId + "', `x` = '" + Item.GetX + "', `y` = '" + Item.GetY + "', `z` = '" + Item.GetZ + "', `rot` = '" + Item.Rotation + "', `wall_pos` = @WallPos WHERE `id` = '" + Item.Id + "' LIMIT 1");
-                dbClient.AddParameter("WallPos", Item.wallCoord);
+                dbClient.SetQuery("UPDATE `items` SET `room_id` = '" + _room.RoomId + "', `x` = '" + item.GetX + "', `y` = '" + item.GetY + "', `z` = '" + item.GetZ + "', `rot` = '" + item.Rotation + "', `wall_pos` = @WallPos WHERE `id` = '" + item.Id + "' LIMIT 1");
+                dbClient.AddParameter("WallPos", item.wallCoord);
                 dbClient.RunQuery();
             }
 
-            _wallItems.TryAdd(Item.Id, Item);
+            _wallItems.TryAdd(item.Id, item);
 
-            _room.SendPacket(new ItemAddComposer(Item));
+            _room.SendPacket(new ItemAddComposer(item));
 
             return true;
         }
@@ -839,40 +839,35 @@ namespace Plus.HabboHotel.Rooms
                     _roomItemUpdateQueue.Enqueue(item);
                 }
             }
-
-            //mFloorItems.OnCycle();
-            //mWallItems.OnCycle();
         }
 
-        public List<Item> RemoveItems(GameClient Session)
+        public List<Item> RemoveItems(GameClient session)
         {
-            List<Item> Items = new List<Item>();
+            List<Item> items = new List<Item>();
 
-            foreach (Item Item in this.GetWallAndFloor.ToList())
+            foreach (Item item in this.GetWallAndFloor.ToList())
             {
-                if (Item == null || Item.UserID != Session.GetHabbo().Id)
+                if (item == null || item.UserID != session.GetHabbo().Id)
                     continue;
 
-                if (Item.IsFloorItem)
+                if (item.IsFloorItem)
                 {
-                    Item I = null;
-                    this._floorItems.TryRemove(Item.Id, out I);
-                    Session.GetHabbo().GetInventoryComponent().TryAddFloorItem(Item.Id, I);
-                    this._room.SendPacket(new ObjectRemoveComposer(Item, Item.UserID));                    
+                    this._floorItems.TryRemove(item.Id, out Item I);
+                    session.GetHabbo().GetInventoryComponent().TryAddFloorItem(item.Id, I);
+                    this._room.SendPacket(new ObjectRemoveComposer(item, item.UserID));                    
                 }
-                else if (Item.IsWallItem)
+                else if (item.IsWallItem)
                 {
-                    Item I = null;
-                    this._wallItems.TryRemove(Item.Id, out I);
-                    Session.GetHabbo().GetInventoryComponent().TryAddWallItem(Item.Id, I);
-                    this._room.SendPacket(new ItemRemoveComposer(Item, Item.UserID));
+                    this._wallItems.TryRemove(item.Id, out Item I);
+                    session.GetHabbo().GetInventoryComponent().TryAddWallItem(item.Id, I);
+                    this._room.SendPacket(new ItemRemoveComposer(item, item.UserID));
                 }
                 
-                Session.SendPacket(new FurniListAddComposer(Item));
+                session.SendPacket(new FurniListAddComposer(item));
             }
 
             this._rollers.Clear();
-            return Items;
+            return items;
         }
 
         public ICollection<Item> GetFloor
@@ -965,9 +960,9 @@ namespace Plus.HabboHotel.Rooms
 
                 list3.AddRange(furniObjects);
                 list3.AddRange(collection);
-                foreach (Item item in list3.ToList())
+                foreach (Item i in list3.ToList())
                 {
-                    if ((item.Id != Item.Id) && !item.GetBaseItem().Stackable)
+                    if ((i.Id != Item.Id) && !i.GetBaseItem().Stackable)
                         return false;
                 }
                 return true;

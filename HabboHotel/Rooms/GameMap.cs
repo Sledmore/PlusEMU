@@ -458,16 +458,16 @@ namespace Plus.HabboHotel.Rooms
                         item.Gender = "M";
                         switch (item.team)
                         {
-                            case TEAM.Yellow:
+                            case Team.Yellow:
                                 item.Figure = "lg-275-93.hr-115-61.hd-207-14.ch-265-93.sh-305-62";
                                 break;
-                            case TEAM.Red:
+                            case Team.Red:
                                 item.Figure = "lg-275-96.hr-115-61.hd-180-3.ch-265-96.sh-305-62";
                                 break;
-                            case TEAM.Green:
+                            case Team.Green:
                                 item.Figure = "lg-275-102.hr-115-61.hd-180-3.ch-265-102.sh-305-62";
                                 break;
-                            case TEAM.Blue:
+                            case Team.Blue:
                                 item.Figure = "lg-275-108.hr-115-61.hd-180-3.ch-265-108.sh-305-62";
                                 break;
                         }
@@ -566,7 +566,7 @@ namespace Plus.HabboHotel.Rooms
                 RemoveSpecialItem(item);
 
             if (_room.GotSoccer())
-                _room.GetSoccer().onGateRemove(item);
+                _room.GetSoccer().OnGateRemove(item);
 
             bool isRemoved = false;
             foreach (Point coord in item.GetCoords.ToList())
@@ -633,7 +633,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_RED_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Red);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, Team.Red);
                             break;
                         }
                     case InteractionType.FOOTBALL_GOAL_GREEN:
@@ -644,7 +644,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_GREEN_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Green);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, Team.Green);
                             break;
                         }
                     case InteractionType.FOOTBALL_GOAL_BLUE:
@@ -655,7 +655,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_BLUE_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Blue);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, Team.Blue);
                             break;
                         }
                     case InteractionType.FOOTBALL_GOAL_YELLOW:
@@ -666,7 +666,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_YELLOW_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Yellow);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, Team.Yellow);
                             break;
                         }
                     case InteractionType.freezeexit:
@@ -947,8 +947,7 @@ namespace Plus.HabboHotel.Rooms
                     Item I = Items.FirstOrDefault(x => x.GetBaseItem().InteractionType == InteractionType.GUILD_GATE);
                     if (I != null)
                     {
-                        Group Group = null;
-                        if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(I.GroupId, out Group))
+                        if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(I.GroupId, out Group Group))
                             return false;
 
                         if (User.GetClient() == null || User.GetClient().GetHabbo() == null)
@@ -1013,15 +1012,13 @@ namespace Plus.HabboHotel.Rooms
             }
             return true;
         }
-
-
     
-        public bool IsValidStep(Vector2D From, Vector2D To, bool EndOfPath, bool Override, bool Roller = false)
+        public bool IsValidStep(Vector2D from, Vector2D to, bool endOfPath, bool overriding, bool roller = false)
         {
-            if (!ValidTile(To.X, To.Y))
+            if (!ValidTile(to.X, to.Y))
                 return false;
 
-            if (Override)
+            if (overriding)
                 return true;
 
             /*
@@ -1031,23 +1028,23 @@ namespace Plus.HabboHotel.Rooms
              * 3 = door
              * */
 
-            if (_room.RoomBlockingEnabled == 0 && SquareHasUsers(To.X, To.Y))
+            if (_room.RoomBlockingEnabled == 0 && SquareHasUsers(to.X, to.Y))
                 return false;
 
-            List<Item> Items = _room.GetGameMap().GetAllRoomItemForSquare(To.X, To.Y);
-            if (Items.Count > 0)
+            List<Item> items = _room.GetGameMap().GetAllRoomItemForSquare(to.X, to.Y);
+            if (items.Count > 0)
             {
-                bool HasGroupGate = Items.ToList().Count(x => x != null && x.GetBaseItem().InteractionType == InteractionType.GUILD_GATE) > 0;
+                bool HasGroupGate = items.ToList().Count(x => x != null && x.GetBaseItem().InteractionType == InteractionType.GUILD_GATE) > 0;
                 if (HasGroupGate)
                     return true;
             }
 
-            if ((_gameMap[To.X, To.Y] == 3 && !EndOfPath) || _gameMap[To.X, To.Y] == 0 || (_gameMap[To.X, To.Y] == 2 && !EndOfPath))
+            if ((_gameMap[to.X, to.Y] == 3 && !endOfPath) || _gameMap[to.X, to.Y] == 0 || (_gameMap[to.X, to.Y] == 2 && !endOfPath))
                 return false;
 
-            if (!Roller)
+            if (!roller)
             {
-                double HeightDiff = SqAbsoluteHeight(To.X, To.Y) - SqAbsoluteHeight(From.X, From.Y);
+                double HeightDiff = SqAbsoluteHeight(to.X, to.Y) - SqAbsoluteHeight(from.X, from.Y);
                 if (HeightDiff > 1.5)
                     return false;
             }
@@ -1055,13 +1052,13 @@ namespace Plus.HabboHotel.Rooms
             return true;
         }
 
-        public static bool CanWalk(byte pState, bool pOverride)
+        public static bool CanWalk(byte state, bool overriding)
         {
-            if (!pOverride)
+            if (!overriding)
             {
-                if (pState == 3)
+                if (state == 3)
                     return true;
-                if (pState == 1)
+                if (state == 1)
                     return true;
 
                 return false;
@@ -1078,20 +1075,19 @@ namespace Plus.HabboHotel.Rooms
             return _gameMap[x, y] == 1;
         }
 
-        public double SqAbsoluteHeight(int X, int Y)
+        public double SqAbsoluteHeight(int x, int y)
         {
-            Point Points = new Point(X, Y);
+            Point Points = new Point(x, y);
 
-            List<int> Ids;
 
-            if (_coordinatedItems.TryGetValue(Points, out Ids))
+            if (_coordinatedItems.TryGetValue(Points, out List<int> Ids))
             {
                 List<Item> Items = GetItemsFromIds(Ids);
 
-                return SqAbsoluteHeight(X, Y, Items);
+                return SqAbsoluteHeight(x, y, Items);
             }
             else
-                return _dynamicModel.SqFloorHeight[X, Y];
+                return _dynamicModel.SqFloorHeight[x, y];
 
             #region Old
             /*

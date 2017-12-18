@@ -134,7 +134,7 @@ namespace Plus.HabboHotel.GameClients
                 }
                 #endregion
 
-                PlusEnvironment.GetGame().GetClientManager().RegisterClient(this, userData.userID, userData.user.Username);
+                PlusEnvironment.GetGame().GetClientManager().RegisterClient(this, userData.UserId, userData.user.Username);
                 _habbo = userData.user;
                 if (_habbo != null)
                 {
