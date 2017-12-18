@@ -50,8 +50,6 @@ namespace Plus.HabboHotel.Rooms
                 SqFloorHeight = new short[MapSizeX, MapSizeY];
                 SqSeatRot = new byte[MapSizeX, MapSizeY];
 
-                //this.Furnis = Furnis;
-
                 for (int y = 0; y < MapSizeY; y++)
                 {
                     string line = tmpHeightmap[y];

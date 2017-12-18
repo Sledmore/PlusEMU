@@ -24,13 +24,11 @@ namespace Plus.HabboHotel.Quests
         {
             _quests = new Dictionary<int, Quest>();
             _questCount = new Dictionary<string, int>();
-
-            this.Init();
         }
 
         public void Init()
         {
-            if (this._quests.Count > 0)
+            if (_quests.Count > 0)
             _quests.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -76,174 +74,172 @@ namespace Plus.HabboHotel.Quests
             }
         }
 
-        public Quest GetQuest(int Id)
+        public Quest GetQuest(int id)
         {
-            Quest quest = null;
-            _quests.TryGetValue(Id, out quest);
+            _quests.TryGetValue(id, out Quest quest);
             return quest;
         }
 
-        public int GetAmountOfQuestsInCategory(string Category)
+        public int GetAmountOfQuestsInCategory(string category)
         {
-            int count = 0;
-            _questCount.TryGetValue(Category, out count);
+            _questCount.TryGetValue(category, out int count);
             return count;
         }
 
-        public void ProgressUserQuest(GameClient Session, QuestType QuestType, int EventData = 0)
+        public void ProgressUserQuest(GameClient session, QuestType type, int data = 0)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetStats().QuestID <= 0)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetStats().QuestID <= 0)
             {
                 return;
             }
 
-            Quest UserQuest = GetQuest(Session.GetHabbo().GetStats().QuestID);
+            Quest quest = GetQuest(session.GetHabbo().GetStats().QuestID);
 
-            if (UserQuest == null || UserQuest.GoalType != QuestType)
+            if (quest == null || quest.GoalType != type)
             {
                 return;
             }
 
-            int CurrentProgress = Session.GetHabbo().GetQuestProgress(UserQuest.Id);
-            int NewProgress = CurrentProgress;
-            bool PassQuest = false;
+            int currentProgress = session.GetHabbo().GetQuestProgress(quest.Id);
+            int totalProgress = currentProgress;
+            bool completeQuest = false;
 
-            switch (QuestType)
+            switch (type)
             {
                 default:
 
-                    NewProgress++;
+                    totalProgress++;
 
-                    if (NewProgress >= UserQuest.GoalData)
+                    if (totalProgress >= quest.GoalData)
                     {
-                        PassQuest = true;
+                        completeQuest = true;
                     }
 
                     break;
 
-                case QuestType.EXPLORE_FIND_ITEM:
+                case QuestType.ExploreFindItem:
 
-                    if (EventData != UserQuest.GoalData)
+                    if (data != quest.GoalData)
                         return;
 
-                    NewProgress = Convert.ToInt32(UserQuest.GoalData);
-                    PassQuest = true;
+                    totalProgress = Convert.ToInt32(quest.GoalData);
+                    completeQuest = true;
                     break;
 
-                case QuestType.STAND_ON:
+                case QuestType.StandOn:
 
-                    if (EventData != UserQuest.GoalData)
+                    if (data != quest.GoalData)
                         return;
 
-                    NewProgress = Convert.ToInt32(UserQuest.GoalData);
-                    PassQuest = true;
+                    totalProgress = Convert.ToInt32(quest.GoalData);
+                    completeQuest = true;
                     break;
 
-                case QuestType.XMAS_PARTY:
-                    NewProgress++;
-                    if (NewProgress == UserQuest.GoalData)
-                        PassQuest = true;
+                case QuestType.XmasParty:
+                    totalProgress++;
+                    if (totalProgress == quest.GoalData)
+                        completeQuest = true;
                     break;
 
-                case QuestType.GIVE_ITEM:
+                case QuestType.GiveItem:
 
-                    if (EventData != UserQuest.GoalData)
+                    if (data != quest.GoalData)
                         return;
 
-                    NewProgress = Convert.ToInt32(UserQuest.GoalData);
-                    PassQuest = true;
+                    totalProgress = Convert.ToInt32(quest.GoalData);
+                    completeQuest = true;
                     break;
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `user_quests` SET `progress` = '" + NewProgress + "' WHERE `user_id` = '" + Session.GetHabbo().Id + "' AND `quest_id` = '" + UserQuest.Id + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE `user_quests` SET `progress` = '" + totalProgress + "' WHERE `user_id` = '" + session.GetHabbo().Id + "' AND `quest_id` = '" + quest.Id + "' LIMIT 1");
 
-                if (PassQuest)
-                    dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '0' WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
+                if (completeQuest)
+                    dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '0' WHERE `id` = '" + session.GetHabbo().Id + "' LIMIT 1");
             }
 
-            Session.GetHabbo().quests[Session.GetHabbo().GetStats().QuestID] = NewProgress;
-            Session.SendPacket(new QuestStartedComposer(Session, UserQuest));
+            session.GetHabbo().quests[session.GetHabbo().GetStats().QuestID] = totalProgress;
+            session.SendPacket(new QuestStartedComposer(session, quest));
 
-            if (PassQuest)
+            if (completeQuest)
             {
-                Session.GetHabbo().GetMessenger().BroadcastAchievement(Session.GetHabbo().Id, Users.Messenger.MessengerEventTypes.QuestCompleted, UserQuest.Category + "." + UserQuest.Name);
+                session.GetHabbo().GetMessenger().BroadcastAchievement(session.GetHabbo().Id, Users.Messenger.MessengerEventTypes.QuestCompleted, quest.Category + "." + quest.Name);
 
-                Session.GetHabbo().GetStats().QuestID = 0;
-                Session.GetHabbo().QuestLastCompleted = UserQuest.Id;
-                Session.SendPacket(new QuestCompletedComposer(Session, UserQuest));
-                Session.GetHabbo().Duckets += UserQuest.Reward;
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, UserQuest.Reward));
-                GetList(Session, null);
+                session.GetHabbo().GetStats().QuestID = 0;
+                session.GetHabbo().QuestLastCompleted = quest.Id;
+                session.SendPacket(new QuestCompletedComposer(session, quest));
+                session.GetHabbo().Duckets += quest.Reward;
+                session.SendPacket(new HabboActivityPointNotificationComposer(session.GetHabbo().Duckets, quest.Reward));
+                GetList(session, null);
             }
         }
 
-        public Quest GetNextQuestInSeries(string Category, int Number)
+        public Quest GetNextQuestInSeries(string category, int number)
         {
-            foreach (Quest Quest in _quests.Values)
+            foreach (Quest quest in _quests.Values)
             {
-                if (Quest.Category == Category && Quest.Number == Number)
+                if (quest.Category == category && quest.Number == number)
                 {
-                    return Quest;
+                    return quest;
                 }
             }
 
             return null;
         }
 
-        public void GetList(GameClient Session, ClientPacket Message)
+        public void GetList(GameClient session, ClientPacket message)
         {
             Dictionary<string, int> UserQuestGoals = new Dictionary<string, int>();
             Dictionary<string, Quest> UserQuests = new Dictionary<string, Quest>();
 
-            foreach (Quest Quest in _quests.Values.ToList())
+            foreach (Quest quest in _quests.Values.ToList())
             {
-                if (Quest.Category.Contains("xmas2012"))
+                if (quest.Category.Contains("xmas2012"))
                     continue;
 
-                if (!UserQuestGoals.ContainsKey(Quest.Category))
+                if (!UserQuestGoals.ContainsKey(quest.Category))
                 {
-                    UserQuestGoals.Add(Quest.Category, 1);
-                    UserQuests.Add(Quest.Category, null);
+                    UserQuestGoals.Add(quest.Category, 1);
+                    UserQuests.Add(quest.Category, null);
                 }
 
-                if (Quest.Number >= UserQuestGoals[Quest.Category])
+                if (quest.Number >= UserQuestGoals[quest.Category])
                 {
-                    int UserProgress = Session.GetHabbo().GetQuestProgress(Quest.Id);
+                    int UserProgress = session.GetHabbo().GetQuestProgress(quest.Id);
 
-                    if (Session.GetHabbo().GetStats().QuestID != Quest.Id && UserProgress >= Quest.GoalData)
+                    if (session.GetHabbo().GetStats().QuestID != quest.Id && UserProgress >= quest.GoalData)
                     {
-                        UserQuestGoals[Quest.Category] = Quest.Number + 1;
+                        UserQuestGoals[quest.Category] = quest.Number + 1;
                     }
                 }
             }
 
-            foreach (Quest Quest in _quests.Values.ToList())
+            foreach (Quest quest in _quests.Values.ToList())
             {
                 foreach (var Goal in UserQuestGoals)
                 {
-                    if (Quest.Category.Contains("xmas2012"))
+                    if (quest.Category.Contains("xmas2012"))
                         continue;
 
-                    if (Quest.Category == Goal.Key && Quest.Number == Goal.Value)
+                    if (quest.Category == Goal.Key && quest.Number == Goal.Value)
                     {
-                        UserQuests[Goal.Key] = Quest;
+                        UserQuests[Goal.Key] = quest;
                         break;
                     }
                 }
             }
 
-            Session.SendPacket(new QuestListComposer(Session, (Message != null), UserQuests));
+            session.SendPacket(new QuestListComposer(session, (message != null), UserQuests));
         }
 
-        public void QuestReminder(GameClient Session, int QuestId)
+        public void QuestReminder(GameClient session, int questId)
         {
-            Quest Quest = GetQuest(QuestId);
+            Quest Quest = GetQuest(questId);
             if (Quest == null)
                 return;
 
-            Session.SendPacket(new QuestStartedComposer(Session, Quest));
+            session.SendPacket(new QuestStartedComposer(session, Quest));
         }
     }
 }

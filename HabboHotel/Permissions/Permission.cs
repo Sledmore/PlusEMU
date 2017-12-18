@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Permissions
+﻿namespace Plus.HabboHotel.Permissions
 {
     class Permission
     {
@@ -12,11 +6,11 @@ namespace Plus.HabboHotel.Permissions
         public string PermissionName { get; set; }
         public string Description { get; set; }
 
-        public Permission(int Id, string Name, string Description)
+        public Permission(int id, string name, string description)
         {
-            this.Id = Id;
-            this.PermissionName = Name;
-            this.Description = Description;
+            Id = id;
+            PermissionName = name;
+            Description = description;
         }
     }
 }

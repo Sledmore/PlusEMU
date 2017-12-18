@@ -9,7 +9,6 @@ using Plus.HabboHotel.GameClients;
 using System.Collections.Concurrent;
 using Plus.Database.Interfaces;
 using log4net;
-using System.Threading;
 
 namespace Plus.HabboHotel.Rooms
 {

@@ -10,7 +10,6 @@ using Plus.Communication.Packets.Outgoing.Messenger;
 using Plus.Communication.Packets.Outgoing;
 using Plus.Utilities;
 using Plus.Database.Interfaces;
-using Plus.HabboHotel.Cache;
 using Plus.HabboHotel.Cache.Type;
 
 namespace Plus.HabboHotel.Users.Messenger
@@ -109,7 +108,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
                     client.GetHabbo().GetMessenger().UpdateFriend(_userId, client, true);
 
-                    if (this == null || client == null || client.GetHabbo() == null)
+                    if (client == null || client.GetHabbo() == null)
                         continue;
 
                     UpdateFriend(client.GetHabbo().Id, client, notification);

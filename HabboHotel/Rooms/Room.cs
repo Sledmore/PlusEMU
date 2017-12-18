@@ -29,7 +29,6 @@ using Plus.Communication.Packets.Outgoing.Rooms.Session;
 using Plus.HabboHotel.Rooms.Games.Football;
 using Plus.HabboHotel.Rooms.Games.Banzai;
 using Plus.HabboHotel.Rooms.Games.Teams;
-using Plus.HabboHotel.Rooms.Trading;
 using Plus.HabboHotel.Rooms.AI.Speech;
 using Plus.Database.Interfaces;
 
@@ -82,67 +81,67 @@ namespace Plus.HabboHotel.Rooms
         public int IsLagging { get; set; }
         public int IdleTime { get; set; }
 
-        public Room(RoomData Data)
+        public Room(RoomData data)
         {
             this.IsLagging = 0;
             this.IdleTime = 0;
 
-            this._roomData = Data;
+            this._roomData = data;
             RoomMuted = false;
             mDisposed = false;
 
-            this.Id = Data.Id;
-            this.Name = Data.Name;
-            this.Description = Data.Description;
-            this.OwnerName = Data.OwnerName;
-            this.OwnerId = Data.OwnerId;
+            this.Id = data.Id;
+            this.Name = data.Name;
+            this.Description = data.Description;
+            this.OwnerName = data.OwnerName;
+            this.OwnerId = data.OwnerId;
 
-            this.Category = Data.Category;
-            this.Type = Data.Type;
-            this.Access = Data.Access;
+            this.Category = data.Category;
+            this.Type = data.Type;
+            this.Access = data.Access;
             this.UsersNow = 0;
-            this.UsersMax = Data.UsersMax;
-            this.ModelName = Data.ModelName;
-            this.Score = Data.Score;
+            this.UsersMax = data.UsersMax;
+            this.ModelName = data.ModelName;
+            this.Score = data.Score;
             this.Tags = new List<string>();
-            foreach (string tag in Data.Tags)
+            foreach (string tag in data.Tags)
             {
                 Tags.Add(tag);
             }
 
-            this.AllowPets = Data.AllowPets;
-            this.AllowPetsEating = Data.AllowPetsEating;
-            this.RoomBlockingEnabled = Data.RoomBlockingEnabled;
-            this.Hidewall = Data.Hidewall;
-            this.Group = Data.Group;
+            this.AllowPets = data.AllowPets;
+            this.AllowPetsEating = data.AllowPetsEating;
+            this.RoomBlockingEnabled = data.RoomBlockingEnabled;
+            this.Hidewall = data.Hidewall;
+            this.Group = data.Group;
 
-            this.Password = Data.Password;
-            this.Wallpaper = Data.Wallpaper;
-            this.Floor = Data.Floor;
-            this.Landscape = Data.Landscape;
+            this.Password = data.Password;
+            this.Wallpaper = data.Wallpaper;
+            this.Floor = data.Floor;
+            this.Landscape = data.Landscape;
 
-            this.WallThickness = Data.WallThickness;
-            this.FloorThickness = Data.FloorThickness;
+            this.WallThickness = data.WallThickness;
+            this.FloorThickness = data.FloorThickness;
 
-            this.chatMode = Data.chatMode;
-            this.chatSize = Data.chatSize;
-            this.chatSpeed = Data.chatSpeed;
-            this.chatDistance = Data.chatDistance;
-            this.extraFlood = Data.extraFlood;
+            this.chatMode = data.chatMode;
+            this.chatSize = data.chatSize;
+            this.chatSpeed = data.chatSpeed;
+            this.chatDistance = data.chatDistance;
+            this.extraFlood = data.extraFlood;
 
-            this.TradeSettings = Data.TradeSettings;
+            this.TradeSettings = data.TradeSettings;
 
-            this.WhoCanBan = Data.WhoCanBan;
-            this.WhoCanKick = Data.WhoCanKick;
-            this.WhoCanBan = Data.WhoCanBan;
+            this.WhoCanBan = data.WhoCanBan;
+            this.WhoCanKick = data.WhoCanKick;
+            this.WhoCanBan = data.WhoCanBan;
 
-            this.PushEnabled = Data.PushEnabled;
-            this.PullEnabled = Data.PullEnabled;
-            this.SPullEnabled = Data.SPullEnabled;
-            this.SPushEnabled = Data.SPushEnabled;
-            this.EnablesEnabled = Data.EnablesEnabled;
-            this.RespectNotificationsEnabled = Data.RespectNotificationsEnabled;
-            this.PetMorphsAllowed = Data.PetMorphsAllowed;
+            this.PushEnabled = data.PushEnabled;
+            this.PullEnabled = data.PullEnabled;
+            this.SPullEnabled = data.SPullEnabled;
+            this.SPushEnabled = data.SPushEnabled;
+            this.EnablesEnabled = data.EnablesEnabled;
+            this.RespectNotificationsEnabled = data.RespectNotificationsEnabled;
+            this.PetMorphsAllowed = data.PetMorphsAllowed;
 
             this.ActiveTrades = new ArrayList();
             this.MutedUsers = new Dictionary<int, double>();
@@ -167,7 +166,7 @@ namespace Plus.HabboHotel.Rooms
             this.InitBots();
             this.InitPets();
 
-            Data.UsersNow = 1;
+            data.UsersNow = 1;
         }
 
         public List<string> WordFilterList
@@ -737,31 +736,31 @@ namespace Plus.HabboHotel.Rooms
         #endregion
 
         #region Communication (Packets)
-        public void SendPacket(IServerPacket Message, bool UsersWithRightsOnly = false)
+        public void SendPacket(IServerPacket packet, bool withRightsOnly = false)
         {
-            if (Message == null)
+            if (packet == null)
                 return;
 
             try
             {
 
-                List<RoomUser> Users = this._roomUserManager.GetUserList().ToList();
+                List<RoomUser> users = this._roomUserManager.GetUserList().ToList();
 
-                if (this == null || this._roomUserManager == null || Users == null)
+                if (this._roomUserManager == null || users == null)
                     return;
 
-                foreach (RoomUser User in Users)
+                foreach (RoomUser user in users)
                 {
-                    if (User == null || User.IsBot)
+                    if (user == null || user.IsBot)
                         continue;
 
-                    if (User.GetClient() == null || User.GetClient().GetConnection() == null)
+                    if (user.GetClient() == null || user.GetClient().GetConnection() == null)
                         continue;
 
-                    if (UsersWithRightsOnly && !this.CheckRights(User.GetClient()))
+                    if (withRightsOnly && !this.CheckRights(user.GetClient()))
                         continue;
 
-                    User.GetClient().SendPacket(Message);
+                    user.GetClient().SendPacket(packet);
                 }
             }
             catch (Exception e)
@@ -770,23 +769,23 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public void BroadcastPacket(byte[] Packet)
+        public void BroadcastPacket(byte[] packet)
         {
-            foreach (RoomUser User in this._roomUserManager.GetUserList().ToList())
+            foreach (RoomUser user in this._roomUserManager.GetUserList().ToList())
             {
-                if (User == null || User.IsBot)
+                if (user == null || user.IsBot)
                     continue;
 
-                if (User.GetClient() == null || User.GetClient().GetConnection() == null)
+                if (user.GetClient() == null || user.GetClient().GetConnection() == null)
                     continue;
 
-                User.GetClient().GetConnection().SendData(Packet);
+                user.GetClient().GetConnection().SendData(packet);
             }
         }
 
-        public void SendPacket(List<ServerPacket> Messages)
+        public void SendPacket(List<ServerPacket> packets)
         {
-            if (Messages.Count == 0)
+            if (packets.Count == 0)
                 return;
 
             try
@@ -794,9 +793,9 @@ namespace Plus.HabboHotel.Rooms
                 byte[] TotalBytes = new byte[0];
                 int Current = 0;
 
-                foreach (ServerPacket Packet in Messages.ToList())
+                foreach (ServerPacket packet in packets.ToList())
                 {
-                    byte[] ToAdd = Packet.GetBytes();
+                    byte[] ToAdd = packet.GetBytes();
                     int NewLen = TotalBytes.Length + ToAdd.Length;
 
                     Array.Resize(ref TotalBytes, NewLen);

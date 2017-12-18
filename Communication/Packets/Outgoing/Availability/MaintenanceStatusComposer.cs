@@ -2,12 +2,12 @@
 {
     class MaintenanceStatusComposer : ServerPacket
     {
-        public MaintenanceStatusComposer(int Minutes, int Duration)
+        public MaintenanceStatusComposer(int minutes, int duration)
             : base(ServerPacketHeader.MaintenanceStatusMessageComposer)
         {
             base.WriteBoolean(false);
-            base.WriteInteger(Minutes);//Time till shutdown.
-            base.WriteInteger(Duration);//Duration
+            base.WriteInteger(minutes);//Time till shutdown.
+            base.WriteInteger(duration);//Duration
         }
     }
 }

@@ -10,22 +10,22 @@ namespace Plus.HabboHotel.Rooms
         private double _timestampStarted;
         private int _categoryId;
 
-        public RoomPromotion(string Name, string Desc, int CategoryId)
+        public RoomPromotion(string name, string description, int categoryId)
         {
-            this._name = Name;
-            this._description = Desc;
+            this._name = name;
+            this._description = description;
             this._timestampStarted = PlusEnvironment.GetUnixTimestamp();
             this._timestampExpires = (PlusEnvironment.GetUnixTimestamp()) + (Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.promotion.lifespan")) * 60);
-            this._categoryId = CategoryId;
+            this._categoryId = categoryId;
         }
 
-        public RoomPromotion(string Name, string Desc, double Started, double Expires, int CategoryId)
+        public RoomPromotion(string name, string description, double started, double expires, int categoryId)
         {
-            this._name = Name;
-            this._description = Desc;
-            this._timestampStarted = Started;
-            this._timestampExpires = Expires;
-            this._categoryId = CategoryId;
+            this._name = name;
+            this._description = description;
+            this._timestampStarted = started;
+            this._timestampExpires = expires;
+            this._categoryId = categoryId;
         }
 
         public string Name

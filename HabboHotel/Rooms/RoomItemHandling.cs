@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
@@ -44,9 +43,9 @@ namespace Plus.HabboHotel.Rooms
 
         private ConcurrentQueue<Item> _roomItemUpdateQueue;
 
-        public RoomItemHandling(Room Room)
+        public RoomItemHandling(Room room)
         {
-            this._room = Room;
+            this._room = room;
 
             this.HopperCount = 0;
             this.mGotRollers = false;

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 
-using Plus.Core;
 using Plus.HabboHotel.Items;
 using Plus.Communication.Packets.Outgoing.Inventory.Trading;
 using Plus.Communication.Packets.Outgoing;
@@ -23,35 +21,35 @@ namespace Plus.HabboHotel.Rooms.Trading
 
         public Trade(int Id, RoomUser Player1, RoomUser Player2, Room Instance)
         {
-            this.Id = Id;
-            this.CanChange = true;
-            this.Instance = Instance;
-            this.Users = new TradeUser[2];
-            this.Users[0] = new TradeUser(Player1);
-            this.Users[1] = new TradeUser(Player2);
+            Id = Id;
+            CanChange = true;
+            Instance = Instance;
+            Users = new TradeUser[2];
+            Users[0] = new TradeUser(Player1);
+            Users[1] = new TradeUser(Player2);
 
             Player1.IsTrading = true;
-            Player1.TradeId = this.Id;
+            Player1.TradeId = Id;
             Player1.TradePartner = Player2.UserId;
             Player2.IsTrading = true;
-            Player2.TradeId = this.Id;
+            Player2.TradeId = Id;
             Player2.TradePartner = Player1.UserId;
         }
 
-        public void SendPacket(ServerPacket Packet)
+        public void SendPacket(ServerPacket packet)
         {
-            foreach (TradeUser TradeUser in this.Users)
+            foreach (TradeUser user in Users)
             {
-                if (TradeUser == null || TradeUser.RoomUser == null || TradeUser.RoomUser.GetClient() == null)
+                if (user == null || user.RoomUser == null || user.RoomUser.GetClient() == null)
                     continue;
 
-                TradeUser.RoomUser.GetClient().SendPacket(Packet);
+                user.RoomUser.GetClient().SendPacket(packet);
             }
         }
 
         public void RemoveAccepted()
         {
-            foreach (TradeUser User in this.Users)
+            foreach (TradeUser User in Users)
             {
                 if (User == null)
                     continue;
@@ -64,7 +62,7 @@ namespace Plus.HabboHotel.Rooms.Trading
         {
             get
             {
-                foreach (TradeUser User in this.Users)
+                foreach (TradeUser User in Users)
                 {
                     if (User == null)
                         continue;
@@ -81,41 +79,41 @@ namespace Plus.HabboHotel.Rooms.Trading
 
         public void EndTrade(int UserId)
         {
-            foreach (TradeUser TradeUser in this.Users)
+            foreach (TradeUser TradeUser in Users)
             {
                 if (TradeUser == null || TradeUser.RoomUser == null)
                     continue;
 
-                this.RemoveTrade(TradeUser.RoomUser.UserId);
+                RemoveTrade(TradeUser.RoomUser.UserId);
             }
 
-            this.SendPacket(new TradingClosedComposer(UserId));
-            Instance.GetTrading().RemoveTrade(this.Id);
+            SendPacket(new TradingClosedComposer(UserId));
+            Instance.GetTrading().RemoveTrade(Id);
         }
 
         public void Finish()
         {
-            foreach (TradeUser TradeUser in this.Users)
+            foreach (TradeUser TradeUser in Users)
             {
                 if (TradeUser == null)
                     continue;
 
-                this.RemoveTrade(TradeUser.RoomUser.UserId);
+                RemoveTrade(TradeUser.RoomUser.UserId);
             }
 
-            this.ProcessItems();
-            this.SendPacket(new TradingFinishComposer());
+            ProcessItems();
+            SendPacket(new TradingFinishComposer());
 
-            Instance.GetTrading().RemoveTrade(this.Id);
+            Instance.GetTrading().RemoveTrade(Id);
         }
 
         public void RemoveTrade(int UserId)
         {
-            TradeUser TradeUser = this.Users[0];
+            TradeUser TradeUser = Users[0];
 
             if (TradeUser.RoomUser.UserId != UserId)
             {
-                TradeUser = this.Users[1];
+                TradeUser = Users[1];
             }
 
             TradeUser.RoomUser.RemoveStatus("trd");
@@ -127,11 +125,11 @@ namespace Plus.HabboHotel.Rooms.Trading
 
         public void ProcessItems()
         {
-            List<Item> UserOne = this.Users[0].OfferedItems.Values.ToList();
-            List<Item> UserTwo = this.Users[1].OfferedItems.Values.ToList();
+            List<Item> UserOne = Users[0].OfferedItems.Values.ToList();
+            List<Item> UserTwo = Users[1].OfferedItems.Values.ToList();
 
-            RoomUser RoomUserOne = this.Users[0].RoomUser;
-            RoomUser RoomUserTwo = this.Users[1].RoomUser;
+            RoomUser RoomUserOne = Users[0].RoomUser;
+            RoomUser RoomUserTwo = Users[1].RoomUser;
 
             string logUserOne = "";
             string logUserTwo = "";
@@ -148,7 +146,7 @@ namespace Plus.HabboHotel.Rooms.Trading
 
                 if (I == null)
                 {
-                    this.SendPacket(new BroadcastMessageAlertComposer("Error! Trading Failed!"));
+                    SendPacket(new BroadcastMessageAlertComposer("Error! Trading Failed!"));
                     return;
                 }
             }
@@ -159,7 +157,7 @@ namespace Plus.HabboHotel.Rooms.Trading
 
                 if (I == null)
                 {
-                    this.SendPacket(new BroadcastMessageAlertComposer("Error! Trading Failed!"));
+                    SendPacket(new BroadcastMessageAlertComposer("Error! Trading Failed!"));
                     return;
                 }
             }

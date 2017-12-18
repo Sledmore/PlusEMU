@@ -884,8 +884,6 @@
     <Compile Include="HabboHotel\Rooms\Trading\TradeUser.cs" />
     <Compile Include="HabboHotel\Subscriptions\SubscriptionData.cs" />
     <Compile Include="HabboHotel\Subscriptions\SubscriptionManager.cs" />
-    <Compile Include="HabboHotel\Surveys\Question.cs" />
-    <Compile Include="HabboHotel\Surveys\SurveyManager.cs" />
     <Compile Include="HabboHotel\Talents\TalentTrackSubLevel.cs" />
     <Compile Include="HabboHotel\Talents\TalentTrackManager.cs" />
     <Compile Include="HabboHotel\Talents\TalentTrackLevel.cs" />

@@ -506,9 +506,6 @@ namespace Plus.HabboHotel.Items
 
         public void ProcessUpdates()
         {
-            if (this == null)
-                return;
-
             try
             {
                 UpdateCounter--;

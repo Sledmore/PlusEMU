@@ -6,66 +6,66 @@
         {
             switch (type)
             {
-                case QuestType.SOCIAL_WAVE:
+                case QuestType.SocialWave:
                     return "WAVE";
 
-                case QuestType.SOCIAL_DANCE:
+                case QuestType.SocialDance:
                     return "DANCE";
 
-                case QuestType.SOCIAL_RESPECT:
+                case QuestType.SocialRespect:
                     return "GIVE_RESPECT";
 
-                case QuestType.SOCIAL_FRIEND:
+                case QuestType.SocialFriend:
                     return "REQUEST_FRIEND";
 
-                case QuestType.SOCIAL_CHAT:
+                case QuestType.SocialChat:
                     return "CHAT_WITH_SOMEONE";
 
-                case QuestType.SOCIAL_VISIT:
+                case QuestType.SocialVisit:
                     return "ENTER_OTHERS_ROOM";
 
-                case QuestType.PROFILE_BADGE:
+                case QuestType.ProfileBadge:
                     return "WEAR_BADGE";
 
-                case QuestType.PROFILE_CHANGE_MOTTO:
+                case QuestType.ProfileChangeMotto:
                     return "CHANGE_MOTTO";
 
-                case QuestType.PROFILE_CHANGE_LOOK:
+                case QuestType.ProfileChangeLook:
                     return "CHANGE_FIGURE";
 
-                case QuestType.FURNI_DECORATION_WALL:
+                case QuestType.FurniDecoWall:
                     return "PLACE_WALLPAPER";
 
-                case QuestType.FURNI_DECORATION_FLOOR:
+                case QuestType.FurniDecoFloor:
                     return "PLACE_FLOOR";
 
-                case QuestType.FURNI_STACK:
+                case QuestType.FurniStack:
                     return "STACK_ITEM";
 
-                case QuestType.FURNI_SWITCH:
+                case QuestType.FurniSwitch:
                     return "SWITCH_ITEM_STATE";
 
-                case QuestType.FURNI_PICK:
+                case QuestType.FurniPick:
                     return "PICKUP_ITEM";
 
-                case QuestType.FURNI_PLACE:
+                case QuestType.FurniPlace:
                     return "PLACE_ITEM";
 
-                case QuestType.FURNI_ROTATE:
+                case QuestType.FurniRotate:
                     return "ROTATE_ITEM";
 
-                case QuestType.FURNI_MOVE:
+                case QuestType.FurniMove:
                     return "MOVE_ITEM";
-                case QuestType.SUMMER_ENTER_ROOM:
+                case QuestType.SummerEnterRoom:
                     return "ENTER_ROOM";
 
-                case QuestType.ADD_FRIENDS:
+                case QuestType.AddFriends:
                     return "add_25_friends";
-                case QuestType.WAVE_USERS:
+                case QuestType.WaveUsers:
                     return "wave_10_users";
 
                 default:
-                case QuestType.EXPLORE_FIND_ITEM:
+                case QuestType.ExploreFindItem:
                     return "FIND_STUFF";
             }
         }

@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Permissions
+﻿namespace Plus.HabboHotel.Permissions
 {
     class PermissionCommand
     {
-        public string Command { get; set; }
-        public int GroupId { get; set; }
-        public int SubscriptionId { get; set; }
+        public string Command { get; private set; }
+        public int GroupId { get; private set; }
+        public int SubscriptionId { get; private set; }
 
-        public PermissionCommand(string Command, int GroupId, int SubscriptionId)
+        public PermissionCommand(string command, int groupId, int subscriptionId)
         {
-            this.Command = Command;
-            this.GroupId = GroupId;
-            this.SubscriptionId = SubscriptionId;
+            Command = command;
+            GroupId = groupId;
+            SubscriptionId = subscriptionId;
         }
     }
 }

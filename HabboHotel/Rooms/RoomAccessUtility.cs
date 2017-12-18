@@ -2,9 +2,9 @@
 {
     public static class RoomAccessUtility
     {
-        public static int GetRoomAccessPacketNum(RoomAccess Access)
+        public static int GetRoomAccessPacketNum(RoomAccess access)
         {
-            switch (Access)
+            switch (access)
             {
                 default:
                 case RoomAccess.Open:
@@ -21,9 +21,9 @@
             }
         }
 
-        public static RoomAccess ToRoomAccess(string Id)
+        public static RoomAccess ToRoomAccess(string id)
         {
-            switch (Id)
+            switch (id)
             {
                 default:
                 case "open":
@@ -40,9 +40,9 @@
             }
         }
 
-        public static RoomAccess ToRoomAccess(int Id)
+        public static RoomAccess ToRoomAccess(int id)
         {
-            switch (Id)
+            switch (id)
             {
                 default:
                 case 0:
