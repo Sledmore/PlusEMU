@@ -76,7 +76,7 @@ namespace Plus.Communication.Packets.Outgoing.Navigator
             base.WriteInteger(Data.WhoCanBan);
 
             base.WriteBoolean(Session.GetHabbo().GetPermissions().HasRight("mod_tool") || Data.OwnerName == Session.GetHabbo().Username);//Room muting.
-            base.WriteInteger(Data.chatMode);
+            base.WriteInteger(Data.ChatMode);
             base.WriteInteger(Data.ChatSize);
             base.WriteInteger(Data.ChatSpeed);
             base.WriteInteger(Data.ExtraFlood);//Hearing distance

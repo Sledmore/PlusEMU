@@ -2,25 +2,13 @@
 {
     public class BadgeDefinition
     {
-        private string _code;
-        private string _requiredRight;
+        public string Code { get; private set; }
+        public string RequiredRight { get; private set; }
 
-        public BadgeDefinition(string Code, string RequiredRight)
+        public BadgeDefinition(string code, string requiredRight)
         {
-            this._code = Code;
-            this._requiredRight = RequiredRight;
-        }
-
-        public string Code
-        {
-            get { return this._code; }
-            set { this._code = value; }
-        }
-
-        public string RequiredRight
-        {
-            get { return this._requiredRight; }
-            set { this._requiredRight = value; }
+            Code = code;
+            RequiredRight = requiredRight;
         }
     }
 }

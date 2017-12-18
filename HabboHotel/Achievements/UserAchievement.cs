@@ -2,15 +2,15 @@
 {
     public class UserAchievement
     {
-        public readonly string AchievementGroup;
-        public int Level;
-        public int Progress;
+        public string AchievementGroup { get; private set; }
+        public int Level { get; set; }
+        public int Progress { get; set; }
 
         public UserAchievement(string achievementGroup, int level, int progress)
         {
-            this.AchievementGroup = achievementGroup;
-            this.Level = level;
-            this.Progress = progress;
+            AchievementGroup = achievementGroup;
+            Level = level;
+            Progress = progress;
         }
     }
 }

@@ -27,11 +27,11 @@ namespace Plus.HabboHotel.Rooms
 
         public RoomManager()
         {
-            this._roomModels = new Dictionary<string, RoomModel>();
-            this._rooms = new ConcurrentDictionary<int, Room>();
-            this._roomLoadingSync = new object();
+            _roomModels = new Dictionary<string, RoomModel>();
+            _rooms = new ConcurrentDictionary<int, Room>();
+            _roomLoadingSync = new object();
 
-            this.LoadModels();
+            LoadModels();
         }
 
         public void OnCycle()
@@ -42,7 +42,7 @@ namespace Plus.HabboHotel.Rooms
                 if (sinceLastTime.TotalMilliseconds >= 500)
                 {
                     _cycleLastExecution = DateTime.Now;
-                    foreach (Room Room in this._rooms.Values.ToList())
+                    foreach (Room Room in _rooms.Values.ToList())
                     {
                         if (Room.isCrashed)
                             continue;
@@ -74,7 +74,7 @@ namespace Plus.HabboHotel.Rooms
 
         public int Count
         {
-            get { return this._rooms.Count; }
+            get { return _rooms.Count; }
         }
 
         public void LoadModels()
@@ -90,34 +90,34 @@ namespace Plus.HabboHotel.Rooms
                 if (Data == null)
                     return;
 
-                foreach (DataRow Row in Data.Rows)
+                foreach (DataRow row in Data.Rows)
                 {
-                    string Modelname = Convert.ToString(Row["id"]);
+                    string model = Convert.ToString(row["id"]);
 
-                    _roomModels.Add(Modelname, new RoomModel(Modelname, Convert.ToInt32(Row["door_x"]), Convert.ToInt32(Row["door_y"]), (Double)Row["door_z"], Convert.ToInt32(Row["door_dir"]),
-                        Convert.ToString(Row["heightmap"]), PlusEnvironment.EnumToBool(Row["club_only"].ToString()), Convert.ToInt32(Row["wall_height"]), false));
+                    _roomModels.Add(model, new RoomModel(model, Convert.ToInt32(row["door_x"]), Convert.ToInt32(row["door_y"]), (Double)row["door_z"], Convert.ToInt32(row["door_dir"]),
+                        Convert.ToString(row["heightmap"]), PlusEnvironment.EnumToBool(row["club_only"].ToString()), Convert.ToInt32(row["wall_height"]), false));
                 }
             }
         }
 
         public bool LoadModel(string id)
         {
-            DataRow Row = null;
+            DataRow row = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT id,door_x,door_y,door_z,door_dir,heightmap,club_only,poolmap,`wall_height` FROM `room_models` WHERE `custom` = '1' AND `id` = @modelId LIMIT 1");
                 dbClient.AddParameter("modelId", id);
-                Row = dbClient.GetRow();
+                row = dbClient.GetRow();
 
-                if (Row == null)
+                if (row == null)
                     return false;
 
-                string Modelname = Convert.ToString(Row["id"]);
+                string model = Convert.ToString(row["id"]);
 
-                if (!this._roomModels.ContainsKey(Modelname))
+                if (!_roomModels.ContainsKey(model))
                 {
-                    this._roomModels.Add(Modelname, new RoomModel(Modelname, Convert.ToInt32(Row["door_x"]), Convert.ToInt32(Row["door_y"]), Convert.ToDouble(Row["door_z"]), Convert.ToInt32(Row["door_dir"]),
-                      Convert.ToString(Row["heightmap"]), PlusEnvironment.EnumToBool(Row["club_only"].ToString()), Convert.ToInt32(Row["wall_height"]), true));
+                    _roomModels.Add(model, new RoomModel(model, Convert.ToInt32(row["door_x"]), Convert.ToInt32(row["door_y"]), Convert.ToDouble(row["door_z"]), Convert.ToInt32(row["door_dir"]),
+                      Convert.ToString(row["heightmap"]), PlusEnvironment.EnumToBool(row["club_only"].ToString()), Convert.ToInt32(row["wall_height"]), true));
                 }
 
                 return true;
@@ -126,29 +126,28 @@ namespace Plus.HabboHotel.Rooms
 
         public void ReloadModel(string Id)
         {
-            if (!this._roomModels.ContainsKey(Id))
+            if (!_roomModels.ContainsKey(Id))
             {
-                this.LoadModel(Id);
+                LoadModel(Id);
                 return;
             }
 
-            this._roomModels.Remove(Id);
-            this.LoadModel(Id);
+            _roomModels.Remove(Id);
+            LoadModel(Id);
         }
 
         public bool TryGetModel(string id, out RoomModel model)
         {
-            if (this._roomModels.ContainsKey(id))
+            if (_roomModels.ContainsKey(id))
             {
-                model = this._roomModels[id];
+                model = _roomModels[id];
                 return true;
             }
 
             // Try to load this model.
             if (LoadModel(id))
             {
-                RoomModel customModel = null;
-                if (TryGetModel(id, out customModel))
+                if (TryGetModel(id, out RoomModel customModel))
                 {
                     model = customModel;
                     return true;
@@ -161,7 +160,7 @@ namespace Plus.HabboHotel.Rooms
 
         public void UnloadRoom(int roomId)
         {
-            if (this._rooms.TryRemove(roomId, out Room room))
+            if (_rooms.TryRemove(roomId, out Room room))
             {
                 room.Dispose();
             }
@@ -170,7 +169,7 @@ namespace Plus.HabboHotel.Rooms
         public bool TryLoadRoom(int roomId, out Room instance)
         {
             Room inst = null;
-            if (this._rooms.TryGetValue(roomId, out inst))
+            if (_rooms.TryGetValue(roomId, out inst))
             {
                 if (!inst.Unloaded)
                 {
@@ -204,7 +203,7 @@ namespace Plus.HabboHotel.Rooms
                 }
 
                 Room myInstance = new Room(data);
-                if (this._rooms.TryAdd(roomId, myInstance))
+                if (_rooms.TryAdd(roomId, myInstance))
                 {
                     instance = myInstance;
                     return true;
@@ -218,68 +217,68 @@ namespace Plus.HabboHotel.Rooms
 
         public List<Room> SearchGroupRooms(string query)
         {
-            return this._rooms.Values.Where(x => x.Group != null && x.Group.Name.ToLower().Contains(query.ToLower()) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
+            return _rooms.Values.Where(x => x.Group != null && x.Group.Name.ToLower().Contains(query.ToLower()) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
         }
 
         public List<Room> SearchTaggedRooms(string query)
         {
-            return this._rooms.Values.Where(x => x.Tags.Contains(query) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
+            return _rooms.Values.Where(x => x.Tags.Contains(query) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(50).ToList();
         }
 
         public List<Room> GetPopularRooms(int category, int amount = 50)
         {
-            return this._rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+            return _rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
         }
 
         public List<Room> GetRecommendedRooms(int amount = 50, int CurrentRoomId = 0)
         {
-            return this._rooms.Values.Where(x => x.Id != CurrentRoomId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).OrderByDescending(x => x.Score).Take(amount).ToList();
+            return _rooms.Values.Where(x => x.Id != CurrentRoomId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).OrderByDescending(x => x.Score).Take(amount).ToList();
         }
 
         public List<Room> GetPopularRatedRooms(int amount = 50)
         {
-            return this._rooms.Values.Where(x => x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+            return _rooms.Values.Where(x => x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
         }
 
         public List<Room> GetRoomsByCategory(int category, int amount = 50)
         {
-            return this._rooms.Values.Where(x => x.Category == category && x.Access != RoomAccess.Invisible && x.UsersNow > 0).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+            return _rooms.Values.Where(x => x.Category == category && x.Access != RoomAccess.Invisible && x.UsersNow > 0).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
         }
 
         public List<Room> GetOnGoingRoomPromotions(int Mode, int Amount = 50)
         {
             if (Mode == 17)
             {
-                return this._rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(Amount).ToList();
+                return _rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(Amount).ToList();
             }
 
-            return this._rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(Amount).ToList();
+            return _rooms.Values.Where(x => x.HasActivePromotion && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(Amount).ToList();
         }
 
         public List<Room> GetPromotedRooms(int categoryId, int amount = 50)
         {
-            return this._rooms.Values.Where(x => x.HasActivePromotion && x.Promotion.CategoryId == categoryId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(amount).ToList();
+            return _rooms.Values.Where(x => x.HasActivePromotion && x.Promotion.CategoryId == categoryId && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Promotion.TimestampStarted).Take(amount).ToList();
         }
 
         public List<Room> GetGroupRooms(int amount = 50)
         {
-            return this._rooms.Values.Where(x => x.Group != null && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).Take(amount).ToList();
+            return _rooms.Values.Where(x => x.Group != null && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.Score).Take(amount).ToList();
         }
 
         public List<Room> GetRoomsByIds(List<int> ids, int amount = 50)
         {
-            return this._rooms.Values.Where(x => ids.Contains(x.Id) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
+            return _rooms.Values.Where(x => ids.Contains(x.Id) && x.Access != RoomAccess.Invisible).OrderByDescending(x => x.UsersNow).Take(amount).ToList();
         }
 
         public Room TryGetRandomLoadedRoom()
         {
-            return this._rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible && x.UsersNow < x.UsersMax).OrderByDescending(x => x.UsersNow).FirstOrDefault();
+            return _rooms.Values.Where(x => x.UsersNow > 0 && x.Access != RoomAccess.Invisible && x.UsersNow < x.UsersMax).OrderByDescending(x => x.UsersNow).FirstOrDefault();
         }
 
 
         public bool TryGetRoom(int RoomId, out Room Room)
         {
-            return this._rooms.TryGetValue(RoomId, out Room);
+            return _rooms.TryGetValue(RoomId, out Room);
         }
 
         public RoomData CreateRoom(GameClient session, string name, string description, int category, int maxVisitors, int tradeSettings, RoomModel model, string wallpaper = "0.0", string floor = "0.0", string landscape = "0.0", int wallthick = 0, int floorthick = 0)
@@ -306,7 +305,6 @@ namespace Plus.HabboHotel.Rooms
                 roomId = Convert.ToInt32(dbClient.InsertQuery());
             }
 
-
             RoomData data = new RoomData(roomId, name, model.Id, session.GetHabbo().Username, session.GetHabbo().Id, "", 0, "public", "open", 0, maxVisitors, category, description, string.Empty,
              floor, landscape, 1, 1, 0, 0, wallthick, floorthick, wallpaper, 1, 1, 1, 1, 1, 1, 1, 8, tradeSettings, true, true, true, true, true, true, true, 0, 0, true, model);
 
@@ -315,19 +313,19 @@ namespace Plus.HabboHotel.Rooms
 
         public ICollection<Room> GetRooms()
         {
-            return this._rooms.Values;
+            return _rooms.Values;
         }
 
         public void Dispose()
         {
             int length = _rooms.Count;
             int i = 0;
-            foreach (Room Room in this._rooms.Values.ToList())
+            foreach (Room room in _rooms.Values.ToList())
             {
-                if (Room == null)
+                if (room == null)
                     continue;
 
-                PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room.Id);
+                PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(room.Id);
                 Console.Clear();
                 log.Info("<<- SERVER SHUTDOWN ->> ROOM ITEM SAVE: " + String.Format("{0:0.##}", ((double)i / length) * 100) + "%");
                 i++;

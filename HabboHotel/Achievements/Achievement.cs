@@ -4,24 +4,25 @@ namespace Plus.HabboHotel.Achievements
 {
     public class Achievement
     {
-        public int Id;
-        public string Category;
-        public string GroupName;
-        public int GameId;
+        public int Id { get; private set; }
+        public string Category { get; private set; }
+        public string GroupName { get; private set; }
+        public int GameId { get; private set; }
+
         public Dictionary<int, AchievementLevel> Levels;
 
-        public Achievement(int Id, string GroupName, string Category, int GameId)
+        public Achievement(int id, string groupName, string category, int gameId)
         {
-            this.Id = Id;
-            this.GroupName = GroupName;
-            this.Category = Category;
-            this.GameId = GameId;
-            this.Levels = new Dictionary<int, AchievementLevel>();
+            Id = id;
+            GroupName = groupName;
+            Category = category;
+            GameId = gameId;
+            Levels = new Dictionary<int, AchievementLevel>();
         }
 
-        public void AddLevel(AchievementLevel Level)
+        public void AddLevel(AchievementLevel level)
         {
-            Levels.Add(Level.Level, Level);
+            Levels.Add(level.Level, level);
         }
     }
 }

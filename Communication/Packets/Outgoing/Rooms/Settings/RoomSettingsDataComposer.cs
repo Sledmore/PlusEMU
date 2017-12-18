@@ -29,7 +29,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
             base.WriteInteger(room.WallThickness);
             base.WriteInteger(room.FloorThickness);
 
-            base.WriteInteger(room.chatMode);//Chat mode
+            base.WriteInteger(room.ChatMode);//Chat mode
             base.WriteInteger(room.ChatSize);//Chat size
             base.WriteInteger(room.ChatSpeed);//Chat speed
             base.WriteInteger(room.ChatDistance);//Hearing Distance

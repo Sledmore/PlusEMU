@@ -34,7 +34,7 @@ namespace Plus.HabboHotel.Rooms
         public int WhoCanMute { get; set; }
         public int WhoCanBan { get; set; }
         public int WhoCanKick { get; set; }
-        public int chatMode { get; set; }
+        public int ChatMode { get; set; }
         public int ChatSize { get; set; }
         public int ChatSpeed { get; set; }
         public int ExtraFlood { get; set; }
@@ -102,7 +102,7 @@ namespace Plus.HabboHotel.Rooms
             this.WhoCanMute = muteSettings;
             this.WhoCanBan = banSettings;
             this.WhoCanKick = kickSettings;
-            this.chatMode = chatMode;
+            this.ChatMode = chatMode;
             this.ChatSize = chatSize;
             this.ChatSpeed = chatSpeed;
             this.ExtraFlood = extraFlood;
@@ -167,7 +167,7 @@ namespace Plus.HabboHotel.Rooms
             this.WhoCanMute = data.WhoCanMute;
             this.WhoCanBan = data.WhoCanBan;
             this.WhoCanKick = data.WhoCanKick;
-            this.chatMode = data.chatMode;
+            this.ChatMode = data.ChatMode;
             this.ChatSize = data.ChatSize;
             this.ChatSpeed = data.ChatSpeed;
             this.ExtraFlood = data.ExtraFlood;

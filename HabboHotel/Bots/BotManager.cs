@@ -18,36 +18,36 @@ namespace Plus.HabboHotel.Bots
 
         public BotManager()
         {
-            this._responses = new List<BotResponse>();
+            _responses = new List<BotResponse>();
         }
 
         public void Init()
         {
-            if (this._responses.Count > 0)
-                this._responses.Clear();
+            if (_responses.Count > 0)
+                _responses.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `bot_ai`,`chat_keywords`,`response_text`,`response_mode`,`response_beverage` FROM `bots_responses`");
-                DataTable BotResponses = dbClient.GetTable();
+                DataTable data = dbClient.GetTable();
 
-                if (BotResponses != null)
+                if (data != null)
                 {
-                    foreach (DataRow Response in BotResponses.Rows)
+                    foreach (DataRow row in data.Rows)
                     {
-                        this._responses.Add(new BotResponse(Convert.ToString(Response["bot_ai"]), Convert.ToString(Response["chat_keywords"]), Convert.ToString(Response["response_text"]), Response["response_mode"].ToString(), Convert.ToString(Response["response_beverage"])));
+                        this._responses.Add(new BotResponse(Convert.ToString(row["bot_ai"]), Convert.ToString(row["chat_keywords"]), Convert.ToString(row["response_text"]), row["response_mode"].ToString(), Convert.ToString(row["response_beverage"])));
                     }
                 }
             }
         }
 
-        public BotResponse GetResponse(BotAIType AiType, string Message)
+        public BotResponse GetResponse(BotAIType type, string message)
         {
-            foreach (BotResponse Response in this._responses.Where(X => X.AiType == AiType).ToList())
+            foreach (BotResponse response in _responses.Where(X => X.AiType == type).ToList())
             {
-                if (Response.KeywordMatched(Message))
+                if (response.KeywordMatched(message))
                 {
-                    return Response;
+                    return response;
                 }
             }
 

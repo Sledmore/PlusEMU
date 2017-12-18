@@ -15,7 +15,7 @@ namespace Plus.HabboHotel.Badges
 
         public BadgeManager()
         {
-            this._badges = new Dictionary<string, BadgeDefinition>();
+            _badges = new Dictionary<string, BadgeDefinition>();
         }
 
         public void Init()
@@ -23,23 +23,23 @@ namespace Plus.HabboHotel.Badges
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `badge_definitions`;");
-                DataTable GetBadges = dbClient.GetTable();
+                DataTable data = dbClient.GetTable();
 
-                foreach (DataRow Row in GetBadges.Rows)
+                foreach (DataRow row in data.Rows)
                 {
-                    string BadgeCode = Convert.ToString(Row["code"]).ToUpper();
+                    string code = Convert.ToString(row["code"]).ToUpper();
 
-                    if (!this._badges.ContainsKey(BadgeCode))
-                        this._badges.Add(BadgeCode, new BadgeDefinition(BadgeCode, Convert.ToString(Row["required_right"])));
+                    if (!this._badges.ContainsKey(code))
+                        this._badges.Add(code, new BadgeDefinition(code, Convert.ToString(row["required_right"])));
                 }
             }
 
             log.Info("Loaded " + this._badges.Count + " badge definitions.");
         }
    
-        public bool TryGetBadge(string BadgeCode, out BadgeDefinition Badge)
+        public bool TryGetBadge(string code, out BadgeDefinition badge)
         {
-            return this._badges.TryGetValue(BadgeCode.ToUpper(), out Badge);
+            return this._badges.TryGetValue(code.ToUpper(), out badge);
         }
     }
 }

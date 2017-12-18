@@ -1023,7 +1023,6 @@
     <Compile Include="HabboHotel\Users\Messenger\SearchResultFactory.cs" />
     <Compile Include="HabboHotel\Users\UserData\UserData.cs" />
     <Compile Include="HabboHotel\Users\UserData\UserDataFactory.cs" />
-    <Compile Include="HabboHotel\Users\UserData\UserDataNotFoundException.cs" />
     <Compile Include="Communication\Packets\Incoming\ClientPacket.cs" />
     <Compile Include="Communication\GamePacketParser.cs" />
     <Compile Include="Communication\InitialPacketParser.cs" />

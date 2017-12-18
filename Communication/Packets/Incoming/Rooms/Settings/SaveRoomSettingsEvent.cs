@@ -147,7 +147,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
             room.WallThickness = WallThickness;
             room.FloorThickness = FloorThickness;
 
-            room.chatMode = chatMode;
+            room.ChatMode = chatMode;
             room.ChatSize = chatSize;
             room.ChatSpeed = chatSpeed;
             room.ChatDistance = chatDistance;
@@ -190,7 +190,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
                 dbClient.AddParameter("muteSettings", room.WhoCanMute);
                 dbClient.AddParameter("kickSettings", room.WhoCanKick);
                 dbClient.AddParameter("banSettings", room.WhoCanBan);
-                dbClient.AddParameter("chatMode", room.chatMode);
+                dbClient.AddParameter("chatMode", room.ChatMode);
                 dbClient.AddParameter("chatSize", room.ChatSize);
                 dbClient.AddParameter("chatSpeed", room.ChatSpeed);
                 dbClient.AddParameter("extraFlood", room.ExtraFlood);
