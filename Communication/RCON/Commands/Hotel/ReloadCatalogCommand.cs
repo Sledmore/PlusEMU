@@ -1,8 +1,8 @@
 ﻿using Plus.Communication.Packets.Outgoing.Catalog;
 
-namespace Plus.Communication.RCON.Commands.Hotel
+namespace Plus.Communication.Rcon.Commands.Hotel
 {
-    class ReloadCatalogCommand : IRCONCommand
+    class ReloadCatalogCommand : IRconCommand
     {
         public string Description
         {

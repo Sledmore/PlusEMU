@@ -45,7 +45,7 @@ namespace Plus.HabboHotel.Items.Interactor
             if (Item.GetRoom().GetWired().IsTrigger(Item))
             {
                 List<int> BlockedItems = WiredBoxTypeUtility.ContainsBlockedEffect(Box, Item.GetRoom().GetWired().GetEffects(Box));
-                Session.SendPacket(new WiredTriggerConfigComposer(Box, BlockedItems));
+                Session.SendPacket(new WiredTriggeRconfigComposer(Box, BlockedItems));
             }
             else if (Item.GetRoom().GetWired().IsEffect(Item))
             {

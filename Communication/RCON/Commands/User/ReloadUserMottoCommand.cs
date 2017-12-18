@@ -3,9 +3,9 @@ using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
-namespace Plus.Communication.RCON.Commands.User
+namespace Plus.Communication.Rcon.Commands.User
 {
-    class ReloadUserMottoCommand : IRCONCommand
+    class ReloadUserMottoCommand : IRconCommand
     {
         public string Description
         {

@@ -3,9 +3,9 @@ using Plus.HabboHotel.GameClients;
 using Plus.Database.Interfaces;
 using Plus.Communication.Packets.Outgoing.Inventory.Purse;
 
-namespace Plus.Communication.RCON.Commands.User
+namespace Plus.Communication.Rcon.Commands.User
 {
-    class ReloadUserCurrencyCommand : IRCONCommand
+    class ReloadUserCurrencyCommand : IRconCommand
     {
         public string Description
         {

@@ -3,9 +3,9 @@
 using Plus.HabboHotel.GameClients;
 using Plus.Communication.Packets.Outgoing.Moderation;
 
-namespace Plus.Communication.RCON.Commands.User
+namespace Plus.Communication.Rcon.Commands.User
 {
-    class GiveUserBadgeCommand : IRCONCommand
+    class GiveUserBadgeCommand : IRconCommand
     {
         public string Description
         {

@@ -22,7 +22,7 @@ using Plus.Database.Interfaces;
 using Plus.Database;
 using Plus.HabboHotel.Cache.Type;
 using Plus.HabboHotel.Users.UserData;
-using Plus.Communication.RCON;
+using Plus.Communication.Rcon;
 using Plus.Communication.ConnectionManager;
 using Plus.Core.FigureData;
 using Plus.Core.Language;
@@ -46,7 +46,7 @@ namespace Plus
         private static LanguageManager _languageManager;
         private static SettingsManager _settingsManager;
         private static DatabaseManager _manager;
-        private static RCONSocket _rcon;
+        private static RconSocket _Rcon;
         private static FigureDataManager _figureManager;
 
         // TODO: Get rid?
@@ -145,8 +145,8 @@ namespace Plus
                 //Have our encryption ready.
                 HabboEncryptionV2.Initialize(new RSAKeys());
 
-                //Make sure RCON is connected before we allow clients to connect.
-                _rcon = new RCONSocket(GetConfig().data["rcon.tcp.bindip"], int.Parse(GetConfig().data["rcon.tcp.port"]), GetConfig().data["rcon.tcp.allowedaddr"].Split(Convert.ToChar(";")));
+                //Make sure Rcon is connected before we allow clients to connect.
+                _Rcon = new RconSocket(GetConfig().data["Rcon.tcp.bindip"], int.Parse(GetConfig().data["Rcon.tcp.port"]), GetConfig().data["Rcon.tcp.allowedaddr"].Split(Convert.ToChar(";")));
 
                 //Accept connections.
                 _connectionManager = new ConnectionHandling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]), GetConfig().data["game.tcp.enablenagles"].ToLower() == "true");
@@ -220,14 +220,14 @@ namespace Plus
         {
             foreach (char character in figure)
             {
-                if (!isValid(character))
+                if (!IsValid(character))
                     return "sh-3338-93.ea-1406-62.hr-831-49.ha-3331-92.hd-180-7.ch-3334-93-1408.lg-3337-92.ca-1813-62";
             }
 
             return figure;
         }
 
-        private static bool isValid(char character)
+        private static bool IsValid(char character)
         {
             return Allowedchars.Contains(character);
         }
@@ -242,7 +242,7 @@ namespace Plus
 
             for (int i = 0; i < inputStr.Length; i++)
             {
-                if (!isValid(inputStr[i]))
+                if (!IsValid(inputStr[i]))
                 {
                     return false;
                 }
@@ -390,9 +390,9 @@ namespace Plus
             return _game;
         }
 
-        public static RCONSocket GetRCONSocket()
+        public static RconSocket GetRconSocket()
         {
-            return _rcon;
+            return _Rcon;
         }
 
         public static FigureDataManager GetFigureManager()

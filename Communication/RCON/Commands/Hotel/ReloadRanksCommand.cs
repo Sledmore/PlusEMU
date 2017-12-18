@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Plus.HabboHotel.GameClients;
 
-namespace Plus.Communication.RCON.Commands.Hotel
+namespace Plus.Communication.Rcon.Commands.Hotel
 {
-    class ReloadRanksCommand : IRCONCommand
+    class ReloadRanksCommand : IRconCommand
     {
         public string Description
         {

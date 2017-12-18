@@ -1,9 +1,9 @@
 ﻿using Plus.Database.Interfaces;
 using Plus.HabboHotel.GameClients;
 
-namespace Plus.Communication.RCON.Commands.User
+namespace Plus.Communication.Rcon.Commands.User
 {
-    class ReloadUserVIPRankCommand : IRCONCommand
+    class ReloadUserVIPRankCommand : IRconCommand
     {
         public string Description
         {

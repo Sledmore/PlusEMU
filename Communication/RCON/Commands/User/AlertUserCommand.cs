@@ -2,9 +2,9 @@
 using Plus.HabboHotel.GameClients;
 using Plus.Communication.Packets.Outgoing.Moderation;
 
-namespace Plus.Communication.RCON.Commands.User
+namespace Plus.Communication.Rcon.Commands.User
 {
-    class AlertUserCommand : IRCONCommand
+    class AlertUserCommand : IRconCommand
     {
         public string Description
         {

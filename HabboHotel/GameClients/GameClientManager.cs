@@ -202,8 +202,7 @@ namespace Plus.HabboHotel.GameClients
 
         public void DisposeConnection(int clientID)
         {
-            GameClient Client = null;
-            if (!TryGetClient(clientID, out Client))
+            if (!TryGetClient(clientID, out GameClient Client))
                 return;
 
             if (Client != null)
@@ -234,8 +233,7 @@ namespace Plus.HabboHotel.GameClients
 
         public void UnregisterClient(int userid, string username)
         {
-            GameClient Client = null;
-            _userIDRegister.TryRemove(userid, out Client);
+            _userIDRegister.TryRemove(userid, out GameClient Client);
             _usernameRegister.TryRemove(username.ToLower(), out Client);
         }
 

@@ -12,9 +12,9 @@ namespace Plus.Database
         private readonly IQueryAdapter _adapter;
         private readonly MySqlConnection _con;
 
-        public DatabaseConnection(string ConnectionStr)
+        public DatabaseConnection(string connectionString)
         {
-            this._con = new MySqlConnection(ConnectionStr);
+            this._con = new MySqlConnection(connectionString);
             this._adapter = new NormalQueryReactor(this);
         }
 

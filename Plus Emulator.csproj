@@ -50,7 +50,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
@@ -616,31 +616,31 @@
     <Compile Include="Communication\Packets\Outgoing\Users\UpdateUsernameComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\UserTagsComposer.cs" />
     <Compile Include="Communication\Packets\PacketManager.cs" />
-    <Compile Include="Communication\RCON\Commands\CommandManager.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadBansCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadCatalogCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadFilterCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadItemsCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadNavigatorCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadRanksCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadServerSettingsCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadQuestsCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\Hotel\ReloadVouchersCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\IRCONCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\AlertUserCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\DisconnectUserCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\GiveUserBadgeCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\GiveUserCurrencyCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\ProgressUserAchievementCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\ReloadUserCurrencyCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\ReloadUserMottoCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\ReloadUserRankCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\ReloadUserVIPRankCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\SyncUserCurrencyCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\TakeUserBadgeCommand.cs" />
-    <Compile Include="Communication\RCON\Commands\User\TakeUserCurrencyCommand.cs" />
-    <Compile Include="Communication\RCON\RCONConnection.cs" />
-    <Compile Include="Communication\RCON\RCONSocket.cs" />
+    <Compile Include="Communication\Rcon\Commands\CommandManager.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadBansCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadCatalogCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadFilterCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadItemsCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadNavigatorCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadRanksCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadServerSettingsCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadQuestsCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\Hotel\ReloadVouchersCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\IRconCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\AlertUserCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\DisconnectUserCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\GiveUserBadgeCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\GiveUserCurrencyCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\ProgressUserAchievementCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\ReloadUserCurrencyCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\ReloadUserMottoCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\ReloadUserRankCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\ReloadUserVIPRankCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\SyncUserCurrencyCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\TakeUserBadgeCommand.cs" />
+    <Compile Include="Communication\Rcon\Commands\User\TakeUserCurrencyCommand.cs" />
+    <Compile Include="Communication\Rcon\RconConnection.cs" />
+    <Compile Include="Communication\Rcon\RconSocket.cs" />
     <Compile Include="Core\FigureData\Types\Color.cs" />
     <Compile Include="Core\FigureData\FigureDataManager.cs" />
     <Compile Include="Core\FigureData\Types\FigureSet.cs" />
@@ -1039,10 +1039,10 @@
     <Compile Include="Communication\Encryption\Keys\RSAKeys.cs" />
     <Compile Include="Utilities\Converter.cs" />
     <Compile Include="Utilities\HabboEncoding.cs" />
-    <Compile Include="Utilities\Randomizer.cs" />
     <Compile Include="Utilities\Enclosure\Algorithm\GametileUpdate.cs" />
     <Compile Include="Utilities\Enclosure\GameField.cs" />
     <Compile Include="Utilities\Enclosure\PointField.cs" />
+    <Compile Include="Utilities\Randomizer.cs" />
     <Compile Include="Utilities\RandomNumber.cs" />
     <Compile Include="Utilities\StringCharFilter.cs" />
     <Compile Include="Utilities\TextHandling.cs" />
@@ -1073,17 +1073,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="docs\MySqlCommand.xml" />
-    <Content Include="docs\MySqlCommandBuilder.xml" />
-    <Content Include="docs\MySqlConnection.xml" />
-    <Content Include="docs\MySqlConnectionStringBuilder.xml" />
-    <Content Include="docs\MySqlDataAdapter.xml" />
-    <Content Include="docs\MySqlDataReader.xml" />
-    <Content Include="docs\MySqlException.xml" />
-    <Content Include="docs\MySqlHelper.xml" />
-    <Content Include="docs\MySqlParameter.xml" />
-    <Content Include="docs\MySqlParameterCollection.xml" />
-    <Content Include="docs\MySqlTransaction.xml" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>

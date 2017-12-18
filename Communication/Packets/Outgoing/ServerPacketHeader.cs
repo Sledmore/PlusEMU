@@ -84,7 +84,7 @@
         public const int HideWiredConfigMessageComposer = 2430;//3715
         public const int WiredEffectConfigMessageComposer = 1428;//1469
         public const int WiredConditionConfigMessageComposer = 1775;//1456
-        public const int WiredTriggerConfigMessageComposer = 21;//1618
+        public const int WiredTriggeRconfigMessageComposer = 21;//1618
         public const int MoodlightConfigMessageComposer = 1540;//1964
         public const int GroupFurniSettingsMessageComposer = 3755;//613
         public const int OpenGiftMessageComposer = 862;//1375

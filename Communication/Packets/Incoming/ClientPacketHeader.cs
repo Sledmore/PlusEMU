@@ -168,7 +168,7 @@
         public const int JoinPlayerQueueMessageEvent = 167;//951
         public const int CanCreateRoomMessageEvent = 2411;//361
         public const int SetTonerMessageEvent = 1389;//1061
-        public const int SaveWiredTriggerConfigMessageEvent = 3877;//1897
+        public const int SaveWiredTriggeRconfigMessageEvent = 3877;//1897
         public const int PlaceBotMessageEvent = 3770;//2321
         public const int GetRelationshipsMessageEvent = 3046;//866
         public const int SetMessengerInviteStatusMessageEvent = 1663;//1379

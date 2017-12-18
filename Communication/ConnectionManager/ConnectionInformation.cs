@@ -112,7 +112,7 @@ namespace Plus.Communication.ConnectionManager
         ///     Returns the ip of the current connection
         /// </summary>
         /// <returns>The ip of this connection</returns>
-        public string getIp()
+        public string GetIP()
         {
             return ip;
         }
@@ -121,7 +121,7 @@ namespace Plus.Communication.ConnectionManager
         ///     Returns the connection id
         /// </summary>
         /// <returns>The id of the connection</returns>
-        public int getConnectionID()
+        public int GetConnectionID()
         {
             return connectionID;
         }

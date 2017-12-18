@@ -9,9 +9,9 @@ namespace Plus.Database
     {
         private readonly string _connectionStr;
 
-        public DatabaseManager(string ConnectionStr)
+        public DatabaseManager(string connectionString)
         {
-            this._connectionStr = ConnectionStr;
+            this._connectionStr = connectionString;
         }
 
         public bool IsConnected()

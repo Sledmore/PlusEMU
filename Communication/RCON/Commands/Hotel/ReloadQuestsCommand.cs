@@ -1,6 +1,6 @@
-﻿namespace Plus.Communication.RCON.Commands.Hotel
+﻿namespace Plus.Communication.Rcon.Commands.Hotel
 {
-    class ReloadQuestsCommand : IRCONCommand
+    class ReloadQuestsCommand : IRconCommand
     {
         public string Description
         {

@@ -2,11 +2,11 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
-using Plus.Communication.RCON.Commands;
+using Plus.Communication.Rcon.Commands;
 
-namespace Plus.Communication.RCON
+namespace Plus.Communication.Rcon
 {
-    public class RCONSocket
+    public class RconSocket
     {
         private Socket _musSocket;
 
@@ -16,7 +16,7 @@ namespace Plus.Communication.RCON
         private List<string> _allowedConnections;
         private CommandManager _commands;
 
-        public RCONSocket(string musIP, int musPort, string[] allowedConnections)
+        public RconSocket(string musIP, int musPort, string[] allowedConnections)
         {
             this._musIP = musIP;
             this._musPort = musPort;
@@ -36,7 +36,7 @@ namespace Plus.Communication.RCON
             }
             catch (Exception e)
             {
-                throw new ArgumentException("Could not set up RCON socket:\n" + e);
+                throw new ArgumentException("Could not set up Rcon socket:\n" + e);
             }
 
             this._commands = new CommandManager();
@@ -51,7 +51,7 @@ namespace Plus.Communication.RCON
                 string ip = socket.RemoteEndPoint.ToString().Split(':')[0];
                 if (this._allowedConnections.Contains(ip))
                 {
-                    new RCONConnection(socket);
+                    new RconConnection(socket);
                 }
                 else
                 {

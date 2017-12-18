@@ -72,7 +72,7 @@ namespace Plus.Communication.ConnectionManager
         /// </summary>
         /// <param name="portID">The ID of the port this item should listen on</param>
         /// <param name="maxConnections">The maximum amount of connections</param>
-        public void init(int portID, int maxConnections, int connectionsPerIP, IDataParser parser,  bool disableNaglesAlgorithm)
+        public void Init(int portID, int maxConnections, int connectionsPerIP, IDataParser parser,  bool disableNaglesAlgorithm)
         {
             this._ipConnectionsCount = new ConcurrentDictionary<string, int>();
 
@@ -92,8 +92,11 @@ namespace Plus.Communication.ConnectionManager
         /// </summary>
         private void prepareConnectionDetails()
         {
-            connectionListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            connectionListener.NoDelay = disableNagleAlgorithm;
+            connectionListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+            {
+                NoDelay = disableNagleAlgorithm
+            };
+
             try
             {
                 connectionListener.Bind(new IPEndPoint(IPAddress.Any, portInformation));
@@ -208,7 +211,7 @@ namespace Plus.Communication.ConnectionManager
         public void reportDisconnect(ConnectionInformation gameConnection)
         {
             gameConnection.connectionChanged -= c_connectionChanged;
-            reportUserLogout(gameConnection.getIp());
+            reportUserLogout(gameConnection.GetIP());
             //activeConnections.Remove(gameConnection.getConnectionID());
         }
 

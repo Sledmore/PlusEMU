@@ -16,7 +16,6 @@ namespace Plus.Core
 
             try
             {
-                #region Command parsing
                 string[] parameters = inputData.Split(' ');
 
                 switch (parameters[0].ToLower())
@@ -49,7 +48,6 @@ namespace Plus.Core
                             break;
                         }
                 }
-                #endregion
             }
             catch (Exception e)
             {

@@ -1,8 +1,8 @@
 ﻿using Plus.Core;
 
-namespace Plus.Communication.RCON.Commands.Hotel
+namespace Plus.Communication.Rcon.Commands.Hotel
 {
-    class ReloadServerSettingsCommand : IRCONCommand
+    class ReloadServerSettingsCommand : IRconCommand
     {
         public string Description
         {

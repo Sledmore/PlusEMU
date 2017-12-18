@@ -1,11 +1,7 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 
-using Plus.Communication.Packets.Incoming;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Catalog.Vouchers;
-
-
 
 using Plus.Communication.Packets.Outgoing.Catalog;
 using Plus.Communication.Packets.Outgoing.Inventory.Purse;
@@ -16,35 +12,34 @@ namespace Plus.Communication.Packets.Incoming.Catalog
 {
     public class RedeemVoucherEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            string VoucherCode = Packet.PopString().Replace("\r", "");
+            string code = packet.PopString().Replace("\r", "");
 
-            Voucher Voucher = null;
-            if (!PlusEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(VoucherCode, out Voucher))
+            if (!PlusEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(code, out Voucher voucher))
             {
-                Session.SendPacket(new VoucherRedeemErrorComposer(0));
+                session.SendPacket(new VoucherRedeemErrorComposer(0));
                 return;
             }
 
-            if (Voucher.CurrentUses >= Voucher.MaxUses)
+            if (voucher.CurrentUses >= voucher.MaxUses)
             {
-                Session.SendNotification("Oops, this voucher has reached the maximum usage limit!");
+                session.SendNotification("Oops, this voucher has reached the maximum usage limit!");
                 return;
             }
 
-            DataRow GetRow = null;
+            DataRow row = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `user_vouchers` WHERE `user_id` = @userId AND `voucher` = @Voucher LIMIT 1");
-                dbClient.AddParameter("userId", Session.GetHabbo().Id);
-                dbClient.AddParameter("Voucher", VoucherCode);
-                GetRow = dbClient.GetRow();
+                dbClient.AddParameter("userId", session.GetHabbo().Id);
+                dbClient.AddParameter("Voucher", code);
+                row = dbClient.GetRow();
             }
 
-            if (GetRow != null)
+            if (row != null)
             {
-                Session.SendNotification("You've already used this voucher code, one per each user, sorry!");
+                session.SendNotification("You've already used this voucher code, one per each user, sorry!");
                 return;
             }
             else
@@ -52,26 +47,26 @@ namespace Plus.Communication.Packets.Incoming.Catalog
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dbClient.SetQuery("INSERT INTO `user_vouchers` (`user_id`,`voucher`) VALUES (@userId, @Voucher)");
-                    dbClient.AddParameter("userId", Session.GetHabbo().Id);
-                    dbClient.AddParameter("Voucher", VoucherCode);
+                    dbClient.AddParameter("userId", session.GetHabbo().Id);
+                    dbClient.AddParameter("Voucher", code);
                     dbClient.RunQuery();
                 }
             }
 
-            Voucher.UpdateUses();
+            voucher.UpdateUses();
 
-            if (Voucher.Type == VoucherType.CREDIT)
+            if (voucher.Type == VoucherType.CREDIT)
             {
-                Session.GetHabbo().Credits += Voucher.Value;
-                Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
+                session.GetHabbo().Credits += voucher.Value;
+                session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
             }
-            else if (Voucher.Type == VoucherType.DUCKET)
+            else if (voucher.Type == VoucherType.DUCKET)
             {
-                Session.GetHabbo().Duckets += Voucher.Value;
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, Voucher.Value));
+                session.GetHabbo().Duckets += voucher.Value;
+                session.SendPacket(new HabboActivityPointNotificationComposer(session.GetHabbo().Duckets, voucher.Value));
             }
 
-            Session.SendPacket(new VoucherRedeemOkComposer());
+            session.SendPacket(new VoucherRedeemOkComposer());
         }
     }
 }

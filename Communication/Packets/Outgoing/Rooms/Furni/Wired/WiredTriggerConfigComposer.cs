@@ -8,10 +8,10 @@ using Plus.HabboHotel.Items.Wired;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Furni.Wired
 {
-    internal class WiredTriggerConfigComposer : ServerPacket
+    internal class WiredTriggeRconfigComposer : ServerPacket
     {
-        public WiredTriggerConfigComposer(IWiredItem Box, List<int> BlockedItems)
-            : base(ServerPacketHeader.WiredTriggerConfigMessageComposer)
+        public WiredTriggeRconfigComposer(IWiredItem Box, List<int> BlockedItems)
+            : base(ServerPacketHeader.WiredTriggeRconfigMessageComposer)
         {
             base.WriteBoolean(false);
             base.WriteInteger(5);

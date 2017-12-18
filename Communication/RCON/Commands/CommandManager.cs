@@ -1,26 +1,23 @@
-﻿using Plus.Communication.RCON.Commands.Hotel;
-using Plus.Communication.RCON.Commands.User;
+﻿using Plus.Communication.Rcon.Commands.Hotel;
+using Plus.Communication.Rcon.Commands.User;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Plus.Communication.RCON.Commands
+namespace Plus.Communication.Rcon.Commands
 {
     public class CommandManager
     { 
         /// <summary>
         /// Commands registered for use.
         /// </summary>
-        private readonly Dictionary<string, IRCONCommand> _commands;
+        private readonly Dictionary<string, IRconCommand> _commands;
 
         /// <summary>
         /// The default initializer for the CommandManager
         /// </summary>
         public CommandManager()
         {
-            this._commands = new Dictionary<string, IRCONCommand>();
+            this._commands = new Dictionary<string, IRconCommand>();
             
             this.RegisterUser();
             this.RegisterHotel();
@@ -38,7 +35,7 @@ namespace Plus.Communication.RCON.Commands
 
             string cmd = data.Split(Convert.ToChar(1))[0];
 
-            IRCONCommand command = null;
+            IRconCommand command = null;
             if (this._commands.TryGetValue(cmd.ToLower(), out command))
             {
                 string param = null;
@@ -90,11 +87,11 @@ namespace Plus.Communication.RCON.Commands
         }
 
         /// <summary>
-        /// Registers a RCON command.
+        /// Registers a Rcon command.
         /// </summary>
         /// <param name="commandText">Text to type for this command.</param>
         /// <param name="command">The command to execute.</param>
-        public void Register(string commandText, IRCONCommand command)
+        public void Register(string commandText, IRconCommand command)
         {
             this._commands.Add(commandText, command);
         }

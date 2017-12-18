@@ -522,7 +522,7 @@ namespace Plus.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.ToggleYouTubeVideoMessageEvent, new ToggleYouTubeVideoEvent());
             this._incomingPackets.Add(ClientPacketHeader.YouTubeVideoInformationMessageEvent, new YouTubeVideoInformationEvent());
             this._incomingPackets.Add(ClientPacketHeader.YouTubeGetNextVideo, new YouTubeGetNextVideo());
-            this._incomingPackets.Add(ClientPacketHeader.SaveWiredTriggerConfigMessageEvent, new SaveWiredConfigEvent());
+            this._incomingPackets.Add(ClientPacketHeader.SaveWiredTriggeRconfigMessageEvent, new SaveWiredConfigEvent());
             this._incomingPackets.Add(ClientPacketHeader.SaveWiredEffectConfigMessageEvent, new SaveWiredConfigEvent());
             this._incomingPackets.Add(ClientPacketHeader.SaveWiredConditionConfigMessageEvent, new SaveWiredConfigEvent());
             this._incomingPackets.Add(ClientPacketHeader.SaveBrandingItemMessageEvent, new SaveBrandingItemEvent());
@@ -786,7 +786,7 @@ namespace Plus.Communication.Packets
             this._packetNames.Add(ClientPacketHeader.ToggleYouTubeVideoMessageEvent, "ToggleYouTubeVideoEvent");
             this._packetNames.Add(ClientPacketHeader.YouTubeVideoInformationMessageEvent, "YouTubeVideoInformationEvent");
             this._packetNames.Add(ClientPacketHeader.YouTubeGetNextVideo, "YouTubeGetNextVideo");
-            this._packetNames.Add(ClientPacketHeader.SaveWiredTriggerConfigMessageEvent, "SaveWiredConfigEvent");
+            this._packetNames.Add(ClientPacketHeader.SaveWiredTriggeRconfigMessageEvent, "SaveWiredConfigEvent");
             this._packetNames.Add(ClientPacketHeader.SaveWiredEffectConfigMessageEvent, "SaveWiredConfigEvent");
             this._packetNames.Add(ClientPacketHeader.SaveWiredConditionConfigMessageEvent, "SaveWiredConfigEvent");
             this._packetNames.Add(ClientPacketHeader.SaveBrandingItemMessageEvent, "SaveBrandingItemEvent");

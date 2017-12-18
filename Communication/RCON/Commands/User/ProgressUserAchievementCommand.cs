@@ -1,9 +1,9 @@
 ﻿using System;
 using Plus.HabboHotel.GameClients;
 
-namespace Plus.Communication.RCON.Commands.User
+namespace Plus.Communication.Rcon.Commands.User
 {
-    class ProgressUserAchievementCommand : IRCONCommand
+    class ProgressUserAchievementCommand : IRconCommand
     {
         public string Description
         {
