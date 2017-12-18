@@ -29,26 +29,26 @@ namespace Plus.HabboHotel.Rooms.Games.Teams
 
         public bool CanEnterOnTeam(TEAM t)
         {
-            if (t.Equals(TEAM.BLUE))
+            if (t.Equals(TEAM.Blue))
                 return (BlueTeam.Count < 5);
-            else if (t.Equals(TEAM.RED))
+            else if (t.Equals(TEAM.Red))
                 return (RedTeam.Count < 5);
-            else if (t.Equals(TEAM.YELLOW))
+            else if (t.Equals(TEAM.Yellow))
                 return (YellowTeam.Count < 5);
-            else if (t.Equals(TEAM.GREEN))
+            else if (t.Equals(TEAM.Green))
                 return (GreenTeam.Count < 5);
             return false;
         }
 
         public void AddUser(RoomUser user)
         {
-            if (user.Team.Equals(TEAM.BLUE) && !BlueTeam.Contains(user))
+            if (user.Team.Equals(TEAM.Blue) && !BlueTeam.Contains(user))
                 BlueTeam.Add(user);
-            else if (user.Team.Equals(TEAM.RED) && !RedTeam.Contains(user))
+            else if (user.Team.Equals(TEAM.Red) && !RedTeam.Contains(user))
                 RedTeam.Add(user);
-            else if (user.Team.Equals(TEAM.YELLOW) && !YellowTeam.Contains(user))
+            else if (user.Team.Equals(TEAM.Yellow) && !YellowTeam.Contains(user))
                 YellowTeam.Add(user);
-            else if (user.Team.Equals(TEAM.GREEN) && !GreenTeam.Contains(user))
+            else if (user.Team.Equals(TEAM.Green) && !GreenTeam.Contains(user))
                 GreenTeam.Add(user);
 
             switch (Game.ToLower())
@@ -160,13 +160,13 @@ namespace Plus.HabboHotel.Rooms.Games.Teams
         public void OnUserLeave(RoomUser user)
         {
             //Console.WriteLine("remove user from team! (" + Game + ")");
-            if (user.Team.Equals(TEAM.BLUE) && BlueTeam.Contains(user))
+            if (user.Team.Equals(TEAM.Blue) && BlueTeam.Contains(user))
                 BlueTeam.Remove(user);
-            else if (user.Team.Equals(TEAM.RED) && RedTeam.Contains(user))
+            else if (user.Team.Equals(TEAM.Red) && RedTeam.Contains(user))
                 RedTeam.Remove(user);
-            else if (user.Team.Equals(TEAM.YELLOW) && YellowTeam.Contains(user))
+            else if (user.Team.Equals(TEAM.Yellow) && YellowTeam.Contains(user))
                 YellowTeam.Remove(user);
-            else if (user.Team.Equals(TEAM.GREEN) && GreenTeam.Contains(user))
+            else if (user.Team.Equals(TEAM.Green) && GreenTeam.Contains(user))
                 GreenTeam.Remove(user);
 
             switch (Game.ToLower())

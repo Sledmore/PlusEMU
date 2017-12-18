@@ -1208,7 +1208,7 @@ namespace Plus.HabboHotel.Users
             this.GetClient().SendPacket(new OpenConnectionComposer());
             if (!Room.CheckRights(this.GetClient(), true, true) && !this.GetClient().GetHabbo().IsTeleporting && !this.GetClient().GetHabbo().IsHopping)
             {
-                if (Room.Access == RoomAccess.DOORBELL && !this.GetClient().GetHabbo().GetPermissions().HasRight("room_enter_locked"))
+                if (Room.Access == RoomAccess.Doorbell && !this.GetClient().GetHabbo().GetPermissions().HasRight("room_enter_locked"))
                 {
                     if (Room.UserCount > 0)
                     {
@@ -1223,7 +1223,7 @@ namespace Plus.HabboHotel.Users
                         return;
                     }
                 }
-                else if (Room.Access == RoomAccess.PASSWORD && !this.GetClient().GetHabbo().GetPermissions().HasRight("room_enter_locked"))
+                else if (Room.Access == RoomAccess.Password && !this.GetClient().GetHabbo().GetPermissions().HasRight("room_enter_locked"))
                 {
                     if (Password.ToLower() != Room.Password.ToLower() || String.IsNullOrWhiteSpace(Password))
                     {

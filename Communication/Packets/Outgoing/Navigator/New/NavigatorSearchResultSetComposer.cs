@@ -20,7 +20,7 @@ namespace Plus.Communication.Packets.Outgoing.Navigator.New
                base.WriteString(SearchResult.PublicName);
                 base.WriteInteger(NavigatorSearchAllowanceUtility.GetIntegerValue(SearchResult.SearchAllowance) != 0 ? GoBack : NavigatorSearchAllowanceUtility.GetIntegerValue(SearchResult.SearchAllowance));//0 = nothing, 1 = show more, 2 = back Action allowed.
                 base.WriteBoolean(false);//True = minimized, false = open.
-                base.WriteInteger(SearchResult.ViewMode == NavigatorViewMode.REGULAR ? 0 : SearchResult.ViewMode == NavigatorViewMode.THUMBNAIL ? 1 : 0);//View mode, 0 = tiny/regular, 1 = thumbnail
+                base.WriteInteger(SearchResult.ViewMode == NavigatorViewMode.Regular ? 0 : SearchResult.ViewMode == NavigatorViewMode.Thumbnail ? 1 : 0);//View mode, 0 = tiny/regular, 1 = thumbnail
 
                 NavigatorHandler.Search(this, SearchResult, Data, Session, FetchLimit);
             }

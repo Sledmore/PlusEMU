@@ -194,7 +194,7 @@ namespace Plus.Communication.ConnectionManager
 
         private void c_connectionChanged(ConnectionInformation information, ConnectionState state)
         {
-            if (state == ConnectionState.CLOSED)
+            if (state == ConnectionState.Closed)
             {
                 reportDisconnect(information);
             }

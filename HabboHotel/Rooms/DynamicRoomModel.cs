@@ -53,7 +53,7 @@ namespace Plus.HabboHotel.Rooms
                 {
                     if (x > (staticModel.MapSizeX - 1) || y > (staticModel.MapSizeY - 1))
                     {
-                        SqState[x, y] = SquareState.BLOCKED;
+                        SqState[x, y] = SquareState.Blocked;
                     }
                     else
                     {
@@ -81,7 +81,7 @@ namespace Plus.HabboHotel.Rooms
                         continue;
                     }
 
-                    if (SqState[x, y] == SquareState.BLOCKED)
+                    if (SqState[x, y] == SquareState.Blocked)
                     {
                         FloorMap.Append('x');
                         continue;
@@ -110,7 +110,7 @@ namespace Plus.HabboHotel.Rooms
                 {
                     if (x > (staticModel.MapSizeX - 1) || y > (staticModel.MapSizeY - 1))
                     {
-                        newSqState[x, y] = SquareState.BLOCKED;
+                        newSqState[x, y] = SquareState.Blocked;
                     }
                     else
                     {
@@ -147,7 +147,7 @@ namespace Plus.HabboHotel.Rooms
             if (z < 0)
                 z = 0;
             SqFloorHeight[x, y] = (short)z;
-            SqState[x, y] = SquareState.OPEN;
+            SqState[x, y] = SquareState.Open;
         }
 
         public void AddY()

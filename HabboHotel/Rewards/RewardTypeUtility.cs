@@ -13,20 +13,20 @@ namespace Plus.HabboHotel.Rewards
             switch (Type.ToLower())
             {
                 case "badge":
-                    return RewardType.BADGE;
+                    return RewardType.Badge;
 
                 case "credits":
-                    return RewardType.CREDITS;
+                    return RewardType.Credits;
 
                 case "duckets":
-                    return RewardType.DUCKETS;
+                    return RewardType.Duckets;
 
                 case "diamonds":
-                    return RewardType.DIAMONDS;
+                    return RewardType.Diamonds;
 
                 default:
                 case "none":
-                    return RewardType.NONE;
+                    return RewardType.None;
             }
         }
     }

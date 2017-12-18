@@ -104,7 +104,7 @@ namespace Plus.HabboHotel.Navigator
         {
             IEnumerable<SearchResultList> Categorys =
                 (from Cat in this._searchResultLists
-                 where Cat.Value.CategoryType == NavigatorCategoryType.CATEGORY
+                 where Cat.Value.CategoryType == NavigatorCategoryType.Category
                  orderby Cat.Value.OrderId ascending
                  select Cat.Value);
             return Categorys.ToList();
@@ -114,7 +114,7 @@ namespace Plus.HabboHotel.Navigator
         {
             IEnumerable<SearchResultList> Categorys =
                 (from Cat in this._searchResultLists
-                 where Cat.Value.CategoryType == NavigatorCategoryType.PROMOTION_CATEGORY
+                 where Cat.Value.CategoryType == NavigatorCategoryType.PromotionCategory
                  orderby Cat.Value.OrderId ascending
                  select Cat.Value);
             return Categorys.ToList();

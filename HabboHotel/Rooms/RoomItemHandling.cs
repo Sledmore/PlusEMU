@@ -554,14 +554,14 @@ namespace Plus.HabboHotel.Rooms
                 if (!OnRoller)
                 {
                     // Make sure this tile is open and there are no users here
-                    if (_room.GetGameMap().Model.SqState[newX, newY] != SquareState.OPEN && !Item.GetBaseItem().IsSeat)
+                    if (_room.GetGameMap().Model.SqState[newX, newY] != SquareState.Open && !Item.GetBaseItem().IsSeat)
                     {
                         return false;
                     }
 
                     foreach (ThreeDCoord Tile in AffectedTiles.Values)
                     {
-                        if (_room.GetGameMap().Model.SqState[Tile.X, Tile.Y] != SquareState.OPEN &&
+                        if (_room.GetGameMap().Model.SqState[Tile.X, Tile.Y] != SquareState.Open &&
                             !Item.GetBaseItem().IsSeat)
                         {
                             if (NeedsReAdd)
@@ -930,12 +930,12 @@ namespace Plus.HabboHotel.Rooms
                 if ((((Item.Rotation == newRot) && (Item.GetX == newX)) && (Item.GetY == newY)) && (Item.GetZ != num))
                     return false;
 
-                if (this._room.GetGameMap().Model.SqState[newX, newY] != SquareState.OPEN)
+                if (this._room.GetGameMap().Model.SqState[newX, newY] != SquareState.Open)
                     return false;
 
                 foreach (ThreeDCoord coord in dictionary.Values.ToList())
                 {
-                    if (this._room.GetGameMap().Model.SqState[coord.X, coord.Y] != SquareState.OPEN)
+                    if (this._room.GetGameMap().Model.SqState[coord.X, coord.Y] != SquareState.Open)
                         return false;
                 }
                 if (!Item.GetBaseItem().IsSeat)

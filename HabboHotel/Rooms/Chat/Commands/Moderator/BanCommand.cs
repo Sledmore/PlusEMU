@@ -72,7 +72,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
                 dbClient.RunQuery("UPDATE `user_info` SET `bans` = `bans` + '1' WHERE `user_id` = '" + Habbo.Id + "' LIMIT 1");
             }
 
-            PlusEnvironment.GetGame().GetModerationManager().BanUser(Session.GetHabbo().Username, ModerationBanType.USERNAME, Habbo.Username, Reason, Expire);
+            PlusEnvironment.GetGame().GetModerationManager().BanUser(Session.GetHabbo().Username, ModerationBanType.Username, Habbo.Username, Reason, Expire);
 
             GameClient TargetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
             if (TargetClient != null)

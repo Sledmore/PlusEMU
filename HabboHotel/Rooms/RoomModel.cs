@@ -1,19 +1,9 @@
 ﻿using System;
+
 namespace Plus.HabboHotel.Rooms
 {
-    public enum SquareState
-    {
-        OPEN = 0,
-        BLOCKED = 1,
-        SEAT = 2,
-        POOL = 3, //Should be closed ASAP
-        VIP = 4
-    }
-
     public class RoomModel
     {
-        //public string Name;
-
         public bool ClubOnly;
         public int DoorOrientation;
         public int DoorX;
@@ -34,10 +24,6 @@ namespace Plus.HabboHotel.Rooms
         public byte[,] mRoomModelfx;
 
         public int WallHeight;
-
-        //public List<PublicRoomSquare> Furnis;
-
-
 
         public RoomModel(int DoorX, int DoorY, double DoorZ, int DoorOrientation, string Heightmap, string StaticFurniMap, bool ClubOnly, string Poolmap, int WallHeight)
         {
@@ -77,11 +63,11 @@ namespace Plus.HabboHotel.Rooms
                     {
                         if (square == 'x')
                         {
-                            SqState[x, y] = SquareState.BLOCKED;
+                            SqState[x, y] = SquareState.Blocked;
                         }
                         else
                         {
-                            SqState[x, y] = SquareState.OPEN;
+                            SqState[x, y] = SquareState.Open;
                             SqFloorHeight[x, y] = parse(square);
                         }
                         x++;

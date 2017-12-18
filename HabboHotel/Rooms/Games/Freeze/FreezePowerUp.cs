@@ -1,18 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.HabboHotel.Rooms.Games.Freeze
+﻿namespace Plus.HabboHotel.Rooms.Games.Freeze
 {
     public enum FreezePowerUp
     {
-        NONE = 0,
-        BLUEARROW = 1,
-        GREENARROW = 2,
-        SHIELD = 3,
-        HEART = 4,
-        ORANGESNOWBALL = 5,
-        SNOWBALLS = 6
+        None = 0,
+        BlueArrow = 1,
+        GreenArrow = 2,
+        Shield = 3,
+        Heart = 4,
+        OrangeSnowball = 5,
+        Snowballs = 6
     }
 }

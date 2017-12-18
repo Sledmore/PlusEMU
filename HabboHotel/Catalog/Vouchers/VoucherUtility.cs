@@ -8,9 +8,9 @@
             {
                 default:
                 case "credit":
-                    return VoucherType.CREDIT;
+                    return VoucherType.Credit;
                 case "ducket":
-                    return VoucherType.DUCKET;
+                    return VoucherType.Ducket;
             }
         }
 
@@ -19,9 +19,9 @@
             switch (Type)
             {
                 default:
-                case VoucherType.CREDIT:
+                case VoucherType.Credit:
                     return "credit";
-                case VoucherType.DUCKET:
+                case VoucherType.Ducket:
                     return "ducket";
             }
         }

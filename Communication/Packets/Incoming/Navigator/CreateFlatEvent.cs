@@ -45,7 +45,7 @@ namespace Plus.Communication.Packets.Incoming.Navigator
             if (!PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(Category, out SearchResultList))
                 Category = 36;
             
-            if (SearchResultList.CategoryType != NavigatorCategoryType.CATEGORY || SearchResultList.RequiredRank > Session.GetHabbo().Rank)
+            if (SearchResultList.CategoryType != NavigatorCategoryType.Category || SearchResultList.RequiredRank > Session.GetHabbo().Rank)
                 Category = 36;
 
             if (MaxVisitors < 10 || MaxVisitors > 25)

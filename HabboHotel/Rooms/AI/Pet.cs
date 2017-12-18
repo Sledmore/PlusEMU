@@ -14,7 +14,7 @@ namespace Plus.HabboHotel.Rooms.AI
         public int AnyoneCanRide;
         public string Color;
         public double CreationStamp;
-        public DatabaseUpdateState DBState;
+        public PetDatabaseUpdateState DBState;
 
         public int Energy;
         public int HairDye;
@@ -55,7 +55,7 @@ namespace Plus.HabboHotel.Rooms.AI
             this.Y = Y;
             this.Z = Z;
             this.PlacedInRoom = false;
-            this.DBState = DatabaseUpdateState.Updated;
+            this.DBState = PetDatabaseUpdateState.Updated;
             this.Saddle = Saddle;
             this.AnyoneCanRide = Anyonecanride;
             this.PetHair = PetHer;
@@ -68,8 +68,8 @@ namespace Plus.HabboHotel.Rooms.AI
             Respect++;
             Room.SendPacket(new RespectPetNotificationMessageComposer(this));
 
-            if (DBState != DatabaseUpdateState.NeedsInsert)
-                DBState = DatabaseUpdateState.NeedsUpdate;
+            if (DBState != PetDatabaseUpdateState.NeedsInsert)
+                DBState = PetDatabaseUpdateState.NeedsUpdate;
 
             if (experience <= 150000)
                 Addexperience(10);
@@ -89,8 +89,8 @@ namespace Plus.HabboHotel.Rooms.AI
                 return;
             }
 
-            if (DBState != DatabaseUpdateState.NeedsInsert)
-                DBState = DatabaseUpdateState.NeedsUpdate;
+            if (DBState != PetDatabaseUpdateState.NeedsInsert)
+                DBState = PetDatabaseUpdateState.NeedsUpdate;
 
             if (Room != null)
             {
@@ -138,8 +138,8 @@ namespace Plus.HabboHotel.Rooms.AI
                 Energy = Energy + r;
 
 
-            if (DBState != DatabaseUpdateState.NeedsInsert)
-                DBState = DatabaseUpdateState.NeedsUpdate;
+            if (DBState != PetDatabaseUpdateState.NeedsInsert)
+                DBState = PetDatabaseUpdateState.NeedsUpdate;
         }
 
         public Room Room
@@ -215,12 +215,5 @@ namespace Plus.HabboHotel.Rooms.AI
         {
             get { return PlusEnvironment.GetGame().GetClientManager().GetNameById(OwnerId); }
         }
-    }
-
-    public enum DatabaseUpdateState
-    {
-        Updated,
-        NeedsUpdate,
-        NeedsInsert
     }
 }

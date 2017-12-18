@@ -120,7 +120,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigateblue:
                     case InteractionType.FREEZE_BLUE_GATE:
                     case InteractionType.freezebluecounter:
-                        team = TEAM.BLUE;
+                        team = TEAM.Blue;
                         break;
 
                     case InteractionType.banzaiscoregreen:
@@ -128,7 +128,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigategreen:
                     case InteractionType.freezegreencounter:
                     case InteractionType.FREEZE_GREEN_GATE:
-                        team = TEAM.GREEN;
+                        team = TEAM.Green;
                         break;
 
                     case InteractionType.banzaiscorered:
@@ -136,7 +136,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigatered:
                     case InteractionType.freezeredcounter:
                     case InteractionType.FREEZE_RED_GATE:
-                        team = TEAM.RED;
+                        team = TEAM.Red;
                         break;
 
                     case InteractionType.banzaiscoreyellow:
@@ -144,7 +144,7 @@ namespace Plus.HabboHotel.Items
                     case InteractionType.banzaigateyellow:
                     case InteractionType.freezeyellowcounter:
                     case InteractionType.FREEZE_YELLOW_GATE:
-                        team = TEAM.YELLOW;
+                        team = TEAM.Yellow;
                         break;
 
                     case InteractionType.banzaitele:
@@ -1158,25 +1158,25 @@ namespace Plus.HabboHotel.Items
 
                                         switch (team)
                                         {
-                                            case TEAM.BLUE:
+                                            case TEAM.Blue:
                                                 {
                                                     ExtraData = "11";
                                                     break;
                                                 }
 
-                                            case TEAM.GREEN:
+                                            case TEAM.Green:
                                                 {
                                                     ExtraData = "8";
                                                     break;
                                                 }
 
-                                            case TEAM.RED:
+                                            case TEAM.Red:
                                                 {
                                                     ExtraData = "5";
                                                     break;
                                                 }
 
-                                            case TEAM.YELLOW:
+                                            case TEAM.Yellow:
                                                 {
                                                     ExtraData = "14";
                                                     break;

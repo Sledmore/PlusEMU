@@ -338,7 +338,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
             if (!FriendshipExists(ToId))
             {
-                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.YOUR_NOT_FRIENDS, ToId));
+                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.NotFriends, ToId));
                 return;
             }
 
@@ -375,19 +375,19 @@ namespace Plus.HabboHotel.Users.Messenger
 
             if (!Client.GetHabbo().AllowConsoleMessages || Client.GetHabbo().GetIgnores().IgnoredUserIds().Contains(GetClient().GetHabbo().Id))
             {
-                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.FRIEND_BUSY, ToId));
+                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.FriendBusy, ToId));
                 return;
             }
 
             if (GetClient().GetHabbo().TimeMuted > 0)
             {
-                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.YOUR_MUTED, ToId));
+                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.yourMuted, ToId));
                 return;
             }
 
             if (Client.GetHabbo().TimeMuted > 0)
             {
-                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.FRIEND_MUTED, ToId));
+                GetClient().SendPacket(new InstantMessageErrorComposer(MessengerMessageErrors.FriendMuted, ToId));
             }
 
             if (String.IsNullOrEmpty(Message))

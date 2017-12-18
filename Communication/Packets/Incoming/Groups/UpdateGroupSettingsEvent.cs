@@ -33,17 +33,17 @@ namespace Plus.Communication.Packets.Incoming.Groups
             {
                 default:
                 case 0:
-                    Group.GroupType = GroupType.OPEN;
+                    Group.GroupType = GroupType.Open;
                     break;
                 case 1:
-                    Group.GroupType = GroupType.LOCKED;
+                    Group.GroupType = GroupType.Locked;
                     break;
                 case 2:
-                    Group.GroupType = GroupType.PRIVATE;
+                    Group.GroupType = GroupType.Private;
                     break;
             }
 
-            if (Group.GroupType != GroupType.LOCKED)
+            if (Group.GroupType != GroupType.Locked)
             {
                 if (Group.GetRequests.Count > 0)
                 {
@@ -59,7 +59,7 @@ namespace Plus.Communication.Packets.Incoming.Groups
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `groups` SET `state` = @GroupState, `admindeco` = @AdminDeco WHERE `id` = @groupId LIMIT 1");
-                dbClient.AddParameter("GroupState", (Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2).ToString());
+                dbClient.AddParameter("GroupState", (Group.GroupType == GroupType.Open ? 0 : Group.GroupType == GroupType.Locked ? 1 : 2).ToString());
                 dbClient.AddParameter("AdminDeco", (FurniOptions == 1 ? 1 : 0).ToString());
                 dbClient.AddParameter("groupId", Group.Id);
                 dbClient.RunQuery();

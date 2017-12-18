@@ -2,9 +2,9 @@
 {
     public enum RoomAccess
     {
-        OPEN,
-        DOORBELL,
-        PASSWORD,
-        INVISIBLE
+        Open,
+        Doorbell,
+        Password,
+        Invisible
     }
 }

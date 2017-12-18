@@ -138,7 +138,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                 base.WriteInteger(User.Y);
                 base.WriteDouble(User.Z);
                 base.WriteInteger(0);
-                base.WriteInteger((User.BotData.AiType == BotAIType.PET) ? 2 : 4);
+                base.WriteInteger((User.BotData.AiType == BotAIType.Pet) ? 2 : 4);
                 base.WriteInteger(User.PetData.Type);
                 base.WriteInteger(User.PetData.OwnerId); // userid
                 base.WriteString(User.PetData.OwnerName); // username
@@ -160,7 +160,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                 base.WriteInteger(User.Y);
                 base.WriteDouble(User.Z);
                 base.WriteInteger(0);
-                base.WriteInteger((User.BotData.AiType == BotAIType.PET) ? 2 : 4);
+                base.WriteInteger((User.BotData.AiType == BotAIType.Pet) ? 2 : 4);
 
                 base.WriteString(User.BotData.Gender.ToLower()); // ?
                 base.WriteInteger(User.BotData.ownerID); //Owner Id

@@ -271,10 +271,4 @@ namespace Plus.Communication.Encryption.Crypto.RSA
     }
 
     public delegate BigInteger DoCalculateionDelegate(BigInteger m);
-
-    public enum Pkcs1PadType
-    {
-        FullByte = 1,
-        RandomByte = 2
-    }
 }

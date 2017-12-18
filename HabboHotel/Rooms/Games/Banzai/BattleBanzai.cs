@@ -216,7 +216,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
             {
                 tile.ExtraData = "1";
                 tile.value = 0;
-                tile.team = TEAM.NONE;
+                tile.team = TEAM.None;
                 tile.UpdateState();
             }
 
@@ -272,20 +272,20 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                     tile.interactionCountHelper = 0;
                     tile.UpdateNeeded = true;
                 }
-                else if (tile.team == TEAM.NONE)
+                else if (tile.team == TEAM.None)
                 {
                     tile.ExtraData = "0";
                     tile.UpdateState();
                 }
             }
 
-            if (winners != TEAM.NONE)
+            if (winners != TEAM.None)
             {
                 List<RoomUser> Winners = _room.GetRoomUserManager().GetRoomUsers();
 
                 foreach (RoomUser User in Winners.ToList())
                 {
-                    if (User.Team != TEAM.NONE)
+                    if (User.Team != TEAM.None)
                     {
                         if (PlusEnvironment.GetUnixTimestamp() - timestarted > 5)
                         {
@@ -293,7 +293,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User.GetClient(), "ACH_BattleBallPlayer", 1);
                         }
                     }
-                    if (winners == TEAM.BLUE)
+                    if (winners == TEAM.Blue)
                     {
                         if (User.CurrentEffect == 35)
                         {
@@ -302,7 +302,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             _room.SendPacket(new ActionComposer(User.VirtualId, 1));
                         }
                     }
-                    else if (winners == TEAM.RED)
+                    else if (winners == TEAM.Red)
                     {
                         if (User.CurrentEffect == 33)
                         {
@@ -311,7 +311,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             _room.SendPacket(new ActionComposer(User.VirtualId, 1));
                         }
                     }
-                    else if (winners == TEAM.GREEN)
+                    else if (winners == TEAM.Green)
                     {
                         if (User.CurrentEffect == 34)
                         {
@@ -320,7 +320,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                             _room.SendPacket(new ActionComposer(User.VirtualId, 1));
                         }
                     }
-                    else if (winners == TEAM.YELLOW)
+                    else if (winners == TEAM.Yellow)
                     {
                         if (User.CurrentEffect == 36)
                         {
@@ -409,7 +409,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
         private void HandleBanzaiTiles(Point coord, TEAM team, RoomUser user)
         {
-            if (team == TEAM.NONE)
+            if (team == TEAM.None)
                 return;
 
             List<Item> items = _room.GetGameMap().GetCoordinatedItems(coord);
@@ -421,7 +421,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
                 if (_item.GetBaseItem().InteractionType != InteractionType.banzaifloor)
                 {
-                    user.Team = TEAM.NONE;
+                    user.Team = TEAM.None;
                     user.ApplyEffect(0);
                     continue;
                 }
@@ -448,7 +448,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
         private void HandleMaxBanzaiTiles(Point coord, TEAM team)
         {
-            if (team == TEAM.NONE)
+            if (team == TEAM.None)
                 return;
 
             List<Item> items = _room.GetGameMap().GetCoordinatedItems(coord);

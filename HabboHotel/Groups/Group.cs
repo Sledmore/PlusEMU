@@ -41,13 +41,13 @@ namespace Plus.HabboHotel.Groups
             switch (Type)
             {
                 case 0:
-                    this.GroupType = GroupType.OPEN;
+                    this.GroupType = GroupType.Open;
                     break;
                 case 1:
-                    this.GroupType = GroupType.LOCKED;
+                    this.GroupType = GroupType.Locked;
                     break;
                 case 2:
-                    this.GroupType = GroupType.PRIVATE;
+                    this.GroupType = GroupType.Private;
                     break;
             }
 
@@ -201,7 +201,7 @@ namespace Plus.HabboHotel.Groups
 
         public void AddMember(int Id)
         {
-            if (this.IsMember(Id) || this.GroupType == GroupType.LOCKED && this._requests.Contains(Id))
+            if (this.IsMember(Id) || this.GroupType == GroupType.Locked && this._requests.Contains(Id))
                 return;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -212,7 +212,7 @@ namespace Plus.HabboHotel.Groups
                     this._administrators.Remove(Id);
                     this._members.Add(Id);
                 }
-                else if (this.GroupType == GroupType.LOCKED)
+                else if (this.GroupType == GroupType.Locked)
                 {
                     dbClient.SetQuery("INSERT INTO `group_requests` (user_id, group_id) VALUES (@uid, @gid)");
                     this._requests.Add(Id);

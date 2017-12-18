@@ -176,11 +176,11 @@ namespace Plus.HabboHotel.Rooms
             {
                 mGameMap[x, y] = 3;
             }
-            else if (Model.SqState[x, y] == SquareState.OPEN)
+            else if (Model.SqState[x, y] == SquareState.Open)
             {
                 mGameMap[x, y] = 1;
             }
-            else if (Model.SqState[x, y] == SquareState.SEAT)
+            else if (Model.SqState[x, y] == SquareState.Seat)
             {
                 mGameMap[x, y] = 2;
             }
@@ -250,15 +250,15 @@ namespace Plus.HabboHotel.Rooms
                         {
                             mGameMap[chr, line] = 3;
                         }
-                        else if (Model.SqState[chr, line] == SquareState.OPEN)
+                        else if (Model.SqState[chr, line] == SquareState.Open)
                         {
                             mGameMap[chr, line] = 1;
                         }
-                        else if (Model.SqState[chr, line] == SquareState.SEAT)
+                        else if (Model.SqState[chr, line] == SquareState.Seat)
                         {
                             mGameMap[chr, line] = 2;
                         }
-                        else if (Model.SqState[chr, line] == SquareState.POOL)
+                        else if (Model.SqState[chr, line] == SquareState.Pool)
                         {
                             mUserItemEffect[chr, line] = 6;
                         }
@@ -284,15 +284,15 @@ namespace Plus.HabboHotel.Rooms
                         {
                             mGameMap[chr, line] = 3;
                         }
-                        else if (Model.SqState[chr, line] == SquareState.OPEN)
+                        else if (Model.SqState[chr, line] == SquareState.Open)
                         {
                             mGameMap[chr, line] = 1;
                         }
-                        else if (Model.SqState[chr, line] == SquareState.SEAT)
+                        else if (Model.SqState[chr, line] == SquareState.Seat)
                         {
                             mGameMap[chr, line] = 2;
                         }
-                        else if (Model.SqState[chr, line] == SquareState.POOL)
+                        else if (Model.SqState[chr, line] == SquareState.Pool)
                         {
                             mUserItemEffect[chr, line] = 6;
                         }
@@ -349,7 +349,7 @@ namespace Plus.HabboHotel.Rooms
                     return false;
                 }
 
-                if (Model.SqState[Coord.X, Coord.Y] == SquareState.BLOCKED)
+                if (Model.SqState[Coord.X, Coord.Y] == SquareState.Blocked)
                 {
                     Model.OpenSquare(Coord.X, Coord.Y, Item.GetZ);
                 }
@@ -478,16 +478,16 @@ namespace Plus.HabboHotel.Rooms
                         item.Gender = "M";
                         switch (item.team)
                         {
-                            case TEAM.YELLOW:
+                            case TEAM.Yellow:
                                 item.Figure = "lg-275-93.hr-115-61.hd-207-14.ch-265-93.sh-305-62";
                                 break;
-                            case TEAM.RED:
+                            case TEAM.Red:
                                 item.Figure = "lg-275-96.hr-115-61.hd-180-3.ch-265-96.sh-305-62";
                                 break;
-                            case TEAM.GREEN:
+                            case TEAM.Green:
                                 item.Figure = "lg-275-102.hr-115-61.hd-180-3.ch-265-102.sh-305-62";
                                 break;
-                            case TEAM.BLUE:
+                            case TEAM.Blue:
                                 item.Figure = "lg-275-108.hr-115-61.hd-180-3.ch-265-108.sh-305-62";
                                 break;
                         }
@@ -653,7 +653,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_RED_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.RED);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Red);
                             break;
                         }
                     case InteractionType.FOOTBALL_GOAL_GREEN:
@@ -664,7 +664,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_GREEN_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.GREEN);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Green);
                             break;
                         }
                     case InteractionType.FOOTBALL_GOAL_BLUE:
@@ -675,7 +675,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_BLUE_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.BLUE);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Blue);
                             break;
                         }
                     case InteractionType.FOOTBALL_GOAL_YELLOW:
@@ -686,7 +686,7 @@ namespace Plus.HabboHotel.Rooms
                     case InteractionType.FREEZE_YELLOW_GATE:
                         {
                             if (!_room.GetRoomItemHandler().GetFloor.Contains(Item))
-                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.YELLOW);
+                                _room.GetGameManager().AddFurnitureToTeam(Item, TEAM.Yellow);
                             break;
                         }
                     case InteractionType.freezeexit:
@@ -812,7 +812,7 @@ namespace Plus.HabboHotel.Rooms
             if (!ValidTile(x, y))
                 return false;
 
-            if (Model.SqState[x, y] == SquareState.BLOCKED)
+            if (Model.SqState[x, y] == SquareState.Blocked)
                 return false;
 
             return true;

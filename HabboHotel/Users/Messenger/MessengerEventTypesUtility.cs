@@ -12,22 +12,22 @@ namespace Plus.HabboHotel.Users.Messenger
         {
             switch (type)
             {
-                case MessengerEventTypes.EVENT_STARTED:
+                case MessengerEventTypes.EventStarted:
                     return 0;
 
-                case MessengerEventTypes.ACHIEVEMENT_UNLOCKED:
+                case MessengerEventTypes.AchievementUnlocked:
                     return 1;
 
-                case MessengerEventTypes.QUEST_COMPLETED:
+                case MessengerEventTypes.QuestCompleted:
                     return 2;
 
-                case MessengerEventTypes.PLAYING_GAME:
+                case MessengerEventTypes.PlayingGame:
                     return 3;
 
-                case MessengerEventTypes.FINISHED_GAME:
+                case MessengerEventTypes.FinishedGame:
                     return 4;
 
-                case MessengerEventTypes.GAME_INVITE:
+                case MessengerEventTypes.GameInvite:
                     return 5;
 
                 default:

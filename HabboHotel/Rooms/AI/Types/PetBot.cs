@@ -87,8 +87,8 @@ namespace Plus.HabboHotel.Rooms.AI.Types
 
             if (SpeechTimer <= 0)
             {
-                if (Pet.PetData.DBState != DatabaseUpdateState.NeedsInsert)
-                    Pet.PetData.DBState = DatabaseUpdateState.NeedsUpdate;
+                if (Pet.PetData.DBState != PetDatabaseUpdateState.NeedsInsert)
+                    Pet.PetData.DBState = PetDatabaseUpdateState.NeedsUpdate;
 
                 if (Pet != null)
                 {
@@ -173,8 +173,8 @@ namespace Plus.HabboHotel.Rooms.AI.Types
             if (Pet == null)
                 return;
 
-            if (Pet.PetData.DBState != DatabaseUpdateState.NeedsInsert)
-                Pet.PetData.DBState = DatabaseUpdateState.NeedsUpdate;
+            if (Pet.PetData.DBState != PetDatabaseUpdateState.NeedsInsert)
+                Pet.PetData.DBState = PetDatabaseUpdateState.NeedsUpdate;
        
             if (Message.ToLower().Equals(Pet.PetData.Name.ToLower()))
             {

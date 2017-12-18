@@ -20,7 +20,7 @@ namespace Plus.Communication.Packets.Outgoing.Groups
             base.WriteInteger(1);
             base.WriteInteger(Group.Colour1);
             base.WriteInteger(Group.Colour2);
-            base.WriteInteger(Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2);
+            base.WriteInteger(Group.GroupType == GroupType.Open ? 0 : Group.GroupType == GroupType.Locked ? 1 : 2);
             base.WriteInteger(Group.AdminOnlyDeco);
             base.WriteBoolean(false);
             base.WriteString("");

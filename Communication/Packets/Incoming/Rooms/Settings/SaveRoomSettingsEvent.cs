@@ -109,8 +109,8 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
             if (Name.Length > 60)
                 Name = Name.Substring(0, 60);
 
-            if (Access == RoomAccess.PASSWORD && Password.Length == 0)
-                Access = RoomAccess.OPEN;
+            if (Access == RoomAccess.Password && Password.Length == 0)
+                Access = RoomAccess.Open;
 
             if (MaxUsers < 0)
                 MaxUsers = 10;
@@ -122,7 +122,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
             if (!PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(CategoryId, out SearchResultList))
                 CategoryId = 36;
 
-            if (SearchResultList.CategoryType != NavigatorCategoryType.CATEGORY || SearchResultList.RequiredRank > Session.GetHabbo().Rank || (Session.GetHabbo().Id != Room.OwnerId && Session.GetHabbo().Rank >= SearchResultList.RequiredRank))
+            if (SearchResultList.CategoryType != NavigatorCategoryType.Category || SearchResultList.RequiredRank > Session.GetHabbo().Rank || (Session.GetHabbo().Id != Room.OwnerId && Session.GetHabbo().Rank >= SearchResultList.RequiredRank))
                 CategoryId = 36;
 
             if (TagCount > 2)
@@ -190,19 +190,19 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
             switch (Access)
             {
                 default:
-                case RoomAccess.OPEN:
+                case RoomAccess.Open:
                     AccessStr = "open";
                     break;
 
-                case RoomAccess.PASSWORD:
+                case RoomAccess.Password:
                     AccessStr = "password";
                     break;
 
-                case RoomAccess.DOORBELL:
+                case RoomAccess.Doorbell:
                     AccessStr = "locked";
                     break;
 
-                case RoomAccess.INVISIBLE:
+                case RoomAccess.Invisible:
                     AccessStr = "invisible";
                     break;
             }

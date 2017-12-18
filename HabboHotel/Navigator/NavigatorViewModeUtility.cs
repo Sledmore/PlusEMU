@@ -8,9 +8,9 @@
             {
                 default:
                 case "REGULAR":
-                    return NavigatorViewMode.REGULAR;
+                    return NavigatorViewMode.Regular;
                 case "THUMBNAIL":
-                    return NavigatorViewMode.THUMBNAIL;
+                    return NavigatorViewMode.Thumbnail;
             }
         }
     }

@@ -71,7 +71,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
 
             if (!string.IsNullOrEmpty(IPAddress))
                 PlusEnvironment.GetGame().GetModerationManager().BanUser(Session.GetHabbo().Username, ModerationBanType.IP, IPAddress, Reason, Expire);
-            PlusEnvironment.GetGame().GetModerationManager().BanUser(Session.GetHabbo().Username, ModerationBanType.USERNAME, Habbo.Username, Reason, Expire);
+            PlusEnvironment.GetGame().GetModerationManager().BanUser(Session.GetHabbo().Username, ModerationBanType.Username, Habbo.Username, Reason, Expire);
 
             GameClient TargetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
             if (TargetClient != null)

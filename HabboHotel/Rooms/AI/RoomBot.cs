@@ -98,7 +98,7 @@ namespace Plus.HabboHotel.Rooms.AI
 
         public bool IsPet
         {
-            get { return (AiType == BotAIType.PET); }
+            get { return (AiType == BotAIType.Pet); }
         }
 
         #region Speech Related
@@ -128,11 +128,11 @@ namespace Plus.HabboHotel.Rooms.AI
         {
             switch (AiType)
             {
-                case BotAIType.PET:
+                case BotAIType.Pet:
                     return new PetBot(VirtualId);
-                case BotAIType.GENERIC:
+                case BotAIType.Generic:
                     return new GenericBot(VirtualId);
-                case BotAIType.BARTENDER:
+                case BotAIType.Bartender:
                     return new BartenderBot(VirtualId);
                 default:
                     return new GenericBot(VirtualId);

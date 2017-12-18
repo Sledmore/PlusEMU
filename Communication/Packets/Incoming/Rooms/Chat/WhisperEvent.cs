@@ -84,7 +84,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Chat
                 Session.GetHabbo().BannedPhraseCount++;
                 if (Session.GetHabbo().BannedPhraseCount >= (Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.chat.filter.banned_phrases.chances"))))
                 {
-                    PlusEnvironment.GetGame().GetModerationManager().BanUser("System", HabboHotel.Moderation.ModerationBanType.USERNAME, Session.GetHabbo().Username, "Spamming banned phrases (" + Message + ")", (PlusEnvironment.GetUnixTimestamp() + 78892200));
+                    PlusEnvironment.GetGame().GetModerationManager().BanUser("System", HabboHotel.Moderation.ModerationBanType.Username, Session.GetHabbo().Username, "Spamming banned phrases (" + Message + ")", (PlusEnvironment.GetUnixTimestamp() + 78892200));
                     Session.Disconnect();
                     return;
                 }

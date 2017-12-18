@@ -28,7 +28,7 @@ namespace Plus.Communication.ConnectionManager
 
         private void connectionChanged(ConnectionInformation information, ConnectionState state)
         {
-            if (state == ConnectionState.CLOSED)
+            if (state == ConnectionState.Closed)
             {
                 CloseConnection(information);
             }

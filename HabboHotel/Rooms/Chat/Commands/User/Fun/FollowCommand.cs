@@ -58,7 +58,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User.Fun
                 return;
             }
 
-            if (TargetClient.GetHabbo().CurrentRoom.Access != RoomAccess.OPEN && !Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (TargetClient.GetHabbo().CurrentRoom.Access != RoomAccess.Open && !Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
             {
                 Session.SendWhisper("Oops, the room that user is either locked, passworded or invisible. You cannot follow!");
                 return;

@@ -14,10 +14,10 @@ namespace Plus.HabboHotel.Users.Messenger.FriendBar
             {
                 default:
                 case 0:
-                    return FriendBarState.CLOSED;
+                    return FriendBarState.Closed;
 
                 case 1:
-                    return FriendBarState.OPEN;
+                    return FriendBarState.Open;
             }
         }
 
@@ -26,10 +26,10 @@ namespace Plus.HabboHotel.Users.Messenger.FriendBar
             switch (State)
             {
                 default:
-                case FriendBarState.CLOSED:
+                case FriendBarState.Closed:
                     return 0;
 
-                case FriendBarState.OPEN:
+                case FriendBarState.Open:
                     return 1;
             }
         }

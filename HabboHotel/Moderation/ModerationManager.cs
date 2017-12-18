@@ -228,7 +228,7 @@ namespace Plus.HabboHotel.Moderation
 
         public void BanUser(string Mod, ModerationBanType Type, string BanValue, string Reason, double ExpireTimestamp)
         {
-            string BanType = (Type == ModerationBanType.IP ? "ip" : Type == ModerationBanType.MACHINE ? "machine" : "user");
+            string BanType = (Type == ModerationBanType.IP ? "ip" : Type == ModerationBanType.Machine ? "machine" : "user");
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("REPLACE INTO `bans` (`bantype`, `value`, `reason`, `expire`, `added_by`,`added_date`) VALUES ('" + BanType + "', '" + BanValue + "', @reason, " + ExpireTimestamp + ", '" + Mod + "', '" + PlusEnvironment.GetUnixTimestamp() + "');");
@@ -236,7 +236,7 @@ namespace Plus.HabboHotel.Moderation
                 dbClient.RunQuery();
             }
 
-            if (Type == ModerationBanType.MACHINE || Type == ModerationBanType.USERNAME)
+            if (Type == ModerationBanType.Machine || Type == ModerationBanType.Username)
             {
                 if (!this._bans.ContainsKey(BanValue))
                     this._bans.Add(BanValue, new ModerationBan(Type, BanValue, Reason, ExpireTimestamp));

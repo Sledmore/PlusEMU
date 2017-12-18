@@ -79,7 +79,7 @@ namespace Plus.Communication.ConnectionManager
             sendCallback = sentData;
             this.connectionID = connectionID;
             if (connectionChanged != null)
-                connectionChanged.Invoke(this, ConnectionState.OPEN);
+                connectionChanged.Invoke(this, ConnectionState.Open);
 
         }
 
@@ -174,7 +174,7 @@ namespace Plus.Communication.ConnectionManager
                     try
                     {
                         if (connectionChanged != null)
-                            connectionChanged.Invoke(this, ConnectionState.CLOSED);
+                            connectionChanged.Invoke(this, ConnectionState.Closed);
                     }
                     catch
                     {

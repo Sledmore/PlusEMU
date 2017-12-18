@@ -14,11 +14,11 @@ namespace Plus.HabboHotel.Navigator
             {
                 default:
                 case "NOTHING":
-                    return NavigatorSearchAllowance.NOTHING;
+                    return NavigatorSearchAllowance.Nothing;
                 case "SHOW_MORE":
-                    return NavigatorSearchAllowance.SHOW_MORE;
+                    return NavigatorSearchAllowance.ShowMore;
                 case "GO_BACK":
-                    return NavigatorSearchAllowance.GO_BACK;
+                    return NavigatorSearchAllowance.GoBack;
             }
         }
 
@@ -27,11 +27,11 @@ namespace Plus.HabboHotel.Navigator
             switch (SearchAllowance)
             {
                 default:
-                case NavigatorSearchAllowance.NOTHING:
+                case NavigatorSearchAllowance.Nothing:
                     return 0;
-                case NavigatorSearchAllowance.SHOW_MORE:
+                case NavigatorSearchAllowance.ShowMore:
                     return 1;
-                case NavigatorSearchAllowance.GO_BACK:
+                case NavigatorSearchAllowance.GoBack:
                     return 2;
             }
         }

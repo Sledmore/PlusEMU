@@ -55,12 +55,12 @@ namespace Plus.Communication.Packets.Incoming.Catalog
 
             voucher.UpdateUses();
 
-            if (voucher.Type == VoucherType.CREDIT)
+            if (voucher.Type == VoucherType.Credit)
             {
                 session.GetHabbo().Credits += voucher.Value;
                 session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
             }
-            else if (voucher.Type == VoucherType.DUCKET)
+            else if (voucher.Type == VoucherType.Ducket)
             {
                 session.GetHabbo().Duckets += voucher.Value;
                 session.SendPacket(new HabboActivityPointNotificationComposer(session.GetHabbo().Duckets, voucher.Value));

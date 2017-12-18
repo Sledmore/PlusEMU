@@ -168,7 +168,7 @@ namespace Plus.HabboHotel.Quests
 
             if (PassQuest)
             {
-                Session.GetHabbo().GetMessenger().BroadcastAchievement(Session.GetHabbo().Id, Users.Messenger.MessengerEventTypes.QUEST_COMPLETED, UserQuest.Category + "." + UserQuest.Name);
+                Session.GetHabbo().GetMessenger().BroadcastAchievement(Session.GetHabbo().Id, Users.Messenger.MessengerEventTypes.QuestCompleted, UserQuest.Category + "." + UserQuest.Name);
 
                 Session.GetHabbo().GetStats().QuestID = 0;
                 Session.GetHabbo().QuestLastCompleted = UserQuest.Id;

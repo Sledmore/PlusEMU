@@ -51,14 +51,14 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (User == null)
                 return false;
 
-            TEAM ToJoin = (int.Parse(this.StringData) == 1 ? TEAM.RED : int.Parse(this.StringData) == 2 ? TEAM.GREEN : int.Parse(this.StringData) == 3 ? TEAM.BLUE : int.Parse(this.StringData) == 4 ? TEAM.YELLOW : TEAM.NONE);
+            TEAM ToJoin = (int.Parse(this.StringData) == 1 ? TEAM.Red : int.Parse(this.StringData) == 2 ? TEAM.Green : int.Parse(this.StringData) == 3 ? TEAM.Blue : int.Parse(this.StringData) == 4 ? TEAM.Yellow : TEAM.None);
 
             TeamManager Team = Instance.GetTeamManagerForFreeze();
             if (Team != null)
             {
                 if (Team.CanEnterOnTeam(ToJoin))
                 {
-                    if (User.Team != TEAM.NONE)
+                    if (User.Team != TEAM.None)
                         Team.OnUserLeave(User);
 
                     User.Team = ToJoin;

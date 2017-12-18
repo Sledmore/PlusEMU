@@ -77,7 +77,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
 
             Room.GetRoomUserManager().DeployBot(RoomBot, Pet);
 
-            Pet.DBState = DatabaseUpdateState.NeedsUpdate;
+            Pet.DBState = PetDatabaseUpdateState.NeedsUpdate;
             Room.GetRoomUserManager().UpdatePets();
 
             Pet ToRemove = null;

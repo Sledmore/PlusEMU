@@ -1,23 +1,20 @@
 ﻿using System;
 
-using Plus.HabboHotel.Moderation;
-
 namespace Plus.HabboHotel.Moderation
-{
-
+{ 
     public class ModerationBan
     {
-        public string Value;
-        public double Expire;
-        public string Reason;
-        public ModerationBanType Type;
+        public string Value { get; set; }
+        public double Expire { get; set; }
+        public string Reason { get; set; }
+        public ModerationBanType Type { get; set; }
 
-        public ModerationBan(ModerationBanType Type, string Value, string Reason, Double Expire)
+        public ModerationBan(ModerationBanType type, string value, string reason, Double expire)
         {
-            this.Type = Type;
-            this.Value = Value;
-            this.Reason = Reason;
-            this.Expire = Expire;
+            this.Type = type;
+            this.Value = value;
+            this.Reason = reason;
+            this.Expire = expire;
         }
 
         public bool Expired

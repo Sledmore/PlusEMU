@@ -174,7 +174,7 @@ namespace Plus.HabboHotel.Rooms
             IEnumerable<RoomData> InstanceMatches =
                 (from RoomInstance in this._loadedRoomData
                  where RoomInstance.Value.UsersNow >= 0 &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE &&
+                 RoomInstance.Value.Access != RoomAccess.Invisible &&
                  RoomInstance.Value.Group != null &&
                  (RoomInstance.Value.OwnerName.StartsWith(Query) ||
                  RoomInstance.Value.Tags.Contains(Query) ||
@@ -189,7 +189,7 @@ namespace Plus.HabboHotel.Rooms
             IEnumerable<RoomData> InstanceMatches =
                 (from RoomInstance in this._loadedRoomData
                  where RoomInstance.Value.UsersNow >= 0 &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE &&
+                 RoomInstance.Value.Access != RoomAccess.Invisible &&
                  (RoomInstance.Value.Tags.Contains(Query))
                  orderby RoomInstance.Value.UsersNow descending
                  select RoomInstance.Value).Take(50);
@@ -202,7 +202,7 @@ namespace Plus.HabboHotel.Rooms
                 (from RoomInstance in this._loadedRoomData
                  where RoomInstance.Value.UsersNow > 0 &&
                  (category == -1 || RoomInstance.Value.Category == category) &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                 RoomInstance.Value.Access != RoomAccess.Invisible
                  orderby RoomInstance.Value.Score descending
                  orderby RoomInstance.Value.UsersNow descending
                  select RoomInstance.Value).Take(Amount);
@@ -215,7 +215,7 @@ namespace Plus.HabboHotel.Rooms
                 (from RoomInstance in this._loadedRoomData
                  where RoomInstance.Value.UsersNow >= 0 &&
                  RoomInstance.Value.Score >= 0 &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE &&
+                 RoomInstance.Value.Access != RoomAccess.Invisible &&
                  RoomInstance.Value.Id != CurrentRoomId
                  orderby RoomInstance.Value.Score descending
                  orderby RoomInstance.Value.UsersNow descending
@@ -227,7 +227,7 @@ namespace Plus.HabboHotel.Rooms
         {
             IEnumerable<RoomData> rooms =
                 (from RoomInstance in this._loadedRoomData
-                 where RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                 where RoomInstance.Value.Access != RoomAccess.Invisible
                  orderby RoomInstance.Value.Score descending
                  select RoomInstance.Value).Take(Amount);
             return rooms.ToList();
@@ -239,7 +239,7 @@ namespace Plus.HabboHotel.Rooms
                 (from RoomInstance in this._loadedRoomData
                  where RoomInstance.Value.Category == Category &&
                  RoomInstance.Value.UsersNow > 0 &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                 RoomInstance.Value.Access != RoomAccess.Invisible
                  orderby RoomInstance.Value.UsersNow descending
                  select RoomInstance.Value).Take(Amount);
             return rooms.ToList();
@@ -254,7 +254,7 @@ namespace Plus.HabboHotel.Rooms
                 Rooms =
                     (from RoomInstance in this._loadedRoomData
                      where (RoomInstance.Value.HasActivePromotion) &&
-                     RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                     RoomInstance.Value.Access != RoomAccess.Invisible
                      orderby RoomInstance.Value.Promotion.TimestampStarted descending
                      select RoomInstance.Value).Take(Amount);
             }
@@ -263,7 +263,7 @@ namespace Plus.HabboHotel.Rooms
                 Rooms =
                     (from RoomInstance in this._loadedRoomData
                      where (RoomInstance.Value.HasActivePromotion) &&
-                     RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                     RoomInstance.Value.Access != RoomAccess.Invisible
                      orderby RoomInstance.Value.UsersNow descending
                      select RoomInstance.Value).Take(Amount);
             }
@@ -280,7 +280,7 @@ namespace Plus.HabboHotel.Rooms
                 (from RoomInstance in this._loadedRoomData
                  where (RoomInstance.Value.HasActivePromotion) &&
                  RoomInstance.Value.Promotion.CategoryId == CategoryId &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                 RoomInstance.Value.Access != RoomAccess.Invisible
                  orderby RoomInstance.Value.Promotion.TimestampStarted descending
                  select RoomInstance.Value).Take(Amount);
 
@@ -292,7 +292,7 @@ namespace Plus.HabboHotel.Rooms
             IEnumerable<List<string>> Tags =
                 (from RoomInstance in this._loadedRoomData
                  where RoomInstance.Value.UsersNow >= 0 &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                 RoomInstance.Value.Access != RoomAccess.Invisible
                  orderby RoomInstance.Value.UsersNow descending
                  orderby RoomInstance.Value.Score descending
                  select RoomInstance.Value.Tags).Take(50);
@@ -329,7 +329,7 @@ namespace Plus.HabboHotel.Rooms
             IEnumerable<RoomData> rooms =
                 (from RoomInstance in this._loadedRoomData
                  where RoomInstance.Value.Group != null &&
-                 RoomInstance.Value.Access != RoomAccess.INVISIBLE
+                 RoomInstance.Value.Access != RoomAccess.Invisible
                  orderby RoomInstance.Value.Score descending
                  select RoomInstance.Value).Take(Amount);
             return rooms.ToList();
@@ -340,7 +340,7 @@ namespace Plus.HabboHotel.Rooms
             IEnumerable<Room> room =
                 (from RoomInstance in this._rooms
                 where (RoomInstance.Value.RoomData.UsersNow > 0 &&
-                RoomInstance.Value.RoomData.Access == RoomAccess.OPEN &&
+                RoomInstance.Value.RoomData.Access == RoomAccess.Open &&
                 RoomInstance.Value.RoomData.UsersNow < RoomInstance.Value.RoomData.UsersMax)
                 orderby RoomInstance.Value.RoomData.UsersNow descending
                 select RoomInstance.Value).Take(1);

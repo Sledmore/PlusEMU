@@ -63,7 +63,7 @@ namespace Plus.Communication.Packets.Incoming.Catalog
             if (Session.GetHabbo().InRoom && Session.GetHabbo().CurrentRoomId == RoomId)
                 Session.GetHabbo().CurrentRoom.SendPacket(new RoomEventComposer(Data, Data.Promotion));
 
-            Session.GetHabbo().GetMessenger().BroadcastAchievement(Session.GetHabbo().Id, HabboHotel.Users.Messenger.MessengerEventTypes.EVENT_STARTED, Name);
+            Session.GetHabbo().GetMessenger().BroadcastAchievement(Session.GetHabbo().Id, HabboHotel.Users.Messenger.MessengerEventTypes.EventStarted, Name);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
                 CategoryId = 36;
             }
 
-            if (SearchResultList.CategoryType != NavigatorCategoryType.CATEGORY || SearchResultList.RequiredRank > Session.GetHabbo().Rank)
+            if (SearchResultList.CategoryType != NavigatorCategoryType.Category || SearchResultList.RequiredRank > Session.GetHabbo().Rank)
             {
                 CategoryId = 36;
             }

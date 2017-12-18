@@ -185,7 +185,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         public void OnUserWalk(RoomUser User)
         {
-            if (!this._gameStarted || User.Team == TEAM.NONE)
+            if (!this._gameStarted || User.Team == TEAM.None)
                 return;
 
             foreach (Item Item in this._freezeTiles.Values.ToList())
@@ -203,10 +203,10 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
                         switch (User.banzaiPowerUp)
                         {
-                            case FreezePowerUp.GREENARROW:
-                            case FreezePowerUp.ORANGESNOWBALL:
+                            case FreezePowerUp.GreenArrow:
+                            case FreezePowerUp.OrangeSnowball:
                                 {
-                                    User.banzaiPowerUp = FreezePowerUp.NONE;
+                                    User.banzaiPowerUp = FreezePowerUp.None;
                                     break;
                                 }
                         }
@@ -219,7 +219,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
             {
                 if (User.GoalX == Item.GetX && User.GoalY == Item.GetY)
                 {
-                    if (Item.freezePowerUp != FreezePowerUp.NONE)
+                    if (Item.freezePowerUp != FreezePowerUp.None)
                     {
                         PickUpPowerUp(Item, User);
                     }
@@ -233,10 +233,10 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
             foreach (RoomUser User in this._room.GetRoomUserManager().GetUserList().ToList())
             {
-                if (User.IsBot || User.Team == TEAM.NONE || User.GetClient() == null)
+                if (User.IsBot || User.Team == TEAM.None || User.GetClient() == null)
                     continue;
 
-                User.banzaiPowerUp = FreezePowerUp.NONE;
+                User.banzaiPowerUp = FreezePowerUp.None;
                 User.FreezeLives = 3;
                 User.shieldActive = false;
                 User.shieldCounter = 11;
@@ -252,19 +252,19 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
             switch (powerUp)
             {
-                case FreezePowerUp.BLUEARROW:
+                case FreezePowerUp.BlueArrow:
                     {
                         items = GetVerticalItems(item.GetX, item.GetY, 5);
                         break;
                     }
 
-                case FreezePowerUp.GREENARROW:
+                case FreezePowerUp.GreenArrow:
                     {
                         items = GetDiagonalItems(item.GetX, item.GetY, 5);
                         break;
                     }
 
-                case FreezePowerUp.ORANGESNOWBALL:
+                case FreezePowerUp.OrangeSnowball:
                     {
                         items = GetVerticalItems(item.GetX, item.GetY, 5);
                         items.AddRange(GetDiagonalItems(item.GetX, item.GetY, 5));
@@ -326,43 +326,43 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 case 2:
                     {
                         item.ExtraData = "2000";
-                        item.freezePowerUp = FreezePowerUp.BLUEARROW;
+                        item.freezePowerUp = FreezePowerUp.BlueArrow;
                         break;
                     }
                 case 3:
                     {
                         item.ExtraData = "3000";
-                        item.freezePowerUp = FreezePowerUp.SNOWBALLS;
+                        item.freezePowerUp = FreezePowerUp.Snowballs;
                         break;
                     }
                 case 4:
                     {
                         item.ExtraData = "4000";
-                        item.freezePowerUp = FreezePowerUp.GREENARROW;
+                        item.freezePowerUp = FreezePowerUp.GreenArrow;
                         break;
                     }
                 case 5:
                     {
                         item.ExtraData = "5000";
-                        item.freezePowerUp = FreezePowerUp.ORANGESNOWBALL;
+                        item.freezePowerUp = FreezePowerUp.OrangeSnowball;
                         break;
                     }
                 case 6:
                     {
                         item.ExtraData = "6000";
-                        item.freezePowerUp = FreezePowerUp.HEART;
+                        item.freezePowerUp = FreezePowerUp.Heart;
                         break;
                     }
                 case 7:
                     {
                         item.ExtraData = "7000";
-                        item.freezePowerUp = FreezePowerUp.SHIELD;
+                        item.freezePowerUp = FreezePowerUp.Shield;
                         break;
                     }
                 default:
                     {
                         item.ExtraData = "1000";
-                        item.freezePowerUp = FreezePowerUp.NONE;
+                        item.freezePowerUp = FreezePowerUp.None;
                         break;
                     }
             }
@@ -375,7 +375,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
         {
             switch (item.freezePowerUp)
             {
-                case FreezePowerUp.HEART:
+                case FreezePowerUp.Heart:
                     {
                         if (User.FreezeLives < 5)
                         {
@@ -386,21 +386,21 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                         User.GetClient().SendPacket(new UpdateFreezeLivesComposer(User.InternalRoomID, User.FreezeLives));
                         break;
                     }
-                case FreezePowerUp.SHIELD:
+                case FreezePowerUp.Shield:
                     {
                         ActivateShield(User);
                         break;
                     }
-                case FreezePowerUp.BLUEARROW:
-                case FreezePowerUp.GREENARROW:
-                case FreezePowerUp.ORANGESNOWBALL:
+                case FreezePowerUp.BlueArrow:
+                case FreezePowerUp.GreenArrow:
+                case FreezePowerUp.OrangeSnowball:
                     {
                         User.banzaiPowerUp = item.freezePowerUp;
                         break;
                     }
             }
 
-            item.freezePowerUp = FreezePowerUp.NONE;
+            item.freezePowerUp = FreezePowerUp.None;
             item.ExtraData = "1" + item.ExtraData;
             item.UpdateState(false, true);
         }
@@ -447,7 +447,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         private void FreezeUser(RoomUser User)
         {
-            if (User.IsBot || User.shieldActive || User.Team == TEAM.NONE || User.Freezed)
+            if (User.IsBot || User.shieldActive || User.Team == TEAM.None || User.Freezed)
                 return;
 
             User.Freezed = true;
@@ -462,7 +462,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 _room.GetGameManager().AddPointToTeam(User.Team, -10);
                 TeamManager t = _room.GetTeamManagerForFreeze();
                 t.OnUserLeave(User);
-                User.Team = TEAM.NONE;
+                User.Team = TEAM.None;
                 if (_exitTeleports.Count > 0)
                     _room.GetGameMap().TeleportToItem(User, this.GetRandomExitTile());
 

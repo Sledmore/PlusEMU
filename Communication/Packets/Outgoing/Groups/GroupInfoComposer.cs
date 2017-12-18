@@ -18,7 +18,7 @@ namespace Plus.Communication.Packets.Outgoing.Groups
 
             base.WriteInteger(Group.Id);
             base.WriteBoolean(true);
-            base.WriteInteger(Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2);
+            base.WriteInteger(Group.GroupType == GroupType.Open ? 0 : Group.GroupType == GroupType.Locked ? 1 : 2);
             base.WriteString(Group.Name);
             base.WriteString(Group.Description);
             base.WriteString(Group.Badge);

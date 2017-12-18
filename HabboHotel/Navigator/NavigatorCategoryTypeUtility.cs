@@ -14,33 +14,33 @@ namespace Plus.HabboHotel.Navigator
             {
                 default:
                 case "category":
-                    return NavigatorCategoryType.CATEGORY;
+                    return NavigatorCategoryType.Category;
                 case "featured":
-                    return NavigatorCategoryType.FEATURED;
+                    return NavigatorCategoryType.Featured;
                 case "popular":
-                    return NavigatorCategoryType.POPULAR;
+                    return NavigatorCategoryType.Popular;
                 case "recommended":
-                    return NavigatorCategoryType.RECOMMENDED;
+                    return NavigatorCategoryType.Recommended;
                 case "query":
-                    return NavigatorCategoryType.QUERY;
+                    return NavigatorCategoryType.Query;
                 case "my_rooms":
-                    return NavigatorCategoryType.MY_ROOMS;
+                    return NavigatorCategoryType.MyRooms;
                 case "my_favorites":
-                    return NavigatorCategoryType.MY_FAVORITES;
+                    return NavigatorCategoryType.MyFavourites;
                 case "my_groups":
-                    return NavigatorCategoryType.MY_GROUPS;
+                    return NavigatorCategoryType.MyGroups;
                 case "my_history":
-                    return NavigatorCategoryType.MY_HISTORY;
+                    return NavigatorCategoryType.MyHistory;
                 case "my_friends_room":
-                    return NavigatorCategoryType.MY_FRIENDS_ROOMS;
+                    return NavigatorCategoryType.MyFriendsRooms;
                 case "my_history_freq":
-                    return NavigatorCategoryType.MY_HISTORY_FREQ;
+                    return NavigatorCategoryType.MyFrequentHistory;
                 case "top_promotions":
-                    return NavigatorCategoryType.TOP_PROMOTIONS;
+                    return NavigatorCategoryType.TopPromotions;
                 case "promotion_category":
-                    return NavigatorCategoryType.PROMOTION_CATEGORY;
+                    return NavigatorCategoryType.PromotionCategory;
                 case "my_rights":
-                    return NavigatorCategoryType.MY_RIGHTS;
+                    return NavigatorCategoryType.MyRights;
             }
         }
     }

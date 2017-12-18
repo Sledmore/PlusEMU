@@ -114,6 +114,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Communication\Encryption\Crypto\RSA\Pkcs1PadType.cs" />
     <Compile Include="Communication\Interfaces\IServerPacket.cs" />
     <Compile Include="Communication\Packets\Incoming\Avatar\GetWardrobeEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Avatar\SaveWardrobeOutfitEvent.cs" />
@@ -716,6 +717,7 @@
     <Compile Include="HabboHotel\Rewards\RewardManager.cs" />
     <Compile Include="HabboHotel\Rewards\RewardType.cs" />
     <Compile Include="HabboHotel\Rewards\RewardTypeUtility.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\DatabaseUpdateState.cs" />
     <Compile Include="HabboHotel\Rooms\AI\Types\BartenderBot.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\ChatManager.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Administrator\BubbleCommand.cs" />
@@ -878,6 +880,7 @@
     <Compile Include="HabboHotel\Rooms\RoomAccessUtility.cs" />
     <Compile Include="HabboHotel\Rooms\RoomAppender.cs" />
     <Compile Include="HabboHotel\Rooms\RoomPromotion.cs" />
+    <Compile Include="HabboHotel\Rooms\SquareState.cs" />
     <Compile Include="HabboHotel\Rooms\Trading\TradeUser.cs" />
     <Compile Include="HabboHotel\Subscriptions\SubscriptionData.cs" />
     <Compile Include="HabboHotel\Subscriptions\SubscriptionManager.cs" />

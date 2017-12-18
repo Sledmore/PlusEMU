@@ -7,16 +7,16 @@
             switch (Access)
             {
                 default:
-                case RoomAccess.OPEN:
+                case RoomAccess.Open:
                     return 0;
 
-                case RoomAccess.DOORBELL:
+                case RoomAccess.Doorbell:
                     return 1;
 
-                case RoomAccess.PASSWORD:
+                case RoomAccess.Password:
                     return 2;
 
-                case RoomAccess.INVISIBLE:
+                case RoomAccess.Invisible:
                     return 3;
             }
         }
@@ -27,16 +27,16 @@
             {
                 default:
                 case "open":
-                    return RoomAccess.OPEN;
+                    return RoomAccess.Open;
 
                 case "locked":
-                    return RoomAccess.DOORBELL;
+                    return RoomAccess.Doorbell;
 
                 case "password":
-                    return RoomAccess.PASSWORD;
+                    return RoomAccess.Password;
 
                 case "invisible":
-                    return RoomAccess.INVISIBLE;
+                    return RoomAccess.Invisible;
             }
         }
 
@@ -46,16 +46,16 @@
             {
                 default:
                 case 0:
-                    return RoomAccess.OPEN;
+                    return RoomAccess.Open;
 
                 case 1:
-                    return RoomAccess.DOORBELL;
+                    return RoomAccess.Doorbell;
 
                 case 2:
-                    return RoomAccess.PASSWORD;
+                    return RoomAccess.Password;
 
                 case 3:
-                    return RoomAccess.INVISIBLE;
+                    return RoomAccess.Invisible;
             }
         }
     }

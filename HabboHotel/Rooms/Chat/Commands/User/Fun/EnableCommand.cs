@@ -49,7 +49,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User.Fun
                 Session.SendWhisper("You cannot enable effects whilst riding a horse!");
                 return;
             }
-            else if (ThisUser.Team != TEAM.NONE)
+            else if (ThisUser.Team != TEAM.None)
                 return;
             else if (ThisUser.isLying)
                 return;

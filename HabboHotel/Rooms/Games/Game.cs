@@ -69,22 +69,22 @@ namespace Plus.HabboHotel.Rooms.Games
 
             foreach (Item item in _room.GetRoomItemHandler().GetFloor.ToList())
             {
-                if (team == TEAM.BLUE && item.Data.InteractionType == InteractionType.banzaiscoreblue)
+                if (team == TEAM.Blue && item.Data.InteractionType == InteractionType.banzaiscoreblue)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
                 }
-                else if (team == TEAM.RED && item.Data.InteractionType == InteractionType.banzaiscorered)
+                else if (team == TEAM.Red && item.Data.InteractionType == InteractionType.banzaiscorered)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
                 }
-                else if (team == TEAM.GREEN && item.Data.InteractionType == InteractionType.banzaiscoregreen)
+                else if (team == TEAM.Green && item.Data.InteractionType == InteractionType.banzaiscoregreen)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
                 }
-                else if (team == TEAM.YELLOW && item.Data.InteractionType == InteractionType.banzaiscoreyellow)
+                else if (team == TEAM.Yellow && item.Data.InteractionType == InteractionType.banzaiscoreyellow)
                 {
                     item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
@@ -94,10 +94,10 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public void Reset()
         {
-            AddPointToTeam(TEAM.BLUE, GetScoreForTeam(TEAM.BLUE) * (-1));
-            AddPointToTeam(TEAM.GREEN, GetScoreForTeam(TEAM.GREEN) * (-1));
-            AddPointToTeam(TEAM.RED, GetScoreForTeam(TEAM.RED) * (-1));
-            AddPointToTeam(TEAM.YELLOW, GetScoreForTeam(TEAM.YELLOW) * (-1));
+            AddPointToTeam(TEAM.Blue, GetScoreForTeam(TEAM.Blue) * (-1));
+            AddPointToTeam(TEAM.Green, GetScoreForTeam(TEAM.Green) * (-1));
+            AddPointToTeam(TEAM.Red, GetScoreForTeam(TEAM.Red) * (-1));
+            AddPointToTeam(TEAM.Yellow, GetScoreForTeam(TEAM.Yellow) * (-1));
         }
 
         private int GetScoreForTeam(TEAM team)
@@ -111,13 +111,13 @@ namespace Plus.HabboHotel.Rooms.Games
             {
                 default:
                     return new ConcurrentDictionary<int, Item>();
-                case TEAM.BLUE:
+                case TEAM.Blue:
                     return this._blueTeamItems;
-                case TEAM.GREEN:
+                case TEAM.Green:
                     return this._greenTeamItems;
-                case TEAM.RED:
+                case TEAM.Red:
                     return this._redTeamItems;
-                case TEAM.YELLOW:
+                case TEAM.Yellow:
                     return this._yellowTeamItems;
             }
         }
@@ -131,16 +131,16 @@ namespace Plus.HabboHotel.Rooms.Games
         {
             switch (team)
             {
-                case TEAM.BLUE:
+                case TEAM.Blue:
                     _blueTeamItems.TryAdd(item.Id, item);
                     break;
-                case TEAM.GREEN:
+                case TEAM.Green:
                     _greenTeamItems.TryAdd(item.Id, item);
                     break;
-                case TEAM.RED:
+                case TEAM.Red:
                     _redTeamItems.TryAdd(item.Id, item);
                     break;
-                case TEAM.YELLOW:
+                case TEAM.Yellow:
                     _yellowTeamItems.TryAdd(item.Id, item);
                     break;
             }
@@ -150,16 +150,16 @@ namespace Plus.HabboHotel.Rooms.Games
         {
             switch (team)
             {
-                case TEAM.BLUE:
+                case TEAM.Blue:
                     _blueTeamItems.TryRemove(item.Id, out item);
                     break;
-                case TEAM.GREEN:
+                case TEAM.Green:
                     _greenTeamItems.TryRemove(item.Id, out item);
                     break;
-                case TEAM.RED:
+                case TEAM.Red:
                     _redTeamItems.TryRemove(item.Id, out item);
                     break;
-                case TEAM.YELLOW:
+                case TEAM.Yellow:
                     _yellowTeamItems.TryRemove(item.Id, out item);
                     break;
             }

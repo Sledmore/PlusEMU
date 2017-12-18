@@ -48,14 +48,14 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (User == null)
                 return false;
 
-            if (User.Team != TEAM.NONE)
+            if (User.Team != TEAM.None)
             {
                 TeamManager Team = Instance.GetTeamManagerForFreeze();
                 if (Team != null)
                 {
                     Team.OnUserLeave(User);
 
-                    User.Team = TEAM.NONE;
+                    User.Team = TEAM.None;
 
                     if (User.GetClient().GetHabbo().Effects().CurrentEffect != 0)
                         User.GetClient().GetHabbo().Effects().ApplyEffect(0);

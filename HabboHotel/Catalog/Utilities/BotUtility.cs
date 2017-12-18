@@ -34,15 +34,15 @@ namespace Plus.HabboHotel.Catalog.Utilities
             switch (Type)
             {
                 case "pet":
-                    return BotAIType.PET;
+                    return BotAIType.Pet;
                 case "generic":
-                    return BotAIType.GENERIC;
+                    return BotAIType.Generic;
                 case "bartender":
-                    return BotAIType.BARTENDER;
+                    return BotAIType.Bartender;
                 case "casino_bot":
-                    return BotAIType.CASINO_BOT;
+                    return BotAIType.CasinoBot;
                 default:
-                    return BotAIType.GENERIC;
+                    return BotAIType.Generic;
             }
         }
     }

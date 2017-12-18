@@ -22,7 +22,7 @@ namespace Plus.HabboHotel.Navigator
                     Message.WriteInteger(0);
                     break;
 
-                case NavigatorCategoryType.QUERY:
+                case NavigatorCategoryType.Query:
                     {
                         #region Query
                         if (SearchData.ToLower().StartsWith("owner:"))
@@ -122,7 +122,7 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.FEATURED:
+                case NavigatorCategoryType.Featured:
                     #region Featured
                     List<RoomData> Rooms = new List<RoomData>();
                     ICollection<FeaturedRoom> Featured = PlusEnvironment.GetGame().GetNavigator().GetFeaturedRooms();
@@ -147,7 +147,7 @@ namespace Plus.HabboHotel.Navigator
                     #endregion
                     break;
 
-                case NavigatorCategoryType.POPULAR:
+                case NavigatorCategoryType.Popular:
                     {
                         List<RoomData> PopularRooms = PlusEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, FetchLimit);
 
@@ -159,7 +159,7 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.RECOMMENDED:
+                case NavigatorCategoryType.Recommended:
                     {
                         List<RoomData> RecommendedRooms = PlusEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(FetchLimit);
 
@@ -171,7 +171,7 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.CATEGORY:
+                case NavigatorCategoryType.Category:
                     {
                         List<RoomData> GetRoomsByCategory = PlusEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(SearchResult.Id, FetchLimit);
 
@@ -183,7 +183,7 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.MY_ROOMS:
+                case NavigatorCategoryType.MyRooms:
 
                     Message.WriteInteger(Session.GetHabbo().UsersRooms.Count);
                     foreach (RoomData Data in Session.GetHabbo().UsersRooms.ToList())
@@ -192,7 +192,7 @@ namespace Plus.HabboHotel.Navigator
                     }
                     break;
 
-                case NavigatorCategoryType.MY_FAVORITES:
+                case NavigatorCategoryType.MyFavourites:
                     List<RoomData> Favourites = new List<RoomData>();
                     foreach (int Id in Session.GetHabbo().FavoriteRooms.ToArray())
                     {
@@ -213,7 +213,7 @@ namespace Plus.HabboHotel.Navigator
                     }
                     break;
 
-                case NavigatorCategoryType.MY_GROUPS:
+                case NavigatorCategoryType.MyGroups:
                     List<RoomData> MyGroups = new List<RoomData>();
 
                     foreach (Group Group in PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(Session.GetHabbo().Id).ToList())
@@ -238,7 +238,7 @@ namespace Plus.HabboHotel.Navigator
                     }
                     break;
 
-                case NavigatorCategoryType.MY_FRIENDS_ROOMS:
+                case NavigatorCategoryType.MyFriendsRooms:
                     List<RoomData> MyFriendsRooms = new List<RoomData>();
                     foreach (MessengerBuddy buddy in Session.GetHabbo().GetMessenger().GetFriends().Where(p => p.InRoom))
                     {
@@ -256,7 +256,7 @@ namespace Plus.HabboHotel.Navigator
                     }
                     break;
 
-                case NavigatorCategoryType.MY_RIGHTS:
+                case NavigatorCategoryType.MyRights:
                     List<RoomData> MyRights = new List<RoomData>();
 
                     DataTable GetRights = null;
@@ -285,7 +285,7 @@ namespace Plus.HabboHotel.Navigator
                     }
                     break;
 
-                case NavigatorCategoryType.TOP_PROMOTIONS:
+                case NavigatorCategoryType.TopPromotions:
                     {
                         List<RoomData> GetPopularPromotions = PlusEnvironment.GetGame().GetRoomManager().GetOnGoingRoomPromotions(16, FetchLimit);
 
@@ -297,7 +297,7 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.PROMOTION_CATEGORY:
+                case NavigatorCategoryType.PromotionCategory:
                     {
                         List<RoomData> GetPromotedRooms = PlusEnvironment.GetGame().GetRoomManager().GetPromotedRooms(SearchResult.Id, FetchLimit);
 

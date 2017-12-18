@@ -1,7 +1,4 @@
-﻿using System;
-using Plus;
-using Plus.Core;
-namespace Plus.HabboHotel.Items
+﻿namespace Plus.HabboHotel.Items
 {
     public enum InteractionType
     {

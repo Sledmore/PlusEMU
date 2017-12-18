@@ -33,7 +33,7 @@ namespace Plus.Communication.Packets.Incoming.Moderation
             }
 
             if (SetLock)
-                Room.RoomData.Access = RoomAccess.DOORBELL;
+                Room.RoomData.Access = RoomAccess.Doorbell;
 
             if (Room.Tags.Count > 0)
                 Room.ClearTags();
