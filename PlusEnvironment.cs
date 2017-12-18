@@ -92,7 +92,9 @@ namespace Plus
 
             try
             {
-                _configuration = new ConfigurationData(Path.Combine(Application.StartupPath, @"config.ini"));
+                string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+
+                _configuration = new ConfigurationData(projectSolutionPath + "\\Config\\config.ini");
 
                 var connectionString = new MySqlConnectionStringBuilder
                 {
@@ -146,7 +148,7 @@ namespace Plus
                 HabboEncryptionV2.Initialize(new RSAKeys());
 
                 //Make sure Rcon is connected before we allow clients to connect.
-                _Rcon = new RconSocket(GetConfig().data["Rcon.tcp.bindip"], int.Parse(GetConfig().data["Rcon.tcp.port"]), GetConfig().data["Rcon.tcp.allowedaddr"].Split(Convert.ToChar(";")));
+                _Rcon = new RconSocket(GetConfig().data["rcon.tcp.bindip"], int.Parse(GetConfig().data["rcon.tcp.port"]), GetConfig().data["rcon.tcp.allowedaddr"].Split(Convert.ToChar(";")));
 
                 //Accept connections.
                 _connectionManager = new ConnectionHandling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]), GetConfig().data["game.tcp.enablenagles"].ToLower() == "true");

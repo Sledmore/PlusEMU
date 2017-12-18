@@ -1074,12 +1074,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\figuredata.xml" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Config\config.ini" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

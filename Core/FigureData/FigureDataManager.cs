@@ -7,6 +7,7 @@ using Plus.Core.FigureData.Types;
 using System.Xml;
 using Plus.HabboHotel.Catalog.Clothing;
 using Plus.HabboHotel.Users.Clothing.Parts;
+using System.IO;
 
 namespace Plus.Core.FigureData
 {
@@ -38,8 +39,11 @@ namespace Plus.Core.FigureData
             if (this._setTypes.Count > 0)
                 this._setTypes.Clear();
 
+
+            string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(@"extra/figuredata.xml");
+            xDoc.Load(projectSolutionPath + "\\Config\\figuredata.xml");
 
             XmlNodeList Colors = xDoc.GetElementsByTagName("colors");
             foreach (XmlNode Node in Colors)
