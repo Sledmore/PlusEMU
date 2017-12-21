@@ -6,31 +6,31 @@ namespace Plus.Communication.Packets.Outgoing.Catalog
 {
     public class CatalogIndexComposer : ServerPacket
     {
-        public CatalogIndexComposer(GameClient Session, ICollection<CatalogPage> Pages, int Sub = 0)
+        public CatalogIndexComposer(GameClient sesion, ICollection<CatalogPage> pages)
             : base(ServerPacketHeader.CatalogIndexMessageComposer)
         {
-            WriteRootIndex(Session, Pages);
+            WriteRootIndex(sesion, pages);
 
-            foreach (CatalogPage Parent in Pages)
+            foreach (CatalogPage Parent in pages)
             {
-                if (Parent.ParentId != -1 || Parent.MinimumRank > Session.GetHabbo().Rank || (Parent.MinimumVIP > Session.GetHabbo().VIPRank && Session.GetHabbo().Rank == 1))
+                if (Parent.ParentId != -1 || Parent.MinimumRank > sesion.GetHabbo().Rank || (Parent.MinimumVIP > sesion.GetHabbo().VIPRank && sesion.GetHabbo().Rank == 1))
                     continue;
 
-                WritePage(Parent, CalcTreeSize(Session, Pages, Parent.Id));
+                WritePage(Parent, CalcTreeSize(sesion, pages, Parent.Id));
 
-                foreach (CatalogPage child in Pages)
+                foreach (CatalogPage child in pages)
                 {
-                    if (child.ParentId != Parent.Id || child.MinimumRank > Session.GetHabbo().Rank || (child.MinimumVIP > Session.GetHabbo().VIPRank && Session.GetHabbo().Rank == 1))
+                    if (child.ParentId != Parent.Id || child.MinimumRank > sesion.GetHabbo().Rank || (child.MinimumVIP > sesion.GetHabbo().VIPRank && sesion.GetHabbo().Rank == 1))
                         continue;
 
                     if (child.Enabled)
-                        WritePage(child, CalcTreeSize(Session, Pages, child.Id));
+                        WritePage(child, CalcTreeSize(sesion, pages, child.Id));
                     else
-                        WriteNodeIndex(child, CalcTreeSize(Session, Pages, child.Id));
+                        WriteNodeIndex(child, CalcTreeSize(sesion, pages, child.Id));
                     
-                    foreach (CatalogPage SubChild in Pages)
+                    foreach (CatalogPage SubChild in pages)
                     {
-                        if (SubChild.ParentId != child.Id || SubChild.MinimumRank > Session.GetHabbo().Rank)
+                        if (SubChild.ParentId != child.Id || SubChild.MinimumRank > sesion.GetHabbo().Rank)
                             continue;
 
                         WritePage(SubChild, 0);

@@ -256,7 +256,7 @@ namespace Plus.Communication.ConnectionManager
         {
             if (parser != null)
             {
-                parser.handlePacketData(packet);
+                parser.HandlePacketData(packet);
             }
         }
 

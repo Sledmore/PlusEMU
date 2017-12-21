@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
 
 using Plus.HabboHotel.Users;
 
 using Plus.Database.Interfaces;
 
-
 namespace Plus.HabboHotel.Items
 {
-    public class ItemFactory
+    public static class ItemFactory
     {
         public static Item CreateSingleItemNullable(ItemData Data, Habbo Habbo, string ExtraData, string DisplayFlags, int GroupId = 0, int LimitedNumber = 0, int LimitedStack = 0)
         {

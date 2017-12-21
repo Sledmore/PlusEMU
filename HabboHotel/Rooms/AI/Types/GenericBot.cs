@@ -71,7 +71,7 @@ namespace Plus.HabboHotel.Rooms.AI.Types
                     string String = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Speech.Message);
                     if (String.Contains("<img src") || String.Contains("<font ") || String.Contains("</font>") || String.Contains("</a>") || String.Contains("<i>"))
                         String = "I really shouldn't be using HTML within bot speeches.";
-                    GetRoomUser().Chat(String, false, GetBotData().ChatBubble);
+                    GetRoomUser().Chat(String, GetBotData().ChatBubble);
                 }
                 SpeechTimer = GetBotData().SpeakingInterval;
             }

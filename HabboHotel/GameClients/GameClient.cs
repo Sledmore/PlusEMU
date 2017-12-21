@@ -55,7 +55,7 @@ namespace Plus.HabboHotel.GameClients
             byte[] data = (_connection.parser as InitialPacketParser).currentData;
             _connection.parser.Dispose();
             _connection.parser = _packetParser;
-            _connection.parser.handlePacketData(data);
+            _connection.parser.HandlePacketData(data);
         }
 
         private void parser_onNewPacket(ClientPacket Message)

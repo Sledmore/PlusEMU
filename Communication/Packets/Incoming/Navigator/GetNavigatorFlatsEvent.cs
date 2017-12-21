@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Plus.HabboHotel.GameClients;
-using Plus.Communication.Packets.Incoming;
 using Plus.Communication.Packets.Outgoing.Navigator;
 using Plus.HabboHotel.Navigator;
 
@@ -12,11 +7,11 @@ namespace Plus.Communication.Packets.Incoming.Navigator
 {
     class GetNavigatorFlatsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            ICollection<SearchResultList> Categories = PlusEnvironment.GetGame().GetNavigator().GetEventCategories();
+            ICollection<SearchResultList> categories = PlusEnvironment.GetGame().GetNavigator().GetEventCategories();
 
-            Session.SendPacket(new NavigatorFlatCatsComposer(Categories, Session.GetHabbo().Rank));
+            session.SendPacket(new NavigatorFlatCatsComposer(categories));
         }
     }
 }

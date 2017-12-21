@@ -123,7 +123,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                         NewY = user.Y + 2;
                     }
 
-                    if (!this._room.GetRoomItemHandler().CheckPosItem(user.GetClient(), item, NewX, NewY, item.Rotation, false, false))
+                    if (!this._room.GetRoomItemHandler().CheckPosItem(item, NewX, NewY, item.Rotation))
                     {
                         if (user.RotBody == 0)
                         {

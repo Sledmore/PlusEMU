@@ -4,6 +4,6 @@ namespace Plus.Communication.ConnectionManager
 {
     public interface IDataParser : IDisposable, ICloneable
     {
-        void handlePacketData(byte[] packet);
+        void HandlePacketData(byte[] packet);
     }
 }

@@ -20,11 +20,11 @@ namespace Plus.HabboHotel.Rooms
         public SquareState[,] SqState;
         private RoomModel staticModel;
 
-        private string RelativeHeightmap = null;
+        private string _relativeHeightmap = null;
 
-        public DynamicRoomModel(RoomModel pModel)
+        public DynamicRoomModel(RoomModel model)
         {
-            staticModel = pModel;
+            staticModel = model;
             DoorX = staticModel.DoorX;
             DoorY = staticModel.DoorY;
             DoorZ = staticModel.DoorZ;
@@ -36,13 +36,8 @@ namespace Plus.HabboHotel.Rooms
             MapSizeY = staticModel.MapSizeY;
             ClubOnly = staticModel.ClubOnly;
 
-            this.RelativeHeightmap = string.Empty;
+            this._relativeHeightmap = string.Empty;
 
-            Generate();
-        }
-
-        public void Generate()
-        {
             SqState = new SquareState[MapSizeX, MapSizeY];
             SqFloorHeight = new short[MapSizeX, MapSizeY];
             SqSeatRot = new byte[MapSizeX, MapSizeY];
@@ -64,11 +59,6 @@ namespace Plus.HabboHotel.Rooms
                 }
             }
 
-            this.Make();
-        }
-
-        private void Make()
-        {
             var FloorMap = new StringBuilder();
 
             for (int y = 0; y < MapSizeY; y++)
@@ -95,10 +85,10 @@ namespace Plus.HabboHotel.Rooms
                 FloorMap.Append(Convert.ToChar(13));
             }
 
-            this.RelativeHeightmap = FloorMap.ToString();
+            this._relativeHeightmap = FloorMap.ToString();
         }
 
-        public void refreshArrays()
+        public void RefreshArrays()
         {
             var newSqState = new SquareState[MapSizeX + 1, MapSizeY + 1];
             var newSqFloorHeight = new short[MapSizeX + 1, MapSizeY + 1];
@@ -129,15 +119,13 @@ namespace Plus.HabboHotel.Rooms
 
         public string GetRelativeHeightmap()
         {
-            return this.RelativeHeightmap;
+            return this._relativeHeightmap;
         }
-
-
 
         public void AddX()
         {
             MapSizeX++;
-            refreshArrays();
+            RefreshArrays();
         }
 
         public void OpenSquare(int x, int y, double z)
@@ -153,7 +141,7 @@ namespace Plus.HabboHotel.Rooms
         public void AddY()
         {
             MapSizeY++;
-            refreshArrays();
+            RefreshArrays();
         }
 
         public bool DoorIsValid()
@@ -168,7 +156,7 @@ namespace Plus.HabboHotel.Rooms
         {
             MapSizeX = x;
             MapSizeY = y;
-            refreshArrays();
+            RefreshArrays();
         }
 
         public void Destroy()

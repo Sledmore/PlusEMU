@@ -9,7 +9,7 @@ namespace Plus.Communication
 
         public byte[] currentData;
 
-        public void handlePacketData(byte[] packet)
+        public void HandlePacketData(byte[] packet)
         {
             if (packet[0] == 60 && PolicyRequest != null)
             {

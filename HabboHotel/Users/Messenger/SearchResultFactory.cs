@@ -7,7 +7,7 @@ using Plus.Database.Interfaces;
 
 namespace Plus.HabboHotel.Users.Messenger
 {
-    public class SearchResultFactory
+    public static class SearchResultFactory
     {
         public static List<SearchResult> GetSearchResult(string query)
         {

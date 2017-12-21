@@ -120,11 +120,11 @@
     }
 
 
-    public class InteractionTypes
+    public static class InteractionTypes
     {
-        public static InteractionType GetTypeFromString(string pType)
+        public static InteractionType GetTypeFromString(string type)
         {
-            switch (pType.ToLower())
+            switch (type.ToLower())
             {
                 case "":
                 case "default":

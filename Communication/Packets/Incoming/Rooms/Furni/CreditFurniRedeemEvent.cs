@@ -57,7 +57,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
             }
 
             Session.SendPacket(new FurniListUpdateComposer());
-            Room.GetRoomItemHandler().RemoveFurniture(null, Exchange.Id, false);
+            Room.GetRoomItemHandler().RemoveFurniture(null, Exchange.Id);
             Session.GetHabbo().GetInventoryComponent().RemoveItem(Exchange.Id);
 
         }

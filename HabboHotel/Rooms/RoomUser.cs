@@ -274,7 +274,7 @@ namespace Plus.HabboHotel.Rooms
             mClient = null;
         }
 
-        public void Chat(string Message, bool Shout, int colour = 0)
+        public void Chat(string Message, int colour = 0)
         {
             if (GetRoom() == null)
                 return;

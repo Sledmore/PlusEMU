@@ -12,11 +12,11 @@ using Plus.HabboHotel.Users.Relationships;
 
 namespace Plus.HabboHotel.Users.UserData
 {
-    public class UserDataFactory
+    public static class UserDataFactory
     {
         public static UserData GetUserData(string SessionTicket, out byte errorCode)
         {
-            int UserId;
+            int userId;
             DataRow dUserInfo = null;
             DataTable dAchievements = null;
             DataTable dFavouriteRooms = null;
@@ -39,21 +39,21 @@ namespace Plus.HabboHotel.Users.UserData
                     return null;
                 }
 
-                UserId = Convert.ToInt32(dUserInfo["id"]);
-                if (PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId) != null)
+                userId = Convert.ToInt32(dUserInfo["id"]);
+                if (PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
                 {
                     errorCode = 2;
-                    PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId).Disconnect();
+                    PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(userId).Disconnect();
                     return null;
                 }
 
-                dbClient.SetQuery("SELECT `group`,`level`,`progress` FROM `user_achievements` WHERE `userid` = '" + UserId + "'");
+                dbClient.SetQuery("SELECT `group`,`level`,`progress` FROM `user_achievements` WHERE `userid` = '" + userId + "'");
                 dAchievements = dbClient.GetTable();
 
-                dbClient.SetQuery("SELECT room_id FROM user_favorites WHERE `user_id` = '" + UserId + "'");
+                dbClient.SetQuery("SELECT room_id FROM user_favorites WHERE `user_id` = '" + userId + "'");
                 dFavouriteRooms = dbClient.GetTable();
                 
-                dbClient.SetQuery("SELECT `badge_id`,`badge_slot` FROM user_badges WHERE `user_id` = '" + UserId + "'");
+                dbClient.SetQuery("SELECT `badge_id`,`badge_slot` FROM user_badges WHERE `user_id` = '" + userId + "'");
                 dBadges = dbClient.GetTable();
 
                 dbClient.SetQuery(
@@ -61,35 +61,35 @@ namespace Plus.HabboHotel.Users.UserData
                     "FROM users " +
                     "JOIN messenger_friendships " +
                     "ON users.id = messenger_friendships.user_one_id " +
-                    "WHERE messenger_friendships.user_two_id = " + UserId + " " +
+                    "WHERE messenger_friendships.user_two_id = " + userId + " " +
                     "UNION ALL " +
                     "SELECT users.id,users.username,users.motto,users.look,users.last_online,users.hide_inroom,users.hide_online " +
                     "FROM users " +
                     "JOIN messenger_friendships " +
                     "ON users.id = messenger_friendships.user_two_id " +
-                    "WHERE messenger_friendships.user_one_id = " + UserId);
+                    "WHERE messenger_friendships.user_one_id = " + userId);
                 dFriends = dbClient.GetTable();
 
-                dbClient.SetQuery("SELECT messenger_requests.from_id,messenger_requests.to_id,users.username FROM users JOIN messenger_requests ON users.id = messenger_requests.from_id WHERE messenger_requests.to_id = " + UserId);
+                dbClient.SetQuery("SELECT messenger_requests.from_id,messenger_requests.to_id,users.username FROM users JOIN messenger_requests ON users.id = messenger_requests.from_id WHERE messenger_requests.to_id = " + userId);
                 dRequests = dbClient.GetTable();
 
-                dbClient.SetQuery("SELECT `quest_id`,`progress` FROM user_quests WHERE `user_id` = '" + UserId + "'");
+                dbClient.SetQuery("SELECT `quest_id`,`progress` FROM user_quests WHERE `user_id` = '" + userId + "'");
                 dQuests = dbClient.GetTable();
 
-                dbClient.SetQuery("SELECT `id`,`user_id`,`target`,`type` FROM `user_relationships` WHERE `user_id` = '" + UserId + "'");
+                dbClient.SetQuery("SELECT `id`,`user_id`,`target`,`type` FROM `user_relationships` WHERE `user_id` = '" + userId + "'");
                 dRelations = dbClient.GetTable();
 
-                dbClient.SetQuery("SELECT * FROM `user_info` WHERE `user_id` = '" + UserId + "' LIMIT 1");
+                dbClient.SetQuery("SELECT * FROM `user_info` WHERE `user_id` = '" + userId + "' LIMIT 1");
                 UserInfo = dbClient.GetRow();
                 if (UserInfo == null)
                 {
-                    dbClient.RunQuery("INSERT INTO `user_info` (`user_id`) VALUES ('" + UserId + "')");
+                    dbClient.RunQuery("INSERT INTO `user_info` (`user_id`) VALUES ('" + userId + "')");
 
-                    dbClient.SetQuery("SELECT * FROM `user_info` WHERE `user_id` = '" + UserId + "' LIMIT 1");
+                    dbClient.SetQuery("SELECT * FROM `user_info` WHERE `user_id` = '" + userId + "' LIMIT 1");
                     UserInfo = dbClient.GetRow();
                 }
 
-                dbClient.RunQuery("UPDATE `users` SET `online` = '1', `auth_ticket` = '' WHERE `id` = '" + UserId + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE `users` SET `online` = '1', `auth_ticket` = '' WHERE `id` = '" + userId + "' LIMIT 1");
             }
 
             ConcurrentDictionary<string, UserAchievement> Achievements = new ConcurrentDictionary<string, UserAchievement>();
@@ -121,7 +121,7 @@ namespace Plus.HabboHotel.Users.UserData
                 bool friendHideOnline = PlusEnvironment.EnumToBool(dRow["hide_online"].ToString());
                 bool friendHideRoom = PlusEnvironment.EnumToBool(dRow["hide_inroom"].ToString());
 
-                if (friendID == UserId)
+                if (friendID == userId)
                     continue;
 
                 if (!friends.ContainsKey(friendID))
@@ -136,15 +136,15 @@ namespace Plus.HabboHotel.Users.UserData
 
                 string requestUsername = Convert.ToString(dRow["username"]);
 
-                if (receiverID != UserId)
+                if (receiverID != userId)
                 {
                     if (!requests.ContainsKey(receiverID))
-                        requests.Add(receiverID, new MessengerRequest(UserId, receiverID, requestUsername));
+                        requests.Add(receiverID, new MessengerRequest(userId, receiverID, requestUsername));
                 }
                 else
                 {
                     if (!requests.ContainsKey(senderID))
-                        requests.Add(senderID, new MessengerRequest(UserId, senderID, requestUsername));
+                        requests.Add(senderID, new MessengerRequest(userId, senderID, requestUsername));
                 }
             }
 
@@ -177,7 +177,7 @@ namespace Plus.HabboHotel.Users.UserData
             dRelations = null;
 
             errorCode = 0;
-            return new UserData(UserId, Achievements, favouritedRooms, badges, friends, requests, quests, user, Relationships);
+            return new UserData(userId, Achievements, favouritedRooms, badges, friends, requests, quests, user, Relationships);
         }
 
         public static UserData GetUserData(int UserId)

@@ -2,7 +2,7 @@
 
 namespace Plus.HabboHotel.Rooms.PathFinding
 {
-    public class PathFinder
+    public static class PathFinder
     {
         public static Vector2D[] DiagMovePoints = new[]
             {

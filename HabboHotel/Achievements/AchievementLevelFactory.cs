@@ -5,7 +5,7 @@ using Plus.Database.Interfaces;
 
 namespace Plus.HabboHotel.Achievements
 {
-    public class AchievementLevelFactory
+    public static class AchievementLevelFactory
     {
         public static void GetAchievementLevels(out Dictionary<string, Achievement> achievements)
         {

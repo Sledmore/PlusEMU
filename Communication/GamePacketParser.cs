@@ -10,12 +10,12 @@ namespace Plus.Communication
 {
     public class GamePacketParser : IDataParser
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.Messages.Net.GamePacketParser");
+        private static readonly ILog log = LogManager.GetLogger("Plus.Communication.GamePacketParser");
 
         public delegate void HandlePacket(ClientPacket message);
 
-        private readonly GameClient currentClient;
-        private ConnectionInformation con;
+        private readonly GameClient _currentClient;
+        private ConnectionInformation _con;
 
         private bool _halfDataRecieved = false;
         private byte[] _halfData = null;
@@ -23,39 +23,39 @@ namespace Plus.Communication
 
         public GamePacketParser(GameClient me)
         {
-            currentClient = me;
+            _currentClient = me;
         }
 
-        public void handlePacketData(byte[] Data)
+        public void HandlePacketData(byte[] data)
         {
             try
             {
-                if (this.currentClient.RC4Client != null && !this._deciphered)
+                if (this._currentClient.RC4Client != null && !this._deciphered)
                 {
-                    this.currentClient.RC4Client.Decrypt(ref Data);
+                    this._currentClient.RC4Client.Decrypt(ref data);
                     this._deciphered = true;
                 }
 
                 if (this._halfDataRecieved)
                 {
-                    byte[] FullDataRcv = new byte[this._halfData.Length + Data.Length];
+                    byte[] FullDataRcv = new byte[this._halfData.Length + data.Length];
                     Buffer.BlockCopy(this._halfData, 0, FullDataRcv, 0, this._halfData.Length);
-                    Buffer.BlockCopy(Data, 0, FullDataRcv, this._halfData.Length, Data.Length);
+                    Buffer.BlockCopy(data, 0, FullDataRcv, this._halfData.Length, data.Length);
 
                     this._halfDataRecieved = false; // mark done this round
-                    handlePacketData(FullDataRcv); // repeat now we have the combined array
+                    HandlePacketData(FullDataRcv); // repeat now we have the combined array
                     return;
                 }
 
-                using (BinaryReader Reader = new BinaryReader(new MemoryStream(Data)))
+                using (BinaryReader Reader = new BinaryReader(new MemoryStream(data)))
                 {
-                    if (Data.Length < 4)
+                    if (data.Length < 4)
                         return;
 
                     int MsgLen = HabboEncoding.DecodeInt32(Reader.ReadBytes(4));
                     if ((Reader.BaseStream.Length - 4) < MsgLen)
                     {
-                        this._halfData = Data;
+                        this._halfData = data;
                         this._halfDataRecieved = true;
                         return;
                     }
@@ -80,10 +80,10 @@ namespace Plus.Communication
                     if (Reader.BaseStream.Length - 4 > MsgLen)
                     {
                         byte[] Extra = new byte[Reader.BaseStream.Length - Reader.BaseStream.Position];
-                        Buffer.BlockCopy(Data, (int)Reader.BaseStream.Position, Extra, 0, (int)(Reader.BaseStream.Length - Reader.BaseStream.Position));
+                        Buffer.BlockCopy(data, (int)Reader.BaseStream.Position, Extra, 0, (int)(Reader.BaseStream.Length - Reader.BaseStream.Position));
 
                         this._deciphered = true;
-                        handlePacketData(Extra);
+                        HandlePacketData(Extra);
                     }
                 }
             }
@@ -101,14 +101,14 @@ namespace Plus.Communication
 
         public object Clone()
         {
-            return new GamePacketParser(currentClient);
+            return new GamePacketParser(_currentClient);
         }
 
         public event HandlePacket onNewPacket;
 
         public void SetConnection(ConnectionInformation con)
         {
-            this.con = con;
+            _con = con;
             onNewPacket = null;
         }
     }

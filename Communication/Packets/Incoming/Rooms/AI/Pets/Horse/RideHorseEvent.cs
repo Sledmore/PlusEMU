@@ -53,7 +53,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                 {
                     string[] Speech2 = PlusEnvironment.GetGame().GetChatManager().GetPetLocale().GetValue("pet.alreadymounted");
                     var RandomSpeech2 = new Random();
-                    Pet.Chat(Speech2[RandomSpeech2.Next(0, Speech2.Length - 1)], false);
+                    Pet.Chat(Speech2[RandomSpeech2.Next(0, Speech2.Length - 1)]);
                 }
                 else if (User.RidingHorse)
                 {

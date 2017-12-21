@@ -88,7 +88,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
 
             try
             {
-                DoorZ = parse(modelData[DoorY][DoorX]);
+                DoorZ = Parse(modelData[DoorY][DoorX]);
             }
             catch { }
 
@@ -173,7 +173,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
             }
         }
 
-        public static short parse(char input)
+        public static short Parse(char input)
         {
 
             switch (input)

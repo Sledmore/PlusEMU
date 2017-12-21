@@ -88,9 +88,9 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (!this.Requested || String.IsNullOrEmpty(this.StringData) || this.StringData == "0;0;0" || this.SetItems.Count == 0)
                 return false;
 
-            foreach (Item Item in this.SetItems.Values.ToList())
+            foreach (Item item in this.SetItems.Values.ToList())
             {
-                if (Instance.GetRoomItemHandler().GetFloor == null && !Instance.GetRoomItemHandler().GetFloor.Contains(Item))
+                if (Instance.GetRoomItemHandler().GetFloor == null && !Instance.GetRoomItemHandler().GetFloor.Contains(item))
                     continue;
 
                 foreach (string I in this.ItemsData.Split(';'))
@@ -135,7 +135,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     try
                     {
                         if (int.Parse(this.StringData.Split(';')[2]) == 1)//Position
-                            this.SetPosition(II, Convert.ToInt32(part[0].ToString()), Convert.ToInt32(part[1].ToString()), Convert.ToDouble(part[2].ToString()), Convert.ToInt32(part[3].ToString()));
+                            this.SetPosition(II, Convert.ToInt32(part[0].ToString()), Convert.ToInt32(part[1].ToString()), Convert.ToDouble(part[2].ToString()));
                     }
                     catch (Exception e) { ExceptionLogger.LogWiredException(e); }
                 }
@@ -165,7 +165,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             Item.UpdateState(false, true);
         }
 
-        private void SetPosition(Item Item, int CoordX, int CoordY, double CoordZ, int Rotation)
+        private void SetPosition(Item Item, int CoordX, int CoordY, double CoordZ)
         {
             Instance.SendPacket(new SlideObjectBundleComposer(Item.GetX, Item.GetY, Item.GetZ, CoordX, CoordY, CoordZ, 0, 0, Item.Id));
 

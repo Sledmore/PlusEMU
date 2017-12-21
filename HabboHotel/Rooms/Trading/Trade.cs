@@ -19,21 +19,21 @@ namespace Plus.HabboHotel.Rooms.Trading
 
         private Room Instance = null;
 
-        public Trade(int Id, RoomUser Player1, RoomUser Player2, Room Instance)
+        public Trade(int id, RoomUser playerOne, RoomUser playerTwo, Room room)
         {
             Id = Id;
             CanChange = true;
-            Instance = Instance;
+            Instance = room;
             Users = new TradeUser[2];
-            Users[0] = new TradeUser(Player1);
-            Users[1] = new TradeUser(Player2);
+            Users[0] = new TradeUser(playerOne);
+            Users[1] = new TradeUser(playerTwo);
 
-            Player1.IsTrading = true;
-            Player1.TradeId = Id;
-            Player1.TradePartner = Player2.UserId;
-            Player2.IsTrading = true;
-            Player2.TradeId = Id;
-            Player2.TradePartner = Player1.UserId;
+            playerOne.IsTrading = true;
+            playerOne.TradeId = Id;
+            playerOne.TradePartner = playerTwo.UserId;
+            playerTwo.IsTrading = true;
+            playerTwo.TradeId = Id;
+            playerTwo.TradePartner = playerOne.UserId;
         }
 
         public void SendPacket(ServerPacket packet)

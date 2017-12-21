@@ -5,62 +5,62 @@ namespace Plus.HabboHotel.Rooms
 {
     static class RoomAppender
     {
-        public static void WriteRoom(ServerPacket Packet, RoomData Data, RoomPromotion Promotion, bool NewNavigator = false)
+        public static void WriteRoom(ServerPacket packet, RoomData data, RoomPromotion promotion)
         {
-            Packet.WriteInteger(Data.Id);
-            Packet.WriteString(Data.Name);
-            Packet.WriteInteger(Data.OwnerId);
-            Packet.WriteString(Data.OwnerName);
-            Packet.WriteInteger(RoomAccessUtility.GetRoomAccessPacketNum(Data.Access));
-            Packet.WriteInteger(Data.UsersNow);
-            Packet.WriteInteger(Data.UsersMax);
-            Packet.WriteString(Data.Description);
-            Packet.WriteInteger(Data.TradeSettings);
-            Packet.WriteInteger(Data.Score);
-            Packet.WriteInteger(0);//Top rated room rank.
-            Packet.WriteInteger(Data.Category);
+            packet.WriteInteger(data.Id);
+            packet.WriteString(data.Name);
+            packet.WriteInteger(data.OwnerId);
+            packet.WriteString(data.OwnerName);
+            packet.WriteInteger(RoomAccessUtility.GetRoomAccessPacketNum(data.Access));
+            packet.WriteInteger(data.UsersNow);
+            packet.WriteInteger(data.UsersMax);
+            packet.WriteString(data.Description);
+            packet.WriteInteger(data.TradeSettings);
+            packet.WriteInteger(data.Score);
+            packet.WriteInteger(0);//Top rated room rank.
+            packet.WriteInteger(data.Category);
 
-            Packet.WriteInteger(Data.Tags.Count);
-            foreach (string tag in Data.Tags)
+            packet.WriteInteger(data.Tags.Count);
+            foreach (string tag in data.Tags)
             {
-                Packet.WriteString(tag);
+                packet.WriteString(tag);
             }
 
             int RoomType = 0;
-            if (Data.Group != null)
+            if (data.Group != null)
                 RoomType += 2;
-            if (Data.Promotion != null)
+            if (data.Promotion != null)
                 RoomType += 4;
-            if (Data.Type == "private")
+            if (data.Type == "private")
                 RoomType += 8;
-            if (Data.AllowPets == 1)
+            if (data.AllowPets == 1)
                 RoomType += 16;
 
             FeaturedRoom Item = null;
-            if (PlusEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(Data.Id, out Item))
+            if (PlusEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(data.Id, out Item))
             {
                 RoomType += 1;
             }
 
-            Packet.WriteInteger(RoomType);
+            packet.WriteInteger(RoomType);
 
             if (Item != null)
             {
-                Packet.WriteString(Item.Image);
+                packet.WriteString(Item.Image);
             }
 
-            if (Data.Group != null)
+            if (data.Group != null)
             {
-                Packet.WriteInteger(Data.Group == null ? 0 : Data.Group.Id);
-                Packet.WriteString(Data.Group == null ? "" : Data.Group.Name);
-                Packet.WriteString(Data.Group == null ? "" : Data.Group.Badge);
+                packet.WriteInteger(data.Group == null ? 0 : data.Group.Id);
+                packet.WriteString(data.Group == null ? "" : data.Group.Name);
+                packet.WriteString(data.Group == null ? "" : data.Group.Badge);
             }
 
-            if (Data.Promotion != null)
+            if (data.Promotion != null)
             {
-                Packet.WriteString(Promotion != null ? Promotion.Name : "");
-                Packet.WriteString(Promotion != null ? Promotion.Description : "");
-                Packet.WriteInteger(Promotion != null ? Promotion.MinutesLeft : 0);
+                packet.WriteString(promotion != null ? promotion.Name : "");
+                packet.WriteString(promotion != null ? promotion.Description : "");
+                packet.WriteInteger(promotion != null ? promotion.MinutesLeft : 0);
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Plus.HabboHotel.Quests
 {
-    public class QuestTypeUtillity
+    public static class QuestTypeUtillity
     {
         public static string GetString(QuestType type)
         {

@@ -254,9 +254,9 @@ namespace Plus.HabboHotel.Rooms
             return null;
         }
 
-        public void RemoveFurniture(GameClient Session, int pId, bool WasPicked = true)
+        public void RemoveFurniture(GameClient session, int id)
         {
-            Item Item = GetItem(pId);
+            Item Item = GetItem(id);
             if (Item == null)
                 return;
 
@@ -264,7 +264,7 @@ namespace Plus.HabboHotel.Rooms
                 _room.GetSoccer().UnRegisterGate(Item);
 
             if (Item.GetBaseItem().InteractionType != InteractionType.GIFT)
-                Item.Interactor.OnRemove(Session, Item);
+                Item.Interactor.OnRemove(session, Item);
 
             if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
             {
@@ -895,7 +895,7 @@ namespace Plus.HabboHotel.Rooms
         }
 
 
-        public bool CheckPosItem(GameClient Session, Item Item, int newX, int newY, int newRot, bool newItem, bool SendNotify = true)
+        public bool CheckPosItem(Item Item, int newX, int newY, int newRot)
         {
             try
             {

@@ -5,7 +5,7 @@ using Plus.Communication.Packets.Outgoing.Moderation;
 
 namespace Plus.Core
 {
-    public class ConsoleCommands
+    public static class ConsoleCommands
     {
         private static readonly ILog log = LogManager.GetLogger("Plus.Core.ConsoleCommands");
 

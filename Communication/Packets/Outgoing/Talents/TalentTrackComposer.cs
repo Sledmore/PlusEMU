@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Collections.Generic;
 
 using Plus.HabboHotel.Talents;
@@ -9,38 +7,38 @@ namespace Plus.Communication.Packets.Outgoing.Talents
 {
     class TalentTrackComposer : ServerPacket
     {
-        public TalentTrackComposer(ICollection<TalentTrackLevel> Levels, string Type)
+        public TalentTrackComposer(ICollection<TalentTrackLevel> levels, string type)
             : base(ServerPacketHeader.TalentTrackMessageComposer)
         {
-            base.WriteString("citizenship");
-            base.WriteInteger(Levels.Count);
+            base.WriteString(type);
+            base.WriteInteger(levels.Count);
 
-            foreach (TalentTrackLevel Level in Levels.ToList())
+            foreach (TalentTrackLevel level in levels.ToList())
             {
-                base.WriteInteger(Level.Level);//First level
+                base.WriteInteger(level.Level);//First level
                 base.WriteInteger(0);//Progress, 0 = nothing, 1 = started, 2 = done
 
-                base.WriteInteger(Level.GetSubLevels().Count);
-                foreach (TalentTrackSubLevel Sub in Level.GetSubLevels())
+                base.WriteInteger(level.GetSubLevels().Count);
+                foreach (TalentTrackSubLevel sub in level.GetSubLevels())
                 {
                     base.WriteInteger(0);//Achievement Id
                     base.WriteInteger(0);//Achievement level
-                    base.WriteString(Sub.Badge);//Achievement name
+                    base.WriteString(sub.Badge);//Achievement name
                     base.WriteInteger(0);//Progress, 0 = nothing, 1 = started, 2 = done
                     base.WriteInteger(0);//My actual progress
-                    base.WriteInteger(Sub.RequiredProgress);
+                    base.WriteInteger(sub.RequiredProgress);
                 }
 
-                base.WriteInteger(Level.Actions.Count);
-                foreach (string Action in Level.Actions.ToList())
+                base.WriteInteger(level.Actions.Count);
+                foreach (string action in level.Actions.ToList())
                 {
-                    base.WriteString(Action);
+                    base.WriteString(action);
                 }
 
-                base.WriteInteger(Level.Gifts.Count);
-                foreach (string Gift in Level.Gifts.ToList())
+                base.WriteInteger(level.Gifts.Count);
+                foreach (string gift in level.Gifts.ToList())
                 {
-                    base.WriteString(Gift);
+                    base.WriteString(gift);
                     base.WriteInteger(0);
                 }
             }

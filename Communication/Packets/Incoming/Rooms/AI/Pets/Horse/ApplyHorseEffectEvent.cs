@@ -1,12 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
-
-
 
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 using Plus.Communication.Packets.Outgoing.Rooms.AI.Pets;
@@ -17,28 +10,26 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
 {
     class ApplyHorseEffectEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
+                return;
+            
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
-                return;
-
-            int ItemId = Packet.PopInt();
-            Item Item = Room.GetRoomItemHandler().GetItem(ItemId);
+            int ItemId = packet.PopInt();
+            Item Item = room.GetRoomItemHandler().GetItem(ItemId);
             if (Item == null)
                 return;
 
-            int PetId = Packet.PopInt();
+            int PetId = packet.PopInt();
 
             RoomUser PetUser = null;
-            if (!Room.GetRoomUserManager().TryGetPet(PetId, out PetUser))
+            if (!room.GetRoomUserManager().TryGetPet(PetId, out PetUser))
                 return;
 
-            if (PetUser.PetData == null || PetUser.PetData.OwnerId != Session.GetHabbo().Id)
+            if (PetUser.PetData == null || PetUser.PetData.OwnerId != session.GetHabbo().Id)
                 return;
 
             if (Item.Data.InteractionType == InteractionType.HORSE_SADDLE_1)
@@ -51,7 +42,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                 }
 
                 //We only want to use this if we're successful. 
-                Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id, false);
+                room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
             }
             else if (Item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
             {
@@ -63,7 +54,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                 }
 
                 //We only want to use this if we're successful. 
-                Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id, false);
+                room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
             }
             else if (Item.Data.InteractionType == InteractionType.HORSE_HAIRSTYLE)
             {
@@ -80,7 +71,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                 }
 
                 //We only want to use this if we're successful. 
-                Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id, false);
+                room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
             }
             else if (Item.Data.InteractionType == InteractionType.HORSE_HAIR_DYE)
             {
@@ -97,7 +88,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                 }
 
                 //We only want to use this if we're successful. 
-                Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id, false);
+                room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
             }
             else if (Item.Data.InteractionType == InteractionType.HORSE_BODY_DYE)
             {
@@ -121,12 +112,12 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                 }
 
                 //We only want to use this if we're successful. 
-                Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id, false);
+                room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
             }
 
             //Update the Pet and the Pet figure information.
-            Room.SendPacket(new UsersComposer(PetUser));
-            Room.SendPacket(new PetHorseFigureInformationComposer(PetUser));
+            room.SendPacket(new UsersComposer(PetUser));
+            room.SendPacket(new PetHorseFigureInformationComposer(PetUser));
         }
     }
 }

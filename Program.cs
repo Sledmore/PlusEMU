@@ -7,7 +7,7 @@ using log4net.Config;
 
 namespace Plus
 {
-    public class Program
+    public static class Program
     {
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_CLOSE = 0xF060;

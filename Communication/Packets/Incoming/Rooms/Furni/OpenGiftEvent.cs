@@ -51,7 +51,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
             if (Data == null)
             {
                 Session.SendNotification("Oops! Appears there was a bug with this gift.\nWe'll just get rid of it for you.");
-                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id, false);
+                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
@@ -67,7 +67,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
             if (!int.TryParse(Present.ExtraData.Split(Convert.ToChar(5))[2], out PurchaserId))
             {
                 Session.SendNotification("Oops! Appears there was a bug with this gift.\nWe'll just get rid of it for you.");
-                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id, false);
+                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
@@ -83,7 +83,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
             if (Purchaser == null)
             {
                 Session.SendNotification("Oops! Appears there was a bug with this gift.\nWe'll just get rid of it for you.");
-                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id, false);
+                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
@@ -99,7 +99,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
             if (!PlusEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Data["base_id"]), out BaseItem))
             {
                 Session.SendNotification("Oops, it appears that the item within the gift is no longer in the hotel!");
-                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id, false);
+                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {

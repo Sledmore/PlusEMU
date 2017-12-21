@@ -1,6 +1,6 @@
 ﻿namespace Plus.HabboHotel.Rewards
 {
-    public class RewardTypeUtility
+    public static class RewardTypeUtility
     {
         public static RewardType GetType(string type)
         {
