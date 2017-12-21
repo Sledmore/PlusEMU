@@ -10,17 +10,11 @@ namespace Plus.Communication.Rcon
     {
         private Socket _musSocket;
 
-        private string _musIP;
-        private int _musPort;
-
         private List<string> _allowedConnections;
         private CommandManager _commands;
 
         public RconSocket(string musIP, int musPort, string[] allowedConnections)
         {
-            this._musIP = musIP;
-            this._musPort = musPort;
-
             this._allowedConnections = new List<string>();
             foreach (string ipAddress in allowedConnections)
             {
@@ -30,7 +24,7 @@ namespace Plus.Communication.Rcon
             try
             {
                 this._musSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this._musSocket.Bind(new IPEndPoint(IPAddress.Any, this._musPort));
+                this._musSocket.Bind(new IPEndPoint(IPAddress.Any, musPort)); // SHould be musIP?
                 this._musSocket.Listen(0);
                 this._musSocket.BeginAccept(OnCallBack, this._musSocket);
             }

@@ -331,7 +331,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
         public void MovePuck(Item item, GameClient mover, int newX, int newY, Team team)
         {
-            if (!_room.GetGameMap().itemCanBePlacedHere(newX, newY))
+            if (!_room.GetGameMap().ItemCanBePlaced(newX, newY))
                 return;
 
             Point oldRoomCoord = item.Coordinate;

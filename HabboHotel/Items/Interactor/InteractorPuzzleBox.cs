@@ -60,7 +60,7 @@ namespace Plus.HabboHotel.Items.Interactor
                 }
 
                 if (Room.GetGameMap().ValidTile(NewPoint.X, NewPoint.Y) &&
-                    Room.GetGameMap().itemCanBePlacedHere(NewPoint.X, NewPoint.Y) &&
+                    Room.GetGameMap().ItemCanBePlaced(NewPoint.X, NewPoint.Y) &&
                     Room.GetGameMap().CanRollItemHere(NewPoint.X, NewPoint.Y))
                 {
                     Double NewZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(NewPoint.X, NewPoint.Y);

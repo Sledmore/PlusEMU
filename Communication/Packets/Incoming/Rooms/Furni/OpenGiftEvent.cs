@@ -62,9 +62,8 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
                 Session.GetHabbo().GetInventoryComponent().RemoveItem(Present.Id);
                 return;
             }
-
-            int PurchaserId = 0;
-            if (!int.TryParse(Present.ExtraData.Split(Convert.ToChar(5))[2], out PurchaserId))
+            
+            if (!int.TryParse(Present.ExtraData.Split(Convert.ToChar(5))[2], out int PurchaserId))
             {
                 Session.SendNotification("Oops! Appears there was a bug with this gift.\nWe'll just get rid of it for you.");
                 Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
@@ -94,9 +93,8 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
                 Session.GetHabbo().GetInventoryComponent().RemoveItem(Present.Id);
                 return;
             }
-
-            ItemData BaseItem = null;
-            if (!PlusEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Data["base_id"]), out BaseItem))
+            
+            if (!PlusEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Data["base_id"]), out ItemData BaseItem))
             {
                 Session.SendNotification("Oops, it appears that the item within the gift is no longer in the hotel!");
                 Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);

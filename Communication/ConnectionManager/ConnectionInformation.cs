@@ -45,11 +45,6 @@ namespace Plus.Communication.ConnectionManager
         private bool isConnected;
 
         /// <summary>
-        ///     The manager which created this class
-        /// </summary>
-        private SocketManager manager;
-
-        /// <summary>
         ///     This item contains the data parser for the connection
         /// </summary>
         public IDataParser parser { get; set; }
@@ -72,7 +67,7 @@ namespace Plus.Communication.ConnectionManager
         {
             this.parser = parser;
             buffer = new byte[GameSocketManagerStatics.BUFFER_SIZE];
-            this.manager = manager;
+            //this.manager = manager;
             dataSocket = dataStream;
             dataSocket.SendBufferSize = GameSocketManagerStatics.BUFFER_SIZE;
             this.ip = ip;

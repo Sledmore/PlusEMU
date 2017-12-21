@@ -24,9 +24,8 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                 return;
 
             int PetId = packet.PopInt();
-
-            RoomUser PetUser = null;
-            if (!room.GetRoomUserManager().TryGetPet(PetId, out PetUser))
+            
+            if (!room.GetRoomUserManager().TryGetPet(PetId, out RoomUser PetUser))
                 return;
 
             if (PetUser.PetData == null || PetUser.PetData.OwnerId != session.GetHabbo().Id)

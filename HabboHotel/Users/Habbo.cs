@@ -38,8 +38,6 @@ namespace Plus.HabboHotel.Users
 {
     public class Habbo
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Users");
-
         //Generic player values.
         private int _id;
         private string _username;

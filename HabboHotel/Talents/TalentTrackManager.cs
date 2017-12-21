@@ -19,30 +19,32 @@ namespace Plus.HabboHotel.Talents
 
         public TalentTrackManager()
         {
-            this._citizenshipLevels = new Dictionary<int, TalentTrackLevel>();
+            _citizenshipLevels = new Dictionary<int, TalentTrackLevel>();
         }
 
         public void Init()
         {
-            DataTable GetTable = null;
+            DataTable data = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `type`,`level`,`data_actions`,`data_gifts` FROM `talents`");
-                GetTable = dbClient.GetTable();
+                data = dbClient.GetTable();
             }
 
-            if (GetTable != null)
+            if (data != null)
             {
-                foreach (DataRow Row in GetTable.Rows)
+                foreach (DataRow row in data.Rows)
                 {
-                    this._citizenshipLevels.Add(Convert.ToInt32(Row["level"]), new TalentTrackLevel(Convert.ToString(Row["type"]), Convert.ToInt32(Row["level"]), Convert.ToString(Row["data_actions"]), Convert.ToString(Row["data_gifts"])));
+                    _citizenshipLevels.Add(Convert.ToInt32(row["level"]), new TalentTrackLevel(Convert.ToString(row["type"]), Convert.ToInt32(row["level"]), Convert.ToString(row["data_actions"]), Convert.ToString(row["data_gifts"])));
                 }
             }
+
+            log.Info("Loaded " + _citizenshipLevels.Count + " talent track levels");
         }
 
         public ICollection<TalentTrackLevel> GetLevels()
         {
-            return this._citizenshipLevels.Values;
+            return _citizenshipLevels.Values;
         }
     }
 }

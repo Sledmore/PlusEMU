@@ -2,21 +2,21 @@
 {
     public class CatalogBot
     {
-        public int Id;
-        public string Figure;
-        public string Gender;
-        public string Motto;
-        public string Name;
-        public string AIType;
+        public int Id { get; private set; }
+        public string Figure { get; private set; }
+        public string Gender { get; private set; }
+        public string Motto { get; private set; }
+        public string Name { get; private set; }
+        public string AIType { get; private set; }
 
-        public CatalogBot(int Id, string Name, string Figure, string Motto, string Gender, string AIType)
+        public CatalogBot(int id, string name, string figure, string motto, string gender, string type)
         {
-            this.Id = Id;
-            this.Name = Name;
-            this.Figure = Figure;
-            this.Motto = Motto;
-            this.Gender = Gender;
-            this.AIType = AIType;
+            Id = id;
+            Name = name;
+            Figure = figure;
+            Motto = motto;
+            Gender = gender;
+            AIType = type;
         }
     }
 }

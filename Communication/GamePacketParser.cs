@@ -14,25 +14,24 @@ namespace Plus.Communication
 
         public delegate void HandlePacket(ClientPacket message);
 
-        private readonly GameClient _currentClient;
-        private ConnectionInformation _con;
+        private readonly GameClient _client;
 
         private bool _halfDataRecieved = false;
         private byte[] _halfData = null;
         private bool _deciphered = false;
 
-        public GamePacketParser(GameClient me)
+        public GamePacketParser(GameClient client)
         {
-            _currentClient = me;
+            _client = client;
         }
 
         public void HandlePacketData(byte[] data)
         {
             try
             {
-                if (this._currentClient.RC4Client != null && !this._deciphered)
+                if (this._client.RC4Client != null && !this._deciphered)
                 {
-                    this._currentClient.RC4Client.Decrypt(ref data);
+                    this._client.RC4Client.Decrypt(ref data);
                     this._deciphered = true;
                 }
 
@@ -101,14 +100,14 @@ namespace Plus.Communication
 
         public object Clone()
         {
-            return new GamePacketParser(_currentClient);
+            return new GamePacketParser(_client);
         }
 
         public event HandlePacket onNewPacket;
 
         public void SetConnection(ConnectionInformation con)
         {
-            _con = con;
+            // Connection information passes through, but we seemingly do nothing?
             onNewPacket = null;
         }
     }

@@ -148,7 +148,7 @@ namespace Plus.Communication.Encryption.Crypto.RSA
             {
                 int bl = this.GetBlockSize();
 
-                byte[] paddedBytes = this.pkcs1pad(src, bl, type);
+                byte[] paddedBytes = this.Pkcs1pad(src, bl, type);
                 BigInteger m = new BigInteger(paddedBytes);
                 if (m == 0)
                 {
@@ -182,7 +182,7 @@ namespace Plus.Communication.Encryption.Crypto.RSA
 
                 int bl = this.GetBlockSize();
 
-                byte[] bytes = this.pkcs1unpad(m.getBytes(), bl, type);
+                byte[] bytes = this.Pkcs1unpad(m.getBytes(), bl, type);
 
                 return bytes;
             }
@@ -192,7 +192,7 @@ namespace Plus.Communication.Encryption.Crypto.RSA
             }
         }
 
-        private byte[] pkcs1pad(byte[] src, int n, Pkcs1PadType type)
+        private byte[] Pkcs1pad(byte[] src, int n, Pkcs1PadType type)
         {
             byte[] bytes = new byte[n];
 
@@ -219,7 +219,7 @@ namespace Plus.Communication.Encryption.Crypto.RSA
             return bytes;
         }
 
-        private byte[] pkcs1unpad(byte[] src, int n, Pkcs1PadType type)
+        private byte[] Pkcs1unpad(byte[] src, int n, Pkcs1PadType type)
         {
             int i = 0;
             while (i < src.Length && src[i] == 0)

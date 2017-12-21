@@ -49,7 +49,7 @@ namespace Plus.HabboHotel.Items.Interactor
 
             if (NewMode == 0)
             {
-                if (!Item.GetRoom().GetGameMap().itemCanBePlacedHere(Item.GetX, Item.GetY))
+                if (!Item.GetRoom().GetGameMap().ItemCanBePlaced(Item.GetX, Item.GetY))
                 {
                     return;
                 }
@@ -58,7 +58,7 @@ namespace Plus.HabboHotel.Items.Interactor
             Item.ExtraData = NewMode.ToString();
             Item.UpdateState();
 
-            Item.GetRoom().GetGameMap().updateMapForItem(Item);
+            Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
             Item.GetRoom().GetWired().TriggerEvent(WiredBoxType.TriggerStateChanges, Session.GetHabbo(), Item);
             //Item.GetRoom().GenerateMaps();
         }
@@ -94,7 +94,7 @@ namespace Plus.HabboHotel.Items.Interactor
 
             if (NewMode == 0)
             {
-                if (!Item.GetRoom().GetGameMap().itemCanBePlacedHere(Item.GetX, Item.GetY))
+                if (!Item.GetRoom().GetGameMap().ItemCanBePlaced(Item.GetX, Item.GetY))
                 {
                     return;
                 }
@@ -103,7 +103,7 @@ namespace Plus.HabboHotel.Items.Interactor
             Item.ExtraData = NewMode.ToString();
             Item.UpdateState();
 
-            Item.GetRoom().GetGameMap().updateMapForItem(Item);
+            Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
             //Item.GetRoom().GenerateMaps();
         }
     }

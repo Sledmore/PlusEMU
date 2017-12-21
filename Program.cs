@@ -11,7 +11,6 @@ namespace Plus
     {
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_CLOSE = 0xF060;
-        private static readonly ILog log = LogManager.GetLogger("Plus.Program");
 
         [DllImport("Kernel32")]
         private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);

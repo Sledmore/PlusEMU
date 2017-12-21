@@ -193,7 +193,7 @@ namespace Plus.HabboHotel.Rooms
             {
                 if (!Model.DoorIsValid())
                 {
-                    Point Square = _room.GetGameMap().getRandomWalkableSquare();
+                    Point Square = _room.GetGameMap().GetRandomWalkableSquare();
                     Model.DoorX = Square.X;
                     Model.DoorY = Square.Y;
                     Model.DoorZ = _room.GetGameMap().GetHeightForSquareFromData(Square);

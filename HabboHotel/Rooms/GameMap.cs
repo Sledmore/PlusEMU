@@ -44,8 +44,10 @@ namespace Plus.HabboHotel.Rooms
             }
             else
             {
-                List<RoomUser> users = new List<RoomUser>();
-                users.Add(user);
+                List<RoomUser> users = new List<RoomUser>
+                {
+                    user
+                };
                 _userMap.TryAdd(coord, users);
             }
         }
@@ -98,7 +100,7 @@ namespace Plus.HabboHotel.Rooms
                 return new List<RoomUser>();
         }
 
-        public Point getRandomWalkableSquare()
+        public Point GetRandomWalkableSquare()
         {
             var walkableSquares = new List<Point>();
             for (int y = 0; y < _gameMap.GetUpperBound(1); y++)
@@ -124,7 +126,7 @@ namespace Plus.HabboHotel.Rooms
         }
 
 
-        public bool isInMap(int X, int Y)
+        public bool IsInMap(int X, int Y)
         {
             var walkableSquares = new List<Point>();
             for (int y = 0; y < _gameMap.GetUpperBound(1); y++)
@@ -166,7 +168,7 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public void updateMapForItem(Item item)
+        public void UpdateMapForItem(Item item)
         {
             RemoveFromMap(item);
             AddToMap(item);
@@ -835,32 +837,30 @@ namespace Plus.HabboHotel.Rooms
             return true;
         }
 
-        public double GetHeightForSquare(Point Coord)
+        public double GetHeightForSquare(Point coord)
         {
-            Item rItem;
-
-            if (GetHighestItemForSquare(Coord, out rItem))
+            if (GetHighestItemForSquare(coord, out Item rItem))
                 if (rItem != null)
                     return rItem.TotalHeight;
 
             return 0.0;
         }
 
-        public Point GetChaseMovement(Item Item)
+        public Point GetChaseMovement(Item item)
         {
             int Distance = 99;
             Point Coord = new Point(0, 0);
-            int iX = Item.GetX;
-            int iY = Item.GetY;
+            int iX = item.GetX;
+            int iY = item.GetY;
             bool X = false;
 
             foreach (RoomUser User in _room.GetRoomUserManager().GetRoomUsers())
             {
-                if (User.X == Item.GetX || Item.GetY == User.Y)
+                if (User.X == item.GetX || item.GetY == User.Y)
                 {
-                    if (User.X == Item.GetX)
+                    if (User.X == item.GetX)
                     {
-                        int Difference = Math.Abs(User.Y - Item.GetY);
+                        int Difference = Math.Abs(User.Y - item.GetY);
                         if (Difference < Distance)
                         {
                             Distance = Difference;
@@ -871,9 +871,9 @@ namespace Plus.HabboHotel.Rooms
                             continue;
 
                     }
-                    else if (User.Y == Item.GetY)
+                    else if (User.Y == item.GetY)
                     {
-                        int Difference = Math.Abs(User.X - Item.GetX);
+                        int Difference = Math.Abs(User.X - item.GetX);
                         if (Difference < Distance)
                         {
                             Distance = Difference;
@@ -889,7 +889,7 @@ namespace Plus.HabboHotel.Rooms
             }
 
             if (Distance > 5)
-                return Item.GetSides().OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+                return item.GetSides().OrderBy(x => Guid.NewGuid()).FirstOrDefault();
             if (X && Distance < 99)
             {
                 if (iX > Coord.X)
@@ -917,7 +917,7 @@ namespace Plus.HabboHotel.Rooms
                 }
             }
             else
-                return Item.Coordinate;
+                return item.Coordinate;
         }
 
         public bool IsValidStep2(RoomUser User, Vector2D From, Vector2D To, bool EndOfPath, bool Override)
@@ -1066,7 +1066,7 @@ namespace Plus.HabboHotel.Rooms
             return true;
         }
 
-        public bool itemCanBePlacedHere(int x, int y)
+        public bool ItemCanBePlaced(int x, int y)
         {
             if (_dynamicModel.MapSizeX - 1 < x || _dynamicModel.MapSizeY - 1 < y ||
                 (x == _dynamicModel.DoorX && y == _dynamicModel.DoorY))
@@ -1285,21 +1285,19 @@ namespace Plus.HabboHotel.Rooms
             return itemsToReturn;
         }
 
-        public List<Item> GetAllRoomItemForSquare(int pX, int pY)
+        public List<Item> GetAllRoomItemForSquare(int x, int y)
         {
-            Point Coord = new Point(pX, pY);
+            Point coord = new Point(x, y);
 
-            List<Item> Items = new List<Item>();
-            List<int> Ids;
+            List<Item> items = new List<Item>();
 
-            // CHANGED THIS ~  IF FAILED CHANGE BACK
 
-            if (_coordinatedItems.TryGetValue(Coord, out Ids))
-                Items = GetItemsFromIds(Ids);
+            if (_coordinatedItems.TryGetValue(coord, out List<int> Ids))
+                items = GetItemsFromIds(Ids);
             else
-                Items = new List<Item>();
+                items = new List<Item>();
 
-            return Items;
+            return items;
         }
 
         public bool SquareHasUsers(int X, int Y)

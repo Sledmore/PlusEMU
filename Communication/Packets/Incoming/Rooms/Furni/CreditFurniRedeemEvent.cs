@@ -19,9 +19,8 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
         {
             if (!Session.GetHabbo().InRoom)
                 return;
-
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
                 return;
 
             if (!Room.CheckRights(Session, true))

@@ -39,7 +39,7 @@ namespace Plus.HabboHotel.Rooms.AI.Types
 
         public override void OnSelfEnterRoom()
         {
-            Point nextCoord = GetRoom().GetGameMap().getRandomWalkableSquare();
+            Point nextCoord = GetRoom().GetGameMap().GetRandomWalkableSquare();
             //int randomX = PlusEnvironment.GetRandomNumber(0, GetRoom().Model.MapSizeX);
             //int randomY = PlusEnvironment.GetRandomNumber(0, GetRoom().Model.MapSizeY);
             if (GetRoomUser() != null)
@@ -127,7 +127,7 @@ namespace Plus.HabboHotel.Rooms.AI.Types
                         // Remove Status
                         RemovePetStatus();
 
-                        Point nextCoord = GetRoom().GetGameMap().getRandomWalkableSquare();
+                        Point nextCoord = GetRoom().GetGameMap().GetRandomWalkableSquare();
                         if (GetRoomUser().CanWalk)
                             GetRoomUser().MoveTo(nextCoord.X, nextCoord.Y);
                     }
@@ -207,7 +207,7 @@ namespace Plus.HabboHotel.Rooms.AI.Types
 
                             //int randomX = PlusEnvironment.GetRandomNumber(0, GetRoom().Model.MapSizeX);
                             //int randomY = PlusEnvironment.GetRandomNumber(0, GetRoom().Model.MapSizeY);
-                            Point nextCoord = GetRoom().GetGameMap().getRandomWalkableSquare();
+                            Point nextCoord = GetRoom().GetGameMap().GetRandomWalkableSquare();
                             Pet.MoveTo(nextCoord.X, nextCoord.Y);
 
                             Pet.PetData.Addexperience(10); // Give XP

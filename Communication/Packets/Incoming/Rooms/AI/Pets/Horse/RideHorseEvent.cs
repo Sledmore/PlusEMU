@@ -1,48 +1,37 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Drawing;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms.AI;
 using Plus.HabboHotel.Rooms;
 
-using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 using Plus.Communication.Packets.Outgoing.Rooms.AI.Pets;
-
-
 
 namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
 {
     class RideHorseEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null)
                 return;
 
-            int PetId = Packet.PopInt();
-            bool Type = Packet.PopBoolean();
-           
-            RoomUser Pet = null;
-            if (!Room.GetRoomUserManager().TryGetPet(PetId, out Pet))
+            int PetId = packet.PopInt();
+            bool Type = packet.PopBoolean();
+
+            if (!room.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
                 return;
 
             if (Pet.PetData == null)
                 return;
-            
-            if (Pet.PetData.AnyoneCanRide == 0 && Pet.PetData.OwnerId != User.UserId)
+
+            if (Pet.PetData.AnyoneCanRide == 0 && Pet.PetData.OwnerId != user.UserId)
             {
-                Session.SendNotification(
+                session.SendNotification(
                     "You are unable to ride this horse.\nThe owner of the pet has not selected for anyone to ride it.");
                 return;
             }
@@ -55,44 +44,41 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                     var RandomSpeech2 = new Random();
                     Pet.Chat(Speech2[RandomSpeech2.Next(0, Speech2.Length - 1)]);
                 }
-                else if (User.RidingHorse)
+                else if (user.RidingHorse)
                 {
-                    Session.SendNotification("You are already riding a horse!");
+                    session.SendNotification("You are already riding a horse!");
                 }
                 else
                 {
                     if (Pet.Statusses.Count > 0)
                         Pet.Statusses.Clear();
 
-                    int NewX2 = User.X;
-                    int NewY2 = User.Y;
-                    Room.SendPacket(Room.GetRoomItemHandler() .UpdateUserOnRoller(Pet, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2)));
-                    Room.SendPacket(Room.GetRoomItemHandler() .UpdateUserOnRoller(User, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2) + 1));
+                    int NewX2 = user.X;
+                    int NewY2 = user.Y;
+                    room.SendPacket(room.GetRoomItemHandler().UpdateUserOnRoller(Pet, new Point(NewX2, NewY2), 0, room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2)));
+                    room.SendPacket(room.GetRoomItemHandler().UpdateUserOnRoller(user, new Point(NewX2, NewY2), 0, room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2) + 1));
 
-                    User.MoveTo(NewX2, NewY2);
-                    
+                    user.MoveTo(NewX2, NewY2);
+
                     Pet.ClearMovement(true);
 
-                    User.RidingHorse = true;
+                    user.RidingHorse = true;
                     Pet.RidingHorse = true;
-                    Pet.HorseID = User.VirtualId;
-                    User.HorseID = Pet.VirtualId;
-                   
-                    User.ApplyEffect(77);
-            
-                    User.RotBody = Pet.RotBody;
-                    User.RotHead = Pet.RotHead;
-            
-                    User.UpdateNeeded = true;
+                    Pet.HorseID = user.VirtualId;
+                    user.HorseID = Pet.VirtualId;
+
+                    user.ApplyEffect(77);
+
+                    user.RotBody = Pet.RotBody;
+                    user.RotHead = Pet.RotHead;
+
+                    user.UpdateNeeded = true;
                     Pet.UpdateNeeded = true;
-
-     
-
                 }
             }
             else
             {
-                if (User.VirtualId == Pet.HorseID)
+                if (user.VirtualId == Pet.HorseID)
                 {
                     Pet.Statusses.Remove("sit");
                     Pet.Statusses.Remove("lay");
@@ -100,22 +86,22 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets.Horse
                     Pet.Statusses.Remove("eat");
                     Pet.Statusses.Remove("ded");
                     Pet.Statusses.Remove("jmp");
-                    User.RidingHorse = false;
-                    User.HorseID = 0;
+                    user.RidingHorse = false;
+                    user.HorseID = 0;
                     Pet.RidingHorse = false;
                     Pet.HorseID = 0;
-                    User.MoveTo(new Point(User.X + 2, User.Y + 2));
-                    User.ApplyEffect(-1);
-                    User.UpdateNeeded = true;
+                    user.MoveTo(new Point(user.X + 2, user.Y + 2));
+                    user.ApplyEffect(-1);
+                    user.UpdateNeeded = true;
                     Pet.UpdateNeeded = true;
                 }
                 else
                 {
-                    Session.SendNotification("Could not dismount this horse - You are not riding it!");
+                    session.SendNotification("Could not dismount this horse - You are not riding it!");
                 }
             }
 
-            Room.SendPacket(new PetHorseFigureInformationComposer(Pet));
+            room.SendPacket(new PetHorseFigureInformationComposer(Pet));
         }
     }
 }

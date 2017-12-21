@@ -35,18 +35,17 @@ namespace Plus.HabboHotel.Rooms
                 RoomType += 8;
             if (data.AllowPets == 1)
                 RoomType += 16;
-
-            FeaturedRoom Item = null;
-            if (PlusEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(data.Id, out Item))
+            
+            if (PlusEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(data.Id, out FeaturedRoom item))
             {
                 RoomType += 1;
             }
 
             packet.WriteInteger(RoomType);
 
-            if (Item != null)
+            if (item != null)
             {
-                packet.WriteString(Item.Image);
+                packet.WriteString(item.Image);
             }
 
             if (data.Group != null)

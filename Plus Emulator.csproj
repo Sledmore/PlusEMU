@@ -875,7 +875,6 @@
     <Compile Include="HabboHotel\Rooms\Instance\FilterComponent.cs" />
     <Compile Include="HabboHotel\Rooms\Instance\TradingComponent.cs" />
     <Compile Include="HabboHotel\Rooms\Instance\WiredComponent.cs" />
-    <Compile Include="HabboHotel\Rooms\Polls\RoomPollManager.cs" />
     <Compile Include="HabboHotel\Rooms\RoomAccess.cs" />
     <Compile Include="HabboHotel\Rooms\RoomAccessUtility.cs" />
     <Compile Include="HabboHotel\Rooms\RoomAppender.cs" />
@@ -1094,6 +1093,7 @@
     <Folder Include="Communication\Packets\Incoming\Rooms\Groups\" />
     <Folder Include="HabboHotel\Rooms\Chat\Commands\Roleplay\Generic\" />
     <Folder Include="HabboHotel\Rooms\Chat\Moderation\" />
+    <Folder Include="HabboHotel\Rooms\Polls\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -272,7 +272,7 @@ namespace Plus.HabboHotel.Rooms.Games.Football
             if (item == null || user == null)
                 return;
 
-            if (!_room.GetGameMap().itemCanBePlacedHere(newX, newY))
+            if (!_room.GetGameMap().ItemCanBePlaced(newX, newY))
                 return;
 
             Point oldRoomCoord = item.Coordinate;

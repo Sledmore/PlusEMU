@@ -56,7 +56,7 @@ namespace Plus.HabboHotel.Rooms.Games
                     }
                     else
                     {
-                        if (_room.GetGameMap().itemCanBePlacedHere(item.GetX, item.GetY))
+                        if (_room.GetGameMap().ItemCanBePlaced(item.GetX, item.GetY))
                         {
                             item.ExtraData = "0";
                             item.UpdateState();
