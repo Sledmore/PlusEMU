@@ -51,14 +51,14 @@ namespace Plus.HabboHotel.GameClients
         private void SwitchParserRequest()
         {
             _packetParser.SetConnection(_connection);
-            _packetParser.onNewPacket += parser_onNewPacket;
+            _packetParser.onNewPacket += Parser_onNewPacket;
             byte[] data = (_connection.parser as InitialPacketParser).currentData;
             _connection.parser.Dispose();
             _connection.parser = _packetParser;
             _connection.parser.HandlePacketData(data);
         }
 
-        private void parser_onNewPacket(ClientPacket Message)
+        private void Parser_onNewPacket(ClientPacket Message)
         {
             try
             {
@@ -174,16 +174,14 @@ namespace Plus.HabboHotel.GameClients
                         _habbo.MachineId = MachineId;
                     }
 
-                    PermissionGroup PermissionGroup = null;
-                    if (PlusEnvironment.GetGame().GetPermissionManager().TryGetGroup(_habbo.Rank, out PermissionGroup))
+                    if (PlusEnvironment.GetGame().GetPermissionManager().TryGetGroup(_habbo.Rank, out PermissionGroup group))
                     {
-                        if (!String.IsNullOrEmpty(PermissionGroup.Badge))
-                            if (!_habbo.GetBadgeComponent().HasBadge(PermissionGroup.Badge))
-                                _habbo.GetBadgeComponent().GiveBadge(PermissionGroup.Badge, true, this);
+                        if (!String.IsNullOrEmpty(group.Badge))
+                            if (!_habbo.GetBadgeComponent().HasBadge(group.Badge))
+                                _habbo.GetBadgeComponent().GiveBadge(group.Badge, true, this);
                     }
 
-                    SubscriptionData SubData = null;
-                    if (PlusEnvironment.GetGame().GetSubscriptionManager().TryGetSubscriptionData(this._habbo.VIPRank, out SubData))
+                    if (PlusEnvironment.GetGame().GetSubscriptionManager().TryGetSubscriptionData(this._habbo.VIPRank, out SubscriptionData SubData))
                     {
                         if (!String.IsNullOrEmpty(SubData.Badge))
                         {

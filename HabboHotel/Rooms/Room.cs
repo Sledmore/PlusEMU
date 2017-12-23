@@ -162,14 +162,14 @@ namespace Plus.HabboHotel.Rooms
         public TeamManager GetTeamManagerForBanzai()
         {
             if (teambanzai == null)
-                teambanzai = TeamManager.createTeamforGame("banzai");
+                teambanzai = TeamManager.CreateTeam("banzai");
             return teambanzai;
         }
 
         public TeamManager GetTeamManagerForFreeze()
         {
             if (teamfreeze == null)
-                teamfreeze = TeamManager.createTeamforGame("freeze");
+                teamfreeze = TeamManager.CreateTeam("freeze");
             return teamfreeze;
         }
 

@@ -66,8 +66,7 @@ namespace Plus.HabboHotel.Items
 
         public Item(int Id, int RoomId, int BaseItem, string ExtraData, int X, int Y, Double Z, int Rot, int Userid, int Group, int limitedNumber, int limitedStack, string wallCoord, Room Room = null)
         {
-            ItemData Data = null;
-            if (PlusEnvironment.GetGame().GetItemManager().GetItem(BaseItem, out Data))
+            if (PlusEnvironment.GetGame().GetItemManager().GetItem(BaseItem, out ItemData Data))
             {
                 this.Id = Id;
                 this.RoomId = RoomId;
@@ -225,8 +224,10 @@ namespace Plus.HabboHotel.Items
         {
             get
             {
-                var toReturn = new List<Point>();
-                toReturn.Add(Coordinate);
+                var toReturn = new List<Point>
+                {
+                    Coordinate
+                };
 
                 foreach (ThreeDCoord tile in _affectedPoints.Values)
                 {
@@ -239,13 +240,15 @@ namespace Plus.HabboHotel.Items
 
         public List<Point> GetSides()
         {
-            var toReturn = new List<Point>();
-            toReturn.Add(SquareBehind);
-            toReturn.Add(SquareInFront);
-            toReturn.Add(SquareLeft);
-            toReturn.Add(SquareRight);
-            toReturn.Add(Coordinate);
-            return toReturn;
+            var sides = new List<Point>
+            {
+                SquareBehind,
+                SquareInFront,
+                SquareLeft,
+                SquareRight,
+                Coordinate
+            };
+            return sides;
         }
 
         public double TotalHeight
@@ -253,11 +256,10 @@ namespace Plus.HabboHotel.Items
             get
             {
                 double CurHeight = 0.0;
-                int num2;
 
                 if (this.GetBaseItem().AdjustableHeights.Count > 1)
                 {
-                    if (int.TryParse(this.ExtraData, out num2) && (this.GetBaseItem().AdjustableHeights.Count) - 1 >= num2)
+                    if (int.TryParse(this.ExtraData, out int num2) && (this.GetBaseItem().AdjustableHeights.Count) - 1 >= num2)
                         CurHeight = this.GetZ + this.GetBaseItem().AdjustableHeights[num2];
                 }
 
@@ -1540,8 +1542,7 @@ namespace Plus.HabboHotel.Items
         {
             if (this._data == null)
             {
-                ItemData I = null;
-                if (PlusEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out I))
+                if (PlusEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out ItemData I))
                     this._data = I;
             }
 
@@ -1552,9 +1553,8 @@ namespace Plus.HabboHotel.Items
         {
             if (this._room != null)
                 return this._room;
-
-            Room Room;
-            if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(RoomId, out Room))
+            
+            if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(RoomId, out Room Room))
                 return Room;
 
             return null;

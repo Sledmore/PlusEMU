@@ -24,7 +24,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.AI.Pets
             base.WriteInteger(Pet.Level);
             base.WriteInteger(Pet.MaxLevel);
             base.WriteInteger(Pet.experience);
-            base.WriteInteger(Pet.experienceGoal);
+            base.WriteInteger(Pet.ExperienceGoal);
             base.WriteInteger(Pet.Energy);
             base.WriteInteger(Pet.MaxEnergy);
             base.WriteInteger(Pet.Nutrition);

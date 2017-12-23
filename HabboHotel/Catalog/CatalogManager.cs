@@ -78,9 +78,8 @@ namespace Plus.HabboHotel.Catalog
                         int PageId = Convert.ToInt32(Row["page_id"]);
                         int BaseId = Convert.ToInt32(Row["item_id"]);
                         int OfferId = Convert.ToInt32(Row["offer_id"]);
-
-                        ItemData Data = null;
-                        if (!ItemDataManager.GetItem(BaseId, out Data))
+                        
+                        if (!ItemDataManager.GetItem(BaseId, out ItemData Data))
                         {
                             log.Error("Couldn't load Catalog Item " + ItemId + ", no furniture record found.");
                             continue;

@@ -8,7 +8,7 @@ namespace Plus.Core
 {
     public class ServerStatusUpdater : IDisposable
     {
-        private static ILog log = LogManager.GetLogger("Plus.Core.ServerUpdater");
+        private static ILog log = LogManager.GetLogger("Plus.Core.ServerStatusUpdater");
 
         private const int UPDATE_IN_SECS = 30;
 

@@ -163,7 +163,9 @@ namespace Plus
 
                 log.Info("EMULATOR -> READY! (" + TimeUsed.Seconds + " s, " + TimeUsed.Milliseconds + " ms)");
             }
+#pragma warning disable CS0168 // The variable 'e' is declared but never used
             catch (KeyNotFoundException e)
+#pragma warning restore CS0168 // The variable 'e' is declared but never used
             { 
                 log.Error("Please check your configuration file - some values appear to be missing.");
                 log.Error("Press any key to shut down ...");

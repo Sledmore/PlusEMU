@@ -70,9 +70,6 @@ namespace Plus.HabboHotel.Achievements
             {
                 NewLevel++;
                 NewTarget++;
-
-                int ProgressRemainder = NewProgress - TargetLevelData.Requirement;
-
                 NewProgress = 0;
 
                 if (TargetLevel == 1)

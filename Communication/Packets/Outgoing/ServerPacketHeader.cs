@@ -298,7 +298,6 @@
         public const int BotInventoryMessageComposer = 3692;//2620
         public const int LoadGameMessageComposer = 652;//1403        
         public const int UpdateMagicTileMessageComposer = 2811;//2641
-        public const int CampaignCalendarDataMessageComposer = 2276;//1480
         public const int MaintenanceStatusMessageComposer = 3465;//3198
         public const int Game3WeeklyLeaderboardMessageComposer = 1326;//2194
         public const int GameListMessageComposer = 1220;//2481

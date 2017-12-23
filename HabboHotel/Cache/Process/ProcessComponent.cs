@@ -24,10 +24,12 @@ namespace Plus.HabboHotel.Cache.Process
         /// </summary>
         private bool _timerRunning = false;
 
+#pragma warning disable CS0414 // The field 'ProcessComponent._timerLagging' is assigned but its value is never used
         /// <summary>
         /// Checks if the timer is lagging behind (server can't keep up).
         /// </summary>
         private bool _timerLagging = false;
+#pragma warning restore CS0414 // The field 'ProcessComponent._timerLagging' is assigned but its value is never used
 
         /// <summary>
         /// Enable/Disable the timer WITHOUT disabling the timer itself.

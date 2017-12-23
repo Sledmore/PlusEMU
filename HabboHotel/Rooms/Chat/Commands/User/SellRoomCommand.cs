@@ -40,15 +40,14 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
                 Session.SendWhisper("Oops, this room has a group. You must delete the group before you can sell the room.");
                 return;
             }
-
-            int Price = 0;
-            if (!int.TryParse(Params[1], out Price))
+            
+            if (!int.TryParse(Params[1], out int price))
             {
                 Session.SendWhisper("Oops, you've entered an invalid integer.");
                 return;
             }
 
-            if (Price == 0)
+            if (price == 0)
             {
                 Session.SendWhisper("Oops, you cannot sell a room for 0 credits.");
                 return;
@@ -57,19 +56,19 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `rooms` SET `sale_price` = @SalePrice WHERE `id` = @Id LIMIT 1");
-                dbClient.AddParameter("SalePrice", Price);
+                dbClient.AddParameter("SalePrice", price);
                 dbClient.AddParameter("Id", Room.Id);
                 dbClient.RunQuery();
             }
 
             Session.SendNotification("Your room is now up for sale. The the current room visitors have been alerted, any item that belongs to you in this room will be transferred to the new owner once purchased. Other items shall be ejected.");
 
-            foreach (RoomUser User in Room.GetRoomUserManager().GetRoomUsers())
+            foreach (RoomUser user in Room.GetRoomUserManager().GetRoomUsers())
             {
-                if (User == null || User.GetClient() == null)
+                if (user == null || user.GetClient() == null)
                     continue;
 
-                User.GetClient().SendWhisper("Attention! This room has been put up for sale, you can buy it now for " + Price + " credits! Use the :buyroom command.");
+                user.GetClient().SendWhisper("Attention! This room has been put up for sale, you can buy it now for " + price + " credits! Use the :buyroom command.");
             }
         }
     }

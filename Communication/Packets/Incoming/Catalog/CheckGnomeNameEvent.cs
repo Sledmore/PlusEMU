@@ -71,12 +71,7 @@ namespace Plus.Communication.Packets.Incoming.Catalog
                 return;
             }
 
-
-            
-            
-
             List<RandomSpeech> RndSpeechList = new List<RandomSpeech>();
-            List<BotResponse> BotResponse = new List<BotResponse>();
 
             Pet.RoomId = Session.GetHabbo().CurrentRoomId;
             Pet.GnomeClothing = RandomClothing();
@@ -94,8 +89,7 @@ namespace Plus.Communication.Packets.Incoming.Catalog
             RoomUser PetUser = Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.RoomId, "pet", "freeroam", Pet.Name, "", Pet.Look, X, Y, 0, 0, 0, 0, 0, 0, ref RndSpeechList, "", 0, Pet.OwnerId, false, 0, false, 0), Pet);
 
             //Give the food.
-            ItemData PetFood = null;
-            if (PlusEnvironment.GetGame().GetItemManager().GetItem(320, out PetFood))
+            if (PlusEnvironment.GetGame().GetItemManager().GetItem(320, out ItemData PetFood))
             {
                 Item Food = ItemFactory.CreateSingleItemNullable(PetFood, Session.GetHabbo(), "", "");
                 if (Food != null)

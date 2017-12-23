@@ -50,7 +50,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
@@ -85,8 +85,8 @@
       <HintPath>packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MoreLinq, Version=2.8.21218.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
-      <HintPath>packages\morelinq.2.8.0\lib\net40\MoreLinq.dll</HintPath>
+    <Reference Include="MoreLinq, Version=2.9.21302.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>packages\morelinq.2.9.0\lib\net40\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.10.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>packages\MySql.Data.6.10.5\lib\net452\MySql.Data.dll</HintPath>
@@ -253,7 +253,6 @@
     <Compile Include="Communication\Packets\Outgoing\Availability\MaintenanceStatusComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\BuildersClub\BCBorrowedItemsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\BuildersClub\BuildersClubMembershipComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Campaigns\CampaignCalendarDataComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Catalog\CheckGnomeNameComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Catalog\ClubGiftsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\GameCenter\Game1WeeklyLeaderboardComposer.cs" />
@@ -656,6 +655,7 @@
     <Compile Include="Database\Adapter\NormalQueryReactor.cs" />
     <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HabboHotel\Badges\BadgeDefinition.cs" />
     <Compile Include="HabboHotel\Badges\BadgeManager.cs" />
     <Compile Include="HabboHotel\Cache\CacheManager.cs" />
@@ -1091,6 +1091,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Communication\Packets\Incoming\Rooms\Groups\" />
+    <Folder Include="Communication\Packets\Outgoing\Campaigns\" />
     <Folder Include="HabboHotel\Rooms\Chat\Commands\Roleplay\Generic\" />
     <Folder Include="HabboHotel\Rooms\Chat\Moderation\" />
     <Folder Include="HabboHotel\Rooms\Polls\" />

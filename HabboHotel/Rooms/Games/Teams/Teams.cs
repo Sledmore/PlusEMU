@@ -16,7 +16,7 @@ namespace Plus.HabboHotel.Rooms.Games.Teams
         public List<RoomUser> RedTeam;
         public List<RoomUser> YellowTeam;
 
-        public static TeamManager createTeamforGame(string Game)
+        public static TeamManager CreateTeam(string Game)
         {
             var t = new TeamManager();
             t.Game = Game;

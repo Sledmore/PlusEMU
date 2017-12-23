@@ -96,7 +96,7 @@ namespace Plus.HabboHotel.Rooms.AI
             {
                 Room.SendPacket(new AddExperiencePointsComposer(PetId, VirtualId, Amount));
 
-                if (experience >= experienceGoal)
+                if (experience >= ExperienceGoal)
                     Room.SendPacket(new ChatComposer(VirtualId, "*leveled up to level " + Level + " *", 0, 0));
             }
         }
@@ -149,13 +149,11 @@ namespace Plus.HabboHotel.Rooms.AI
                 if (!IsInRoom)
                     return null;
 
-                Room _room;
-
-                if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(RoomId, out _room))
+                if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(RoomId, out Room _room))
                     return _room;
                 else
                     return null;
-            
+
             }
         }
 
@@ -182,7 +180,7 @@ namespace Plus.HabboHotel.Rooms.AI
             get { return 20; }
         }
 
-        public int experienceGoal
+        public int ExperienceGoal
         {
             get
             {
