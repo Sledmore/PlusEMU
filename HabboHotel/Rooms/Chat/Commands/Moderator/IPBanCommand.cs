@@ -53,7 +53,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
             }
 
             String IPAddress = String.Empty;
-            Double Expire = PlusEnvironment.GetUnixTimestamp() + 78892200;
+            double Expire = PlusEnvironment.GetUnixTimestamp() + 78892200;
             string Username = Habbo.Username;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {

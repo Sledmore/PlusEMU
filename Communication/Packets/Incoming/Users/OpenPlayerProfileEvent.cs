@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Plus.HabboHotel.Users;
 using Plus.HabboHotel.Groups;
@@ -13,29 +10,29 @@ namespace Plus.Communication.Packets.Incoming.Users
 {
     class OpenPlayerProfileEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            int userID = Packet.PopInt();
-            Boolean IsMe = Packet.PopBoolean();
+            int userId = packet.PopInt();
+            bool IsMe = packet.PopBoolean();
 
-            Habbo targetData = PlusEnvironment.GetHabboById(userID);
+            Habbo targetData = PlusEnvironment.GetHabboById(userId);
             if (targetData == null)
             {
-                Session.SendNotification("An error occured whilst finding that user's profile.");
+                session.SendNotification("An error occured whilst finding that user's profile.");
                 return;
             }
             
-            List<Group> Groups = PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.Id);
+            List<Group> groups = PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.Id);
             
             int friendCount = 0;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT COUNT(0) FROM `messenger_friendships` WHERE (`user_one_id` = @userid OR `user_two_id` = @userid)");
-                dbClient.AddParameter("userid", userID);
+                dbClient.AddParameter("userid", userId);
                 friendCount = dbClient.GetInteger();
             }
 
-            Session.SendPacket(new ProfileInformationComposer(targetData, Session, Groups, friendCount));
+            session.SendPacket(new ProfileInformationComposer(targetData, session, groups, friendCount));
         }
     }
 }

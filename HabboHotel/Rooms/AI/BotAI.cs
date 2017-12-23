@@ -7,45 +7,45 @@ namespace Plus.HabboHotel.Rooms.AI
     public abstract class BotAI
     {
         public int BaseId;
-        private int RoomId;
-        private int RoomUserId;
-        private Room room;
-        private RoomUser roomUser;
+        private int _roomId;
+        private int _roomUserId;
+        private Room _room;
+        private RoomUser _roomUser;
 
-        public void Init(int pBaseId, int pRoomUserId, int pRoomId, RoomUser user, Room room)
+        public void Init(int baseId, int roomUserId, int roomId, RoomUser user, Room room)
         {
-            this.BaseId = pBaseId;
-            this.RoomUserId = pRoomUserId;
-            this.RoomId = pRoomId;
-            this.roomUser = user;
-            this.room = room;
+            this.BaseId = baseId;
+            this._roomUserId = roomUserId;
+            this._roomId = roomId;
+            this._roomUser = user;
+            this._room = room;
         }
 
         public Room GetRoom()
         {
-            return room;
+            return _room;
         }
 
         public RoomUser GetRoomUser()
         {
-            return roomUser;
+            return _roomUser;
         }
 
         public RoomBot GetBotData()
         {
-            RoomUser User = GetRoomUser();
-            if (User == null)
+            RoomUser user = GetRoomUser();
+            if (user == null)
                 return null;
-            else
-                return GetRoomUser().BotData;
+
+            return GetRoomUser().BotData;
         }
 
         public abstract void OnSelfEnterRoom();
-        public abstract void OnSelfLeaveRoom(bool Kicked);
-        public abstract void OnUserEnterRoom(RoomUser User);
-        public abstract void OnUserLeaveRoom(GameClient Client);
-        public abstract void OnUserSay(RoomUser User, string Message);
-        public abstract void OnUserShout(RoomUser User, string Message);
+        public abstract void OnSelfLeaveRoom(bool kicked);
+        public abstract void OnUserEnterRoom(RoomUser user);
+        public abstract void OnUserLeaveRoom(GameClient client);
+        public abstract void OnUserSay(RoomUser user, string message);
+        public abstract void OnUserShout(RoomUser user, string message);
         public abstract void OnTimerTick();
     }
 }

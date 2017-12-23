@@ -63,14 +63,14 @@ namespace Plus.HabboHotel.Items
         private readonly bool mIsWallItem;
         private readonly bool mIsFloorItem;
 
-        public Item(int Id, int RoomId, int BaseItem, string ExtraData, int X, int Y, Double Z, int Rot, int Userid, int Group, int limitedNumber, int limitedStack, string wallCoord, Room Room = null)
+        public Item(int Id, int RoomId, int BaseItem, string ExtraData, int X, int Y, double Z, int Rot, int Userid, int Group, int limitedNumber, int limitedStack, string wallCoord, Room Room = null)
         {
-            if (PlusEnvironment.GetGame().GetItemManager().GetItem(BaseItem, out ItemData Data))
+            if (PlusEnvironment.GetGame().GetItemManager().GetItem(BaseItem, out ItemData data))
             {
                 this.Id = Id;
                 this.RoomId = RoomId;
                 this._room = Room;
-                this._data = Data;
+                this._data = data;
                 this.BaseItem = BaseItem;
                 this.ExtraData = ExtraData;
                 this.GroupId = Group;
@@ -494,7 +494,7 @@ namespace Plus.HabboHotel.Items
             }
         }
 
-        public void SetState(int pX, int pY, Double pZ, Dictionary<int, ThreeDCoord> Tiles)
+        public void SetState(int pX, int pY, double pZ, Dictionary<int, ThreeDCoord> Tiles)
         {
             GetX = pX;
             GetY = pY;

@@ -45,9 +45,9 @@ namespace Plus.HabboHotel.Users.Badges
             {
                 int i = 0;
 
-                foreach (Badge Badge in _badges.Values)
+                foreach (Badge badge in _badges.Values)
                 {
-                    if (Badge.Slot <= 0)
+                    if (badge.Slot <= 0)
                     {
                         continue;
                     }
@@ -64,49 +64,49 @@ namespace Plus.HabboHotel.Users.Badges
             return this._badges.Values;
         }
 
-        public Badge GetBadge(string Badge)
+        public Badge GetBadge(string badge)
         {
-            if (_badges.ContainsKey(Badge))
-                return (Badge)_badges[Badge];
+            if (_badges.ContainsKey(badge))
+                return _badges[badge];
 
             return null;
         }
 
-        public bool TryGetBadge(string BadgeCode, out Badge Badge)
+        public bool TryGetBadge(string code, out Badge badge)
         {
-            return this._badges.TryGetValue(BadgeCode, out Badge);
+            return this._badges.TryGetValue(code, out badge);
         }
 
-        public bool HasBadge(string Badge)
+        public bool HasBadge(string badge)
         {
-            return _badges.ContainsKey(Badge);
+            return _badges.ContainsKey(badge);
         }
 
-        public void GiveBadge(string Badge, Boolean InDatabase, GameClient Session)
+        public void GiveBadge(string code, bool inDatabase, GameClient session)
         {
-            if (HasBadge(Badge))
+            if (HasBadge(code))
                 return;
 
-            BadgeDefinition BadgeDefinition = null;
-            if (!PlusEnvironment.GetGame().GetBadgeManager().TryGetBadge(Badge.ToUpper(), out BadgeDefinition) || BadgeDefinition.RequiredRight.Length > 0 && !Session.GetHabbo().GetPermissions().HasRight(BadgeDefinition.RequiredRight))
+            BadgeDefinition badge = null;
+            if (!PlusEnvironment.GetGame().GetBadgeManager().TryGetBadge(code.ToUpper(), out badge) || badge.RequiredRight.Length > 0 && !session.GetHabbo().GetPermissions().HasRight(badge.RequiredRight))
                 return;
 
-            if (InDatabase)
+            if (inDatabase)
             {
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dbClient.SetQuery("REPLACE INTO `user_badges` (`user_id`,`badge_id`,`badge_slot`) VALUES ('" + _player.Id + "', @badge, '" + 0 + "')");
-                    dbClient.AddParameter("badge", Badge);
+                    dbClient.AddParameter("badge", code);
                     dbClient.RunQuery();
                 }
             }
 
-            _badges.Add(Badge, new Badge(Badge, 0));
+            _badges.Add(code, new Badge(code, 0));
 
-            if (Session != null)
+            if (session != null)
             {
-                Session.SendPacket(new BadgesComposer(Session));
-                Session.SendPacket(new FurniListNotificationComposer(1, 4));
+                session.SendPacket(new BadgesComposer(session));
+                session.SendPacket(new FurniListNotificationComposer(1, 4));
             }
         }
 

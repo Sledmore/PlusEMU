@@ -119,15 +119,15 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     Point Point = HandleMovement(Convert.ToInt32(this.StringData.Split(';')[0]),new Point(Item.GetX, Item.GetY));
                     int newRot = HandleRotation(Convert.ToInt32(this.StringData.Split(';')[1]), Item.Rotation);
 
-                    Instance.GetWired().onUserFurniCollision(Instance, Item);
+                    Instance.GetWired().OnUserFurniCollision(Instance, Item);
 
                     if (!Instance.GetGameMap().ItemCanMove(Item, Point))
                         continue;
 
                     if (Instance.GetGameMap().CanRollItemHere(Point.X, Point.Y) && !Instance.GetGameMap().SquareHasUsers(Point.X, Point.Y))
                     {
-                        Double NewZ = Instance.GetGameMap().GetHeightForSquareFromData(Point);
-                        Boolean CanBePlaced = true;
+                        double NewZ = Instance.GetGameMap().GetHeightForSquareFromData(Point);
+                        bool CanBePlaced = true;
 
                         List<Item> Items = Instance.GetGameMap().GetCoordinatedItems(Point);
                         foreach (Item IItem in Items.ToList())

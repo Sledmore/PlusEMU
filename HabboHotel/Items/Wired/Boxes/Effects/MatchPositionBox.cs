@@ -17,7 +17,6 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         public Room Instance { get; set; }
 
         public Item Item { get; set; }
-
         public WiredBoxType Type { get { return WiredBoxType.EffectMatchPosition; } }
 
         public ConcurrentDictionary<int, Item> SetItems { get; set; }
@@ -29,12 +28,6 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         public int Delay { get { return this._delay; } set { this._delay = value; this.TickCount = value + 1; } }
 
         public int TickCount { get; set; }
-
-        public bool MatchPosition { get; set; }
-
-        public bool MatchRotation { get; set; }
-
-        public bool MatchState { get; set; }
 
         private bool Requested;
         public string ItemsData { get; set; }

@@ -53,7 +53,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
                 return;
             }
 
-            Double Expire = 0;
+            double Expire = 0;
             string Hours = Params[2];
             if (String.IsNullOrEmpty(Hours) || Hours == "perm")
                 Expire = PlusEnvironment.GetUnixTimestamp() + 78892200;

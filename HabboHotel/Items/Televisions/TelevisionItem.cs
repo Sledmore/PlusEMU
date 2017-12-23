@@ -12,9 +12,9 @@ namespace Plus.HabboHotel.Items.Televisions
         private string _youtubeId;
         private string _title;
         private string _description;
-        private Boolean _enabled;
+        private bool _enabled;
 
-        public TelevisionItem(int Id, string YouTubeId, string Title, string Description, Boolean Enabled)
+        public TelevisionItem(int Id, string YouTubeId, string Title, string Description, bool Enabled)
         {
             this._id = Id;
             this._youtubeId = YouTubeId;

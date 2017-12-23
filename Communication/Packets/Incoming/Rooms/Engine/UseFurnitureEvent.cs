@@ -65,7 +65,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                 Session.SendPacket(new GnomeBoxComposer(Item.Id));
             }
 
-            Boolean Toggle = true;
+            bool Toggle = true;
             if (Item.GetBaseItem().InteractionType == InteractionType.WF_FLOOR_SWITCH_1 || Item.GetBaseItem().InteractionType == InteractionType.WF_FLOOR_SWITCH_2)
             {
                 RoomUser User = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);

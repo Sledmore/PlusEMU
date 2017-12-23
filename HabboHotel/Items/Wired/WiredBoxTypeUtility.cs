@@ -1,15 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Collections.Generic;
 
 namespace Plus.HabboHotel.Items.Wired
 {
     static class WiredBoxTypeUtility
     {
-        public static WiredBoxType FromWiredId(int Id)
+        public static WiredBoxType FromWiredId(int id)
         {
-            switch (Id)
+            switch (id)
             {
                 default:
                     return WiredBoxType.None;
@@ -126,9 +124,9 @@ namespace Plus.HabboHotel.Items.Wired
             }
         }
 
-        public static int GetWiredId(WiredBoxType Type)
+        public static int GetWiredId(WiredBoxType type)
         {
-            switch (Type)
+            switch (type)
             {
                 case WiredBoxType.TriggerUserSays:
                 case WiredBoxType.TriggerUserSaysCommand:
@@ -213,54 +211,54 @@ namespace Plus.HabboHotel.Items.Wired
             return 0;
         }
 
-        public static List<int> ContainsBlockedTrigger(IWiredItem Box, ICollection<IWiredItem> Triggers)
+        public static List<int> ContainsBlockedTrigger(IWiredItem box, ICollection<IWiredItem> triggers)
         {
-            List<int> BlockedItems = new List<int>();
+            List<int> blockedItems = new List<int>();
 
-            if (Box.Type != WiredBoxType.EffectShowMessage && Box.Type != WiredBoxType.EffectMuteTriggerer && Box.Type != WiredBoxType.EffectTeleportToFurni && Box.Type != WiredBoxType.EffectKickUser && Box.Type != WiredBoxType.ConditionTriggererOnFurni)
-                return BlockedItems;
+            if (box.Type != WiredBoxType.EffectShowMessage && box.Type != WiredBoxType.EffectMuteTriggerer && box.Type != WiredBoxType.EffectTeleportToFurni && box.Type != WiredBoxType.EffectKickUser && box.Type != WiredBoxType.ConditionTriggererOnFurni)
+                return blockedItems;
 
-            foreach (IWiredItem Item in Triggers)
+            foreach (IWiredItem item in triggers)
             {
-                if (Item.Type == WiredBoxType.TriggerRepeat)
+                if (item.Type == WiredBoxType.TriggerRepeat)
                 {
-                    if (!BlockedItems.Contains(Item.Item.GetBaseItem().SpriteId))
-                        BlockedItems.Add(Item.Item.GetBaseItem().SpriteId);
+                    if (!blockedItems.Contains(item.Item.GetBaseItem().SpriteId))
+                        blockedItems.Add(item.Item.GetBaseItem().SpriteId);
                     else continue;
                 }
                 else continue;
             }
 
-            return BlockedItems;
+            return blockedItems;
         }
 
-        public static List<int> ContainsBlockedEffect(IWiredItem Box,  ICollection<IWiredItem> Effects)
+        public static List<int> ContainsBlockedEffect(IWiredItem box,  ICollection<IWiredItem> effects)
         {
-            List<int> BlockedItems = new List<int>();
+            List<int> blockedItems = new List<int>();
 
-            if (Box.Type != WiredBoxType.TriggerRepeat)
-                return BlockedItems;
+            if (box.Type != WiredBoxType.TriggerRepeat)
+                return blockedItems;
 
-            bool HasMoveRotate = Effects.Where(x => x.Type == WiredBoxType.EffectMoveAndRotate).ToList().Count > 0;
-            bool HasMoveNear = Effects.Where(x => x.Type == WiredBoxType.EffectMoveFurniToNearestUser).ToList().Count > 0;
+            bool hasMoveRotate = effects.Where(x => x.Type == WiredBoxType.EffectMoveAndRotate).ToList().Count > 0;
+            bool hasMoveNear = effects.Where(x => x.Type == WiredBoxType.EffectMoveFurniToNearestUser).ToList().Count > 0;
 
-            foreach (IWiredItem Item in Effects)
+            foreach (IWiredItem item in effects)
             {
-                if (Item.Type == WiredBoxType.EffectKickUser || Item.Type == WiredBoxType.EffectMuteTriggerer || Item.Type == WiredBoxType.EffectShowMessage || Item.Type == WiredBoxType.EffectTeleportToFurni || Item.Type == WiredBoxType.EffectBotFollowsUserBox)
+                if (item.Type == WiredBoxType.EffectKickUser || item.Type == WiredBoxType.EffectMuteTriggerer || item.Type == WiredBoxType.EffectShowMessage || item.Type == WiredBoxType.EffectTeleportToFurni || item.Type == WiredBoxType.EffectBotFollowsUserBox)
                 {
-                    if (!BlockedItems.Contains(Item.Item.GetBaseItem().SpriteId))
-                        BlockedItems.Add(Item.Item.GetBaseItem().SpriteId);
+                    if (!blockedItems.Contains(item.Item.GetBaseItem().SpriteId))
+                        blockedItems.Add(item.Item.GetBaseItem().SpriteId);
                     else continue;
                 }
-                else if((Item.Type == WiredBoxType.EffectMoveFurniToNearestUser && HasMoveRotate) || (Item.Type == WiredBoxType.EffectMoveAndRotate && HasMoveNear))
+                else if((item.Type == WiredBoxType.EffectMoveFurniToNearestUser && hasMoveRotate) || (item.Type == WiredBoxType.EffectMoveAndRotate && hasMoveNear))
                 {
-                    if (!BlockedItems.Contains(Item.Item.GetBaseItem().SpriteId))
-                        BlockedItems.Add(Item.Item.GetBaseItem().SpriteId);
+                    if (!blockedItems.Contains(item.Item.GetBaseItem().SpriteId))
+                        blockedItems.Add(item.Item.GetBaseItem().SpriteId);
                     else continue;
                 }
             }
 
-            return BlockedItems;
+            return blockedItems;
         }
     }
 }

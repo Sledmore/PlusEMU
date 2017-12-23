@@ -40,7 +40,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Bots
             if (!Room.GetRoomUserManager().TryGetBot(BotId, out Bot))
                 return;
 
-            if ((Bot.BotData.ownerID != Session.GetHabbo().Id && !Session.GetHabbo().GetPermissions().HasRight("bot_edit_any_override")))
+            if ((Bot.BotData.OwnerId != Session.GetHabbo().Id && !Session.GetHabbo().GetPermissions().HasRight("bot_edit_any_override")))
                 return;
 
             RoomBot RoomBot = Bot.BotData;

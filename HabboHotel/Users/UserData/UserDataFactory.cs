@@ -226,7 +226,6 @@ namespace Plus.HabboHotel.Users.UserData
             List<Badge> Badges = new List<Badge>();
             Dictionary<int, MessengerBuddy> Friends = new Dictionary<int, MessengerBuddy>();
             Dictionary<int, MessengerRequest> FriendRequests = new Dictionary<int, MessengerRequest>();
-            List<RoomData> Rooms = new List<RoomData>();
             Dictionary<int, int> Quests = new Dictionary<int, int>();
 
             Dictionary<int, Relationship> Relationships = new Dictionary<int, Relationship>();

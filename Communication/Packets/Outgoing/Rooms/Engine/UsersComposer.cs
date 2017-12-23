@@ -163,8 +163,8 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                 base.WriteInteger((User.BotData.AiType == BotAIType.Pet) ? 2 : 4);
 
                 base.WriteString(User.BotData.Gender.ToLower()); // ?
-                base.WriteInteger(User.BotData.ownerID); //Owner Id
-                base.WriteString(PlusEnvironment.GetUsernameById(User.BotData.ownerID)); // Owner name
+                base.WriteInteger(User.BotData.OwnerId); //Owner Id
+                base.WriteString(PlusEnvironment.GetUsernameById(User.BotData.OwnerId)); // Owner name
                 base.WriteInteger(5);//Action Count
                 base.WriteShort(1);//Copy looks
                 base.WriteShort(2);//Setup speech
@@ -174,11 +174,11 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
             }
         }
 
-        public string PetFigureForType(int Type)
+        public string PetFigureForType(int type)
         {
             Random _random = new Random();
 
-            switch (Type)
+            switch (type)
             {
                 #region Dog Figures
                 default:

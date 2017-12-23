@@ -1,30 +1,25 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class DiceOffEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            Item Item = Room.GetRoomItemHandler().GetItem(Packet.PopInt());
-            if (Item == null)
+            Item item = room.GetRoomItemHandler().GetItem(packet.PopInt());
+            if (item == null)
                 return;
 
-            Boolean hasRights = false;
-            if (Room.CheckRights(Session))
+            bool hasRights = false;
+            if (room.CheckRights(session))
                 hasRights = true;
 
-            Item.Interactor.OnTrigger(Session, Item, -1, hasRights);
+            item.Interactor.OnTrigger(session, item, -1, hasRights);
         }
     }
 }

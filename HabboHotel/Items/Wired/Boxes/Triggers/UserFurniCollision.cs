@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users;
 using Plus.Communication.Packets.Incoming;
@@ -25,18 +22,18 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
         public bool BoolData { get; set; }
         public string ItemsData { get; set; }
 
-        public UserFurniCollision(Room Instance, Item Item)
+        public UserFurniCollision(Room instance, Item item)
         {
-            this.Instance = Instance;
-            this.Item = Item;
+            this.Instance = instance;
+            this.Item = item;
             this.StringData = "";
             this.SetItems = new ConcurrentDictionary<int, Item>();
         }
 
-        public void HandleSave(ClientPacket Packet)
+        public void HandleSave(ClientPacket packet)
         {
-            int Unknown = Packet.PopInt();
-            string Unknown2 = Packet.PopString();
+            int Unknown = packet.PopInt();
+            string Unknown2 = packet.PopString();
         }
 
         public bool Execute(params object[] Params)

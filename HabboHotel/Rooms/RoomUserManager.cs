@@ -35,7 +35,7 @@ namespace Plus.HabboHotel.Rooms
         private int secondaryPrivateUserID;
 
         public int userCount;
-        private int petCount;
+        private int _petCount;
 
 
         public RoomUserManager(Room room)
@@ -48,103 +48,97 @@ namespace Plus.HabboHotel.Rooms
             this.primaryPrivateUserID = 0;
             this.secondaryPrivateUserID = 0;
 
-            this.petCount = 0;
+            this._petCount = 0;
             this.userCount = 0;
         }
 
-        public RoomUser DeployBot(RoomBot Bot, Pet PetData)
+        public RoomUser DeployBot(RoomBot bot, Pet pet)
         {
-            var BotUser = new RoomUser(0, _room.RoomId, primaryPrivateUserID++, _room);
-            Bot.VirtualId = primaryPrivateUserID;
+            RoomUser user = new RoomUser(0, _room.RoomId, primaryPrivateUserID++, _room);
+            bot.VirtualId = primaryPrivateUserID;
 
             int PersonalID = secondaryPrivateUserID++;
-            BotUser.InternalRoomID = PersonalID;
-            _users.TryAdd(PersonalID, BotUser);
+            user.InternalRoomID = PersonalID;
+            _users.TryAdd(PersonalID, user);
 
-            DynamicRoomModel Model = _room.GetGameMap().Model;
+            DynamicRoomModel model = _room.GetGameMap().Model;
 
-            if ((Bot.X > 0 && Bot.Y > 0) && Bot.X < Model.MapSizeX && Bot.Y < Model.MapSizeY)
+            if ((bot.X > 0 && bot.Y > 0) && bot.X < model.MapSizeX && bot.Y < model.MapSizeY)
             {
-                BotUser.SetPos(Bot.X, Bot.Y, Bot.Z);
-                BotUser.SetRot(Bot.Rot, false);
+                user.SetPos(bot.X, bot.Y, bot.Z);
+                user.SetRot(bot.Rot, false);
             }
             else
             {
-                Bot.X = Model.DoorX;
-                Bot.Y = Model.DoorY;
+                bot.X = model.DoorX;
+                bot.Y = model.DoorY;
 
-                BotUser.SetPos(Model.DoorX, Model.DoorY, Model.DoorZ);
-                BotUser.SetRot(Model.DoorOrientation, false);
+                user.SetPos(model.DoorX, model.DoorY, model.DoorZ);
+                user.SetRot(model.DoorOrientation, false);
             }
 
-            BotUser.BotData = Bot;
-            BotUser.BotAI = Bot.GenerateBotAI(BotUser.VirtualId);
+            user.BotData = bot;
+            user.BotAI = bot.GenerateBotAI(user.VirtualId);
 
-            if (BotUser.IsPet)
+            if (user.IsPet)
             {
-                BotUser.BotAI.Init(Bot.BotId, BotUser.VirtualId, _room.RoomId, BotUser, _room);
-                BotUser.PetData = PetData;
-                BotUser.PetData.VirtualId = BotUser.VirtualId;
+                user.BotAI.Init(bot.BotId, user.VirtualId, _room.RoomId, user, _room);
+                user.PetData = pet;
+                user.PetData.VirtualId = user.VirtualId;
             }
             else
-                BotUser.BotAI.Init(Bot.BotId, BotUser.VirtualId, _room.RoomId, BotUser, _room);
+                user.BotAI.Init(bot.BotId, user.VirtualId, _room.RoomId, user, _room);
+            
+            user.UpdateNeeded = true;
 
-            //UpdateUserStatus(BotUser, false);
-            BotUser.UpdateNeeded = true;
+            _room.SendPacket(new UsersComposer(user));
 
-            _room.SendPacket(new UsersComposer(BotUser));
-
-            if (BotUser.IsPet)
+            if (user.IsPet)
             {
-                if (_pets.ContainsKey(BotUser.PetData.PetId)) //Pet allready placed
-                    _pets[BotUser.PetData.PetId] = BotUser;
+                if (_pets.ContainsKey(user.PetData.PetId))
+                    _pets[user.PetData.PetId] = user;
                 else
-                    _pets.TryAdd(BotUser.PetData.PetId, BotUser);
+                    _pets.TryAdd(user.PetData.PetId, user);
 
-                petCount++;
+                _petCount++;
             }
-            else if (BotUser.IsBot)
+            else if (user.IsBot)
             {
-                if (_bots.ContainsKey(BotUser.BotData.BotId))
-                    _bots[BotUser.BotData.BotId] = BotUser;
+                if (_bots.ContainsKey(user.BotData.BotId))
+                    _bots[user.BotData.BotId] = user;
                 else
-                    _bots.TryAdd(BotUser.BotData.Id, BotUser);
-                _room.SendPacket(new DanceComposer(BotUser, BotUser.BotData.DanceId));
+                    _bots.TryAdd(user.BotData.Id, user);
+
+                _room.SendPacket(new DanceComposer(user, user.BotData.DanceId));
             }
-            return BotUser;
+            return user;
         }
 
-        public void RemoveBot(int VirtualId, bool Kicked)
+        public void RemoveBot(int virtualId, bool kicked)
         {
-            RoomUser User = GetRoomUserByVirtualId(VirtualId);
-            if (User == null || !User.IsBot)
+            RoomUser user = GetRoomUserByVirtualId(virtualId);
+            if (user == null || !user.IsBot)
                 return;
 
-            if (User.IsPet)
+            if (user.IsPet)
             {
-                RoomUser PetRemoval = null;
 
-                _pets.TryRemove(User.PetData.PetId, out PetRemoval);
-                petCount--;
+                _pets.TryRemove(user.PetData.PetId, out RoomUser pet);
+                _petCount--;
             }
             else
             {
-                RoomUser BotRemoval = null;
-                _bots.TryRemove(User.BotData.Id, out BotRemoval);
+                _bots.TryRemove(user.BotData.Id, out RoomUser bot);
             }
 
+            user.BotAI.OnSelfLeaveRoom(kicked);
 
-
-            User.BotAI.OnSelfLeaveRoom(Kicked);
-
-            _room.SendPacket(new UserRemoveComposer(User.VirtualId));
-
-            RoomUser toRemove;
+            _room.SendPacket(new UserRemoveComposer(user.VirtualId));
 
             if (_users != null)
-                _users.TryRemove(User.InternalRoomID, out toRemove);
+                _users.TryRemove(user.InternalRoomID, out RoomUser toRemove);
 
-            onRemove(User);
+            onRemove(user);
         }
 
         public RoomUser GetUserForSquare(int x, int y)
@@ -152,152 +146,149 @@ namespace Plus.HabboHotel.Rooms
             return _room.GetGameMap().GetRoomUsers(new Point(x, y)).FirstOrDefault();
         }
 
-        public bool AddAvatarToRoom(GameClient Session)
+        public bool AddAvatarToRoom(GameClient session)
         {
             if (_room == null)
                 return false;
 
-            if (Session == null)
+            if (session == null)
                 return false;
 
-            if (Session.GetHabbo().CurrentRoom == null)
+            if (session.GetHabbo().CurrentRoom == null)
+                return false;
+            
+            RoomUser user = new RoomUser(session.GetHabbo().Id, _room.RoomId, primaryPrivateUserID++, _room);
+
+            if (user == null || user.GetClient() == null)
                 return false;
 
-            #region Old Stuff
-            RoomUser User = new RoomUser(Session.GetHabbo().Id, _room.RoomId, primaryPrivateUserID++, _room);
+            user.UserId = session.GetHabbo().Id;
 
-            if (User == null || User.GetClient() == null)
-                return false;
-
-            User.UserId = Session.GetHabbo().Id;
-
-            Session.GetHabbo().TentId = 0;
+            session.GetHabbo().TentId = 0;
 
             int PersonalID = secondaryPrivateUserID++;
-            User.InternalRoomID = PersonalID;
+            user.InternalRoomID = PersonalID;
 
 
-            Session.GetHabbo().CurrentRoomId = _room.RoomId;
-            if (!this._users.TryAdd(PersonalID, User))
-                return false;
-            #endregion
-
-            DynamicRoomModel Model = _room.GetGameMap().Model;
-            if (Model == null)
+            session.GetHabbo().CurrentRoomId = _room.RoomId;
+            if (!this._users.TryAdd(PersonalID, user))
                 return false;
 
-            if (!_room.PetMorphsAllowed && Session.GetHabbo().PetId != 0)
-                Session.GetHabbo().PetId = 0;
+            DynamicRoomModel model = _room.GetGameMap().Model;
+            if (model == null)
+                return false;
 
-            if (!Session.GetHabbo().IsTeleporting && !Session.GetHabbo().IsHopping)
+            if (!_room.PetMorphsAllowed && session.GetHabbo().PetId != 0)
+                session.GetHabbo().PetId = 0;
+
+            if (!session.GetHabbo().IsTeleporting && !session.GetHabbo().IsHopping)
             {
-                if (!Model.DoorIsValid())
+                if (!model.DoorIsValid())
                 {
                     Point Square = _room.GetGameMap().GetRandomWalkableSquare();
-                    Model.DoorX = Square.X;
-                    Model.DoorY = Square.Y;
-                    Model.DoorZ = _room.GetGameMap().GetHeightForSquareFromData(Square);
+                    model.DoorX = Square.X;
+                    model.DoorY = Square.Y;
+                    model.DoorZ = _room.GetGameMap().GetHeightForSquareFromData(Square);
                 }
 
-                User.SetPos(Model.DoorX, Model.DoorY, Model.DoorZ);
-                User.SetRot(Model.DoorOrientation, false);
+                user.SetPos(model.DoorX, model.DoorY, model.DoorZ);
+                user.SetRot(model.DoorOrientation, false);
             }
-            else if (!User.IsBot && (User.GetClient().GetHabbo().IsTeleporting || User.GetClient().GetHabbo().IsHopping))
+            else if (!user.IsBot && (user.GetClient().GetHabbo().IsTeleporting || user.GetClient().GetHabbo().IsHopping))
             {
-                Item Item = null;
-                if (Session.GetHabbo().IsTeleporting)
-                    Item = _room.GetRoomItemHandler().GetItem(Session.GetHabbo().TeleporterId);
-                else if (Session.GetHabbo().IsHopping)
-                    Item = _room.GetRoomItemHandler().GetItem(Session.GetHabbo().HopperId);
+                Item item = null;
+                if (session.GetHabbo().IsTeleporting)
+                    item = _room.GetRoomItemHandler().GetItem(session.GetHabbo().TeleporterId);
+                else if (session.GetHabbo().IsHopping)
+                    item = _room.GetRoomItemHandler().GetItem(session.GetHabbo().HopperId);
 
-                if (Item != null)
+                if (item != null)
                 {
-                    if (Session.GetHabbo().IsTeleporting)
+                    if (session.GetHabbo().IsTeleporting)
                     {
-                        Item.ExtraData = "2";
-                        Item.UpdateState(false, true);
-                        User.SetPos(Item.GetX, Item.GetY, Item.GetZ);
-                        User.SetRot(Item.Rotation, false);
-                        Item.InteractingUser2 = Session.GetHabbo().Id;
-                        Item.ExtraData = "0";
-                        Item.UpdateState(false, true);
+                        item.ExtraData = "2";
+                        item.UpdateState(false, true);
+                        user.SetPos(item.GetX, item.GetY, item.GetZ);
+                        user.SetRot(item.Rotation, false);
+                        item.InteractingUser2 = session.GetHabbo().Id;
+                        item.ExtraData = "0";
+                        item.UpdateState(false, true);
                     }
-                    else if (Session.GetHabbo().IsHopping)
+                    else if (session.GetHabbo().IsHopping)
                     {
-                        Item.ExtraData = "1";
-                        Item.UpdateState(false, true);
-                        User.SetPos(Item.GetX, Item.GetY, Item.GetZ);
-                        User.SetRot(Item.Rotation, false);
-                        User.AllowOverride = false;
-                        Item.InteractingUser2 = Session.GetHabbo().Id;
-                        Item.ExtraData = "2";
-                        Item.UpdateState(false, true);
+                        item.ExtraData = "1";
+                        item.UpdateState(false, true);
+                        user.SetPos(item.GetX, item.GetY, item.GetZ);
+                        user.SetRot(item.Rotation, false);
+                        user.AllowOverride = false;
+                        item.InteractingUser2 = session.GetHabbo().Id;
+                        item.ExtraData = "2";
+                        item.UpdateState(false, true);
                     }
                 }
                 else
                 {
-                    User.SetPos(Model.DoorX, Model.DoorY, Model.DoorZ - 1);
-                    User.SetRot(Model.DoorOrientation, false);
+                    user.SetPos(model.DoorX, model.DoorY, model.DoorZ - 1);
+                    user.SetRot(model.DoorOrientation, false);
                 }
             }
 
-            _room.SendPacket(new UsersComposer(User));
-
-            //Below = done
-            if (_room.CheckRights(Session, true))
+            _room.SendPacket(new UsersComposer(user));
+            
+            if (_room.CheckRights(session, true))
             {
-                User.SetStatus("flatctrl", "useradmin");
-                Session.SendPacket(new YouAreOwnerComposer());
-                Session.SendPacket(new YouAreControllerComposer(4));
+                user.SetStatus("flatctrl", "useradmin");
+                session.SendPacket(new YouAreOwnerComposer());
+                session.SendPacket(new YouAreControllerComposer(4));
             }
-            else if (_room.CheckRights(Session, false) && _room.Group == null)
+            else if (_room.CheckRights(session, false) && _room.Group == null)
             {
-                User.SetStatus("flatctrl", "1");
-                Session.SendPacket(new YouAreControllerComposer(1));
+                user.SetStatus("flatctrl", "1");
+                session.SendPacket(new YouAreControllerComposer(1));
             }
-            else if (_room.Group != null && _room.CheckRights(Session, false, true))
+            else if (_room.Group != null && _room.CheckRights(session, false, true))
             {
-                User.SetStatus("flatctrl", "3");
-                Session.SendPacket(new YouAreControllerComposer(3));
+                user.SetStatus("flatctrl", "3");
+                session.SendPacket(new YouAreControllerComposer(3));
             }
             else
-                Session.SendPacket(new YouAreNotControllerComposer());
+                session.SendPacket(new YouAreNotControllerComposer());
 
-            User.UpdateNeeded = true;
+            user.UpdateNeeded = true;
 
-            if (Session.GetHabbo().GetPermissions().HasRight("mod_tool") && !Session.GetHabbo().DisableForcedEffects)
-                Session.GetHabbo().Effects().ApplyEffect(102);
+            if (session.GetHabbo().GetPermissions().HasRight("mod_tool") && !session.GetHabbo().DisableForcedEffects)
+                session.GetHabbo().Effects().ApplyEffect(102);
 
-            foreach (RoomUser Bot in this._bots.Values.ToList())
+            foreach (RoomUser bot in this._bots.Values.ToList())
             {
-                if (Bot == null || Bot.BotAI == null)
+                if (bot == null || bot.BotAI == null)
                     continue;
 
-                Bot.BotAI.OnUserEnterRoom(User);
+                bot.BotAI.OnUserEnterRoom(user);
             }
             return true;
         }
 
-        public void RemoveUserFromRoom(GameClient Session, Boolean NotifyClient, Boolean NotifyKick = false)
+        public void RemoveUserFromRoom(GameClient session, bool nofityUser, bool notifyKick = false)
         {
             try
             {
                 if (_room == null)
                     return;
 
-                if (Session == null || Session.GetHabbo() == null)
+                if (session == null || session.GetHabbo() == null)
                     return;
 
-                if (NotifyKick)
-                    Session.SendPacket(new GenericErrorComposer(4008));
+                if (notifyKick)
+                    session.SendPacket(new GenericErrorComposer(4008));
 
-                if (NotifyClient)
-                    Session.SendPacket(new CloseConnectionComposer());
+                if (nofityUser)
+                    session.SendPacket(new CloseConnectionComposer());
 
-                if (Session.GetHabbo().TentId > 0)
-                    Session.GetHabbo().TentId = 0;
+                if (session.GetHabbo().TentId > 0)
+                    session.GetHabbo().TentId = 0;
 
-                RoomUser User = GetRoomUserByHabbo(Session.GetHabbo().Id);
+                RoomUser User = GetRoomUserByHabbo(session.GetHabbo().Id);
                 if (User != null)
                 {
                     if (User.RidingHorse)
@@ -330,8 +321,8 @@ namespace Plus.HabboHotel.Rooms
 
                     if (User.CurrentItemEffect != ItemEffectType.None)
                     {
-                        if (Session.GetHabbo().Effects() != null)
-                            Session.GetHabbo().Effects().CurrentEffect = -1;
+                        if (session.GetHabbo().Effects() != null)
+                            session.GetHabbo().Effects().CurrentEffect = -1;
                     }
 
                     if (User.IsTrading)
@@ -343,12 +334,12 @@ namespace Plus.HabboHotel.Rooms
 
                     //Session.GetHabbo().CurrentRoomId = 0;
 
-                    if (Session.GetHabbo().GetMessenger() != null)
-                        Session.GetHabbo().GetMessenger().OnStatusChanged(true);
+                    if (session.GetHabbo().GetMessenger() != null)
+                        session.GetHabbo().GetMessenger().OnStatusChanged(true);
 
                     using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("UPDATE user_roomvisits SET exit_timestamp = '" + PlusEnvironment.GetUnixTimestamp() + "' WHERE room_id = '" + _room.RoomId + "' AND user_id = '" + Session.GetHabbo().Id + "' ORDER BY exit_timestamp DESC LIMIT 1");
+                        dbClient.RunQuery("UPDATE user_roomvisits SET exit_timestamp = '" + PlusEnvironment.GetUnixTimestamp() + "' WHERE room_id = '" + _room.RoomId + "' AND user_id = '" + session.GetHabbo().Id + "' ORDER BY exit_timestamp DESC LIMIT 1");
                         dbClient.RunQuery("UPDATE `rooms` SET `users_now` = '" + _room.UsersNow + "' WHERE `id` = '" + _room.RoomId + "' LIMIT 1");
                     }
 
@@ -1390,7 +1381,7 @@ namespace Plus.HabboHotel.Rooms
 
         public int PetCount
         {
-            get { return petCount; }
+            get { return _petCount; }
         }
 
         public ICollection<RoomUser> GetUserList()
@@ -1414,7 +1405,7 @@ namespace Plus.HabboHotel.Rooms
             this._bots.Clear();
 
             this.userCount = 0;
-            this.petCount = 0;
+            this._petCount = 0;
 
             this._users = null;
             this._pets = null;

@@ -119,7 +119,7 @@ namespace Plus.Communication.Packets.Incoming.Catalog
                 case InteractionType.WALLPAPER:
                 case InteractionType.LANDSCAPE:
 
-                    Double Number = 0;
+                    double Number = 0;
 
                     try
                     {
@@ -434,10 +434,9 @@ namespace Plus.Communication.Packets.Incoming.Catalog
                     }
             }
 
-            BadgeDefinition Badge;
 
-            if(!string.IsNullOrEmpty(Item.Badge) &&
-                PlusEnvironment.GetGame().GetBadgeManager().TryGetBadge(Item.Badge, out Badge) &&
+            if (!string.IsNullOrEmpty(Item.Badge) &&
+                PlusEnvironment.GetGame().GetBadgeManager().TryGetBadge(Item.Badge, out BadgeDefinition Badge) &&
                 (string.IsNullOrEmpty(Badge.RequiredRight) || session.GetHabbo().GetPermissions().HasRight(Badge.RequiredRight)))
             {
                 session.GetHabbo().GetBadgeComponent().GiveBadge(Badge.Code, true, session);

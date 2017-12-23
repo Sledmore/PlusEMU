@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
 
 namespace Plus.Communication.Packets.Outgoing.Sound
 {
     class SoundSettingsComposer : ServerPacket
     {
-        public SoundSettingsComposer(ICollection<int> ClientVolumes, Boolean ChatPreference, Boolean InvitesStatus, Boolean FocusPreference, int FriendBarState)
+        public SoundSettingsComposer(ICollection<int> volumes, bool chatPreference, bool invitesStatus, bool focusPreference, int friendBarState)
             : base(ServerPacketHeader.SoundSettingsMessageComposer)
         {
-            foreach (int VolumeValue in ClientVolumes)
+            foreach (int volume in volumes)
             {
-                base.WriteInteger(VolumeValue);
+                base.WriteInteger(volume);
             }
 
-            base.WriteBoolean(ChatPreference);
-            base.WriteBoolean(InvitesStatus);
-            base.WriteBoolean(FocusPreference);
-            base.WriteInteger(FriendBarState);
+            base.WriteBoolean(chatPreference);
+            base.WriteBoolean(invitesStatus);
+            base.WriteBoolean(focusPreference);
+            base.WriteInteger(friendBarState);
             base.WriteInteger(0);
             base.WriteInteger(0);
         }

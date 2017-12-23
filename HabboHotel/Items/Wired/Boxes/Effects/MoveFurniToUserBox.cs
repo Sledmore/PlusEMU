@@ -115,7 +115,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 
                     Point Point = Instance.GetGameMap().GetChaseMovement(Item);
 
-                    Instance.GetWired().onUserFurniCollision(Instance, Item);
+                    Instance.GetWired().OnUserFurniCollision(Instance, Item);
 
                     if (!Instance.GetGameMap().ItemCanMove(Item, Point))
                         continue;
@@ -123,7 +123,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     if (Instance.GetGameMap().CanRollItemHere(Point.X, Point.Y) && !Instance.GetGameMap().SquareHasUsers(Point.X, Point.Y))
                     {    
                         Double NewZ = Item.GetZ;
-                        Boolean CanBePlaced = true;
+                        bool CanBePlaced = true;
 
                         List<Item> Items = Instance.GetGameMap().GetCoordinatedItems(Point);
                         foreach (Item IItem in Items.ToList())

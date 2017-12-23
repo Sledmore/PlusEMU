@@ -98,9 +98,7 @@ namespace Plus.HabboHotel.Rooms.Instance
             if (!this._bans.ContainsKey(UserId))
                 return false;
 
-            double time = 0;
-
-            if (this._bans.TryRemove(UserId, out time))
+            if (this._bans.TryRemove(UserId, out double time))
             {
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {

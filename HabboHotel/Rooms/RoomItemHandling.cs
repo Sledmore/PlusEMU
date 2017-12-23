@@ -546,7 +546,7 @@ namespace Plus.HabboHotel.Rooms
             }
 
             // Start calculating new Z coordinate
-            Double newZ = _room.GetGameMap().Model.SqFloorHeight[newX, newY];
+            double newZ = _room.GetGameMap().Model.SqFloorHeight[newX, newY];
 
             if (height == -1)
             {

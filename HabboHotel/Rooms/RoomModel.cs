@@ -11,10 +11,7 @@ namespace Plus.HabboHotel.Rooms
         public int DoorX;
         public int DoorY;
         public double DoorZ;
-
         public string Heightmap;
-
-
         public int MapSizeX;
         public int MapSizeY;
         public short[,] SqFloorHeight;
@@ -27,25 +24,25 @@ namespace Plus.HabboHotel.Rooms
 
         public int WallHeight;
 
-        public RoomModel(string id, int DoorX, int DoorY, double DoorZ, int DoorOrientation, string Heightmap, bool ClubOnly, int WallHeight, bool custom)
+        public RoomModel(string id, int doorX, int doorY, double doorZ, int doorOrientation, string heightmap, bool clubOnly, int wallHeight, bool custom)
         {
             try
             {
                 this.Id = id;
-                this.DoorX = DoorX;
-                this.DoorY = DoorY;
-                this.DoorZ = DoorZ;
-                this.DoorOrientation = DoorOrientation;
+                this.DoorX = doorX;
+                this.DoorY = doorY;
+                this.DoorZ = doorZ;
+                this.DoorOrientation = doorOrientation;
 
-                this.WallHeight = WallHeight;
+                this.WallHeight = wallHeight;
 
-                this.Heightmap = Heightmap.ToLower();
+                this.Heightmap = heightmap.ToLower();
 
-                string[] tmpHeightmap = Heightmap.Split(Convert.ToChar(13));
+                string[] tmpHeightmap = heightmap.Split(Convert.ToChar(13));
 
                 this.MapSizeX = tmpHeightmap[0].Length;
                 this.MapSizeY = tmpHeightmap.Length;
-                this.ClubOnly = ClubOnly;
+                this.ClubOnly = clubOnly;
 
                 SqState = new SquareState[MapSizeX, MapSizeY];
                 SqFloorHeight = new short[MapSizeX, MapSizeY];

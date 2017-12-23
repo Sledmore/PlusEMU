@@ -40,12 +40,6 @@ namespace Plus.HabboHotel.Users.Messenger
             }
         }
 
-        private GameClient Client
-        {
-            get { return client; }
-            set { client = value; }
-        }
-
         public bool InRoom
         {
             get { return (currentRoom != null); }

@@ -1,13 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.Communication.Packets.Incoming;
-using Plus.HabboHotel.GameClients;
-using Plus.Communication.Packets.Outgoing.Sound;
+﻿using Plus.HabboHotel.GameClients;
 using Plus.Database.Interfaces;
-
 
 namespace Plus.Communication.Packets.Incoming.Users
 {
@@ -15,13 +7,13 @@ namespace Plus.Communication.Packets.Incoming.Users
     {
         public void Parse(GameClient Session, ClientPacket Packet)
         {
-            Boolean ChatPreference = Packet.PopBoolean();
+            bool preference = Packet.PopBoolean();
 
-            Session.GetHabbo().ChatPreference = ChatPreference;
+            Session.GetHabbo().ChatPreference = preference;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `users` SET `chat_preference` = @chatPreference WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
-                dbClient.AddParameter("chatPreference", PlusEnvironment.BoolToEnum(ChatPreference));
+                dbClient.AddParameter("chatPreference", PlusEnvironment.BoolToEnum(preference));
                 dbClient.RunQuery();
             }
         }

@@ -398,16 +398,16 @@ namespace Plus.HabboHotel.Rooms.Instance
             return Effects.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
         }
 
-        public bool onUserFurniCollision(Room Instance, Item Item)
+        public bool OnUserFurniCollision(Room room, Item item)
         {
-            if (Instance == null || Item == null)
+            if (room == null || item == null)
                 return false;
 
-            foreach (Point Point in Item.GetSides())
+            foreach (Point Point in item.GetSides())
             {
-                if (Instance.GetGameMap().SquareHasUsers(Point.X, Point.Y))
+                if (room.GetGameMap().SquareHasUsers(Point.X, Point.Y))
                 {
-                    List<RoomUser> Users = Instance.GetGameMap().GetRoomUsers(Point);
+                    List<RoomUser> Users = room.GetGameMap().GetRoomUsers(Point);
                     if (Users != null && Users.Count > 0)
                     {
                         foreach (RoomUser User in Users.ToList())
@@ -415,7 +415,7 @@ namespace Plus.HabboHotel.Rooms.Instance
                             if (User == null)
                                 continue;
 
-                            Item.UserFurniCollision(User);
+                            item.UserFurniCollision(User);
                         }
                     }
                     else

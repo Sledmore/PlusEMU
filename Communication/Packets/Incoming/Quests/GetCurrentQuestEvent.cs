@@ -8,24 +8,24 @@ namespace Plus.Communication.Packets.Incoming.Quests
     {
         public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
                 return;
 
-            Quest UserQuest = PlusEnvironment.GetGame().GetQuestManager().GetQuest(Session.GetHabbo().QuestLastCompleted);
-            Quest NextQuest = PlusEnvironment.GetGame().GetQuestManager().GetNextQuestInSeries(UserQuest.Category, UserQuest.Number + 1);
+            Quest userQuest = PlusEnvironment.GetGame().GetQuestManager().GetQuest(Session.GetHabbo().QuestLastCompleted);
+            Quest nextQuest = PlusEnvironment.GetGame().GetQuestManager().GetNextQuestInSeries(userQuest.Category, userQuest.Number + 1);
 
-            if (NextQuest == null)
+            if (nextQuest == null)
                 return;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("REPLACE INTO `user_quests`(`user_id`,`quest_id`) VALUES (" + Session.GetHabbo().Id + ", " + NextQuest.Id + ")");
-                dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '" + NextQuest.Id + "' WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
+                dbClient.RunQuery("REPLACE INTO `user_quests`(`user_id`,`quest_id`) VALUES (" + Session.GetHabbo().Id + ", " + nextQuest.Id + ")");
+                dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '" + nextQuest.Id + "' WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
             }
 
-            Session.GetHabbo().GetStats().QuestId = NextQuest.Id;
+            Session.GetHabbo().GetStats().QuestId = nextQuest.Id;
             PlusEnvironment.GetGame().GetQuestManager().GetList(Session, null);
-            Session.SendPacket(new QuestStartedComposer(Session, NextQuest));
+            Session.SendPacket(new QuestStartedComposer(Session, nextQuest));
         }
     }
 }

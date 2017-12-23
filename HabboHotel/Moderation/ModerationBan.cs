@@ -9,7 +9,7 @@ namespace Plus.HabboHotel.Moderation
         public string Reason { get; set; }
         public ModerationBanType Type { get; set; }
 
-        public ModerationBan(ModerationBanType type, string value, string reason, Double expire)
+        public ModerationBan(ModerationBanType type, string value, string reason, double expire)
         {
             this.Type = type;
             this.Value = value;

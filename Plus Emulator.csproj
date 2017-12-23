@@ -250,12 +250,10 @@
     <Compile Include="Communication\Packets\Incoming\Users\GetIgnoredUsersEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\GetUserTagsEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\SetUserFocusPreferenceEvent.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Availability\MaintenanceStatusComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\BuildersClub\BCBorrowedItemsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\BuildersClub\BuildersClubMembershipComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Catalog\CheckGnomeNameComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Catalog\ClubGiftsComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\GameCenter\Game1WeeklyLeaderboardComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\GameCenter\Game2WeeklyLeaderboardComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\GameCenter\Game3WeeklyLeaderboardComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\GameCenter\GameAccountStatusComposer.cs" />
@@ -369,7 +367,6 @@
     <Compile Include="Communication\Packets\Outgoing\Groups\GroupMembersComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Groups\ManageGroupComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Groups\NewGroupInfoComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Groups\SetGroupIdComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Help\SendBullyReportComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Help\SubmitBullyReportComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Achievements\AchievementProgressedComposer.cs" />
@@ -407,7 +404,6 @@
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserRoomVisitsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\MutedComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\OpenHelpToolComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Navigator\GuestRoomSearchResultComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorCollapsedCategoriesComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorLiftedRoomsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\New\NavigatorMetaDataParserComposer.cs" />
@@ -602,9 +598,7 @@
     <Compile Include="Communication\Packets\Outgoing\ServerPacketHeader.cs" />
     <Compile Include="Communication\Packets\Outgoing\Sound\SoundSettingsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Sound\TraxSongInfoComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Talents\TalentLevelUpComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Talents\TalentTrackComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Talents\TalentTrackLevelComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\GetRelationshipsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\HabboGroupBadgesComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\HabboUserBadgesComposer.cs" />
@@ -692,7 +686,6 @@
     <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\SetRollerSpeedBox.cs" />
     <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\TeleportBotToFurniBox.cs" />
     <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\ExecuteWiredStacksBox.cs" />
-    <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\MoveFurniFromUserBox.cs" />
     <Compile Include="HabboHotel\Items\Wired\Boxes\Effects\MoveFurniToUserBox.cs" />
     <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\UserFurniCollision.cs" />
     <Compile Include="HabboHotel\Items\Wired\Boxes\Triggers\UserSaysCommandBox.cs" />
@@ -744,7 +737,6 @@
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\FastwalkCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\ForceSitCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\FreezeCommand.cs" />
-    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\GoBoomCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\MassDanceCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\MassEnableCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\OverrideCommand.cs" />
@@ -861,8 +853,6 @@
     <Compile Include="HabboHotel\Items\Wired\WiredBoxTypeUtility.cs" />
     <Compile Include="HabboHotel\Moderation\ModerationBanType.cs" />
     <Compile Include="HabboHotel\Moderation\ModerationManager.cs" />
-    <Compile Include="HabboHotel\Moderation\ModerationPreset.cs" />
-    <Compile Include="HabboHotel\Moderation\ModerationPresetActionCategories.cs" />
     <Compile Include="HabboHotel\Moderation\ModerationPresetActionMessages.cs" />
     <Compile Include="HabboHotel\Moderation\ModerationTicket.cs" />
     <Compile Include="HabboHotel\Catalog\Pets\PetRace.cs" />
@@ -1091,10 +1081,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Communication\Packets\Incoming\Rooms\Groups\" />
+    <Folder Include="Communication\Packets\Outgoing\Availability\" />
     <Folder Include="Communication\Packets\Outgoing\Campaigns\" />
     <Folder Include="HabboHotel\Rooms\Chat\Commands\Roleplay\Generic\" />
-    <Folder Include="HabboHotel\Rooms\Chat\Moderation\" />
-    <Folder Include="HabboHotel\Rooms\Polls\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

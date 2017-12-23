@@ -129,49 +129,50 @@ namespace Plus.Communication.Packets
 
         }
 
-        public void TryExecutePacket(GameClient Session, ClientPacket Packet)
+        public void TryExecutePacket(GameClient session, ClientPacket packet)
         {
-            IPacketEvent Pak = null;
+            if (session == null)
+                return;
 
-            if (!_incomingPackets.TryGetValue(Packet.Id, out Pak))
+            if (!_incomingPackets.TryGetValue(packet.Id, out IPacketEvent pak))
             {
                 if (System.Diagnostics.Debugger.IsAttached)
-                    log.Debug("Unhandled Packet: " + Packet.ToString());
+                    log.Debug("Unhandled Packet: " + packet.ToString());
                 return;
             }
 
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                if (_packetNames.ContainsKey(Packet.Id))
-                    log.Debug("Handled Packet: [" + Packet.Id + "] " + _packetNames[Packet.Id]);
+                if (_packetNames.ContainsKey(packet.Id))
+                    log.Debug("Handled Packet: [" + packet.Id + "] " + _packetNames[packet.Id]);
                 else
-                    log.Debug("Handled Packet: [" + Packet.Id + "] UnnamedPacketEvent");
+                    log.Debug("Handled Packet: [" + packet.Id + "] UnnamedPacketEvent");
             }
 
             if (!IgnoreTasks)
-                ExecutePacketAsync(Session, Packet, Pak);
+                ExecutePacketAsync(session, packet, pak);
             else
-                Pak.Parse(Session, Packet);
+                pak.Parse(session, packet);
         }
 
-        private void ExecutePacketAsync(GameClient Session, ClientPacket Packet, IPacketEvent Pak)
+        private void ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
         {
-            DateTime Start = DateTime.Now;
+            DateTime start = DateTime.Now;
 
-            var CancelSource = new CancellationTokenSource();
-            CancellationToken Token = CancelSource.Token;
+            CancellationTokenSource CancelSource = new CancellationTokenSource();
+            CancellationToken token = CancelSource.Token;
 
             Task t = _eventDispatcher.StartNew(() =>
             {
-                Pak.Parse(Session, Packet);
-                Token.ThrowIfCancellationRequested();
-            }, Token);
+                pak.Parse(session, packet);
+                token.ThrowIfCancellationRequested();
+            }, token);
 
             _runningTasks.TryAdd(t.Id, t);
 
             try
             {
-                if (!t.Wait(MaximumRunTimeInSec * 1000, Token))
+                if (!t.Wait(MaximumRunTimeInSec * 1000, token))
                 {
                     CancelSource.Cancel();
                 }
@@ -187,13 +188,13 @@ namespace Plus.Communication.Packets
                     else
                     {
                         //log.Fatal("Unhandled Error: " + e.Message + " - " + e.StackTrace);
-                        Session.Disconnect();
+                        session.Disconnect();
                     }
                 }
             }
             catch (OperationCanceledException)
             {
-                Session.Disconnect();
+                session.Disconnect();
             }
             finally
             {

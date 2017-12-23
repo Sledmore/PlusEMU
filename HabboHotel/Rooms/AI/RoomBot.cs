@@ -31,12 +31,12 @@ namespace Plus.HabboHotel.Rooms.AI
         public int X;
         public int Y;
         public double Z;
-        public int maxX;
-        public int maxY;
-        public int minX;
-        public int minY;
+        public int MaxX;
+        public int MaxY;
+        public int MinX;
+        public int MinY;
 
-        public int ownerID;
+        public int OwnerId;
 
         public bool AutomaticChat;
         public int SpeakingInterval;
@@ -52,48 +52,47 @@ namespace Plus.HabboHotel.Rooms.AI
 
         public int TargetUser { get; set; }
 
-        public RoomBot(int BotId, int RoomId, string AiType, string WalkingMode, string Name, string Motto, string Look, int X, int Y, double Z, int Rot,
-            int minX, int minY, int maxX, int maxY, ref List<RandomSpeech> Speeches, string Gender, int Dance, int ownerID,
-            bool AutomaticChat, int SpeakingInterval, bool MixSentences, int ChatBubble)
+        public RoomBot(int id, int roomId, string type, string walkingMode, string name, string motto, string look, int x, int y, double z, int rotation,
+            int minX, int minY, int maxX, int maxY, ref List<RandomSpeech> speeches, string gender, int dance, int ownerId,
+            bool automaticChat, int speakingInterval, bool mixSentences, int chatBubble)
         {
-            this.Id = BotId;
-            this.BotId = BotId;
-            this.RoomId = RoomId;
+            Id = id;
+            BotId = id;
+            RoomId = roomId;
 
-            this.Name = Name;
-            this.Motto = Motto;
-            this.Look = Look;
-            this.Gender = Gender.ToUpper();
+            Name = name;
+            Motto = motto;
+            Look = look;
+            Gender = gender.ToUpper();
 
-            this.AiType = BotUtility.GetAIFromString(AiType);
-            this.WalkingMode = WalkingMode;
+            AiType = BotUtility.GetAIFromString(type);
+            WalkingMode = walkingMode;
 
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-            this.Rot = Rot;
-            this.minX = minX;
-            this.minY = minY;
-            this.maxX = maxX;
-            this.maxY = maxY;
+            X = x;
+            Y = y;
+            Z = z;
+            Rot = rotation;
+            MinX = minX;
+            MinY = minY;
+            MaxX = maxX;
+            MaxY = maxY;
 
-            this.VirtualId = -1;
-            this.RoomUser = null;
-            this.DanceId = Dance;
+            VirtualId = -1;
+            RoomUser = null;
+            DanceId = dance;
 
-            this.LoadRandomSpeech(Speeches);
-            //this.LoadResponses(Responses);
+            LoadRandomSpeech(speeches);
 
-            this.ownerID = ownerID;
+            OwnerId = ownerId;
 
-            this.AutomaticChat = AutomaticChat;
-            this.SpeakingInterval = SpeakingInterval;
-            this.MixSentences = MixSentences;
+            AutomaticChat = automaticChat;
+            SpeakingInterval = speakingInterval;
+            MixSentences = mixSentences;
 
-            this._chatBubble = ChatBubble;
-            this.ForcedMovement = false;
-            this.TargetCoordinate = new Point();
-            this.TargetUser = 0;
+            _chatBubble = chatBubble;
+            ForcedMovement = false;
+            TargetCoordinate = new Point();
+            TargetUser = 0;
         }
 
         public bool IsPet

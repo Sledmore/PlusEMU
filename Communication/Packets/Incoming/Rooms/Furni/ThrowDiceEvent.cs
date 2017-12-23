@@ -1,32 +1,27 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class ThrowDiceEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            Item Item = Room.GetRoomItemHandler().GetItem(Packet.PopInt());
-            if (Item == null)
+            Item item = room.GetRoomItemHandler().GetItem(packet.PopInt());
+            if (item == null)
                 return;
 
-            Boolean hasRights = false;
-            if (Room.CheckRights(Session, false, true))
+            bool hasRights = false;
+            if (room.CheckRights(session, false, true))
                 hasRights = true;
 
-            int request = Packet.PopInt();
+            int request = packet.PopInt();
 
-            Item.Interactor.OnTrigger(Session, Item, request, hasRights);
+            item.Interactor.OnTrigger(session, item, request, hasRights);
         }
     }
 }

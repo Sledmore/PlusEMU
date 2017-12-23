@@ -63,7 +63,7 @@ namespace Plus.HabboHotel.Items.Interactor
                     Room.GetGameMap().ItemCanBePlaced(NewPoint.X, NewPoint.Y) &&
                     Room.GetGameMap().CanRollItemHere(NewPoint.X, NewPoint.Y))
                 {
-                    Double NewZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(NewPoint.X, NewPoint.Y);
+                    double NewZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(NewPoint.X, NewPoint.Y);
 
                     /*var mMessage = new ServerMessage();
                     mMessage.Init(Outgoing.ObjectOnRoller); // Cf
@@ -80,7 +80,7 @@ namespace Plus.HabboHotel.Items.Interactor
 
                     Room.SendPacket(new SlideObjectBundleComposer(Item.GetX, Item.GetY, Item.GetZ, NewPoint.X, NewPoint.Y, NewZ, 0, 0, Item.Id));
 
-                    Item.GetRoom()  .GetRoomItemHandler() .SetFloorItem(User.GetClient(), Item, NewPoint.X, NewPoint.Y, Item.Rotation, false, false, false);
+                    Item.GetRoom().GetRoomItemHandler().SetFloorItem(User.GetClient(), Item, NewPoint.X, NewPoint.Y, Item.Rotation, false, false, false);
                 }
             }
             else

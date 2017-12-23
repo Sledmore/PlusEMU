@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Data;
 using System.Collections.Generic;
 
 using System.Text.RegularExpressions;
 
 using Plus.Database.Interfaces;
-
 
 namespace Plus.HabboHotel.Rooms.Chat.Filter
 {
@@ -23,17 +21,17 @@ namespace Plus.HabboHotel.Rooms.Chat.Filter
         public void Init()
         {
             if (this._filteredWords.Count > 0)
-            this._filteredWords.Clear();
+                this._filteredWords.Clear();
 
-            DataTable Data = null;
+            DataTable data = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `wordfilter`");
-                Data = dbClient.GetTable();
+                data = dbClient.GetTable();
 
-                if (Data != null)
+                if (data != null)
                 {
-                    foreach (DataRow Row in Data.Rows)
+                    foreach (DataRow Row in data.Rows)
                     {
                         this._filteredWords.Add(new WordFilter(Convert.ToString(Row["word"]), Convert.ToString(Row["replacement"]), PlusEnvironment.EnumToBool(Row["strict"].ToString()), PlusEnvironment.EnumToBool(Row["bannable"].ToString())));
                     }
@@ -41,52 +39,52 @@ namespace Plus.HabboHotel.Rooms.Chat.Filter
             }
         }
 
-        public string CheckMessage(string Message)
+        public string CheckMessage(string message)
         {
             foreach (WordFilter Filter in this._filteredWords.ToList())
             {
-                if (Message.ToLower().Contains(Filter.Word) && Filter.IsStrict || Message == Filter.Word)
+                if (message.ToLower().Contains(Filter.Word) && Filter.IsStrict || message == Filter.Word)
                 {
-                    Message = Regex.Replace(Message, Filter.Word, Filter.Replacement, RegexOptions.IgnoreCase);
+                    message = Regex.Replace(message, Filter.Word, Filter.Replacement, RegexOptions.IgnoreCase);
                 }
-                else if (Message.ToLower().Contains(Filter.Word) && !Filter.IsStrict || Message == Filter.Word)
+                else if (message.ToLower().Contains(Filter.Word) && !Filter.IsStrict || message == Filter.Word)
                 {
-                    string[] Words = Message.Split(' ');
+                    string[] Words = message.Split(' ');
 
-                    Message = "";
+                    message = "";
                     foreach (string Word in Words.ToList())
                     {
                         if (Word.ToLower() == Filter.Word)
-                            Message += Filter.Replacement + " ";
+                            message += Filter.Replacement + " ";
                         else
-                            Message += Word + " ";
+                            message += Word + " ";
                     }
                 }
             }
 
-            return Message.TrimEnd(' ');
+            return message.TrimEnd(' ');
         }
 
-        public bool CheckBannedWords(string Message)
+        public bool CheckBannedWords(string message)
         {
-            Message = Message.Replace(" ", "").Replace(".", "").Replace("_", "").ToLower();
+            message = message.Replace(" ", "").Replace(".", "").Replace("_", "").ToLower();
 
             foreach (WordFilter Filter in this._filteredWords.ToList())
             {
                 if (!Filter.IsBannable)
                     continue;
 
-                if (Message.Contains(Filter.Word))
+                if (message.Contains(Filter.Word))
                     return true;
             }
             return false;
         }
 
-        public bool IsFiltered(string Message)
+        public bool IsFiltered(string message)
         {
-            foreach (WordFilter Filter in this._filteredWords.ToList())
+            foreach (WordFilter filter in this._filteredWords.ToList())
             {
-                if (Message.Contains(Filter.Word))
+                if (message.Contains(filter.Word))
                     return true;
             }
             return false;

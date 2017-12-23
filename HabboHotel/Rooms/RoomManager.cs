@@ -40,25 +40,24 @@ namespace Plus.HabboHotel.Rooms
                 if (sinceLastTime.TotalMilliseconds >= 500)
                 {
                     _cycleLastExecution = DateTime.Now;
-                    foreach (Room Room in _rooms.Values.ToList())
+                    foreach (Room room in _rooms.Values.ToList())
                     {
-                        if (Room.isCrashed)
+                        if (room.isCrashed)
                             continue;
 
-                        if (Room.ProcessTask == null || Room.ProcessTask.IsCompleted)
+                        if (room.ProcessTask == null || room.ProcessTask.IsCompleted)
                         {
-                            Room.ProcessTask = new Task(Room.ProcessRoom);
-                            Room.ProcessTask.Start();
-                            Room.IsLagging = 0;
+                            room.ProcessTask = new Task(room.ProcessRoom);
+                            room.ProcessTask.Start();
+                            room.IsLagging = 0;
                         }
                         else
                         {
-                            Room.IsLagging++;
-                            if (Room.IsLagging >= 30)
+                            room.IsLagging++;
+                            if (room.IsLagging >= 30)
                             {
-                                Room.isCrashed = true;
-                                UnloadRoom(Room.Id);
-                               // Logging.WriteLine("[RoomMgr] Room crashed (task didn't complete within 30 seconds): " + Room.RoomId);
+                                room.isCrashed = true;
+                                UnloadRoom(room.Id);
                             }
                         }
                     }
@@ -83,12 +82,12 @@ namespace Plus.HabboHotel.Rooms
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT id,door_x,door_y,door_z,door_dir,heightmap,club_only,poolmap,`wall_height` FROM `room_models` WHERE `custom` = '0'");
-                DataTable Data = dbClient.GetTable();
+                DataTable data = dbClient.GetTable();
 
-                if (Data == null)
+                if (data == null)
                     return;
 
-                foreach (DataRow row in Data.Rows)
+                foreach (DataRow row in data.Rows)
                 {
                     string model = Convert.ToString(row["id"]);
 
@@ -122,16 +121,16 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public void ReloadModel(string Id)
+        public void ReloadModel(string id)
         {
-            if (!_roomModels.ContainsKey(Id))
+            if (!_roomModels.ContainsKey(id))
             {
-                LoadModel(Id);
+                LoadModel(id);
                 return;
             }
 
-            _roomModels.Remove(Id);
-            LoadModel(Id);
+            _roomModels.Remove(id);
+            LoadModel(id);
         }
 
         public bool TryGetModel(string id, out RoomModel model)
@@ -164,18 +163,18 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public bool TryLoadRoom(int roomId, out Room instance)
+        public bool TryLoadRoom(int roomId, out Room room)
         {
             Room inst = null;
             if (_rooms.TryGetValue(roomId, out inst))
             {
                 if (!inst.Unloaded)
                 {
-                    instance = inst;
+                    room = inst;
                     return true;
                 }
 
-                instance = null;
+                room = null;
                 return false;
             }
 
@@ -185,29 +184,28 @@ namespace Plus.HabboHotel.Rooms
                 {
                     if (!inst.Unloaded)
                     {
-                        instance = inst;
+                        room = inst;
                         return true;
                     }
 
-                    instance = null;
+                    room = null;
                     return false;
                 }
 
-                RoomData data = null;
-                if (!RoomFactory.TryGetData(roomId, out data))
+                if (!RoomFactory.TryGetData(roomId, out RoomData data))
                 {
-                    instance = null;
+                    room = null;
                     return false;
                 }
 
                 Room myInstance = new Room(data);
                 if (_rooms.TryAdd(roomId, myInstance))
                 {
-                    instance = myInstance;
+                    room = myInstance;
                     return true;
                 }
 
-                instance = null;
+                room = null;
                 return false;
             }
         }
@@ -274,9 +272,9 @@ namespace Plus.HabboHotel.Rooms
         }
 
 
-        public bool TryGetRoom(int RoomId, out Room Room)
+        public bool TryGetRoom(int roomId, out Room room)
         {
-            return _rooms.TryGetValue(RoomId, out Room);
+            return _rooms.TryGetValue(roomId, out room);
         }
 
         public RoomData CreateRoom(GameClient session, string name, string description, int category, int maxVisitors, int tradeSettings, RoomModel model, string wallpaper = "0.0", string floor = "0.0", string landscape = "0.0", int wallthick = 0, int floorthick = 0)

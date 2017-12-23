@@ -1,13 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Plus.HabboHotel.Rooms.Chat.Emotions
 {
     public sealed class ChatEmotionsManager
     {
-        private readonly Dictionary<string, ChatEmotions> Emotions = new Dictionary<string, ChatEmotions>()
+        private readonly Dictionary<string, ChatEmotions> _emotions = new Dictionary<string, ChatEmotions>()
             {
                 // Smile
                 { ":)", ChatEmotions.Smile },
@@ -51,15 +48,15 @@ namespace Plus.HabboHotel.Rooms.Chat.Emotions
         /// <summary>
         /// Searches the provided text for any emotions that need to be applied and returns the packet number.
         /// </summary>
-        /// <param name="Text">The text to search through</param>
+        /// <param name="text">The text to search through</param>
         /// <returns></returns>
-        public int GetEmotionsForText(string Text)
+        public int GetEmotionsForText(string text)
         {
-            foreach (KeyValuePair<string, ChatEmotions> Kvp in Emotions)
+            foreach (KeyValuePair<string, ChatEmotions> kvp in _emotions)
             {
-                if (Text.ToLower().Contains(Kvp.Key.ToLower()))
+                if (text.ToLower().Contains(kvp.Key.ToLower()))
                 {
-                    return GetEmoticonPacketNum(Kvp.Value);
+                    return GetEmoticonPacketNum(kvp.Value);
                 }
             }
 

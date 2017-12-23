@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
@@ -20,26 +19,26 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
         public bool BoolData { get; set; }
         public string ItemsData { get; set; }
 
-        public UserWalksOffBox(Room Instance, Item Item)
+        public UserWalksOffBox(Room instance, Item item)
         {
-            this.Instance = Instance;
-            this.Item = Item;
+            this.Instance = instance;
+            this.Item = item;
             this.StringData = "";
             this.SetItems = new ConcurrentDictionary<int, Item>();
         }
 
-        public void HandleSave(ClientPacket Packet)
+        public void HandleSave(ClientPacket packet)
         {
-            int Unknown = Packet.PopInt();
-            string Unknown2 = Packet.PopString();
+            int Unknown = packet.PopInt();
+            string Unknown2 = packet.PopString();
 
             if (this.SetItems.Count > 0)
                 this.SetItems.Clear();
 
-            int FurniCount = Packet.PopInt();
+            int FurniCount = packet.PopInt();
             for (int i = 0; i < FurniCount; i++)
             {
-                Item SelectedItem = Instance.GetRoomItemHandler().GetItem(Convert.ToInt32(Packet.PopInt()));
+                Item SelectedItem = Instance.GetRoomItemHandler().GetItem(Convert.ToInt32(packet.PopInt()));
                 if (SelectedItem != null)
                     SetItems.TryAdd(SelectedItem.Id, SelectedItem);
             }
