@@ -33,7 +33,7 @@ namespace Plus.Communication.Packets.Outgoing.Quests
             Message.WriteInteger(Quest == null ? 0 : (Quest.Category.Contains("xmas2012")) ? 0 : AmountInCat); // Total quests in this cat
             Message.WriteInteger(Quest == null ? 3 : Quest.RewardType);// Reward type (1 = Snowflakes, 2 = Love hearts, 3 = Pixels, 4 = Seashells, everything else is pixels
             Message.WriteInteger(Quest == null ? 0 : Quest.Id); // Quest id
-            Message.WriteBoolean(Quest == null ? false : Session.GetHabbo().GetStats().QuestID == Quest.Id);  // Quest started
+            Message.WriteBoolean(Quest == null ? false : Session.GetHabbo().GetStats().QuestId == Quest.Id);  // Quest started
             Message.WriteString(Quest == null ? string.Empty : Quest.ActionName);
             Message.WriteString(Quest == null ? string.Empty : Quest.DataBit);
             Message.WriteInteger(Quest == null ? 0 : Quest.Reward);

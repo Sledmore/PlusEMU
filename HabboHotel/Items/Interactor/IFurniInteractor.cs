@@ -4,9 +4,9 @@ namespace Plus.HabboHotel.Items.Interactor
 {
     public interface IFurniInteractor
     {
-        void OnPlace(GameClient Session, Item Item);
-        void OnRemove(GameClient Session, Item Item);
-        void OnTrigger(GameClient Session, Item Item, int Request, bool HasRights);
-        void OnWiredTrigger(Item Item);
+        void OnPlace(GameClient session, Item item);
+        void OnRemove(GameClient session, Item item);
+        void OnTrigger(GameClient session, Item item, int request, bool hasRights);
+        void OnWiredTrigger(Item item);
     }
 }

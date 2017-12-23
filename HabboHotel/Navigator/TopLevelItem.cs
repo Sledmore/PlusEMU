@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.HabboHotel.Navigator
+﻿namespace Plus.HabboHotel.Navigator
 {
     public class TopLevelItem
     {
@@ -12,12 +7,12 @@ namespace Plus.HabboHotel.Navigator
         private string _filter;
         private string _localization;
 
-        public TopLevelItem(int Id, string SearchCode, string Filter, string Localization)
+        public TopLevelItem(int id, string searchCode, string filter, string localization)
         {
-            this._id = Id;
-            this._searchCode = SearchCode;
-            this._filter = Filter;
-            this._localization = Localization;
+            this._id = id;
+            this._searchCode = searchCode;
+            this._filter = filter;
+            this._localization = localization;
         }
 
         public int Id

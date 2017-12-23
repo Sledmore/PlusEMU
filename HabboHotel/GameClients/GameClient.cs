@@ -12,7 +12,6 @@ using Plus.Communication.Packets.Outgoing.Moderation;
 using Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Plus.Communication.Packets.Outgoing.Inventory.Achievements;
 
-
 using Plus.Communication.Encryption.Crypto.Prng;
 using Plus.HabboHotel.Users.Messenger.FriendBar;
 using Plus.Communication.Packets.Outgoing.BuildersClub;
@@ -39,10 +38,10 @@ namespace Plus.HabboHotel.GameClients
         private ConnectionInformation _connection;
         public int PingCount { get; set; }
 
-        public GameClient(int ClientId, ConnectionInformation pConnection)
+        public GameClient(int clientId, ConnectionInformation connection)
         {
-            this._id = ClientId;
-            this._connection = pConnection;
+            this._id = clientId;
+            this._connection = connection;
             this._packetParser = new GamePacketParser(this);
 
             this.PingCount = 0;

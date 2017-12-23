@@ -4,8 +4,6 @@ using System.Data;
 using System.Linq;
 using Plus.Database.Interfaces;
 
-using Plus.HabboHotel.Navigator;
-
 using log4net;
 
 namespace Plus.HabboHotel.Navigator

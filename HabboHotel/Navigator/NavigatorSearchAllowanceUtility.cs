@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Navigator
+﻿namespace Plus.HabboHotel.Navigator
 {
     public static class NavigatorSearchAllowanceUtility
     {
-        public static NavigatorSearchAllowance GetSearchAllowanceByString(string CategoryType)
+        public static NavigatorSearchAllowance GetSearchAllowanceByString(string type)
         {
-            switch (CategoryType.ToUpper())
+            switch (type.ToUpper())
             {
                 default:
                 case "NOTHING":
@@ -22,9 +16,9 @@ namespace Plus.HabboHotel.Navigator
             }
         }
 
-        public static int GetIntegerValue(NavigatorSearchAllowance SearchAllowance)
+        public static int GetIntegerValue(NavigatorSearchAllowance allowance)
         {
-            switch (SearchAllowance)
+            switch (allowance)
             {
                 default:
                 case NavigatorSearchAllowance.Nothing:

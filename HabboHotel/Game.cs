@@ -79,6 +79,7 @@ namespace Plus.HabboHotel
             _navigatorManager.Init();
 
             _roomManager = new RoomManager();
+            _roomManager.LoadModels();
 
             _chatManager = new ChatManager();
 

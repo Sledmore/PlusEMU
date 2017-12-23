@@ -22,7 +22,7 @@ namespace Plus.Communication.Packets.Outgoing.Quests
             base.WriteInteger((Quest.Name.Contains("xmas2012")) ? 1 : AmountInCat); // Total quests in this cat
             base.WriteInteger(Quest == null ? 3 : Quest.RewardType); // Reward type (1 = Snowflakes, 2 = Love hearts, 3 = Pixels, 4 = Seashells, everything else is pixels
             base.WriteInteger(Quest == null ? 0 : Quest.Id); // Quest id
-            base.WriteBoolean(Quest == null ? false : Session.GetHabbo().GetStats().QuestID == Quest.Id); // Quest started
+            base.WriteBoolean(Quest == null ? false : Session.GetHabbo().GetStats().QuestId == Quest.Id); // Quest started
            base.WriteString(Quest == null ? string.Empty : Quest.ActionName);
            base.WriteString(Quest == null ? string.Empty : Quest.DataBit);
             base.WriteInteger(Quest == null ? 0 : Quest.Reward);

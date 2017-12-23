@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using Plus.HabboHotel.Rooms;
 
@@ -10,23 +9,23 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
     class UserUpdateComposer : ServerPacket
     {
-        public UserUpdateComposer(ICollection<RoomUser> RoomUsers)
+        public UserUpdateComposer(ICollection<RoomUser> users)
             : base(ServerPacketHeader.UserUpdateMessageComposer)
         {
-            base.WriteInteger(RoomUsers.Count);
-            foreach (RoomUser User in RoomUsers.ToList())
+            base.WriteInteger(users.Count);
+            foreach (RoomUser user in users.ToList())
             {
-                base.WriteInteger(User.VirtualId);
-                base.WriteInteger(User.X);
-                base.WriteInteger(User.Y);
-                base.WriteString(User.Z.ToString("0.00"));
-                base.WriteInteger(User.RotHead);
-                base.WriteInteger(User.RotBody);
+                base.WriteInteger(user.VirtualId);
+                base.WriteInteger(user.X);
+                base.WriteInteger(user.Y);
+                base.WriteString(user.Z.ToString("0.00"));
+                base.WriteInteger(user.RotHead);
+                base.WriteInteger(user.RotBody);
 
                 StringBuilder StatusComposer = new StringBuilder();
                 StatusComposer.Append("/");
 
-                foreach (KeyValuePair<string, string> Status in User.Statusses.ToList())
+                foreach (KeyValuePair<string, string> Status in user.Statusses.ToList())
                 {
                     StatusComposer.Append(Status.Key);
 

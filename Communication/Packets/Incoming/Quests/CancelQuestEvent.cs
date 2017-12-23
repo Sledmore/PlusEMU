@@ -8,7 +8,7 @@ namespace Plus.Communication.Packets.Incoming.Quests
     {
         public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
         {
-            Quest Quest = PlusEnvironment.GetGame().GetQuestManager().GetQuest(Session.GetHabbo().GetStats().QuestID);
+            Quest Quest = PlusEnvironment.GetGame().GetQuestManager().GetQuest(Session.GetHabbo().GetStats().QuestId);
             if (Quest == null)
                 return;
 
@@ -18,7 +18,7 @@ namespace Plus.Communication.Packets.Incoming.Quests
                     "UPDATE `user_stats` SET `quest_id` = '0' WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
             }
 
-            Session.GetHabbo().GetStats().QuestID = 0;
+            Session.GetHabbo().GetStats().QuestId = 0;
             Session.SendPacket(new QuestAbortedComposer());
 
             PlusEnvironment.GetGame().GetQuestManager().GetList(Session, null);

@@ -3,7 +3,6 @@ using System.Linq;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users.Relationships;
-using Plus.Communication.Packets.Incoming;
 using Plus.Communication.Packets.Outgoing;
 
 namespace Plus.HabboHotel.Users.Messenger

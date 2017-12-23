@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Subscriptions
+﻿namespace Plus.HabboHotel.Subscriptions
 {
     public class SubscriptionData
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Badge { get; set; }
-        public int Credits { get; set; }
-        public int Duckets { get; set; }
-        public int Respects { get; set; }
+        public int Id { get; private set; }
+        public string Name { get; private set; }
+        public string Badge { get; private set; }
+        public int Credits { get; private set; }
+        public int Duckets { get; private set; }
+        public int Respects { get; private set; }
 
-        public SubscriptionData(int Id, string Name, string Badge, int Credits, int Duckets, int Respects)
+        public SubscriptionData(int id, string name, string badge, int credits, int duckets, int respects)
         {
-            this.Id = Id;
-            this.Name = Name;
-            this.Badge = Badge;
-            this.Credits = Credits;
-            this.Duckets = Duckets;
-            this.Respects = Respects;
+            Id = id;
+            Name = name;
+            Badge = badge;
+            Credits = credits;
+            Duckets = duckets;
+            Respects = respects;
         }
     }
 }

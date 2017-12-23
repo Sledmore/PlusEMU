@@ -7,7 +7,6 @@ using Plus.Core;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items.Interactor;
 
-
 using Plus.Utilities;
 using Plus.HabboHotel.Rooms.Games.Freeze;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-using Plus.Communication.Packets.Incoming;
-using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Items.Wired;
 using Plus.Communication.Packets.Outgoing.Rooms.Furni.Wired;
-
-
 
 namespace Plus.HabboHotel.Items.Interactor
 {

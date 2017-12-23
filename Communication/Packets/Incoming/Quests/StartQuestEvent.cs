@@ -20,7 +20,7 @@ namespace Plus.Communication.Packets.Incoming.Quests
                 dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '" + Quest.Id + "' WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
             }
 
-            Session.GetHabbo().GetStats().QuestID = Quest.Id;
+            Session.GetHabbo().GetStats().QuestId = Quest.Id;
             PlusEnvironment.GetGame().GetQuestManager().GetList(Session, null);
             Session.SendPacket(new QuestStartedComposer(Session, Quest));
         }

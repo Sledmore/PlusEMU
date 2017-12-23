@@ -2,9 +2,9 @@
 {
     public static class NavigatorViewModeUtility
     {
-        public static NavigatorViewMode GetViewModeByString(string ViewMode)
+        public static NavigatorViewMode GetViewModeByString(string mode)
         {
-            switch (ViewMode.ToUpper())
+            switch (mode.ToUpper())
             {
                 default:
                 case "REGULAR":

@@ -1,9 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using Plus.Database.Interfaces;
-
 
 namespace Plus.HabboHotel.Users.Messenger
 {
@@ -15,7 +13,6 @@ namespace Plus.HabboHotel.Users.Messenger
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `id`,`username`,`motto`,`look`,`last_online` FROM users WHERE username LIKE @query LIMIT 50");
-
                 dbClient.AddParameter("query", query + "%");
                 dTable = dbClient.GetTable();
             }

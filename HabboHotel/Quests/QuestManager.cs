@@ -88,12 +88,12 @@ namespace Plus.HabboHotel.Quests
 
         public void ProgressUserQuest(GameClient session, QuestType type, int data = 0)
         {
-            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetStats().QuestID <= 0)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetStats().QuestId <= 0)
             {
                 return;
             }
 
-            Quest quest = GetQuest(session.GetHabbo().GetStats().QuestID);
+            Quest quest = GetQuest(session.GetHabbo().GetStats().QuestId);
 
             if (quest == null || quest.GoalType != type)
             {
@@ -159,14 +159,14 @@ namespace Plus.HabboHotel.Quests
                     dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '0' WHERE `id` = '" + session.GetHabbo().Id + "' LIMIT 1");
             }
 
-            session.GetHabbo().quests[session.GetHabbo().GetStats().QuestID] = totalProgress;
+            session.GetHabbo().quests[session.GetHabbo().GetStats().QuestId] = totalProgress;
             session.SendPacket(new QuestStartedComposer(session, quest));
 
             if (completeQuest)
             {
                 session.GetHabbo().GetMessenger().BroadcastAchievement(session.GetHabbo().Id, Users.Messenger.MessengerEventTypes.QuestCompleted, quest.Category + "." + quest.Name);
 
-                session.GetHabbo().GetStats().QuestID = 0;
+                session.GetHabbo().GetStats().QuestId = 0;
                 session.GetHabbo().QuestLastCompleted = quest.Id;
                 session.SendPacket(new QuestCompletedComposer(session, quest));
                 session.GetHabbo().Duckets += quest.Reward;
@@ -208,7 +208,7 @@ namespace Plus.HabboHotel.Quests
                 {
                     int UserProgress = session.GetHabbo().GetQuestProgress(quest.Id);
 
-                    if (session.GetHabbo().GetStats().QuestID != quest.Id && UserProgress >= quest.GoalData)
+                    if (session.GetHabbo().GetStats().QuestId != quest.Id && UserProgress >= quest.GoalData)
                     {
                         UserQuestGoals[quest.Category] = quest.Number + 1;
                     }

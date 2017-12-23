@@ -13,16 +13,15 @@ namespace Plus.HabboHotel.Navigator
 {
     static class NavigatorHandler
     {
-        public static void Search(ServerPacket Message, SearchResultList SearchResult, string query, GameClient session, int FetchLimit)
+        public static void Search(ServerPacket packet, SearchResultList result, string query, GameClient session, int limit)
         {
             if (session == null)
                 return;
-
-            //Switching by categorys.
-            switch (SearchResult.CategoryType)
+            
+            switch (result.CategoryType)
             {
                 default:
-                    Message.WriteInteger(0);
+                    packet.WriteInteger(0);
                     break;
 
                 case NavigatorCategoryType.Query:
@@ -63,10 +62,10 @@ namespace Plus.HabboHotel.Navigator
                                     GetRooms = null;
                                 }
 
-                                Message.WriteInteger(Results.Count);
+                                packet.WriteInteger(Results.Count);
                                 foreach (RoomData Data in Results.ToList())
                                 {
-                                    RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                                    RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                                 }
 
                                 Results = null;
@@ -77,10 +76,10 @@ namespace Plus.HabboHotel.Navigator
                             query = query.Remove(0, 4);
                             ICollection<Room> TagMatches = PlusEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(query);
 
-                            Message.WriteInteger(TagMatches.Count);
+                            packet.WriteInteger(TagMatches.Count);
                             foreach (RoomData Data in TagMatches.ToList())
                             {
-                                RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                                RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                             }
 
                             TagMatches = null;
@@ -90,10 +89,10 @@ namespace Plus.HabboHotel.Navigator
                             query = query.Remove(0, 6);
                             ICollection<Room> GroupRooms = PlusEnvironment.GetGame().GetRoomManager().SearchGroupRooms(query);
 
-                            Message.WriteInteger(GroupRooms.Count);
+                            packet.WriteInteger(GroupRooms.Count);
                             foreach (RoomData Data in GroupRooms.ToList())
                             {
-                                RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                                RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                             }
 
                             GroupRooms = null;
@@ -129,10 +128,10 @@ namespace Plus.HabboHotel.Navigator
                                     Table = null;
                                 }
 
-                                Message.WriteInteger(Results.Count);
+                                packet.WriteInteger(Results.Count);
                                 foreach (RoomData Data in Results.ToList())
                                 {
-                                    RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                                    RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                                 }
 
                                 Results = null;
@@ -150,12 +149,12 @@ namespace Plus.HabboHotel.Navigator
 
                 case NavigatorCategoryType.Popular:
                     {
-                        List<Room> PopularRooms = PlusEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, FetchLimit);
+                        List<Room> PopularRooms = PlusEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, limit);
 
-                        Message.WriteInteger(PopularRooms.Count);
+                        packet.WriteInteger(PopularRooms.Count);
                         foreach (RoomData Data in PopularRooms.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         PopularRooms = null;
@@ -164,12 +163,12 @@ namespace Plus.HabboHotel.Navigator
 
                 case NavigatorCategoryType.Recommended:
                     {
-                        List<Room> RecommendedRooms = PlusEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(FetchLimit);
+                        List<Room> RecommendedRooms = PlusEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(limit);
 
-                        Message.WriteInteger(RecommendedRooms.Count);
+                        packet.WriteInteger(RecommendedRooms.Count);
                         foreach (RoomData Data in RecommendedRooms.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         RecommendedRooms = null;
@@ -178,12 +177,12 @@ namespace Plus.HabboHotel.Navigator
 
                 case NavigatorCategoryType.Category:
                     {
-                        List<Room> GetRoomsByCategory = PlusEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(SearchResult.Id, FetchLimit);
+                        List<Room> GetRoomsByCategory = PlusEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(result.Id, limit);
 
-                        Message.WriteInteger(GetRoomsByCategory.Count);
+                        packet.WriteInteger(GetRoomsByCategory.Count);
                         foreach (RoomData Data in GetRoomsByCategory.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         GetRoomsByCategory = null;
@@ -194,10 +193,10 @@ namespace Plus.HabboHotel.Navigator
                     {
                         ICollection<RoomData> rooms = RoomFactory.GetRoomsDataByOwnerSortByName(session.GetHabbo().Id).OrderByDescending(x => x.UsersNow).ToList();
 
-                        Message.WriteInteger(rooms.Count);
+                        packet.WriteInteger(rooms.Count);
                         foreach (RoomData Data in rooms.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         break;
@@ -225,12 +224,12 @@ namespace Plus.HabboHotel.Navigator
                                 MyGroups.Add(Data);
                         }
 
-                        MyGroups = MyGroups.Take(FetchLimit).ToList();
+                        MyGroups = MyGroups.Take(limit).ToList();
 
-                        Message.WriteInteger(MyGroups.Count);
+                        packet.WriteInteger(MyGroups.Count);
                         foreach (RoomData Data in MyGroups.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         MyGroups = null;
@@ -256,10 +255,10 @@ namespace Plus.HabboHotel.Navigator
 
                         List<Room> MyFriendsRooms = PlusEnvironment.GetGame().GetRoomManager().GetRoomsByIds(RoomIds.ToList());
 
-                        Message.WriteInteger(MyFriendsRooms.Count);
+                        packet.WriteInteger(MyFriendsRooms.Count);
                         foreach (RoomData Data in MyFriendsRooms.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         MyFriendsRooms = null;
@@ -277,7 +276,7 @@ namespace Plus.HabboHotel.Navigator
                             {
                                 dbClient.SetQuery("SELECT `room_id` FROM `room_rights` WHERE `user_id` = @UserId LIMIT @FetchLimit");
                                 dbClient.AddParameter("UserId", session.GetHabbo().Id);
-                                dbClient.AddParameter("FetchLimit", FetchLimit);
+                                dbClient.AddParameter("FetchLimit", limit);
                                 GetRights = dbClient.GetTable();
 
                                 foreach (DataRow Row in GetRights.Rows)
@@ -292,10 +291,10 @@ namespace Plus.HabboHotel.Navigator
                             }
                         }
 
-                        Message.WriteInteger(MyRights.Count);
+                        packet.WriteInteger(MyRights.Count);
                         foreach (RoomData Data in MyRights.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         MyRights = null;
@@ -304,12 +303,12 @@ namespace Plus.HabboHotel.Navigator
 
                 case NavigatorCategoryType.TopPromotions:
                     {
-                        List<Room> GetPopularPromotions = PlusEnvironment.GetGame().GetRoomManager().GetOnGoingRoomPromotions(16, FetchLimit);
+                        List<Room> GetPopularPromotions = PlusEnvironment.GetGame().GetRoomManager().GetOnGoingRoomPromotions(16, limit);
 
-                        Message.WriteInteger(GetPopularPromotions.Count);
+                        packet.WriteInteger(GetPopularPromotions.Count);
                         foreach (RoomData Data in GetPopularPromotions.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         GetPopularPromotions = null;
@@ -325,12 +324,12 @@ namespace Plus.HabboHotel.Navigator
 
                 case NavigatorCategoryType.PromotionCategory:
                     {
-                        List<Room> GetPromotedRooms = PlusEnvironment.GetGame().GetRoomManager().GetPromotedRooms(SearchResult.OrderId, FetchLimit);
+                        List<Room> GetPromotedRooms = PlusEnvironment.GetGame().GetRoomManager().GetPromotedRooms(result.OrderId, limit);
 
-                        Message.WriteInteger(GetPromotedRooms.Count);
+                        packet.WriteInteger(GetPromotedRooms.Count);
                         foreach (RoomData Data in GetPromotedRooms.ToList())
                         {
-                            RoomAppender.WriteRoom(Message, Data, Data.Promotion);
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
                         }
 
                         GetPromotedRooms = null;

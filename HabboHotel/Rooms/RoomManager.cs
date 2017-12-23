@@ -30,8 +30,6 @@ namespace Plus.HabboHotel.Rooms
             _roomModels = new Dictionary<string, RoomModel>();
             _rooms = new ConcurrentDictionary<int, Room>();
             _roomLoadingSync = new object();
-
-            LoadModels();
         }
 
         public void OnCycle()

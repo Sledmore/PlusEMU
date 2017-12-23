@@ -22,9 +22,9 @@ namespace Plus.HabboHotel.Users.Messenger
         private Dictionary<int, MessengerBuddy> _friends;
         private Dictionary<int, MessengerRequest> _requests;
 
-        public HabboMessenger(int UserId)
+        public HabboMessenger(int userId)
         {
-            this._userId = UserId;
+            this._userId = userId;
             
             this._requests = new Dictionary<int, MessengerRequest>();
             this._friends = new Dictionary<int, MessengerBuddy>();

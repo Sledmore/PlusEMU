@@ -533,13 +533,13 @@ namespace Plus.HabboHotel.Rooms
         }
 
 
-        public bool CheckMute(GameClient Session)
+        public bool CheckMute(GameClient session)
         {
-            if (MutedUsers.ContainsKey(Session.GetHabbo().Id))
+            if (MutedUsers.ContainsKey(session.GetHabbo().Id))
             {
-                if (MutedUsers[Session.GetHabbo().Id] < PlusEnvironment.GetUnixTimestamp())
+                if (MutedUsers[session.GetHabbo().Id] < PlusEnvironment.GetUnixTimestamp())
                 {
-                    MutedUsers.Remove(Session.GetHabbo().Id);
+                    MutedUsers.Remove(session.GetHabbo().Id);
                 }
                 else
                 {
@@ -547,44 +547,42 @@ namespace Plus.HabboHotel.Rooms
                 }
             }
 
-            if (Session.GetHabbo().TimeMuted > 0 || (RoomMuted && Session.GetHabbo().Username != OwnerName))
+            if (session.GetHabbo().TimeMuted > 0 || (RoomMuted && session.GetHabbo().Username != OwnerName))
                 return true;
 
             return false;
         }
 
-        public void SendObjects(GameClient Session)
+        public void SendObjects(GameClient session)
         {
-            Room Room = Session.GetHabbo().CurrentRoom;
+            session.SendPacket(new HeightMapComposer(this.GetGameMap().Model.Heightmap));
+            session.SendPacket(new FloorHeightMapComposer(this.GetGameMap().Model.GetRelativeHeightmap(), this.GetGameMap().StaticModel.WallHeight));
 
-            Session.SendPacket(new HeightMapComposer(Room.GetGameMap().Model.Heightmap));
-            Session.SendPacket(new FloorHeightMapComposer(Room.GetGameMap().Model.GetRelativeHeightmap(), Room.GetGameMap().StaticModel.WallHeight));
-
-            foreach (RoomUser RoomUser in _roomUserManager.GetUserList().ToList())
+            foreach (RoomUser user in _roomUserManager.GetUserList().ToList())
             {
-                if (RoomUser == null)
+                if (user == null)
                     continue;
 
-                Session.SendPacket(new UsersComposer(RoomUser));
+                session.SendPacket(new UsersComposer(user));
 
-                if (RoomUser.IsBot && RoomUser.BotData.DanceId > 0)
-                    Session.SendPacket(new DanceComposer(RoomUser, RoomUser.BotData.DanceId));
-                else if (!RoomUser.IsBot && !RoomUser.IsPet && RoomUser.IsDancing)
-                    Session.SendPacket(new DanceComposer(RoomUser, RoomUser.DanceId));
+                if (user.IsBot && user.BotData.DanceId > 0)
+                    session.SendPacket(new DanceComposer(user, user.BotData.DanceId));
+                else if (!user.IsBot && !user.IsPet && user.IsDancing)
+                    session.SendPacket(new DanceComposer(user, user.DanceId));
 
-                if (RoomUser.IsAsleep)
-                    Session.SendPacket(new SleepComposer(RoomUser, true));
+                if (user.IsAsleep)
+                    session.SendPacket(new SleepComposer(user, true));
 
-                if (RoomUser.CarryItemID > 0 && RoomUser.CarryTimer > 0)
-                    Session.SendPacket(new CarryObjectComposer(RoomUser.VirtualId, RoomUser.CarryItemID));
+                if (user.CarryItemID > 0 && user.CarryTimer > 0)
+                    session.SendPacket(new CarryObjectComposer(user.VirtualId, user.CarryItemID));
 
-                if (!RoomUser.IsBot && !RoomUser.IsPet && RoomUser.CurrentEffect > 0)
-                    Session.SendPacket(new AvatarEffectComposer(RoomUser.VirtualId, RoomUser.CurrentEffect));
+                if (!user.IsBot && !user.IsPet && user.CurrentEffect > 0)
+                    session.SendPacket(new AvatarEffectComposer(user.VirtualId, user.CurrentEffect));
             }
 
-            Session.SendPacket(new UserUpdateComposer(_roomUserManager.GetUserList().ToList()));
-            Session.SendPacket(new ObjectsComposer(Room.GetRoomItemHandler().GetFloor.ToArray(), this));
-            Session.SendPacket(new ItemsComposer(Room.GetRoomItemHandler().GetWall.ToArray(), this));
+            session.SendPacket(new UserUpdateComposer(_roomUserManager.GetUserList().ToList()));
+            session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
+            session.SendPacket(new ItemsComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
         }
 
         #region Tents
