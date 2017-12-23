@@ -6,20 +6,20 @@ namespace Plus.HabboHotel.Catalog.Utilities
 {
     public static class PetUtility
     {
-        public static bool CheckPetName(string PetName)
+        public static bool CheckPetName(string name)
         {
-            if (PetName.Length < 1 || PetName.Length > 16)
+            if (name.Length < 1 || name.Length > 16)
                 return false;
 
-            if (!PlusEnvironment.IsValidAlphaNumeric(PetName))
+            if (!PlusEnvironment.IsValidAlphaNumeric(name))
                 return false;
 
             return true;
         }
 
-        public static Pet CreatePet(int UserId, string Name, int Type, string Race, string Color)
+        public static Pet CreatePet(int userId, string name, int type, string race, string colour)
         {
-            Pet pet = new Pet(0, UserId, 0, Name, Type, Race, Color, 0, 100, 100, 0, PlusEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 0, 0, -1, "-1");
+            Pet pet = new Pet(0, userId, 0, name, type, race, colour, 0, 100, 100, 0, PlusEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 0, 0, -1, "-1");
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {

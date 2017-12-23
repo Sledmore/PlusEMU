@@ -5,25 +5,27 @@ namespace Plus.HabboHotel.Catalog.Clothing
 {
     public class ClothingItem
     {
-        public int Id { get; set; }
-        public string ClothingName { get; set; }
+        public int Id { get; private set; }
+        public string ClothingName { get; private set; }
         public List<int> PartIds { get; private set; }
 
-        public ClothingItem(int Id, string ClothingName, string PartIds)
+        public ClothingItem(int id, string name, string partIds)
         {
-            this.Id = Id;
-            this.ClothingName = ClothingName;
+            Id = id;
+            ClothingName = name;
 
-            this.PartIds = new List<int>();
-            if (PartIds.Contains(","))
+            PartIds = new List<int>();
+            if (partIds.Contains(","))
             {
-                foreach (string PartId in PartIds.Split(','))
+                foreach (string PartId in partIds.Split(','))
                 {
                     this.PartIds.Add(int.Parse(PartId));
                 }
             }
-            else if (!String.IsNullOrEmpty(PartIds) && (int.Parse(PartIds)) > 0)
-                this.PartIds.Add(int.Parse(PartIds));
+            else if (!String.IsNullOrEmpty(partIds) && (int.Parse(partIds)) > 0)
+            {
+                PartIds.Add(int.Parse(partIds));
+            }
         }
     }
 }

@@ -9,29 +9,28 @@ namespace Plus.HabboHotel.Catalog.Utilities
 {
     public static class BotUtility
     {
-        public static Bot CreateBot(ItemData Data, int OwnerId)
+        public static Bot CreateBot(ItemData itemData, int ownerId)
         {
-            DataRow BotData = null;
-            CatalogBot CataBot = null;
-            if (!PlusEnvironment.GetGame().GetCatalog().TryGetBot(Data.Id, out CataBot))
+            DataRow bot = null;
+            if (!PlusEnvironment.GetGame().GetCatalog().TryGetBot(itemData.Id, out CatalogBot CataBot))
                 return null;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO bots (`user_id`,`name`,`motto`,`look`,`gender`,`ai_type`) VALUES ('" + OwnerId + "', '" + CataBot.Name + "', '" + CataBot.Motto + "', '" + CataBot.Figure + "', '" + CataBot.Gender + "', '" + CataBot.AIType + "')");
-                int Id = Convert.ToInt32(dbClient.InsertQuery());
+                dbClient.SetQuery("INSERT INTO bots (`user_id`,`name`,`motto`,`look`,`gender`,`ai_type`) VALUES ('" + ownerId + "', '" + CataBot.Name + "', '" + CataBot.Motto + "', '" + CataBot.Figure + "', '" + CataBot.Gender + "', '" + CataBot.AIType + "')");
+                int id = Convert.ToInt32(dbClient.InsertQuery());
 
-                dbClient.SetQuery("SELECT `id`,`user_id`,`name`,`motto`,`look`,`gender` FROM `bots` WHERE `user_id` = '" + OwnerId + "' AND `id` = '" + Id + "' LIMIT 1");
-                BotData = dbClient.GetRow();
+                dbClient.SetQuery("SELECT `id`,`user_id`,`name`,`motto`,`look`,`gender` FROM `bots` WHERE `user_id` = '" + ownerId + "' AND `id` = '" + id + "' LIMIT 1");
+                bot = dbClient.GetRow();
             }
 
-            return new Bot(Convert.ToInt32(BotData["id"]), Convert.ToInt32(BotData["user_id"]), Convert.ToString(BotData["name"]), Convert.ToString(BotData["motto"]), Convert.ToString(BotData["look"]), Convert.ToString(BotData["gender"]));
+            return new Bot(Convert.ToInt32(bot["id"]), Convert.ToInt32(bot["user_id"]), Convert.ToString(bot["name"]), Convert.ToString(bot["motto"]), Convert.ToString(bot["look"]), Convert.ToString(bot["gender"]));
         }
 
 
-        public static BotAIType GetAIFromString(string Type)
+        public static BotAIType GetAIFromString(string type)
         {
-            switch (Type)
+            switch (type)
             {
                 case "pet":
                     return BotAIType.Pet;

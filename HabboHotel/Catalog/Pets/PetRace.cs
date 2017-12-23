@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Catalog.Pets
+﻿namespace Plus.HabboHotel.Catalog.Pets
 {
     public class PetRace
     {
@@ -14,43 +8,43 @@ namespace Plus.HabboHotel.Catalog.Pets
         public bool _hasPrimaryColour;
         public bool _hasSecondaryColour;
 
-        public PetRace(int RaceId, int PrimaryColour, int SecondaryColour, bool HasPrimaryColour, bool HasSecondaryColour)
+        public PetRace(int raceId, int primaryColour, int secondaryColour, bool hasPrimaryColour, bool hasSecondaryColour)
         {
-            this._raceId = RaceId;
-            this._primaryColour = PrimaryColour;
-            this._secondaryColour = SecondaryColour;
-            this._hasPrimaryColour = HasPrimaryColour;
-            this._hasSecondaryColour = HasSecondaryColour;
+            _raceId = raceId;
+            _primaryColour = primaryColour;
+            _secondaryColour = secondaryColour;
+            _hasPrimaryColour = hasPrimaryColour;
+            _hasSecondaryColour = hasSecondaryColour;
         }
 
         public int RaceId
         {
-            get { return this._raceId; }
-            set { this._raceId = value; }
+            get { return _raceId; }
+            set { _raceId = value; }
         }
 
         public int PrimaryColour
         {
-            get { return this._primaryColour; }
-            set { this._primaryColour = value; }
+            get { return _primaryColour; }
+            set { _primaryColour = value; }
         }
 
         public int SecondaryColour
         {
-            get { return this._secondaryColour; }
-            set { this._secondaryColour = value; }
+            get { return _secondaryColour; }
+            set { _secondaryColour = value; }
         }
 
         public bool HasPrimaryColour
         {
-            get { return this._hasPrimaryColour; }
-            set { this._hasPrimaryColour = value; }
+            get { return _hasPrimaryColour; }
+            set { _hasPrimaryColour = value; }
         }
 
         public bool HasSecondaryColour
         {
-            get { return this._hasSecondaryColour; }
-            set { this._hasSecondaryColour = value; }
+            get { return _hasSecondaryColour; }
+            set { _hasSecondaryColour = value; }
         }
     }
 }

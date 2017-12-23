@@ -24,7 +24,7 @@ namespace Plus.Communication.Packets.Incoming.GameCenter
             {
                 string SSOTicket = "HABBOON-Fastfood-" + GenerateSSO(32) + "-" + Session.GetHabbo().Id;
 
-                Session.SendPacket(new JoinQueueComposer(GameData.GameId));
+                Session.SendPacket(new JoinQueueComposer(GameData.Id));
                 Session.SendPacket(new LoadGameComposer(GameData, SSOTicket));
             }
         }

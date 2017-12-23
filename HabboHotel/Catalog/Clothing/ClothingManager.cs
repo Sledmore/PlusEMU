@@ -11,7 +11,7 @@ namespace Plus.HabboHotel.Catalog.Clothing
 
         public ClothingManager()
         {
-            this._clothing = new Dictionary<int, ClothingItem>();
+            _clothing = new Dictionary<int, ClothingItem>();
         }
 
         public void Init()
@@ -19,32 +19,30 @@ namespace Plus.HabboHotel.Catalog.Clothing
             if (this._clothing.Count > 0)
                 this._clothing.Clear();
 
-            DataTable GetClothing = null;
+            DataTable data = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `id`,`clothing_name`,`clothing_parts` FROM `catalog_clothing`");
-                GetClothing = dbClient.GetTable();
+                data = dbClient.GetTable();
             }
 
-            if (GetClothing != null)
+            if (data != null)
             {
-                foreach (DataRow Row in GetClothing.Rows)
+                foreach (DataRow row in data.Rows)
                 {
-                    this._clothing.Add(Convert.ToInt32(Row["id"]), new ClothingItem(Convert.ToInt32(Row["id"]), Convert.ToString(Row["clothing_name"]), Convert.ToString(Row["clothing_parts"])));
+                    _clothing.Add(Convert.ToInt32(row["id"]), new ClothingItem(Convert.ToInt32(row["id"]), Convert.ToString(row["clothing_name"]), Convert.ToString(row["clothing_parts"])));
                 }
             }
         }
 
-        public bool TryGetClothing(int ItemId, out ClothingItem Clothing)
+        public bool TryGetClothing(int itemId, out ClothingItem clothing)
         {
-            if (this._clothing.TryGetValue(ItemId, out Clothing))
-                return true;
-            return false;
+            return _clothing.TryGetValue(itemId, out clothing);
         }
 
         public ICollection<ClothingItem> GetClothingAllParts
         {
-            get { return this._clothing.Values; }
+            get { return _clothing.Values; }
         }
     }
 }

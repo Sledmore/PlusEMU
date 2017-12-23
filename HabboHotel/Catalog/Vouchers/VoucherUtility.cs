@@ -2,9 +2,9 @@
 {
     public static class VoucherUtility
     {
-        public static VoucherType GetType(string Type)
+        public static VoucherType GetType(string type)
         {
-            switch (Type)
+            switch (type)
             {
                 default:
                 case "credit":
@@ -14,9 +14,9 @@
             }
         }
 
-        public static string FromType(VoucherType Type)
+        public static string FromType(VoucherType type)
         {
-            switch (Type)
+            switch (type)
             {
                 default:
                 case VoucherType.Credit:

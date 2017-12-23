@@ -23,21 +23,20 @@ namespace Plus.HabboHotel.Achievements
                         int id = Convert.ToInt32(row["id"]);
                         string category = Convert.ToString(row["category"]);
                         string groupName = Convert.ToString(row["group_name"]);
-                        int level = Convert.ToInt32(row["level"]);
                         int rewardPixels = Convert.ToInt32(row["reward_pixels"]);
                         int rewardPoints = Convert.ToInt32(row["reward_points"]);
                         int progressNeeded = Convert.ToInt32(row["progress_needed"]);
 
-                        AchievementLevel AchievementLevel = new AchievementLevel(level, rewardPixels, rewardPoints, progressNeeded);
+                        AchievementLevel level = new AchievementLevel(Convert.ToInt32(row["level"]), rewardPixels, rewardPoints, progressNeeded);
 
                         if (!achievements.ContainsKey(groupName))
                         {
-                            Achievement Achievement = new Achievement(id, groupName, category, Convert.ToInt32(row["game_id"]));
-                            Achievement.AddLevel(AchievementLevel);
-                            achievements.Add(groupName, Achievement);
+                            Achievement achievement = new Achievement(id, groupName, category, Convert.ToInt32(row["game_id"]));
+                            achievement.AddLevel(level);
+                            achievements.Add(groupName, achievement);
                         }
                         else
-                            achievements[groupName].AddLevel(AchievementLevel);
+                            achievements[groupName].AddLevel(level);
                     }
                 }
             }

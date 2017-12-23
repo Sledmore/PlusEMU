@@ -4,42 +4,42 @@ namespace Plus.HabboHotel.Catalog
 {
     public class CatalogItem
     {
-        public int Id { get; set; }
-        public int ItemId { get; set; }
-        public ItemData Data { get; set; }
-        public int Amount { get; set; }
-        public int CostCredits { get; set; }
-        public string ExtraData { get; set; }
-        public bool HaveOffer { get; set; }
-        public bool IsLimited { get; set; }
-        public string Name { get; set; }
-        public int PageID { get; set; }
-        public int CostPixels { get; set; }
-        public int LimitedEditionStack { get; set; }
+        public int Id { get; private set; }
+        public int ItemId { get; private set; }
+        public ItemData Data { get; private set; }
+        public int Amount { get; private set; }
+        public int CostCredits { get; private set; }
+        public string ExtraData { get; private set; }
+        public bool HaveOffer { get; private set; }
+        public bool IsLimited { get; private set; }
+        public string Name { get; private set; }
+        public int PageID { get; private set; }
+        public int CostPixels { get; private set; }
+        public int LimitedEditionStack { get; private set; }
         public int LimitedEditionSells { get; set; }
-        public int CostDiamonds { get; set; }
-        public string Badge { get; set; }
-        public int OfferId { get; set; }
+        public int CostDiamonds { get; private set; }
+        public string Badge { get; private set; }
+        public int OfferId { get; private set; }
 
-        public CatalogItem(int Id, int ItemId, ItemData Data, string CatalogName, int PageId, int CostCredits, int CostPixels,
-            int CostDiamonds, int Amount, int LimitedEditionSells, int LimitedEditionStack, bool HaveOffer, string ExtraData, string Badge, int OfferId)
+        public CatalogItem(int id, int itemId, ItemData data, string catalogName, int pageId, int costCredits, int costPixels,
+            int costDiamonds, int amount, int limitedEditionSells, int limitedEditionStack, bool hasOffer, string extraData, string badge, int offerId)
         {
-            this.Id = Id;
-            this.Name = CatalogName;
-            this.ItemId = ItemId;
-            this.Data = Data;
-            this.PageID = PageId;
-            this.CostCredits = CostCredits;
-            this.CostPixels = CostPixels;
-            this.CostDiamonds = CostDiamonds;
-            this.Amount = Amount;
-            this.LimitedEditionSells = LimitedEditionSells;
-            this.LimitedEditionStack = LimitedEditionStack;
-            this.IsLimited = (LimitedEditionStack > 0);
-            this.HaveOffer = HaveOffer;
-            this.ExtraData = ExtraData;
-            this.Badge = Badge;
-            this.OfferId = OfferId;
+            Id = id;
+            Name = catalogName;
+            ItemId = itemId;
+            Data = data;
+            PageID = pageId;
+            CostCredits = costCredits;
+            CostPixels = costPixels;
+            CostDiamonds = costDiamonds;
+            Amount = amount;
+            LimitedEditionSells = limitedEditionSells;
+            LimitedEditionStack = limitedEditionStack;
+            IsLimited = (limitedEditionStack > 0);
+            HaveOffer = hasOffer;
+            ExtraData = extraData;
+            Badge = badge;
+            OfferId = offerId;
         }
     }
 }

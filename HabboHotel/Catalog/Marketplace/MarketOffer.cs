@@ -2,21 +2,21 @@
 {
     public class MarketOffer
     {
-        public int OfferID { get; set; }
-        public int ItemType { get; set; }
-        public int SpriteId { get; set; }
-        public int TotalPrice { get; set; }
-        public int LimitedNumber { get; set; }
-        public int LimitedStack { get; set; }
+        public int OfferID { get; private set; }
+        public int ItemType { get; private set; }
+        public int SpriteId { get; private set; }
+        public int TotalPrice { get; private set; }
+        public int LimitedNumber { get; private set; }
+        public int LimitedStack { get; private set; }
 
-        public MarketOffer(int OfferID, int SpriteId, int TotalPrice, int ItemType, int LimitedNumber, int LimitedStack)
+        public MarketOffer(int offerId, int spriteId, int totalPrice, int itemType, int limitedNumber, int limitedStack)
         {
-            this.OfferID = OfferID;
-            this.SpriteId = SpriteId;
-            this.ItemType = ItemType;
-            this.TotalPrice = TotalPrice;
-            this.LimitedNumber = LimitedNumber;
-            this.LimitedStack = LimitedStack;
+            OfferID = offerId;
+            SpriteId = spriteId;
+            ItemType = itemType;
+            TotalPrice = totalPrice;
+            LimitedNumber = limitedNumber;
+            LimitedStack = limitedStack;
         }
     }
 }

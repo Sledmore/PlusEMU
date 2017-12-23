@@ -4,31 +4,31 @@ namespace Plus.HabboHotel.Catalog.Utilities
 {
     public static class ItemUtility
     {
-        public static bool CanGiftItem(CatalogItem Item)
+        public static bool CanGiftItem(CatalogItem item)
         {
-            if (!Item.Data.AllowGift || Item.IsLimited || Item.Amount > 1 || Item.Data.InteractionType == InteractionType.EXCHANGE ||
-                Item.Data.InteractionType == InteractionType.BADGE || (Item.Data.Type != 's' && Item.Data.Type != 'i') || Item.CostDiamonds > 0 ||
-                Item.Data.InteractionType == InteractionType.TELEPORT || Item.Data.InteractionType == InteractionType.DEAL)
+            if (!item.Data.AllowGift || item.IsLimited || item.Amount > 1 || item.Data.InteractionType == InteractionType.EXCHANGE ||
+                item.Data.InteractionType == InteractionType.BADGE || (item.Data.Type != 's' && item.Data.Type != 'i') || item.CostDiamonds > 0 ||
+                item.Data.InteractionType == InteractionType.TELEPORT || item.Data.InteractionType == InteractionType.DEAL)
                 return false;
 
-            if (Item.Data.IsRare)
+            if (item.Data.IsRare)
                 return false;
 
-            if (Item.Data.InteractionType == InteractionType.PET)
+            if (item.Data.InteractionType == InteractionType.PET)
                 return false;
             return true;
         }
 
-        public static bool CanSelectAmount(CatalogItem Item)
+        public static bool CanSelectAmount(CatalogItem item)
         {
-            if (Item.IsLimited || Item.Amount > 1 || Item.Data.InteractionType == InteractionType.EXCHANGE || !Item.HaveOffer || Item.Data.InteractionType == InteractionType.BADGE || Item.Data.InteractionType == InteractionType.DEAL)
+            if (item.IsLimited || item.Amount > 1 || item.Data.InteractionType == InteractionType.EXCHANGE || !item.HaveOffer || item.Data.InteractionType == InteractionType.BADGE || item.Data.InteractionType == InteractionType.DEAL)
                 return false;
             return true;
         }
 
-        public static int GetSaddleId(int Saddle)
+        public static int GetSaddleId(int saddle)
         {
-            switch (Saddle)
+            switch (saddle)
             {
                 default:
                 case 9:
@@ -38,12 +38,12 @@ namespace Plus.HabboHotel.Catalog.Utilities
             }
         }
 
-        public static bool IsRare(Item Item)
+        public static bool IsRare(Item item)
         {
-            if (Item.LimitedNo > 0)
+            if (item.LimitedNo > 0)
                 return true;
 
-            if (Item.Data.IsRare)
+            if (item.Data.IsRare)
                 return true;
 
             return false;

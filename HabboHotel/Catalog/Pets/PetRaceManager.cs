@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 using Plus.Database.Interfaces;
 
-
 namespace Plus.HabboHotel.Catalog.Pets
 {
     public class PetRaceManager
@@ -14,29 +13,29 @@ namespace Plus.HabboHotel.Catalog.Pets
 
         public void Init()
         {
-            if (this._races.Count > 0)
-                this._races.Clear();
+            if (_races.Count > 0)
+                _races.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `catalog_pet_races`");
-                DataTable Table = dbClient.GetTable();
+                DataTable data = dbClient.GetTable();
 
-                if (Table != null)
+                if (data != null)
                 {
-                    foreach (DataRow Row in Table.Rows)
+                    foreach (DataRow row in data.Rows)
                     {
-                        PetRace Race = new PetRace(Convert.ToInt32(Row["raceid"]), Convert.ToInt32(Row["color1"]), Convert.ToInt32(Row["color2"]), (Convert.ToString(Row["has1color"]) == "1"), (Convert.ToString(Row["has2color"]) == "1"));
-                        if (!this._races.Contains(Race))
-                            this._races.Add(Race);
+                        PetRace race = new PetRace(Convert.ToInt32(row["raceid"]), Convert.ToInt32(row["color1"]), Convert.ToInt32(row["color2"]), (Convert.ToString(row["has1color"]) == "1"), (Convert.ToString(row["has2color"]) == "1"));
+                        if (!_races.Contains(race))
+                            _races.Add(race);
                     }
                 }
             }
         }
 
-        public List<PetRace> GetRacesForRaceId(int RaceId)
+        public List<PetRace> GetRacesForRaceId(int raceId)
         {
-            return this._races.Where(Race => Race.RaceId == RaceId).ToList();
+            return _races.Where(Race => Race.RaceId == raceId).ToList();
         }
     }
 }

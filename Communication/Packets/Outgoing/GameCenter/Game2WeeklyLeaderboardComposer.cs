@@ -35,7 +35,7 @@ namespace Plus.Communication.Packets.Outgoing.GameCenter
             }
 
             base.WriteInteger(0);//
-            base.WriteInteger(GameData.GameId);//Game Id?
+            base.WriteInteger(GameData.Id);//Game Id?
         }
     }
 }

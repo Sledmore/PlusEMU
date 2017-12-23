@@ -12,35 +12,33 @@ namespace Plus.HabboHotel.Catalog.Vouchers
 
         public VoucherManager()
         {
-            this._vouchers = new Dictionary<string, Voucher>();
+            _vouchers = new Dictionary<string, Voucher>();
         }
 
         public void Init()
         {
-            if (this._vouchers.Count > 0)
-                this._vouchers.Clear();
+            if (_vouchers.Count > 0)
+                _vouchers.Clear();
 
-            DataTable GetVouchers = null;
+            DataTable data = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `voucher`,`type`,`value`,`current_uses`,`max_uses` FROM `catalog_vouchers` WHERE `enabled` = '1'");
-                GetVouchers = dbClient.GetTable();
+                data = dbClient.GetTable();
             }
 
-            if (GetVouchers != null)
+            if (data != null)
             {
-                foreach (DataRow Row in GetVouchers.Rows)
+                foreach (DataRow row in data.Rows)
                 {
-                    this._vouchers.Add(Convert.ToString(Row["voucher"]), new Voucher(Convert.ToString(Row["voucher"]), Convert.ToString(Row["type"]), Convert.ToInt32(Row["value"]), Convert.ToInt32(Row["current_uses"]), Convert.ToInt32(Row["max_uses"])));
+                    _vouchers.Add(Convert.ToString(row["voucher"]), new Voucher(Convert.ToString(row["voucher"]), Convert.ToString(row["type"]), Convert.ToInt32(row["value"]), Convert.ToInt32(row["current_uses"]), Convert.ToInt32(row["max_uses"])));
                 }
             }
         }
 
-        public bool TryGetVoucher(string Code, out Voucher Voucher)
+        public bool TryGetVoucher(string code, out Voucher voucher)
         {
-            if (this._vouchers.TryGetValue(Code, out Voucher))
-                return true;
-            return false;
+            return _vouchers.TryGetValue(code, out voucher);
         }
     }
 }

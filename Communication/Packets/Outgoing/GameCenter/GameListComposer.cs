@@ -15,8 +15,8 @@ namespace Plus.Communication.Packets.Outgoing.GameCenter
             base.WriteInteger(PlusEnvironment.GetGame().GetGameDataManager().GetCount());//Game count
             foreach (GameData Game in Games)
             {
-                base.WriteInteger(Game.GameId);
-               base.WriteString(Game.GameName);
+                base.WriteInteger(Game.Id);
+               base.WriteString(Game.Name);
                base.WriteString(Game.ColourOne);
                base.WriteString(Game.ColourTwo);
                base.WriteString(Game.ResourcePath);

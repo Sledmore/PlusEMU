@@ -21,38 +21,38 @@ namespace Plus.HabboHotel.Catalog
         private Dictionary<int, CatalogItem> _items;
         private Dictionary<int, CatalogItem> _itemOffers;
 
-        public CatalogPage(int Id, int ParentId, string Enabled, string Caption, string PageLink, int Icon, int MinRank, int MinVIP,
-              string Visible, string Template, string PageStrings1, string PageStrings2, Dictionary<int, CatalogItem> Items, ref Dictionary<int, int> flatOffers)
+        public CatalogPage(int id, int parentId, string enabled, string caption, string pageLink, int icon, int minRank, int minVIP,
+              string visible, string template, string pageStrings1, string pageStrings2, Dictionary<int, CatalogItem> items, ref Dictionary<int, int> flatOffers)
         {
-            this._id = Id;
-            this._parentId = ParentId;
-            this._enabled = Enabled.ToLower() == "1" ? true : false;
-            this._caption = Caption;
-            this._pageLink = PageLink;
-            this._icon = Icon;
-            this._minRank = MinRank;
-            this._minVIP = MinVIP;
-            this._visible = Visible.ToLower() == "1" ? true : false;
-            this._template = Template;
+            _id = id;
+            _parentId = parentId;
+            _enabled = enabled.ToLower() == "1" ? true : false;
+            _caption = caption;
+            _pageLink = pageLink;
+            _icon = icon;
+            _minRank = minRank;
+            _minVIP = minVIP;
+            _visible = visible.ToLower() == "1" ? true : false;
+            _template = template;
 
-            foreach (string Str in PageStrings1.Split('|'))
+            foreach (string str in pageStrings1.Split('|'))
             {
-                if (this._pageStrings1 == null) { this._pageStrings1 = new List<string>(); }
-                this._pageStrings1.Add(Str);
+                if (_pageStrings1 == null) { _pageStrings1 = new List<string>(); }
+                _pageStrings1.Add(str);
             }
 
-            foreach (string Str in PageStrings2.Split('|'))
+            foreach (string str in pageStrings2.Split('|'))
             {
-                if (this._pageStrings2 == null) { this._pageStrings2 = new List<string>(); }
-                this._pageStrings2.Add(Str);
+                if (_pageStrings2 == null) { _pageStrings2 = new List<string>(); }
+                _pageStrings2.Add(str);
             }
 
-            this._items = Items;
+            _items = items;
 
-            this._itemOffers = new Dictionary<int, CatalogItem>();
+            _itemOffers = new Dictionary<int, CatalogItem>();
             foreach (int i in flatOffers.Keys)
             {
-                if (flatOffers[i] == Id)
+                if (flatOffers[i] == id)
                 {
                     foreach (CatalogItem item in _items.Values)
                     {
@@ -68,92 +68,92 @@ namespace Plus.HabboHotel.Catalog
 
         public int Id
         {
-            get { return this._id; }
-            set { this._id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         public int ParentId
         {
-            get { return this._parentId; }
-            set { this._parentId = value; }
+            get { return _parentId; }
+            set { _parentId = value; }
         }
 
         public bool Enabled
         {
-            get { return this._enabled; }
-            set { this._enabled = value; }
+            get { return _enabled; }
+            set { _enabled = value; }
         }
 
         public string Caption
         {
-            get { return this._caption; }
-            set { this._caption = value; }
+            get { return _caption; }
+            set { _caption = value; }
         }
 
         public string PageLink
         {
-            get { return this._pageLink; }
-            set { this._pageLink = value; }
+            get { return _pageLink; }
+            set { _pageLink = value; }
         }
 
         public int Icon
         {
-            get { return this._icon; }
-            set { this._icon = value; }
+            get { return _icon; }
+            set { _icon = value; }
         }
 
         public int MinimumRank
         {
-            get { return this._minRank; }
-            set { this._minRank = value; }
+            get { return _minRank; }
+            set { _minRank = value; }
         }
 
         public int MinimumVIP
         {
-            get { return this._minVIP;}
-            set { this._minVIP = value; }
+            get { return _minVIP;}
+            set { _minVIP = value; }
         }
 
         public bool Visible
         {
-            get { return this._visible; }
-            set { this._visible = value; }
+            get { return _visible; }
+            set { _visible = value; }
         }
 
         public string Template
         {
-            get { return this._template; }
-            set { this._template = value; }
+            get { return _template; }
+            set { _template = value; }
         }
 
         public List<string> PageStrings1
         {
-            get { return this._pageStrings1; }
-            private set { this._pageStrings1 = value; }
+            get { return _pageStrings1; }
+            private set { _pageStrings1 = value; }
         }
 
         public List<string> PageStrings2
         {
-            get { return this._pageStrings2; }
-            private set { this._pageStrings2 = value; }
+            get { return _pageStrings2; }
+            private set { _pageStrings2 = value; }
         }
 
         public Dictionary<int, CatalogItem> Items
         {
-            get { return this._items; }
-            private set { this._items = value; }
+            get { return _items; }
+            private set { _items = value; }
         }
         
         public Dictionary<int, CatalogItem> ItemOffers
         {
-            get { return this._itemOffers; }
-            private set { this._itemOffers = value; }
+            get { return _itemOffers; }
+            private set { _itemOffers = value; }
         }
 
         public CatalogItem GetItem(int pId)
         {
-            if (this._items.ContainsKey(pId))
-                return (CatalogItem)this._items[pId];
+            if (_items.ContainsKey(pId))
+                return (CatalogItem)_items[pId];
             return null;
         }
     }

@@ -17,30 +17,30 @@ namespace Plus.HabboHotel.Catalog.Marketplace
 
         }
 
-        public int AvgPriceForSprite(int SpriteID)
+        public int AvgPriceForSprite(int spriteId)
         {
             int num = 0;
             int num2 = 0;
-            if (this.MarketAverages.ContainsKey(SpriteID) && this.MarketCounts.ContainsKey(SpriteID))
+            if (this.MarketAverages.ContainsKey(spriteId) && this.MarketCounts.ContainsKey(spriteId))
             {
-                if (this.MarketCounts[SpriteID] > 0)
+                if (this.MarketCounts[spriteId] > 0)
                 {
-                    return (this.MarketAverages[SpriteID] / this.MarketCounts[SpriteID]);
+                    return (this.MarketAverages[spriteId] / this.MarketCounts[spriteId]);
                 }
                 return 0;
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `avgprice` FROM `catalog_marketplace_data` WHERE `sprite` = '" + SpriteID + "' LIMIT 1");
+                dbClient.SetQuery("SELECT `avgprice` FROM `catalog_marketplace_data` WHERE `sprite` = '" + spriteId + "' LIMIT 1");
                 num = dbClient.GetInteger();
 
-                dbClient.SetQuery("SELECT `sold` FROM `catalog_marketplace_data` WHERE `sprite` = '" + SpriteID + "' LIMIT 1");
+                dbClient.SetQuery("SELECT `sold` FROM `catalog_marketplace_data` WHERE `sprite` = '" + spriteId + "' LIMIT 1");
                 num2 = dbClient.GetInteger();
             }
 
-            this.MarketAverages.Add(SpriteID, num);
-            this.MarketCounts.Add(SpriteID, num2);
+            this.MarketAverages.Add(spriteId, num);
+            this.MarketCounts.Add(spriteId, num2);
 
             if (num2 > 0)
                 return Convert.ToInt32(Math.Ceiling((double)(num / num2)));

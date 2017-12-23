@@ -14,28 +14,27 @@ namespace Plus.HabboHotel.Catalog
         public string DisplayName { get; set; }
         public int RoomId { get; set; }
 
-        public CatalogDeal(int Id, string Items, string DisplayName, int RoomId, ItemDataManager ItemDataManager)
+        public CatalogDeal(int id, string items, string displayName, int roomId, ItemDataManager itemDataManager)
         {
-            this.Id = Id;
-            this.DisplayName = DisplayName;
-            this.RoomId = RoomId;
-            this.ItemDataList = new List<CatalogItem>();
+            Id = id;
+            DisplayName = displayName;
+            RoomId = roomId;
+            ItemDataList = new List<CatalogItem>();
 
-            if (RoomId != 0)
+            if (roomId != 0)
             {
-                DataTable getRoomItems = null;
-                Dictionary<int, int> roomItems = new Dictionary<int, int>();
-
+                DataTable data = null;
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dbClient.SetQuery("SELECT `items`.base_item, COALESCE(`items_groups`.`group_id`, 0) AS `group_id` FROM `items` LEFT OUTER JOIN `items_groups` ON `items`.`id` = `items_groups`.`id` WHERE `items`.`room_id` = @rid;");
-                    dbClient.AddParameter("rid", RoomId);
-                    getRoomItems = dbClient.GetTable();
+                    dbClient.AddParameter("rid", roomId);
+                    data = dbClient.GetTable();
                 }
 
-                if (getRoomItems != null)
+                Dictionary<int, int> roomItems = new Dictionary<int, int>();
+                if (data != null)
                 {
-                    foreach (DataRow dRow in getRoomItems.Rows)
+                    foreach (DataRow dRow in data.Rows)
                     {
                         int item_id = Convert.ToInt32(dRow["base_item"]);
                         if (roomItems.ContainsKey(item_id))
@@ -46,26 +45,27 @@ namespace Plus.HabboHotel.Catalog
                 }
 
                 foreach (var roomItem in roomItems)
-                    Items += roomItem.Key + "*" + roomItem.Value + ";";
+                {
+                    items += roomItem.Key + "*" + roomItem.Value + ";";
+                }
 
                 if (roomItems.Count > 0)
-                    Items = Items.Remove(Items.Length - 1);
+                {
+                    items = items.Remove(items.Length - 1);
+                }
             }
 
-            string[] SplitItems = Items.Split(';');
-            foreach (string Split in SplitItems)
+            string[] splitItems = items.Split(';');
+            foreach (string split in splitItems)
             {
-                string[] Item = Split.Split('*');
-                int ItemId = 0;
-                int Amount = 0;
-                if (!int.TryParse(Item[0], out ItemId) || !int.TryParse(Item[1], out Amount))
+                string[] item = split.Split('*');
+                if (!int.TryParse(item[0], out int itemId) || !int.TryParse(item[1], out int Amount))
                     continue;
 
-                ItemData Data = null;
-                if (!ItemDataManager.GetItem(ItemId, out Data))
+                if (!itemDataManager.GetItem(itemId, out ItemData data))
                     continue;
 
-                ItemDataList.Add(new CatalogItem(0, ItemId, Data, string.Empty, 0, 0, 0, 0, Amount, 0, 0, false, "", "", 0));
+                ItemDataList.Add(new CatalogItem(0, itemId, data, string.Empty, 0, 0, 0, 0, Amount, 0, 0, false, "", "", 0));
             }
         }
     }
