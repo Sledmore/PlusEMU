@@ -5,12 +5,12 @@
         public NavigatorLiftedRoomsComposer()
             : base(ServerPacketHeader.NavigatorLiftedRoomsMessageComposer)
         {
-            base.WriteInteger(0);//Count
+            WriteInteger(0); //Count
             {
-                base.WriteInteger(1);//Flat Id
-                base.WriteInteger(0);//Unknown
-               base.WriteString("");//Image
-               base.WriteString("Caption");//Caption.
+                WriteInteger(1); //Flat Id
+                WriteInteger(0); //Unknown
+                WriteString(string.Empty); //Image
+                WriteString("Caption"); //Caption.
             }
         }
     }

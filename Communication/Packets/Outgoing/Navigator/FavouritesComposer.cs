@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace Plus.Communication.Packets.Outgoing.Navigator
 {
@@ -11,12 +7,12 @@ namespace Plus.Communication.Packets.Outgoing.Navigator
         public FavouritesComposer(ArrayList favouriteIDs)
             : base(ServerPacketHeader.FavouritesMessageComposer)
         {
-            base.WriteInteger(50);
-            base.WriteInteger(favouriteIDs.Count);
+            WriteInteger(50);
+            WriteInteger(favouriteIDs.Count);
 
-            foreach (int Id in favouriteIDs.ToArray())
+            foreach (int id in favouriteIDs.ToArray())
             {
-                base.WriteInteger(Id);
+                WriteInteger(id);
             }
         }
     }

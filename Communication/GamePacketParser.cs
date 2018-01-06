@@ -29,9 +29,9 @@ namespace Plus.Communication
         {
             try
             {
-                if (this._client.RC4Client != null && !this._deciphered)
+                if (this._client.Rc4Client != null && !this._deciphered)
                 {
-                    this._client.RC4Client.Decrypt(ref data);
+                    this._client.Rc4Client.Decrypt(ref data);
                     this._deciphered = true;
                 }
 

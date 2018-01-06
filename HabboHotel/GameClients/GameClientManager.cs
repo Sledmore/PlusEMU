@@ -194,7 +194,7 @@ namespace Plus.HabboHotel.GameClients
         public void CreateAndStartClient(int clientID, ConnectionInformation connection)
         {
             GameClient Client = new GameClient(clientID, connection);
-            if (this._clients.TryAdd(Client.ConnectionID, Client))
+            if (this._clients.TryAdd(Client.ConnectionId, Client))
                 Client.StartConnection();
             else
                 connection.Dispose();

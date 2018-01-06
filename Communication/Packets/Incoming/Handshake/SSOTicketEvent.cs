@@ -10,7 +10,7 @@ namespace Plus.Communication.Packets.Incoming.Handshake
     {
         public void Parse(GameClient Session, ClientPacket Packet)
         {
-            if (Session == null || Session.RC4Client == null || Session.GetHabbo() != null)
+            if (Session == null || Session.Rc4Client == null || Session.GetHabbo() != null)
                 return;
 
             string SSO = Packet.PopString();

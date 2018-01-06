@@ -19,7 +19,7 @@ namespace Plus.Communication.Packets.Incoming.Handshake
             BigInteger SharedKey = HabboEncryptionV2.CalculateDiffieHellmanSharedKey(CipherPublickey);
             if (SharedKey != 0)
             {
-                Session.RC4Client = new ARC4(SharedKey.getBytes());
+                Session.Rc4Client = new ARC4(SharedKey.getBytes());
                 Session.SendPacket(new SecretKeyComposer(HabboEncryptionV2.GetRsaDiffieHellmanPublicKey()));
             }
             else 

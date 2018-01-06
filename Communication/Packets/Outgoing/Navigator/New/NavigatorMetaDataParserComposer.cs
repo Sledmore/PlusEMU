@@ -6,15 +6,16 @@ namespace Plus.Communication.Packets.Outgoing.Navigator.New
 {
     class NavigatorMetaDataParserComposer : ServerPacket
     {
-        public NavigatorMetaDataParserComposer(ICollection<TopLevelItem> TopLevelItems)
+        public NavigatorMetaDataParserComposer(ICollection<TopLevelItem> topLevelItems)
             : base(ServerPacketHeader.NavigatorMetaDataParserMessageComposer)
         {
-            base.WriteInteger(TopLevelItems.Count);//Count
-            foreach (TopLevelItem TopLevelItem in TopLevelItems.ToList())
+            //TODO: HMU here too, if you want saved searches to be fixed
+            WriteInteger(topLevelItems.Count); //Count
+            foreach (TopLevelItem topLevelItem in topLevelItems.ToList())
             {
                 //TopLevelContext
-               base.WriteString(TopLevelItem.SearchCode);//Search code
-                base.WriteInteger(0);//Count of saved searches?
+                WriteString(topLevelItem.SearchCode); //Search code
+                WriteInteger(0); //Count of saved searches?
                 /*{
                     //SavedSearch
                     base.WriteInteger(TopLevelItem.Id);//Id

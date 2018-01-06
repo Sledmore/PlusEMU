@@ -15,7 +15,6 @@ using Plus.Communication.Packets.Outgoing.Inventory.Achievements;
 using Plus.Communication.Encryption.Crypto.Prng;
 using Plus.HabboHotel.Users.Messenger.FriendBar;
 using Plus.Communication.Packets.Outgoing.BuildersClub;
-using Plus.HabboHotel.Moderation;
 
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Subscriptions;
@@ -29,22 +28,21 @@ namespace Plus.HabboHotel.GameClients
 {
     public class GameClient
     {
-        private readonly int _id;
         private Habbo _habbo;
         public string MachineId;
         private bool _disconnected;
-        public ARC4 RC4Client = null;
+        public ARC4 Rc4Client;
         private GamePacketParser _packetParser;
         private ConnectionInformation _connection;
         public int PingCount { get; set; }
 
         public GameClient(int clientId, ConnectionInformation connection)
         {
-            this._id = clientId;
-            this._connection = connection;
-            this._packetParser = new GamePacketParser(this);
+            ConnectionId = clientId;
+            _connection = connection;
+            _packetParser = new GamePacketParser(this);
 
-            this.PingCount = 0;
+            PingCount = 0;
         }
 
         private void SwitchParserRequest()
@@ -57,11 +55,11 @@ namespace Plus.HabboHotel.GameClients
             _connection.parser.HandlePacketData(data);
         }
 
-        private void Parser_onNewPacket(ClientPacket Message)
+        private void Parser_onNewPacket(ClientPacket message)
         {
             try
             {
-                PlusEnvironment.GetGame().GetPacketManager().TryExecutePacket(this, Message);
+                PlusEnvironment.GetGame().GetPacketManager().TryExecutePacket(this, message);
             }
             catch (Exception e)
             {
@@ -84,19 +82,18 @@ namespace Plus.HabboHotel.GameClients
             if (_connection == null)
                 return;
 
-            this.PingCount = 0;
+            PingCount = 0;
 
             (_connection.parser as InitialPacketParser).PolicyRequest += PolicyRequest;
             (_connection.parser as InitialPacketParser).SwitchParserRequest += SwitchParserRequest;
             _connection.startPacketProcessing();
         }
 
-        public bool TryAuthenticate(string AuthTicket)
+        public bool TryAuthenticate(string authTicket)
         {
             try
             {
-                byte errorCode = 0;
-                UserData userData = UserDataFactory.GetUserData(AuthTicket, out errorCode);
+                UserData userData = UserDataFactory.GetUserData(authTicket, out byte errorCode);
                 if (errorCode == 1 || errorCode == 2)
                 {
                     Disconnect();
@@ -105,10 +102,9 @@ namespace Plus.HabboHotel.GameClients
 
                 #region Ban Checking
                 //Let's have a quick search for a ban before we successfully authenticate..
-                ModerationBan BanRecord = null;
                 if (!string.IsNullOrEmpty(MachineId))
                 {
-                    if (PlusEnvironment.GetGame().GetModerationManager().IsBanned(MachineId, out BanRecord))
+                    if (PlusEnvironment.GetGame().GetModerationManager().IsBanned(MachineId, out _))
                     {
                         if (PlusEnvironment.GetGame().GetModerationManager().MachineBanCheck(MachineId))
                         {
@@ -120,9 +116,7 @@ namespace Plus.HabboHotel.GameClients
 
                 if (userData.user != null)
                 {
-                    //Now let us check for a username ban record..
-                    BanRecord = null;
-                    if (PlusEnvironment.GetGame().GetModerationManager().IsBanned(userData.user.Username, out BanRecord))
+                    if (PlusEnvironment.GetGame().GetModerationManager().IsBanned(userData.user.Username, out _))
                     {
                         if (PlusEnvironment.GetGame().GetModerationManager().UsernameBanCheck(userData.user.Username))
                         {
@@ -132,6 +126,11 @@ namespace Plus.HabboHotel.GameClients
                     }
                 }
                 #endregion
+
+                if (userData.user == null) //Possible NPE
+                {
+                    return false;
+                }
 
                 PlusEnvironment.GetGame().GetClientManager().RegisterClient(this, userData.UserId, userData.user.Username);
                 _habbo = userData.user;
@@ -159,7 +158,7 @@ namespace Plus.HabboHotel.GameClients
 
                     if (!string.IsNullOrEmpty(MachineId))
                     {
-                        if (this._habbo.MachineId != MachineId)
+                        if (_habbo.MachineId != MachineId)
                         {
                             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
@@ -180,19 +179,19 @@ namespace Plus.HabboHotel.GameClients
                                 _habbo.GetBadgeComponent().GiveBadge(group.Badge, true, this);
                     }
 
-                    if (PlusEnvironment.GetGame().GetSubscriptionManager().TryGetSubscriptionData(this._habbo.VIPRank, out SubscriptionData SubData))
+                    if (PlusEnvironment.GetGame().GetSubscriptionManager().TryGetSubscriptionData(_habbo.VIPRank, out SubscriptionData subData))
                     {
-                        if (!String.IsNullOrEmpty(SubData.Badge))
+                        if (!String.IsNullOrEmpty(subData.Badge))
                         {
-                            if (!_habbo.GetBadgeComponent().HasBadge(SubData.Badge))
-                                _habbo.GetBadgeComponent().GiveBadge(SubData.Badge, true, this);
+                            if (!_habbo.GetBadgeComponent().HasBadge(subData.Badge))
+                                _habbo.GetBadgeComponent().GiveBadge(subData.Badge, true, this);
                         }
                     }
 
                     if (!PlusEnvironment.GetGame().GetCacheManager().ContainsUser(_habbo.Id))
                         PlusEnvironment.GetGame().GetCacheManager().GenerateUser(_habbo.Id);
 
-                    _habbo.Look = PlusEnvironment.GetFigureManager().ProcessFigure(this._habbo.Look, this._habbo.Gender, this._habbo.GetClothing().GetClothingParts, true);
+                    _habbo.Look = PlusEnvironment.GetFigureManager().ProcessFigure(_habbo.Look, _habbo.Gender, _habbo.GetClothing().GetClothingParts, true);
                     _habbo.InitProcess();
           
                     if (userData.user.GetPermissions().HasRight("mod_tickets"))
@@ -217,40 +216,32 @@ namespace Plus.HabboHotel.GameClients
             return false;
         }
 
-        public void SendWhisper(string Message, int Colour = 0)
+        public void SendWhisper(string message, int colour = 0)
         {
             if (GetHabbo() == null || GetHabbo().CurrentRoom == null)
                 return;
 
-            RoomUser User = GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(GetHabbo().Username);
-            if (User == null)
+            RoomUser user = GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(GetHabbo().Username);
+            if (user == null)
                 return;
 
-            SendPacket(new WhisperComposer(User.VirtualId, Message, 0, (Colour == 0 ? User.LastBubble : Colour)));
+            SendPacket(new WhisperComposer(user.VirtualId, message, 0, (colour == 0 ? user.LastBubble : colour)));
         }
 
-        public void SendNotification(string Message)
+        public void SendNotification(string message)
         {
-            SendPacket(new BroadcastMessageAlertComposer(Message));
+            SendPacket(new BroadcastMessageAlertComposer(message));
         }
 
-        public void SendPacket(IServerPacket Message)
+        public void SendPacket(IServerPacket message)
         {
-            byte[] bytes = Message.GetBytes();
-
-            if (Message == null)
-                return;
-
             if (GetConnection() == null)
                 return;
-
-            GetConnection().SendData(bytes);
+            
+            GetConnection().SendData(message.GetBytes());
         }
 
-        public int ConnectionID
-        {
-            get { return _id; }
-        }
+        public int ConnectionId { get; }
 
         public ConnectionInformation GetConnection()
         {
@@ -294,12 +285,12 @@ namespace Plus.HabboHotel.GameClients
             if (GetHabbo() != null)
                 GetHabbo().OnDisconnect();
 
-            this.MachineId = string.Empty;
-            this._disconnected = true;
-            this._habbo = null;
-            this._connection = null;
-            this.RC4Client = null;
-            this._packetParser = null;
+            MachineId = string.Empty;
+            _disconnected = true;
+            _habbo = null;
+            _connection = null;
+            Rc4Client = null;
+            _packetParser = null;
         }
     }
 }
