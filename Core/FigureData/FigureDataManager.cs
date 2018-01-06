@@ -13,7 +13,7 @@ namespace Plus.Core.FigureData
 {
     public class FigureDataManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.Core.FigureData");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.Core.FigureData");
 
         private readonly List<string> _requirements;
         private readonly Dictionary<int, Palette> _palettes; //pallet id, Pallet
@@ -34,11 +34,11 @@ namespace Plus.Core.FigureData
 
         public void Init()
         {
-            if (this._palettes.Count > 0)
-                this._palettes.Clear();
+            if (_palettes.Count > 0)
+                _palettes.Clear();
 
-            if (this._setTypes.Count > 0)
-                this._setTypes.Clear();
+            if (_setTypes.Count > 0)
+                _setTypes.Clear();
 
 
             string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
@@ -46,37 +46,37 @@ namespace Plus.Core.FigureData
             XmlDocument xDoc = new XmlDocument();
             xDoc.Load(projectSolutionPath + "\\Config\\figuredata.xml");
 
-            XmlNodeList Colors = xDoc.GetElementsByTagName("colors");
-            foreach (XmlNode Node in Colors)
+            XmlNodeList colors = xDoc.GetElementsByTagName("colors");
+            foreach (XmlNode node in colors)
             {
-                foreach (XmlNode Child in Node.ChildNodes)
+                foreach (XmlNode child in node.ChildNodes)
                 {
-                    this._palettes.Add(Convert.ToInt32(Child.Attributes["id"].Value), new Palette(Convert.ToInt32(Child.Attributes["id"].Value)));
+                    _palettes.Add(Convert.ToInt32(child.Attributes["id"].Value), new Palette(Convert.ToInt32(child.Attributes["id"].Value)));
 
-                    foreach (XmlNode Sub in Child.ChildNodes)
+                    foreach (XmlNode sub in child.ChildNodes)
                     {
-                        this._palettes[Convert.ToInt32(Child.Attributes["id"].Value)].Colors.Add(Convert.ToInt32(Sub.Attributes["id"].Value), new Color(Convert.ToInt32(Sub.Attributes["id"].Value), Convert.ToInt32(Sub.Attributes["index"].Value), Convert.ToInt32(Sub.Attributes["club"].Value), Convert.ToInt32(Sub.Attributes["selectable"].Value) == 1, Convert.ToString(Sub.InnerText)));
+                        _palettes[Convert.ToInt32(child.Attributes["id"].Value)].Colors.Add(Convert.ToInt32(sub.Attributes["id"].Value), new Color(Convert.ToInt32(sub.Attributes["id"].Value), Convert.ToInt32(sub.Attributes["index"].Value), Convert.ToInt32(sub.Attributes["club"].Value), Convert.ToInt32(sub.Attributes["selectable"].Value) == 1, Convert.ToString(sub.InnerText)));
                     }
                 }
             }
 
-            XmlNodeList Sets = xDoc.GetElementsByTagName("sets");
-            foreach (XmlNode Node in Sets)
+            XmlNodeList sets = xDoc.GetElementsByTagName("sets");
+            foreach (XmlNode node in sets)
             {
-                foreach (XmlNode Child in Node.ChildNodes)
+                foreach (XmlNode child in node.ChildNodes)
                 {
-                    this._setTypes.Add(Child.Attributes["type"].Value, new FigureSet(SetTypeUtility.GetSetType(Child.Attributes["type"].Value), Convert.ToInt32(Child.Attributes["paletteid"].Value)));
+                    _setTypes.Add(child.Attributes["type"].Value, new FigureSet(SetTypeUtility.GetSetType(child.Attributes["type"].Value), Convert.ToInt32(child.Attributes["paletteid"].Value)));
 
-                    foreach (XmlNode Sub in Child.ChildNodes)
+                    foreach (XmlNode sub in child.ChildNodes)
                     {
-                        this._setTypes[Child.Attributes["type"].Value].Sets.Add(Convert.ToInt32(Sub.Attributes["id"].Value), new Set(Convert.ToInt32(Sub.Attributes["id"].Value), Convert.ToString(Sub.Attributes["gender"].Value), Convert.ToInt32(Sub.Attributes["club"].Value), Convert.ToInt32(Sub.Attributes["colorable"].Value) == 1, Convert.ToInt32(Sub.Attributes["selectable"].Value) == 1, Convert.ToInt32(Sub.Attributes["preselectable"].Value) == 1));
+                        _setTypes[child.Attributes["type"].Value].Sets.Add(Convert.ToInt32(sub.Attributes["id"].Value), new Set(Convert.ToInt32(sub.Attributes["id"].Value), Convert.ToString(sub.Attributes["gender"].Value), Convert.ToInt32(sub.Attributes["club"].Value), Convert.ToInt32(sub.Attributes["colorable"].Value) == 1, Convert.ToInt32(sub.Attributes["selectable"].Value) == 1, Convert.ToInt32(sub.Attributes["preselectable"].Value) == 1));
 
-                        foreach (XmlNode Subb in Sub.ChildNodes)
+                        foreach (XmlNode subb in sub.ChildNodes)
                         {
-                            if (Subb.Attributes["type"] != null)
+                            if (subb.Attributes["type"] != null)
                             {
-                                this._setTypes[Child.Attributes["type"].Value].Sets[Convert.ToInt32(Sub.Attributes["id"].Value)].Parts.Add(Convert.ToInt32(Subb.Attributes["id"].Value) + "-" + Subb.Attributes["type"].Value,
-                                  new Part(Convert.ToInt32(Subb.Attributes["id"].Value), SetTypeUtility.GetSetType(Child.Attributes["type"].Value), Convert.ToInt32(Subb.Attributes["colorable"].Value) == 1, Convert.ToInt32(Subb.Attributes["index"].Value), Convert.ToInt32(Subb.Attributes["colorindex"].Value)));
+                                _setTypes[child.Attributes["type"].Value].Sets[Convert.ToInt32(sub.Attributes["id"].Value)].Parts.Add(Convert.ToInt32(subb.Attributes["id"].Value) + "-" + subb.Attributes["type"].Value,
+                                  new Part(Convert.ToInt32(subb.Attributes["id"].Value), SetTypeUtility.GetSetType(child.Attributes["type"].Value), Convert.ToInt32(subb.Attributes["colorable"].Value) == 1, Convert.ToInt32(subb.Attributes["index"].Value), Convert.ToInt32(subb.Attributes["colorindex"].Value)));
                             }
                         }
                     }
@@ -84,10 +84,10 @@ namespace Plus.Core.FigureData
             }
 
             //Faceless.
-            this._setTypes["hd"].Sets.Add(99999, new Set(99999, "U", 0, true, false, false));
+            _setTypes["hd"].Sets.Add(99999, new Set(99999, "U", 0, true, false, false));
 
-            log.Info("Loaded " + this._palettes.Count + " Color Palettes");
-            log.Info("Loaded " + this._setTypes.Count + " Set Types");
+            Log.Info("Loaded " + _palettes.Count + " Color Palettes");
+            Log.Info("Loaded " + _setTypes.Count + " Set Types");
         }
 
         public string ProcessFigure(string figure, string gender, ICollection<ClothingParts> clothingParts, bool hasHabboClub)
@@ -103,7 +103,7 @@ namespace Plus.Core.FigureData
             {
                 string type = part.Split('-')[0];
 
-                if (this._setTypes.TryGetValue(type, out FigureSet figureSet))
+                if (_setTypes.TryGetValue(type, out FigureSet figureSet))
                 {
                     int partId = Convert.ToInt32(part.Split('-')[1]);
                     int colorId = 0;
@@ -122,10 +122,6 @@ namespace Plus.Core.FigureData
                                 figureSet.Sets.TryGetValue(partId, out set);
 
                                 colorId = GetRandomColor(figureSet.PalletId);
-                            }
-                            else
-                            {
-                                //No replacable?
                             }
                         }
                         #endregion
@@ -266,7 +262,7 @@ namespace Plus.Core.FigureData
                         {
                             string type = part.Split('-')[0];
 
-                            if (this._setTypes.TryGetValue(type, out FigureSet figureSet))
+                            if (_setTypes.TryGetValue(type, out FigureSet figureSet))
                             {
                                 Set set = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || x.Value.Gender == "U").Value;
                                 if (set != null)
@@ -288,17 +284,17 @@ namespace Plus.Core.FigureData
 
         public Palette GetPalette(int colorId)
         {
-            return this._palettes.FirstOrDefault(x => x.Value.Colors.ContainsKey(colorId)).Value;
+            return _palettes.FirstOrDefault(x => x.Value.Colors.ContainsKey(colorId)).Value;
         }
 
         public bool TryGetPalette(int palletId, out Palette palette)
         {
-            return this._palettes.TryGetValue(palletId, out palette);
+            return _palettes.TryGetValue(palletId, out palette);
         }
 
         public int GetRandomColor(int palletId)
         {
-            return this._palettes[palletId].Colors.FirstOrDefault().Value.Id;
+            return _palettes[palletId].Colors.FirstOrDefault().Value.Id;
         }
     }
 }

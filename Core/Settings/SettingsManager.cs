@@ -8,40 +8,40 @@ namespace Plus.Core.Settings
 {
     public class SettingsManager
     {
-        private Dictionary<string, string> _settings = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _settings;
 
-        private static readonly ILog log = LogManager.GetLogger("Plus.Core.Settings.SettingsManager");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.Core.Settings.SettingsManager");
 
         public SettingsManager()
         {
-            this._settings = new Dictionary<string, string>();
+            _settings = new Dictionary<string, string>();
         }
 
         public void Init()
         {
-            if (this._settings.Count > 0)
-                this._settings.Clear();
+            if (_settings.Count > 0)
+                _settings.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `server_settings`");
-                DataTable Table = dbClient.GetTable();
+                DataTable table = dbClient.GetTable();
 
-                if (Table != null)
+                if (table != null)
                 {
-                    foreach (DataRow Row in Table.Rows)
+                    foreach (DataRow row in table.Rows)
                     {
-                        this._settings.Add(Row["key"].ToString().ToLower(), Row["value"].ToString().ToLower());
+                        _settings.Add(row["key"].ToString().ToLower(), row["value"].ToString().ToLower());
                     }
                 }
             }
 
-            log.Info("Loaded " + this._settings.Count + " server settings.");
+            Log.Info("Loaded " + _settings.Count + " server settings.");
         }
 
         public string TryGetValue(string value)
         {
-            return this._settings.ContainsKey(value) ? this._settings[value] : "0";
+            return _settings.ContainsKey(value) ? _settings[value] : "0";
         }
     }
 }

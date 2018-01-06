@@ -11,11 +11,11 @@
 
         public Part(int id, SetType setType, bool colorable, int index, int colorIndex)
         {
-            this.Id = id;
-            this.SetType = setType;
-            this.Colorable = colorable;
-            this.Index = index;
-            this.ColorIndex = colorIndex;
+            Id = id;
+            SetType = setType;
+            Colorable = colorable;
+            Index = index;
+            ColorIndex = colorIndex;
         }
     }
 }

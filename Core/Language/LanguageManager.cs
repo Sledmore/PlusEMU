@@ -8,19 +8,19 @@ namespace Plus.Core.Language
 {
     public class LanguageManager
     {
-        private Dictionary<string, string> _values = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _values;
 
         private static readonly ILog log = LogManager.GetLogger("Plus.Core.Language.LanguageManager");
 
         public LanguageManager()
         {
-            this._values = new Dictionary<string, string>();
+            _values = new Dictionary<string, string>();
         }
 
         public void Init()
         {
-            if (this._values.Count > 0)
-                this._values.Clear();
+            if (_values.Count > 0)
+                _values.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -31,17 +31,17 @@ namespace Plus.Core.Language
                 {
                     foreach (DataRow Row in Table.Rows)
                     {
-                        this._values.Add(Row["key"].ToString(), Row["value"].ToString());
+                        _values.Add(Row["key"].ToString(), Row["value"].ToString());
                     }
                 }
             }
 
-            log.Info("Loaded " + this._values.Count + " language locales.");
+            log.Info("Loaded " + _values.Count + " language locales.");
         }
 
         public string TryGetValue(string value)
         {
-            return this._values.ContainsKey(value) ? this._values[value] : "No language locale found for [" + value + "]";
+            return _values.ContainsKey(value) ? _values[value] : "No language locale found for [" + value + "]";
         }
     }
 }
