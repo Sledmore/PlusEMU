@@ -11,71 +11,69 @@ namespace Plus.HabboHotel.Cache
 {
     public class CacheManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Cache.CacheManager");
-        private ConcurrentDictionary<int, UserCache> _usersCached;
-        private ProcessComponent _process;
+        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Cache.CacheManager");
+        private readonly ConcurrentDictionary<int, UserCache> _usersCached;
+        private readonly ProcessComponent _process;
 
         public CacheManager()
         {
-            this._usersCached = new ConcurrentDictionary<int, UserCache>();
-            this._process = new ProcessComponent();
-            this._process.Init();
-            log.Info("Cache Manager -> LOADED");
+            _usersCached = new ConcurrentDictionary<int, UserCache>();
+            _process = new ProcessComponent();
+            _process.Init();
+            Log.Info("Cache Manager -> LOADED");
         }
-        public bool ContainsUser(int Id)
+        public bool ContainsUser(int id)
         {
-            return _usersCached.ContainsKey(Id);
+            return _usersCached.ContainsKey(id);
         }
 
-        public UserCache GenerateUser(int Id)
+        public UserCache GenerateUser(int id)
         {
-            UserCache User = null;
+            UserCache user = null;
 
-            if (_usersCached.ContainsKey(Id))
-                if (TryGetUser(Id, out User))
-                    return User;
+            if (_usersCached.ContainsKey(id))
+                if (TryGetUser(id, out user))
+                    return user;
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Id);
-            if (Client != null)
-                if (Client.GetHabbo() != null)
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(id);
+            if (client != null)
+                if (client.GetHabbo() != null)
                 {
-                    User = new UserCache(Id, Client.GetHabbo().Username, Client.GetHabbo().Motto, Client.GetHabbo().Look);
-                    _usersCached.TryAdd(Id, User);
-                    return User;
+                    user = new UserCache(id, client.GetHabbo().Username, client.GetHabbo().Motto, client.GetHabbo().Look);
+                    _usersCached.TryAdd(id, user);
+                    return user;
                 }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `username`, `motto`, `look` FROM users WHERE id = @id LIMIT 1");
-                dbClient.AddParameter("id", Id);
+                dbClient.AddParameter("id", id);
 
                 DataRow dRow = dbClient.GetRow();
 
                 if (dRow != null)
                 {
-                    User = new UserCache(Id, dRow["username"].ToString(), dRow["motto"].ToString(), dRow["look"].ToString());
-                    _usersCached.TryAdd(Id, User);
+                    user = new UserCache(id, dRow["username"].ToString(), dRow["motto"].ToString(), dRow["look"].ToString());
+                    _usersCached.TryAdd(id, user);
                 }
-
-                dRow = null;
             }
 
-            return User;
+            return user;
         }
 
-        public bool TryRemoveUser(int Id, out UserCache User)
+        public bool TryRemoveUser(int id, out UserCache user)
         {
-            return _usersCached.TryRemove(Id, out User);
+            return _usersCached.TryRemove(id, out user);
         }
 
-        public bool TryGetUser(int Id, out UserCache User)
+        public bool TryGetUser(int id, out UserCache user)
         {
-            return _usersCached.TryGetValue(Id, out User);
+            return _usersCached.TryGetValue(id, out user);
         }
 
         public ICollection<UserCache> GetUserCache()
         {
-            return this._usersCached.Values;
+            return _usersCached.Values;
         }
     }
 }

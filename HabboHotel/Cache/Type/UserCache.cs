@@ -9,18 +9,18 @@ namespace Plus.HabboHotel.Cache.Type
         public string Motto { get; set; }
         public string Look { get; set; }
         public DateTime AddedTime { get; set; }
-        public UserCache(int Id, string Username, string Motto, string Look)
+        public UserCache(int id, string username, string motto, string look)
         {
-            this.Id = Id;
-            this.Username = Username;
-            this.Motto = Motto;
-            this.Look = Look;
-            this.AddedTime = DateTime.Now;
+            Id = id;
+            Username = username;
+            Motto = motto;
+            Look = look;
+            AddedTime = DateTime.Now;
         }
-        public bool isExpired()
+        public bool IsExpired()
         {
-            TimeSpan CacheTime = DateTime.Now - this.AddedTime;
-            return CacheTime.TotalMinutes >= 30;
+            TimeSpan cacheTime = DateTime.Now - AddedTime;
+            return cacheTime.TotalMinutes >= 30;
         }
     }
 }
