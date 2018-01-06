@@ -17,7 +17,7 @@ namespace Plus.Communication.Packets.Incoming.Moderation
                 return;
 
             int UserId = Packet.PopInt();
-            GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId);
             if (Target == null)
                 return;
 

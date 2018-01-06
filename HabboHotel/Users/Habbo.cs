@@ -1077,7 +1077,7 @@ namespace Plus.HabboHotel.Users
             if (this._client != null)
                 return this._client;
 
-            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Id);
+            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Id);
         }
 
         public HabboMessenger GetMessenger()

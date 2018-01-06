@@ -58,7 +58,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
                 if (GetMessages != null)
                 {
-                    GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
+                    GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(this._userId);
                     if (Client == null)
                         return;
 
@@ -164,7 +164,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
             OnNewFriendship(friendID);
 
-            GameClient User = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            GameClient User = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(friendID);
 
             if (User != null && User.GetHabbo().GetMessenger() != null)
             {
@@ -174,7 +174,7 @@ namespace Plus.HabboHotel.Users.Messenger
             if (User != null)
                 PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User, "ACH_FriendListSize", 1);
 
-            GameClient thisUser = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(_userId);
+            GameClient thisUser = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(_userId);
             if (thisUser != null)
                 PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(thisUser, "ACH_FriendListSize", 1);
         }
@@ -189,7 +189,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
             OnDestroyFriendship(friendID);
 
-            GameClient User = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            GameClient User = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(friendID);
 
             if (User != null && User.GetHabbo().GetMessenger() != null)
                 User.GetHabbo().GetMessenger().OnDestroyFriendship(_userId);
@@ -197,7 +197,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
         public void OnNewFriendship(int friendID)
         {
-            GameClient friend = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            GameClient friend = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(friendID);
 
             MessengerBuddy newFriend;
             if (friend == null || friend.GetHabbo() == null)
@@ -301,7 +301,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
             PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(GetClient(), QuestType.AddFriends);
 
-            GameClient ToUser = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
+            GameClient ToUser = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(ToId);
             if (ToUser == null || ToUser.GetHabbo() == null)
                 return true;
 
@@ -358,7 +358,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
             GetClient().GetHabbo().MessengerSpamCount++;
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
+            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(ToId);
             if (Client == null || Client.GetHabbo() == null || Client.GetHabbo().GetMessenger() == null)
             {
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -438,7 +438,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
         private GameClient GetClient()
         {
-            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
+            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(this._userId);
         }
 
         public ICollection<MessengerRequest> GetRequests()

@@ -92,7 +92,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
 
             if (pet.OwnerId != Session.GetHabbo().Id)
             {
-                GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
+                GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(pet.OwnerId);
                 if (Target != null)
                 {
                     Target.GetHabbo().GetInventoryComponent().TryAddPet(Pet.PetData);

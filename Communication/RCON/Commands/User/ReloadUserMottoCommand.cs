@@ -23,7 +23,7 @@ namespace Plus.Communication.Rcon.Commands.User
             if (!int.TryParse(parameters[0].ToString(), out userId))
                 return false;
 
-            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
             if (client == null || client.GetHabbo() == null)
                 return false;
 

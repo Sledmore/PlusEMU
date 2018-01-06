@@ -39,7 +39,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
                     if (Item == null || Item.UserID == Session.GetHabbo().Id)
                         continue;
 
-                    GameClient TargetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Item.UserID);
+                    GameClient TargetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Item.UserID);
                     if (TargetClient != null && TargetClient.GetHabbo() != null)
                     {
                         Room.GetRoomItemHandler().RemoveFurniture(TargetClient, Item.Id);
@@ -63,7 +63,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
                     if (Item == null || Item.UserID != Session.GetHabbo().Id)
                         continue;
 
-                    GameClient TargetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Item.UserID);
+                    GameClient TargetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Item.UserID);
                     if (TargetClient != null && TargetClient.GetHabbo() != null)
                     {
                         Room.GetRoomItemHandler().RemoveFurniture(TargetClient, Item.Id);

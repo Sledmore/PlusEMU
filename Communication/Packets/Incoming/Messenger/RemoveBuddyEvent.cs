@@ -39,7 +39,7 @@ namespace Plus.Communication.Packets.Incoming.Messenger
                     if (Session.GetHabbo().Relationships.ContainsKey(Id))
                         Session.GetHabbo().Relationships.Remove(Id);
 
-                    GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Id);
+                    GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Id);
                     if (Target != null)
                     {
                         if (Target.GetHabbo().Relationships.ContainsKey(Session.GetHabbo().Id))

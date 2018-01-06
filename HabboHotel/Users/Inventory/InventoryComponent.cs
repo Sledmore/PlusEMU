@@ -232,7 +232,7 @@ namespace Plus.HabboHotel.Users.Inventory
 
         private GameClient GetClient()
         {
-            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(_userId);
+            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(_userId);
         }
 
         public void SendNewItems(int Id)

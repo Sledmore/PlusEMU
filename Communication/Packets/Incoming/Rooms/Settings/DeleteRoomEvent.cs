@@ -47,7 +47,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 
             foreach (Item item in ItemsToRemove)
             {
-                GameClient targetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(item.UserID);
+                GameClient targetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(item.UserID);
                 if (targetClient != null && targetClient.GetHabbo() != null)//Again, do we have an active client?
                 {
                     room.GetRoomItemHandler().RemoveFurniture(targetClient, item.Id);

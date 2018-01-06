@@ -2,8 +2,8 @@
 {
     public class BadgeDefinition
     {
-        public string Code { get; private set; }
-        public string RequiredRight { get; private set; }
+        public string Code { get; }
+        public string RequiredRight { get; }
 
         public BadgeDefinition(string code, string requiredRight)
         {

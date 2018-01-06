@@ -2,10 +2,10 @@
 {
     public struct AchievementLevel
     {
-        public int Level { get; private set; }
-        public int Requirement { get; private set; }
-        public int RewardPixels { get; private set; }
-        public int RewardPoints { get; private set; }
+        public int Level { get; }
+        public int Requirement { get; }
+        public int RewardPixels { get; }
+        public int RewardPoints { get; }
 
         public AchievementLevel(int level, int rewardPixels, int rewardPoints, int requirement)
         {

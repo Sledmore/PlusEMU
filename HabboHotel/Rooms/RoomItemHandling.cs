@@ -158,7 +158,7 @@ namespace Plus.HabboHotel.Rooms
                             dbClient.RunQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = '" + Item.Id + "' LIMIT 1");
                         }
 
-                        GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Item.UserID);
+                        GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Item.UserID);
                         if (Client != null)
                         {
                             Client.GetHabbo().GetInventoryComponent().AddNewItem(Item.Id, Item.BaseItem, Item.ExtraData, Item.GroupId, true, true, Item.LimitedNo, Item.LimitedTot);

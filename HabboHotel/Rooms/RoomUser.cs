@@ -718,7 +718,7 @@ namespace Plus.HabboHotel.Rooms
                 return null;
             }
             if (mClient == null)
-                mClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(HabboId);
+                mClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(HabboId);
             return mClient;
         }
 

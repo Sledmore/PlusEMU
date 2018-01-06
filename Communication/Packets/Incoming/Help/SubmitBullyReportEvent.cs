@@ -26,7 +26,7 @@ namespace Plus.Communication.Packets.Incoming.Help
                 return;
             }
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Convert.ToInt32(UserId));
+            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Convert.ToInt32(UserId));
             if (Client == null)
             {
                 Session.SendPacket(new SubmitBullyReportComposer(0));//Just say it's sent, the user isn't found.

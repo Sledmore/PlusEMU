@@ -12,7 +12,7 @@ namespace Plus.HabboHotel.Bots
 {
     public class BotManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Bots.BotManager");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Bots.BotManager");
 
         private readonly List<BotResponse> _responses;
 
@@ -35,7 +35,7 @@ namespace Plus.HabboHotel.Bots
                 {
                     foreach (DataRow row in data.Rows)
                     {
-                        this._responses.Add(new BotResponse(Convert.ToString(row["bot_ai"]), Convert.ToString(row["chat_keywords"]), Convert.ToString(row["response_text"]), row["response_mode"].ToString(), Convert.ToString(row["response_beverage"])));
+                        _responses.Add(new BotResponse(Convert.ToString(row["bot_ai"]), Convert.ToString(row["chat_keywords"]), Convert.ToString(row["response_text"]), row["response_mode"].ToString(), Convert.ToString(row["response_beverage"])));
                     }
                 }
             }
@@ -43,7 +43,7 @@ namespace Plus.HabboHotel.Bots
 
         public BotResponse GetResponse(BotAIType type, string message)
         {
-            foreach (BotResponse response in _responses.Where(X => X.AiType == type).ToList())
+            foreach (BotResponse response in _responses.Where(x => x.AiType == type).ToList())
             {
                 if (response.KeywordMatched(message))
                 {

@@ -13,7 +13,7 @@ namespace Plus.Communication.Packets.Incoming.Moderation
             int UserId = Packet.PopInt();
             string Message = Packet.PopString();
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId);
             if (Client == null || Client.GetHabbo() == null || Client.GetHabbo().CurrentRoomId < 1 || Client.GetHabbo().Id == Session.GetHabbo().Id)
                 return;
 

@@ -82,7 +82,7 @@ namespace Plus.Communication.Packets.Incoming.Users
                         Session.GetHabbo().Relationships.Add(User, new Relationship(newId, User, Type));
                 }
 
-                GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(User);
+                GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(User);
                 if (Client != null)
                     Session.GetHabbo().GetMessenger().UpdateFriend(User, Client, true);
                 else
