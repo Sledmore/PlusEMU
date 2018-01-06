@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Plus.Communication.Packets.Outgoing.Navigator
+﻿namespace Plus.Communication.Packets.Outgoing.Navigator
 {
     class NavigatorSettingsComposer : ServerPacket
     {
-        public NavigatorSettingsComposer(int Homeroom)
+        public NavigatorSettingsComposer(int homeroom)
             : base(ServerPacketHeader.NavigatorSettingsMessageComposer)
         {
-            base.WriteInteger(Homeroom);
-            base.WriteInteger(Homeroom);
+            WriteInteger(homeroom);
+            WriteInteger(homeroom);
         }
     }
 }

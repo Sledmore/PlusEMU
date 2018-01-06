@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.Communication.Packets.Outgoing.Users
+﻿namespace Plus.Communication.Packets.Outgoing.Users
 {
     class UpdateUsernameComposer : ServerPacket
     {
-        public UpdateUsernameComposer(string User)
+        public UpdateUsernameComposer(string username)
             : base(ServerPacketHeader.UpdateUsernameMessageComposer)
         {
-            base.WriteInteger(0);
-           base.WriteString(User);
-            base.WriteInteger(0);
+            WriteInteger(0);
+            WriteString(username);
+            WriteInteger(0);
         }
     }
 }

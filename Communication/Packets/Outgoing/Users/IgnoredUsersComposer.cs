@@ -4,13 +4,13 @@ namespace Plus.Communication.Packets.Outgoing.Users
 {
     public class IgnoredUsersComposer : ServerPacket
     {
-        public IgnoredUsersComposer(List<string> ignoredUsers)
+        public IgnoredUsersComposer(IReadOnlyCollection<string> ignoredUsers)
             : base(ServerPacketHeader.IgnoredUsersMessageComposer)
         {
-            base.WriteInteger(ignoredUsers.Count);
-            foreach (string Username in ignoredUsers)
+            WriteInteger(ignoredUsers.Count);
+            foreach (string username in ignoredUsers)
             {
-                base.WriteString(Username);
+                WriteString(username);
             }
         }
     }

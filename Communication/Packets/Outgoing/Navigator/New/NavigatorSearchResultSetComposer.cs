@@ -7,22 +7,28 @@ namespace Plus.Communication.Packets.Outgoing.Navigator.New
 {
     class NavigatorSearchResultSetComposer : ServerPacket
     {
-        public NavigatorSearchResultSetComposer(string Category, string Data, ICollection<SearchResultList> SearchResultLists, GameClient Session, int GoBack = 1, int FetchLimit = 12)
+        public NavigatorSearchResultSetComposer(string category, string data,
+            ICollection<SearchResultList> searchResultLists, GameClient session, int goBack = 1, int fetchLimit = 12)
             : base(ServerPacketHeader.NavigatorSearchResultSetMessageComposer)
         {
-           base.WriteString(Category);//Search code.
-           base.WriteString(Data);//Text?
+            WriteString(category); //Search code.
+            WriteString(data); //Text?
 
-            base.WriteInteger(SearchResultLists.Count);//Count
-            foreach (SearchResultList SearchResult in SearchResultLists.ToList())
+            WriteInteger(searchResultLists.Count); //Count
+            foreach (SearchResultList searchResult in searchResultLists.ToList())
             {
-               base.WriteString(SearchResult.CategoryIdentifier);
-               base.WriteString(SearchResult.PublicName);
-                base.WriteInteger(NavigatorSearchAllowanceUtility.GetIntegerValue(SearchResult.SearchAllowance) != 0 ? GoBack : NavigatorSearchAllowanceUtility.GetIntegerValue(SearchResult.SearchAllowance));//0 = nothing, 1 = show more, 2 = back Action allowed.
-                base.WriteBoolean(false);//True = minimized, false = open.
-                base.WriteInteger(SearchResult.ViewMode == NavigatorViewMode.Regular ? 0 : SearchResult.ViewMode == NavigatorViewMode.Thumbnail ? 1 : 0);//View mode, 0 = tiny/regular, 1 = thumbnail
+                WriteString(searchResult.CategoryIdentifier);
+                WriteString(searchResult.PublicName);
+                WriteInteger(NavigatorSearchAllowanceUtility.GetIntegerValue(searchResult.SearchAllowance) != 0
+                    ? goBack
+                    : NavigatorSearchAllowanceUtility.GetIntegerValue(searchResult
+                        .SearchAllowance)); //0 = nothing, 1 = show more, 2 = back Action allowed.
+                WriteBoolean(false); //True = minimized, false = open.
+                WriteInteger(searchResult.ViewMode == NavigatorViewMode.Regular ? 0 :
+                    searchResult.ViewMode == NavigatorViewMode.Thumbnail ? 1 :
+                    0); //View mode, 0 = tiny/regular, 1 = thumbnail
 
-                NavigatorHandler.Search(this, SearchResult, Data, Session, FetchLimit);
+                NavigatorHandler.Search(this, searchResult, data, session, fetchLimit);
             }
         }
     }

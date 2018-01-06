@@ -169,7 +169,7 @@ namespace Plus.HabboHotel.GameClients
                     continue;
 
                 if (Client.GetHabbo().GetPermissions().HasRight("mod_tool") && !Client.GetHabbo().GetPermissions().HasRight("staff_ignore_advertisement_reports"))
-                    Client.SendPacket(new MOTDNotificationComposer(Builder.ToString()));
+                    Client.SendPacket(new MotdNotificationComposer(Builder.ToString()));
             }
         }
 
@@ -194,7 +194,7 @@ namespace Plus.HabboHotel.GameClients
         public void CreateAndStartClient(int clientID, ConnectionInformation connection)
         {
             GameClient Client = new GameClient(clientID, connection);
-            if (this._clients.TryAdd(Client.ConnectionID, Client))
+            if (this._clients.TryAdd(Client.ConnectionId, Client))
                 Client.StartConnection();
             else
                 connection.Dispose();

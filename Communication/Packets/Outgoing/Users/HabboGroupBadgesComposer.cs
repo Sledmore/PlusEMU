@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Plus.HabboHotel.Groups;
 
@@ -10,25 +6,24 @@ namespace Plus.Communication.Packets.Outgoing.Users
 {
     class HabboGroupBadgesComposer : ServerPacket
     {
-        public HabboGroupBadgesComposer(Dictionary<int, string> Badges)
+        public HabboGroupBadgesComposer(Dictionary<int, string> badges)
             : base(ServerPacketHeader.HabboGroupBadgesMessageComposer)
         {
-            base.WriteInteger(Badges.Count);
-            foreach (KeyValuePair<int, string> Badge in Badges)
+            WriteInteger(badges.Count);
+            foreach (KeyValuePair<int, string> badge in badges)
             {
-                base.WriteInteger(Badge.Key);
-                base.WriteString(Badge.Value);
+                WriteInteger(badge.Key);
+                WriteString(badge.Value);
             }
         }
 
-        public HabboGroupBadgesComposer(Group Group)
+        public HabboGroupBadgesComposer(Group group)
             : base(ServerPacketHeader.HabboGroupBadgesMessageComposer)
         {
-            base.WriteInteger(1);//count
-            {
-                base.WriteInteger(Group.Id);
-                base.WriteString(Group.Badge);
-            }
+            WriteInteger(1); //count
+
+            WriteInteger(group.Id);
+            WriteString(group.Badge);
         }
     }
 }

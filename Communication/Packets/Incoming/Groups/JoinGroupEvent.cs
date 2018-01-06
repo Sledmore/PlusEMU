@@ -23,7 +23,7 @@ namespace Plus.Communication.Packets.Incoming.Groups
             if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group))
                 return;
 
-            if (Group.IsMember(Session.GetHabbo().Id) || Group.IsAdmin(Session.GetHabbo().Id) || (Group.HasRequest(Session.GetHabbo().Id) && Group.GroupType == GroupType.Private))
+            if (Group.IsMember(Session.GetHabbo().Id) || Group.IsAdmin(Session.GetHabbo().Id) || (Group.HasRequest(Session.GetHabbo().Id) && Group.Type == GroupType.Private))
                 return;
 
             List<Group> Groups = PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(Session.GetHabbo().Id);
@@ -35,7 +35,7 @@ namespace Plus.Communication.Packets.Incoming.Groups
 
             Group.AddMember(Session.GetHabbo().Id);
 
-            if (Group.GroupType == GroupType.Locked)
+            if (Group.Type == GroupType.Locked)
             {
                 List<GameClient> GroupAdmins = (from Client in PlusEnvironment.GetGame().GetClientManager().GetClients.ToList() where Client != null && Client.GetHabbo() != null && Group.IsAdmin(Client.GetHabbo().Id) select Client).ToList();
                 foreach (GameClient Client in GroupAdmins)

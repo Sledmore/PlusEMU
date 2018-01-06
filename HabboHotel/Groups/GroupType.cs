@@ -2,8 +2,8 @@
 {
     public enum GroupType
     {
-        Open,
-        Locked,
-        Private
+        Open = 0,
+        Locked = 1,
+        Private = 2
     }
 }

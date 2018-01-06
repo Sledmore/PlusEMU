@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.Communication.Packets.Outgoing.Navigator
+﻿namespace Plus.Communication.Packets.Outgoing.Navigator
 {
     class RoomRatingComposer : ServerPacket
     {
-        public RoomRatingComposer(int Score, bool CanVote)
+        public RoomRatingComposer(int score, bool canVote)
             : base(ServerPacketHeader.RoomRatingMessageComposer)
         {
-            base.WriteInteger(Score);
-            base.WriteBoolean(CanVote);
+            WriteInteger(score);
+            WriteBoolean(canVote);
         }
     }
 }

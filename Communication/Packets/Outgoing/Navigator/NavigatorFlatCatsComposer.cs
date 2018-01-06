@@ -9,12 +9,12 @@ namespace Plus.Communication.Packets.Outgoing.Navigator
         public NavigatorFlatCatsComposer(ICollection<SearchResultList> categories)
             : base(ServerPacketHeader.NavigatorFlatCatsMessageComposer)
         {
-            base.WriteInteger(categories.Count);
+            WriteInteger(categories.Count);
             foreach (SearchResultList category in categories.ToList())
             {
-                base.WriteInteger(category.Id);
-                base.WriteString(category.PublicName);
-                base.WriteBoolean(true); // TODO
+                WriteInteger(category.Id);
+                WriteString(category.PublicName);
+                WriteBoolean(true); // TODO
             }
         }
     }

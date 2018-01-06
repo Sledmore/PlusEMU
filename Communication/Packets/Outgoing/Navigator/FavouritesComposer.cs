@@ -1,22 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace Plus.Communication.Packets.Outgoing.Navigator
 {
     class FavouritesComposer : ServerPacket
     {
-        public FavouritesComposer(ArrayList favouriteIDs)
+        public FavouritesComposer(ArrayList favouriteIds)
             : base(ServerPacketHeader.FavouritesMessageComposer)
         {
-            base.WriteInteger(50);
-            base.WriteInteger(favouriteIDs.Count);
+            WriteInteger(50);
+            WriteInteger(favouriteIds.Count);
 
-            foreach (int Id in favouriteIDs.ToArray())
+            foreach (int id in favouriteIds.ToArray())
             {
-                base.WriteInteger(Id);
+                WriteInteger(id);
             }
         }
     }

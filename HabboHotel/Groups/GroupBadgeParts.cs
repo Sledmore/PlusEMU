@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Groups
+﻿namespace Plus.HabboHotel.Groups
 {
     public class GroupBadgeParts
     {
-        public int Id { get; private set; }
-        public string AssetOne { get; private set; }
-        public string AssetTwo { get; private set; }
+        public int Id { get; }
+        public string AssetOne { get; }
+        public string AssetTwo { get; }
 
         public GroupBadgeParts(int id, string assetOne, string assetTwo)
         {
-            this.Id = id;
-            this.AssetOne = assetOne;
-            this.AssetTwo = assetTwo;
+            Id = id;
+            AssetOne = assetOne;
+            AssetTwo = assetTwo;
         }
     }
 }

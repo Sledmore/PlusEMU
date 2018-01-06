@@ -1,17 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.Communication.Packets.Outgoing.Navigator
+﻿namespace Plus.Communication.Packets.Outgoing.Navigator
 {
     class CanCreateRoomComposer : ServerPacket
     {
-        public CanCreateRoomComposer(bool Error, int MaxRoomsPerUser)
+        public CanCreateRoomComposer(bool error, int maxRoomsPerUser)
             : base(ServerPacketHeader.CanCreateRoomMessageComposer)
         {
-            base.WriteInteger(Error ? 1 : 0);
-            base.WriteInteger(MaxRoomsPerUser);
+            WriteInteger(error ? 1 : 0);
+            WriteInteger(maxRoomsPerUser);
         }
     }
 }

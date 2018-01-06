@@ -12,32 +12,32 @@ namespace Plus.HabboHotel.Cache.Process
 {
     sealed class ProcessComponent
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Cache.Process.ProcessComponent");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Cache.Process.ProcessComponent");
 
         /// <summary>
         /// ThreadPooled Timer.
         /// </summary>
-        private Timer _timer = null;
+        private Timer _timer;
 
         /// <summary>
         /// Prevents the timer from overlapping itself.
         /// </summary>
-        private bool _timerRunning = false;
+        private bool _timerRunning;
         
         /// <summary>
         /// Checks if the timer is lagging behind (server can't keep up).
         /// </summary>
-        private bool _timerLagging = false;
+        private bool _timerLagging;
 
         /// <summary>
         /// Enable/Disable the timer WITHOUT disabling the timer itself.
         /// </summary>
-        private bool _disabled = false;
+        private bool _disabled;
 
         /// <summary>
         /// Used for disposing the ProcessComponent safely.
         /// </summary>
-        private AutoResetEvent _resetEvent = new AutoResetEvent(true);
+        private readonly AutoResetEvent _resetEvent = new AutoResetEvent(true);
 
         /// <summary>
         /// How often the timer should execute.
@@ -45,18 +45,11 @@ namespace Plus.HabboHotel.Cache.Process
         private static int _runtimeInSec = 1200;
 
         /// <summary>
-        /// Default.
-        /// </summary>
-        public ProcessComponent()
-        {
-        }
-
-        /// <summary>
         /// Initializes the ProcessComponent.
         /// </summary>
         public void Init()
         {
-            this._timer = new Timer(new TimerCallback(Run), null, _runtimeInSec * 1000, _runtimeInSec * 1000);
+            _timer = new Timer(Run, null, _runtimeInSec * 1000, _runtimeInSec * 1000);
         }
 
         /// <summary>
@@ -67,34 +60,30 @@ namespace Plus.HabboHotel.Cache.Process
         {
             try
             {
-                if (this._disabled)
+                if (_disabled)
                     return;
 
-                if (this._timerRunning)
+                if (_timerRunning)
                 {
-                    this._timerLagging = true;
+                    _timerLagging = true;
                     return;
                 }
 
-                this._resetEvent.Reset();
+                _resetEvent.Reset();
 
                 // BEGIN CODE
-                List<UserCache> CacheList = PlusEnvironment.GetGame().GetCacheManager().GetUserCache().ToList();
-                if (CacheList.Count > 0)
+                List<UserCache> cacheList = PlusEnvironment.GetGame().GetCacheManager().GetUserCache().ToList();
+                if (cacheList.Count > 0)
                 {
-                    foreach (UserCache Cache in CacheList)
+                    foreach (UserCache cache in cacheList)
                     {
                         try
                         {
-                            if (Cache == null)
+                            if (cache == null)
                                 continue;
 
-                            UserCache Temp = null;
-
-                            if (Cache.isExpired())
-                                PlusEnvironment.GetGame().GetCacheManager().TryRemoveUser(Cache.Id, out Temp);
-
-                            Temp = null;
+                            if (cache.IsExpired())
+                                PlusEnvironment.GetGame().GetCacheManager().TryRemoveUser(cache.Id, out _);
                         }
                         catch (Exception e)
                         {
@@ -103,27 +92,23 @@ namespace Plus.HabboHotel.Cache.Process
                     }
                 }
 
-                CacheList = null;
-
-                List<Habbo> CachedUsers = PlusEnvironment.GetUsersCached().ToList();
-                if (CachedUsers.Count > 0)
+                List<Habbo> cachedUsers = PlusEnvironment.GetUsersCached().ToList();
+                if (cachedUsers.Count > 0)
                 {
-                    foreach (Habbo Data in CachedUsers)
+                    foreach (Habbo data in cachedUsers)
                     {
                         try
                         {
-                            if (Data == null)
+                            if (data == null)
                                 continue;
 
-                            Habbo Temp = null;
+                            Habbo temp = null;
 
-                            if (Data.CacheExpired())
-                                PlusEnvironment.RemoveFromCache(Data.Id, out Temp);
+                            if (data.CacheExpired())
+                                PlusEnvironment.RemoveFromCache(data.Id, out temp);
 
-                            if (Temp != null)
-                                Temp.Dispose();
-
-                            Temp = null;
+                            if (temp != null)
+                                temp.Dispose();
                         }
                         catch (Exception e)
                         {
@@ -131,15 +116,13 @@ namespace Plus.HabboHotel.Cache.Process
                         }
                     }
                 }
-
-                CachedUsers = null;
                 // END CODE
 
                 // Reset the values
-                this._timerRunning = false;
-                this._timerLagging = false;
+                _timerRunning = false;
+                _timerLagging = false;
 
-                this._resetEvent.Set();
+                _resetEvent.Set();
             }
             catch (Exception e)
             {
@@ -155,23 +138,23 @@ namespace Plus.HabboHotel.Cache.Process
             // Wait until any processing is complete first.
             try
             {
-                this._resetEvent.WaitOne(TimeSpan.FromMinutes(5));
+                _resetEvent.WaitOne(TimeSpan.FromMinutes(5));
             }
             catch { } // give up
 
             // Set the timer to disabled
-            this._disabled = true;
+            _disabled = true;
 
             // Dispose the timer to disable it.
             try
             {
-                if (this._timer != null)
-                    this._timer.Dispose();
+                if (_timer != null)
+                    _timer.Dispose();
             }
             catch { }
 
             // Remove reference to the timer.
-            this._timer = null;
+            _timer = null;
         }
     }
 }
