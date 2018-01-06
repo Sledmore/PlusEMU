@@ -203,7 +203,7 @@ namespace Plus.HabboHotel.GameClients
                     }
 
                     if (PlusEnvironment.GetSettingsManager().TryGetValue("user.login.message.enabled") == "1")
-                        SendPacket(new MOTDNotificationComposer(PlusEnvironment.GetLanguageManager().TryGetValue("user.login.message")));
+                        SendPacket(new MotdNotificationComposer(PlusEnvironment.GetLanguageManager().TryGetValue("user.login.message")));
 
                     PlusEnvironment.GetGame().GetRewardManager().CheckRewards(this);
                     return true;

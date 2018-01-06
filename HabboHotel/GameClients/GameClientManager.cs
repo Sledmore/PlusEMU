@@ -169,7 +169,7 @@ namespace Plus.HabboHotel.GameClients
                     continue;
 
                 if (Client.GetHabbo().GetPermissions().HasRight("mod_tool") && !Client.GetHabbo().GetPermissions().HasRight("staff_ignore_advertisement_reports"))
-                    Client.SendPacket(new MOTDNotificationComposer(Builder.ToString()));
+                    Client.SendPacket(new MotdNotificationComposer(Builder.ToString()));
             }
         }
 
