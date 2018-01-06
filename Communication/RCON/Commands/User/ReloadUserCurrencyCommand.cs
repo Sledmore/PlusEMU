@@ -19,8 +19,7 @@ namespace Plus.Communication.Rcon.Commands.User
 
         public bool TryExecute(string[] parameters)
         {
-            int userId = 0;
-            if (!int.TryParse(parameters[0].ToString(), out userId))
+            if (!int.TryParse(parameters[0], out int userId))
                 return false;
 
             GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
@@ -41,7 +40,7 @@ namespace Plus.Communication.Rcon.Commands.User
                 case "coins":
                 case "credits":
                     {
-                        int credits = 0;
+                        int credits;
                         using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             dbClient.SetQuery("SELECT `credits` FROM `users` WHERE `id` = @id LIMIT 1");
@@ -57,7 +56,7 @@ namespace Plus.Communication.Rcon.Commands.User
                 case "pixels":
                 case "duckets":
                     {
-                        int duckets = 0;
+                        int duckets;
                         using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             dbClient.SetQuery("SELECT `activity_points` FROM `users` WHERE `id` = @id LIMIT 1");
@@ -72,7 +71,7 @@ namespace Plus.Communication.Rcon.Commands.User
 
                 case "diamonds":
                     {
-                        int diamonds = 0;
+                        int diamonds;
                         using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             dbClient.SetQuery("SELECT `vip_points` FROM `users` WHERE `id` = @id LIMIT 1");
@@ -87,7 +86,7 @@ namespace Plus.Communication.Rcon.Commands.User
 
                 case "gotw":
                     {
-                        int gotw = 0;
+                        int gotw;
                         using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             dbClient.SetQuery("SELECT `gotw_points` FROM `users` WHERE `id` = @id LIMIT 1");

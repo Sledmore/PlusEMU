@@ -1,7 +1,6 @@
 ﻿using System;
 using Plus.HabboHotel.GameClients;
 using Plus.Database.Interfaces;
-using Plus.Communication.Packets.Outgoing.Inventory.Purse;
 
 namespace Plus.Communication.Rcon.Commands.User
 {
@@ -19,8 +18,7 @@ namespace Plus.Communication.Rcon.Commands.User
 
         public bool TryExecute(string[] parameters)
         {
-            int userId = 0;
-            if (!int.TryParse(parameters[0].ToString(), out userId))
+            if (!int.TryParse(parameters[0], out int userId))
                 return false;
 
             GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);

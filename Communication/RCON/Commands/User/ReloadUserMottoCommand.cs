@@ -19,8 +19,7 @@ namespace Plus.Communication.Rcon.Commands.User
 
         public bool TryExecute(string[] parameters)
         {
-            int userId = 0;
-            if (!int.TryParse(parameters[0].ToString(), out userId))
+            if (!int.TryParse(parameters[0], out int userId))
                 return false;
 
             GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
@@ -42,13 +41,13 @@ namespace Plus.Communication.Rcon.Commands.User
             else
             {
                 //We are in a room, let's try to run the packets.
-                Room Room = client.GetHabbo().CurrentRoom;
-                if (Room != null)
+                Room room = client.GetHabbo().CurrentRoom;
+                if (room != null)
                 {
-                    RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(client.GetHabbo().Id);
-                    if (User != null)
+                    RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(client.GetHabbo().Id);
+                    if (user != null)
                     {
-                        Room.SendPacket(new UserChangeComposer(User, false));
+                        room.SendPacket(new UserChangeComposer(user, false));
                         return true;
                     }
                 }

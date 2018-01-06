@@ -17,8 +17,7 @@ namespace Plus.Communication.Rcon.Commands.User
 
         public bool TryExecute(string[] parameters)
         {
-            int userId = 0;
-            if (!int.TryParse(parameters[0].ToString(), out userId))
+            if (!int.TryParse(parameters[0], out int userId))
                 return false;
 
             GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
@@ -32,8 +31,7 @@ namespace Plus.Communication.Rcon.Commands.User
             string achievement = Convert.ToString(parameters[1]);
 
             // Validate the progress
-            int progress = 0;
-            if (!int.TryParse(parameters[2].ToString(), out progress))
+            if (!int.TryParse(parameters[2], out int progress))
                 return false;
 
             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(client, achievement, progress);

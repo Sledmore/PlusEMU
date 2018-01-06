@@ -10,15 +10,15 @@ namespace Plus.Communication.Rcon
         private Socket _socket;
         private byte[] _buffer = new byte[1024];
 
-        private static readonly ILog log = LogManager.GetLogger("Plus.Communication.Rcon.RconConnection");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.Rcon.RconConnection");
 
         public RconConnection(Socket socket)
         {
-            this._socket = socket;
+            _socket = socket;
 
             try
             {
-                this._socket.BeginReceive(this._buffer, 0, this._buffer.Length, SocketFlags.None, OnCallBack, this._socket);
+                _socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, OnCallBack, _socket);
             }
             catch { Dispose(); }
         }
@@ -27,8 +27,7 @@ namespace Plus.Communication.Rcon
         {
             try
             {
-                int bytes = 0;
-                if (!int.TryParse(_socket.EndReceive(iAr).ToString(), out bytes))
+                if (!int.TryParse(_socket.EndReceive(iAr).ToString(), out int bytes))
                 {
                     Dispose();
                     return;
@@ -37,7 +36,7 @@ namespace Plus.Communication.Rcon
                 string data = Encoding.Default.GetString(_buffer, 0, bytes);
                 if (!PlusEnvironment.GetRconSocket().GetCommands().Parse(data))
                 {
-                    log.Error("Failed to execute a MUS command. Raw data: " + data);
+                    Log.Error("Failed to execute a MUS command. Raw data: " + data);
                 }
             }
             catch (Exception e)
@@ -50,15 +49,15 @@ namespace Plus.Communication.Rcon
 
         public void Dispose()
         {
-            if (this._socket != null)
+            if (_socket != null)
             {
-                this._socket.Shutdown(SocketShutdown.Both);
-                this._socket.Close();
-                this._socket.Dispose();
+                _socket.Shutdown(SocketShutdown.Both);
+                _socket.Close();
+                _socket.Dispose();
             }
             
-            this._socket = null;
-            this._buffer = null;
+            _socket = null;
+            _buffer = null;
         }
     }
 }

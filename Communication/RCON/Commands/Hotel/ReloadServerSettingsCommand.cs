@@ -1,6 +1,4 @@
-﻿using Plus.Core;
-
-namespace Plus.Communication.Rcon.Commands.Hotel
+﻿namespace Plus.Communication.Rcon.Commands.Hotel
 {
     class ReloadServerSettingsCommand : IRconCommand
     {
