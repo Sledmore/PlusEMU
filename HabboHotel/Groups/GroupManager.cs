@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-
-using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users;
-using Plus.Communication.Packets.Incoming;
 using System.Collections.Concurrent;
 
 using Plus.Database.Interfaces;
@@ -16,7 +11,7 @@ namespace Plus.HabboHotel.Groups
 {
     public class GroupManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Groups.GroupManager");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Groups.GroupManager");
 
         private readonly object _groupLoadingSync;
         private readonly ConcurrentDictionary<int, Group> _groups;
@@ -29,82 +24,81 @@ namespace Plus.HabboHotel.Groups
 
         public GroupManager()
         {
-            this._groupLoadingSync = new object();
-            this._groups = new ConcurrentDictionary<int, Group>();
+            _groupLoadingSync = new object();
+            _groups = new ConcurrentDictionary<int, Group>();
 
-            this._bases = new List<GroupBadgeParts>();
-            this._symbols = new List<GroupBadgeParts>();
-            this._baseColours = new List<GroupColours>();
-            this._symbolColours = new Dictionary<int, GroupColours>();
-            this._backgroundColours = new Dictionary<int, GroupColours>();         
+            _bases = new List<GroupBadgeParts>();
+            _symbols = new List<GroupBadgeParts>();
+            _baseColours = new List<GroupColours>();
+            _symbolColours = new Dictionary<int, GroupColours>();
+            _backgroundColours = new Dictionary<int, GroupColours>();         
         }
 
         public void Init()
         {
-            this._bases.Clear();
-            this._symbols.Clear();
-            this._baseColours.Clear();
-            this._symbolColours.Clear();
-            this._backgroundColours.Clear();
+            _bases.Clear();
+            _symbols.Clear();
+            _baseColours.Clear();
+            _symbolColours.Clear();
+            _backgroundColours.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `id`,`type`,`firstvalue`,`secondvalue` FROM `groups_items` WHERE `enabled` = '1'");
-                DataTable dItems = dbClient.GetTable();
+                DataTable groupItems = dbClient.GetTable();
 
-                foreach (DataRow dRow in dItems.Rows)
+                foreach (DataRow groupItem in groupItems.Rows)
                 {
-                    switch (dRow["type"].ToString())
+                    switch (groupItem["type"].ToString())
                     {
                         case "base":
-                            this._bases.Add(new GroupBadgeParts(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                            _bases.Add(new GroupBadgeParts(Convert.ToInt32(groupItem["id"]), groupItem["firstvalue"].ToString(), groupItem["secondvalue"].ToString()));
                             break;
 
                         case "symbol":
-                            this._symbols.Add(new GroupBadgeParts(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                            _symbols.Add(new GroupBadgeParts(Convert.ToInt32(groupItem["id"]), groupItem["firstvalue"].ToString(), groupItem["secondvalue"].ToString()));
                             break;
 
                         case "color":
-                            this._baseColours.Add(new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                            _baseColours.Add(new GroupColours(Convert.ToInt32(groupItem["id"]), groupItem["firstvalue"].ToString()));
                             break;
 
                         case "color2":
-                            this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                            _symbolColours.Add(Convert.ToInt32(groupItem["id"]), new GroupColours(Convert.ToInt32(groupItem["id"]), groupItem["firstvalue"].ToString()));
                             break;
 
                         case "color3":
-                            this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                            _backgroundColours.Add(Convert.ToInt32(groupItem["id"]), new GroupColours(Convert.ToInt32(groupItem["id"]), groupItem["firstvalue"].ToString()));
                             break;
                     }
                 }
             }
         }
 
-        public bool TryGetGroup(int id, out Group Group)
+        public bool TryGetGroup(int id, out Group group)
         {
-            Group = null;
+            group = null;
 
-            if (this._groups.ContainsKey(id))
-                return this._groups.TryGetValue(id, out Group);
+            if (_groups.ContainsKey(id))
+                return _groups.TryGetValue(id, out group);
 
-            lock (this._groupLoadingSync)
+            lock (_groupLoadingSync)
             {
-                if (this._groups.ContainsKey(id))
-                    return this._groups.TryGetValue(id, out Group);
+                if (_groups.ContainsKey(id))
+                    return _groups.TryGetValue(id, out group);
 
-                DataRow Row = null;
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dbClient.SetQuery("SELECT * FROM `groups` WHERE `id` = @id LIMIT 1");
                     dbClient.AddParameter("id", id);
-                    Row = dbClient.GetRow();
+                    DataRow row = dbClient.GetRow();
 
-                    if (Row != null)
+                    if (row != null)
                     {
-                        Group = new Group(
-                            Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["desc"]), Convert.ToString(Row["badge"]), Convert.ToInt32(Row["room_id"]), Convert.ToInt32(Row["owner_id"]),
-                            Convert.ToInt32(Row["created"]), Convert.ToInt32(Row["state"]), Convert.ToInt32(Row["colour1"]), Convert.ToInt32(Row["colour2"]), Convert.ToInt32(Row["admindeco"]), Convert.ToInt32(Row["forum_enabled"]) == 1);
-                        this._groups.TryAdd(Group.Id, Group);
+                        group = new Group(
+                            Convert.ToInt32(row["id"]), Convert.ToString(row["name"]), Convert.ToString(row["desc"]), Convert.ToString(row["badge"]), Convert.ToInt32(row["room_id"]), Convert.ToInt32(row["owner_id"]),
+                            Convert.ToInt32(row["created"]), Convert.ToInt32(row["state"]), Convert.ToInt32(row["colour1"]), Convert.ToInt32(row["colour2"]), Convert.ToInt32(row["admindeco"]), Convert.ToInt32(row["forum_enabled"]) == 1);
+                        _groups.TryAdd(group.Id, group);
                         return true;
                     }
                 }
@@ -112,38 +106,36 @@ namespace Plus.HabboHotel.Groups
             return false;
         }
 
-        public bool TryCreateGroup(Habbo Player, string Name, string Description, int RoomId, string Badge, int Colour1, int Colour2, out Group Group)
+        public bool TryCreateGroup(Habbo player, string name, string description, int roomId, string badge, int colour1, int colour2, out Group group)
         {
-            Group = new Group(0, Name, Description, Badge, RoomId, Player.Id, (int)PlusEnvironment.GetUnixTimestamp(), 0, Colour1, Colour2, 0, false);
-            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Badge))
+            group = new Group(0, name, description, badge, roomId, player.Id, (int)PlusEnvironment.GetUnixTimestamp(), 0, colour1, colour2, 0, false);
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(badge))
                 return false;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("INSERT INTO `groups` (`name`, `desc`, `badge`, `owner_id`, `created`, `room_id`, `state`, `colour1`, `colour2`, `admindeco`) VALUES (@name, @desc, @badge, @owner, UNIX_TIMESTAMP(), @room, '0', @colour1, @colour2, '0')");
-                dbClient.AddParameter("name", Group.Name);
-                dbClient.AddParameter("desc", Group.Description);
-                dbClient.AddParameter("owner", Group.CreatorId);
-                dbClient.AddParameter("badge", Group.Badge);
-                dbClient.AddParameter("room", Group.RoomId);
-                dbClient.AddParameter("colour1", Group.Colour1);
-                dbClient.AddParameter("colour2", Group.Colour2);
-                Group.Id = Convert.ToInt32(dbClient.InsertQuery());
+                dbClient.AddParameter("name", group.Name);
+                dbClient.AddParameter("desc", group.Description);
+                dbClient.AddParameter("owner", group.CreatorId);
+                dbClient.AddParameter("badge", group.Badge);
+                dbClient.AddParameter("room", group.RoomId);
+                dbClient.AddParameter("colour1", group.Colour1);
+                dbClient.AddParameter("colour2", group.Colour2);
+                group.Id = Convert.ToInt32(dbClient.InsertQuery());
 
-                Group.AddMember(Player.Id);
-                Group.MakeAdmin(Player.Id);
+                group.AddMember(player.Id);
+                group.MakeAdmin(player.Id);
 
-                if (!this._groups.TryAdd(Group.Id, Group))
+                if (!_groups.TryAdd(group.Id, group))
                     return false;
-                else
-                {
-                    dbClient.SetQuery("UPDATE `rooms` SET `group_id` = @gid WHERE `id` = @rid LIMIT 1");
-                    dbClient.AddParameter("gid", Group.Id);
-                    dbClient.AddParameter("rid", Group.RoomId);
-                    dbClient.RunQuery();
 
-                    dbClient.RunQuery("DELETE FROM `room_rights` WHERE `room_id` = '" + RoomId + "'");
-                }
+                dbClient.SetQuery("UPDATE `rooms` SET `group_id` = @gid WHERE `id` = @rid LIMIT 1");
+                dbClient.AddParameter("gid", group.Id);
+                dbClient.AddParameter("rid", group.RoomId);
+                dbClient.RunQuery();
+
+                dbClient.RunQuery("DELETE FROM `room_rights` WHERE `room_id` = '" + roomId + "'");
             }
             return true;
         }
@@ -152,16 +144,16 @@ namespace Plus.HabboHotel.Groups
         {
             if (colourOne)
             {
-                if (this._symbolColours.ContainsKey(id))
+                if (_symbolColours.ContainsKey(id))
                 {
-                    return this._symbolColours[id].Colour;
+                    return _symbolColours[id].Colour;
                 }
             }
             else
             {
-                if (this._backgroundColours.ContainsKey(id))
+                if (_backgroundColours.ContainsKey(id))
                 {
-                    return this._backgroundColours[id].Colour;
+                    return _backgroundColours[id].Colour;
                 }
             }
 
@@ -170,62 +162,61 @@ namespace Plus.HabboHotel.Groups
 
         public void DeleteGroup(int id)
         {
-            Group Group = null;
-            if (this._groups.ContainsKey(id))
-                this._groups.TryRemove(id, out Group);
+            Group group = null;
+            if (_groups.ContainsKey(id))
+                _groups.TryRemove(id, out group);
 
-            if (Group != null)
+            if (group != null)
             {
-                Group.Dispose();
+                group.Dispose();
             }
         }
 
         public List<Group> GetGroupsForUser(int userId)
         {
-            List<Group> Groups = new List<Group>();
+            List<Group> groups = new List<Group>();
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT g.id FROM `group_memberships` AS m RIGHT JOIN `groups` AS g ON m.group_id = g.id WHERE m.user_id = @user");
                 dbClient.AddParameter("user", userId);
-                DataTable GetGroups = dbClient.GetTable();
+                DataTable getGroups = dbClient.GetTable();
 
-                if (GetGroups != null)
+                if (getGroups != null)
                 {
-                    foreach (DataRow Row in GetGroups.Rows)
+                    foreach (DataRow row in getGroups.Rows)
                     {
-                        Group Group = null;
-                        if (this.TryGetGroup(Convert.ToInt32(Row["id"]), out Group))
-                            Groups.Add(Group);
+                        if (TryGetGroup(Convert.ToInt32(row["id"]), out Group group))
+                            groups.Add(group);
                     }
                 }
             }
-            return Groups;
+            return groups;
         }
 
 
         public ICollection<GroupBadgeParts> BadgeBases
         {
-            get { return this._bases; }
+            get { return _bases; }
         }
 
         public ICollection<GroupBadgeParts> BadgeSymbols
         {
-            get { return this._symbols; }
+            get { return _symbols; }
         }
 
         public ICollection<GroupColours> BadgeBaseColours
         {
-            get { return this._baseColours; }
+            get { return _baseColours; }
         }
 
         public ICollection<GroupColours> BadgeSymbolColours
         {
-            get { return this._symbolColours.Values; }
+            get { return _symbolColours.Values; }
         }
 
         public ICollection<GroupColours> BadgeBackColours
         {
-            get { return this._backgroundColours.Values; }
+            get { return _backgroundColours.Values; }
         }
     }
 }
