@@ -73,7 +73,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                 }
                 else//Item is being ejected.
                 {
-                    GameClient targetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(item.UserID);
+                    GameClient targetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(item.UserID);
                     if (targetClient != null && targetClient.GetHabbo() != null)//Again, do we have an active client?
                     {
                         Room.GetRoomItemHandler().RemoveFurniture(targetClient, item.Id);

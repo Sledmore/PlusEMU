@@ -10,15 +10,15 @@ namespace Plus.Communication
 {
     public class GamePacketParser : IDataParser
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.Communication.GamePacketParser");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.GamePacketParser");
 
         public delegate void HandlePacket(ClientPacket message);
 
         private readonly GameClient _client;
 
-        private bool _halfDataRecieved = false;
-        private byte[] _halfData = null;
-        private bool _deciphered = false;
+        private bool _halfDataRecieved;
+        private byte[] _halfData;
+        private bool _deciphered;
 
         public GamePacketParser(GameClient client)
         {
@@ -29,60 +29,61 @@ namespace Plus.Communication
         {
             try
             {
-                if (this._client.Rc4Client != null && !this._deciphered)
+                if (_client.Rc4Client != null && !_deciphered)
                 {
-                    this._client.Rc4Client.Decrypt(ref data);
-                    this._deciphered = true;
+                    _client.Rc4Client.Decrypt(ref data);
+                    _deciphered = true;
                 }
 
-                if (this._halfDataRecieved)
+                if (_halfDataRecieved)
                 {
-                    byte[] FullDataRcv = new byte[this._halfData.Length + data.Length];
-                    Buffer.BlockCopy(this._halfData, 0, FullDataRcv, 0, this._halfData.Length);
-                    Buffer.BlockCopy(data, 0, FullDataRcv, this._halfData.Length, data.Length);
+                    byte[] fullDataRcv = new byte[_halfData.Length + data.Length];
+                    Buffer.BlockCopy(_halfData, 0, fullDataRcv, 0, _halfData.Length);
+                    Buffer.BlockCopy(data, 0, fullDataRcv, _halfData.Length, data.Length);
 
-                    this._halfDataRecieved = false; // mark done this round
-                    HandlePacketData(FullDataRcv); // repeat now we have the combined array
+                    _halfDataRecieved = false; // mark done this round
+                    HandlePacketData(fullDataRcv); // repeat now we have the combined array
                     return;
                 }
 
-                using (BinaryReader Reader = new BinaryReader(new MemoryStream(data)))
+                using (BinaryReader reader = new BinaryReader(new MemoryStream(data)))
                 {
                     if (data.Length < 4)
                         return;
 
-                    int MsgLen = HabboEncoding.DecodeInt32(Reader.ReadBytes(4));
-                    if ((Reader.BaseStream.Length - 4) < MsgLen)
+                    int msgLen = HabboEncoding.DecodeInt32(reader.ReadBytes(4));
+                    if ((reader.BaseStream.Length - 4) < msgLen)
                     {
-                        this._halfData = data;
-                        this._halfDataRecieved = true;
+                        _halfData = data;
+                        _halfDataRecieved = true;
                         return;
                     }
-                    else if (MsgLen < 0 || MsgLen > 5120)//TODO: Const somewhere.
+
+                    if (msgLen < 0 || msgLen > 5120)//TODO: Const somewhere.
                         return;
 
-                    byte[] Packet = Reader.ReadBytes(MsgLen);
+                    byte[] packet = reader.ReadBytes(msgLen);
 
-                    using (BinaryReader R = new BinaryReader(new MemoryStream(Packet)))
+                    using (BinaryReader r = new BinaryReader(new MemoryStream(packet)))
                     {
-                        int Header = HabboEncoding.DecodeInt16(R.ReadBytes(2));
+                        int header = HabboEncoding.DecodeInt16(r.ReadBytes(2));
 
-                        byte[] Content = new byte[Packet.Length - 2];
-                        Buffer.BlockCopy(Packet, 2, Content, 0, Packet.Length - 2);
+                        byte[] content = new byte[packet.Length - 2];
+                        Buffer.BlockCopy(packet, 2, content, 0, packet.Length - 2);
 
-                        ClientPacket Message = new ClientPacket(Header, Content);
-                        onNewPacket.Invoke(Message);
+                        ClientPacket message = new ClientPacket(header, content);
+                        OnNewPacket.Invoke(message);
                      
-                        this._deciphered = false;
+                        _deciphered = false;
                     }
 
-                    if (Reader.BaseStream.Length - 4 > MsgLen)
+                    if (reader.BaseStream.Length - 4 > msgLen)
                     {
-                        byte[] Extra = new byte[Reader.BaseStream.Length - Reader.BaseStream.Position];
-                        Buffer.BlockCopy(data, (int)Reader.BaseStream.Position, Extra, 0, (int)(Reader.BaseStream.Length - Reader.BaseStream.Position));
+                        byte[] extra = new byte[reader.BaseStream.Length - reader.BaseStream.Position];
+                        Buffer.BlockCopy(data, (int)reader.BaseStream.Position, extra, 0, (int)(reader.BaseStream.Length - reader.BaseStream.Position));
 
-                        this._deciphered = true;
-                        HandlePacketData(Extra);
+                        _deciphered = true;
+                        HandlePacketData(extra);
                     }
                 }
             }
@@ -96,7 +97,7 @@ namespace Plus.Communication
 
         public void Dispose()
         {
-            onNewPacket = null;
+            OnNewPacket = null;
             GC.SuppressFinalize(this);
         }
 
@@ -105,12 +106,12 @@ namespace Plus.Communication
             return new GamePacketParser(_client);
         }
 
-        public event HandlePacket onNewPacket;
+        public event HandlePacket OnNewPacket;
 
         public void SetConnection(ConnectionInformation con)
         {
             // Connection information passes through, but we seemingly do nothing?
-            onNewPacket = null;
+            OnNewPacket = null;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Plus.Communication.Interfaces;
 
@@ -7,9 +8,9 @@ namespace Plus.Communication.Packets.Outgoing
 {
     public class ServerPacket : IServerPacket
     {
-        private readonly Encoding Encoding = Encoding.Default;
+        private readonly Encoding _encoding = Encoding.Default;
 
-        private List<byte> Body = new List<byte>();
+        private readonly List<byte> _body = new List<byte>();
 
         public ServerPacket(int id)
         {
@@ -17,58 +18,58 @@ namespace Plus.Communication.Packets.Outgoing
             WriteShort(id);
         }
 
-        public int Id { get; private set; }
+        public int Id { get; }
 
         public byte[] GetBytes()
         {
-            var Final = new List<byte>();
-            Final.AddRange(BitConverter.GetBytes(Body.Count)); // packet len
-            Final.Reverse();
-            Final.AddRange(Body); // Add Packet
-            return Final.ToArray();
+            var final = new List<byte>();
+            final.AddRange(BitConverter.GetBytes(_body.Count)); // packet len
+            final.Reverse();
+            final.AddRange(_body); // Add Packet
+            return final.ToArray();
         }
 
         public void WriteByte(byte b)
         {
-            Body.Add(b);
+            _body.Add(b);
         }
 
         public void WriteByte(int b)
         {
-            Body.Add((byte)b);
+            _body.Add((byte)b);
         }
 
-        public void WriteBytes(byte[] b, bool IsInt) // d
+        public void WriteBytes(byte[] b, bool isInt) // d
         {
-            if (IsInt)
+            if (isInt)
             {
                 for (int i = (b.Length - 1); i > -1; i--)
                 {
-                    Body.Add(b[i]);
+                    _body.Add(b[i]);
                 }
             }
             else
             {
-                Body.AddRange(b);
+                _body.AddRange(b);
             }
         }
 
         public void WriteDouble(double d) // d
         {
-            string Raw = Math.Round(d, 1).ToString();
+            string raw = Math.Round(d, 1).ToString(CultureInfo.CurrentCulture);
 
-            if (Raw.Length == 1)
+            if (raw.Length == 1)
             {
-                Raw += ".0";
+                raw += ".0";
             }
 
-            WriteString(Raw.Replace(',', '.'));
+            WriteString(raw.Replace(',', '.'));
         }
 
         public void WriteString(string s) // d
         {
             WriteShort(s.Length);
-            WriteBytes(Encoding.GetBytes(s), false);
+            WriteBytes(_encoding.GetBytes(s), false);
         }
 
         public void WriteShort(int s) // d

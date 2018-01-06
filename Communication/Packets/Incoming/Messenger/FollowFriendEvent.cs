@@ -21,7 +21,7 @@ namespace Plus.Communication.Packets.Incoming.Messenger
             if (BuddyId == 0 || BuddyId == Session.GetHabbo().Id)
                 return;
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(BuddyId);
+            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(BuddyId);
             if (Client == null || Client.GetHabbo() == null)
                 return;
 

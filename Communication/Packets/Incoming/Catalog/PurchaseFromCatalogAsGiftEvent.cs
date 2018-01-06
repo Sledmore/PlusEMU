@@ -234,7 +234,7 @@ namespace Plus.Communication.Packets.Incoming.Catalog
             Item GiveItem = ItemFactory.CreateGiftItem(PresentData, Habbo, ED, ED, NewItemId, 0, 0);
             if (GiveItem != null)
             {
-                GameClient Receiver = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Habbo.Id);
+                GameClient Receiver = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Habbo.Id);
                 if (Receiver != null)
                 {
                     Receiver.GetHabbo().GetInventoryComponent().TryAddItem(GiveItem);

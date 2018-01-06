@@ -8,32 +8,31 @@ namespace Plus.Communication.Rcon
 {
     public class RconSocket
     {
-        private Socket _musSocket;
+        private readonly Socket _musSocket;
+        private readonly List<string> _allowedConnections;
+        private readonly CommandManager _commands;
 
-        private List<string> _allowedConnections;
-        private CommandManager _commands;
-
-        public RconSocket(string musIP, int musPort, string[] allowedConnections)
+        public RconSocket(string host, int port, IEnumerable<string> allowedConnections)
         {
-            this._allowedConnections = new List<string>();
+            _allowedConnections = new List<string>();
             foreach (string ipAddress in allowedConnections)
             {
-                this._allowedConnections.Add(ipAddress);
+                _allowedConnections.Add(ipAddress);
             }
 
             try
             {
-                this._musSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this._musSocket.Bind(new IPEndPoint(IPAddress.Any, musPort)); // SHould be musIP?
-                this._musSocket.Listen(0);
-                this._musSocket.BeginAccept(OnCallBack, this._musSocket);
+                _musSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _musSocket.Bind(new IPEndPoint(IPAddress.Parse(host), port)); // SHould be host?
+                _musSocket.Listen(0);
+                _musSocket.BeginAccept(OnCallBack, _musSocket);
             }
             catch (Exception e)
             {
                 throw new ArgumentException("Could not set up Rcon socket:\n" + e);
             }
 
-            this._commands = new CommandManager();
+            _commands = new CommandManager();
         }
 
         private void OnCallBack(IAsyncResult iAr)
@@ -43,7 +42,7 @@ namespace Plus.Communication.Rcon
                 Socket socket = ((Socket)iAr.AsyncState).EndAccept(iAr);
 
                 string ip = socket.RemoteEndPoint.ToString().Split(':')[0];
-                if (this._allowedConnections.Contains(ip))
+                if (_allowedConnections.Contains(ip))
                 {
                     new RconConnection(socket);
                 }
@@ -54,14 +53,15 @@ namespace Plus.Communication.Rcon
             }
             catch (Exception)
             {
+                // ignored
             }
 
-            this._musSocket.BeginAccept(OnCallBack, _musSocket);
+            _musSocket.BeginAccept(OnCallBack, _musSocket);
         }
 
         public CommandManager GetCommands()
         {
-            return this._commands;
+            return _commands;
         }
     }
 }

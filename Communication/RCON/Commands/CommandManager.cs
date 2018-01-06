@@ -17,10 +17,10 @@ namespace Plus.Communication.Rcon.Commands
         /// </summary>
         public CommandManager()
         {
-            this._commands = new Dictionary<string, IRconCommand>();
+            _commands = new Dictionary<string, IRconCommand>();
             
-            this.RegisterUser();
-            this.RegisterHotel();
+            RegisterUser();
+            RegisterHotel();
         }
 
         /// <summary>
@@ -35,15 +35,13 @@ namespace Plus.Communication.Rcon.Commands
 
             string cmd = data.Split(Convert.ToChar(1))[0];
 
-            IRconCommand command = null;
-            if (this._commands.TryGetValue(cmd.ToLower(), out command))
+            if (_commands.TryGetValue(cmd.ToLower(), out IRconCommand command))
             {
-                string param = null;
                 string[] parameters = null;
                 if (data.Split(Convert.ToChar(1))[1] != null)
                 {
-                    param = data.Split(Convert.ToChar(1))[1];
-                    parameters = param.ToString().Split(':');
+                    var param = data.Split(Convert.ToChar(1))[1];
+                    parameters = param.Split(':');
                 }
 
                 return command.TryExecute(parameters);
@@ -56,18 +54,18 @@ namespace Plus.Communication.Rcon.Commands
         /// </summary>
         private void RegisterUser()
         {
-            this.Register("alert_user", new AlertUserCommand());
-            this.Register("disconnect_user", new DisconnectUserCommand());
-            this.Register("reload_user_motto", new ReloadUserMottoCommand());
-            this.Register("give_user_currency", new GiveUserCurrencyCommand());
-            this.Register("take_user_currency", new TakeUserCurrencyCommand());
-            this.Register("sync_user_currency", new SyncUserCurrencyCommand());
-            this.Register("reload_user_currency", new ReloadUserCurrencyCommand());
-            this.Register("reload_user_rank", new ReloadUserRankCommand());
-            this.Register("reload_user_vip_rank", new ReloadUserVIPRankCommand());
-            this.Register("progress_user_achievement", new ProgressUserAchievementCommand());
-            this.Register("give_user_badge", new GiveUserBadgeCommand());
-            this.Register("take_user_badge", new TakeUserBadgeCommand());
+            Register("alert_user", new AlertUserCommand());
+            Register("disconnect_user", new DisconnectUserCommand());
+            Register("reload_user_motto", new ReloadUserMottoCommand());
+            Register("give_user_currency", new GiveUserCurrencyCommand());
+            Register("take_user_currency", new TakeUserCurrencyCommand());
+            Register("sync_user_currency", new SyncUserCurrencyCommand());
+            Register("reload_user_currency", new ReloadUserCurrencyCommand());
+            Register("reload_user_rank", new ReloadUserRankCommand());
+            Register("reload_user_vip_rank", new ReloadUserVIPRankCommand());
+            Register("progress_user_achievement", new ProgressUserAchievementCommand());
+            Register("give_user_badge", new GiveUserBadgeCommand());
+            Register("take_user_badge", new TakeUserBadgeCommand());
         }   
 
         /// <summary>
@@ -75,15 +73,15 @@ namespace Plus.Communication.Rcon.Commands
         /// </summary>
         private void RegisterHotel()
         {
-            this.Register("reload_bans", new ReloadBansCommand());
-            this.Register("reload_quests", new ReloadQuestsCommand());
-            this.Register("reload_server_settings", new ReloadServerSettingsCommand());
-            this.Register("reload_vouchers", new ReloadVouchersCommand());
-            this.Register("reload_ranks", new ReloadRanksCommand());
-            this.Register("reload_navigator", new ReloadNavigatorCommand());
-            this.Register("reload_items", new ReloadItemsCommand());
-            this.Register("reload_catalog", new ReloadCatalogCommand());
-            this.Register("reload_filter", new ReloadFilterCommand());
+            Register("reload_bans", new ReloadBansCommand());
+            Register("reload_quests", new ReloadQuestsCommand());
+            Register("reload_server_settings", new ReloadServerSettingsCommand());
+            Register("reload_vouchers", new ReloadVouchersCommand());
+            Register("reload_ranks", new ReloadRanksCommand());
+            Register("reload_navigator", new ReloadNavigatorCommand());
+            Register("reload_items", new ReloadItemsCommand());
+            Register("reload_catalog", new ReloadCatalogCommand());
+            Register("reload_filter", new ReloadFilterCommand());
         }
 
         /// <summary>
@@ -93,7 +91,7 @@ namespace Plus.Communication.Rcon.Commands
         /// <param name="command">The command to execute.</param>
         public void Register(string commandText, IRconCommand command)
         {
-            this._commands.Add(commandText, command);
+            _commands.Add(commandText, command);
         }
     }
 }

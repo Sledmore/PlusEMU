@@ -16,15 +16,14 @@ namespace Plus.Core
             {
                 if (!maynotexist)
                     throw new ArgumentException("Unable to locate configuration file at '" + filePath + "'.");
-                else
-                    return;
+                return;
             }
 
             try
             {
                 using (var stream = new StreamReader(filePath))
                 {
-                    string line = "";
+                    string line;
 
                     while ((line = stream.ReadLine()) != null)
                     {

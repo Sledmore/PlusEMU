@@ -4,10 +4,10 @@ namespace Plus.HabboHotel.Achievements
 {
     public class Achievement
     {
-        public int Id { get; private set; }
-        public string Category { get; private set; }
-        public string GroupName { get; private set; }
-        public int GameId { get; private set; }
+        public int Id { get; }
+        public string Category { get; }
+        public string GroupName { get; }
+        public int GameId { get; }
 
         public Dictionary<int, AchievementLevel> Levels;
 

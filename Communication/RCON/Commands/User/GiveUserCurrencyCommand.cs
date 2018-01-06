@@ -19,11 +19,10 @@ namespace Plus.Communication.Rcon.Commands.User
 
         public bool TryExecute(string[] parameters)
         {
-            int userId = 0;
-            if (!int.TryParse(parameters[0].ToString(), out userId))
+            if (!int.TryParse(parameters[0], out int userId))
                 return false;
 
-            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
             if (client == null || client.GetHabbo() == null)
                 return false;
 
@@ -33,8 +32,7 @@ namespace Plus.Communication.Rcon.Commands.User
 
             string currency = Convert.ToString(parameters[1]);
 
-            int amount = 0;
-            if (!int.TryParse(parameters[2].ToString(), out amount))
+            if (!int.TryParse(parameters[2], out int amount))
                 return false;
 
             switch (currency)

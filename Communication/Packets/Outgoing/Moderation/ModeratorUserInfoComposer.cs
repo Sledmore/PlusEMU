@@ -21,7 +21,7 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
            base.WriteString(User != null ? Convert.ToString(User["look"]) : "Unknown");
             base.WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((PlusEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["account_created"])) / 60)) : 0);
             base.WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((PlusEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["last_online"])) / 60)) : 0);
-            base.WriteBoolean(User != null ? PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Convert.ToInt32(User["id"])) != null : false);
+            base.WriteBoolean(User != null ? PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Convert.ToInt32(User["id"])) != null : false);
             base.WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs"]) : 0);
             base.WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs_abusive"]) : 0);
             base.WriteInteger(Info != null ? Convert.ToInt32(Info["cautions"]) : 0);

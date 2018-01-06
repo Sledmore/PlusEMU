@@ -16,24 +16,24 @@ namespace Plus.HabboHotel.Achievements
     {
         private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Achievements.AchievementManager");
 
-        public Dictionary<string, Achievement> _achievements;
+        public Dictionary<string, Achievement> Achievements;
 
         public AchievementManager()
         {
-            this._achievements = new Dictionary<string, Achievement>();
+            Achievements = new Dictionary<string, Achievement>();
         }
 
         public void Init()
         {
-            AchievementLevelFactory.GetAchievementLevels(out _achievements);
+            AchievementLevelFactory.GetAchievementLevels(out Achievements);
         }
 
         public bool ProgressAchievement(GameClient session, string group, int progress, bool fromBeginning = false)
         {
-            if (!_achievements.ContainsKey(group) || session == null)
+            if (!Achievements.ContainsKey(group) || session == null)
                 return false;
 
-            Achievement data = _achievements[group];
+            Achievement data = Achievements[group];
             if (data == null)
             {
                 return false;
@@ -48,22 +48,22 @@ namespace Plus.HabboHotel.Achievements
 
             int totalLevels = data.Levels.Count;
 
-            if (userData != null && userData.Level == totalLevels)
+            if (userData.Level == totalLevels)
                 return false; // done, no more.
 
-            int targetLevel = (userData != null ? userData.Level + 1 : 1);
+            int targetLevel = userData.Level + 1;
 
             if (targetLevel > totalLevels)
                 targetLevel = totalLevels;
 
             AchievementLevel level = data.Levels[targetLevel];
-            int newProgress = 0;
+            int newProgress;
             if (fromBeginning)
                 newProgress = progress;
             else
-                newProgress = (userData != null ? userData.Progress + progress : progress);
+                newProgress = userData.Progress + progress;
 
-            int newLevel = (userData != null ? userData.Level : 0);
+            int newLevel = userData.Level;
             int newTarget = newLevel + 1;
 
             if (newTarget > totalLevels)
@@ -106,8 +106,8 @@ namespace Plus.HabboHotel.Achievements
                 session.SendPacket(new HabboActivityPointNotificationComposer(session.GetHabbo().Duckets, level.RewardPixels));
                 session.SendPacket(new AchievementScoreComposer(session.GetHabbo().GetStats().AchievementPoints));
 
-                AchievementLevel NewLevelData = data.Levels[newTarget];
-                session.SendPacket(new AchievementProgressedComposer(data, newTarget, NewLevelData, totalLevels, session.GetHabbo().GetAchievementData(group)));
+                AchievementLevel newLevelData = data.Levels[newTarget];
+                session.SendPacket(new AchievementProgressedComposer(data, newTarget, newLevelData, totalLevels, session.GetHabbo().GetAchievementData(group)));
 
                 return true;
             }
@@ -131,7 +131,7 @@ namespace Plus.HabboHotel.Achievements
         {
             List<Achievement> achievements = new List<Achievement>();
 
-            foreach (Achievement achievement in _achievements.Values.ToList())
+            foreach (Achievement achievement in Achievements.Values.ToList())
             {
                 if (achievement.Category == "games" && achievement.GameId == gameId)
                     achievements.Add(achievement);

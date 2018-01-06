@@ -2,7 +2,7 @@
 {
     public class UserAchievement
     {
-        public string AchievementGroup { get; private set; }
+        public string AchievementGroup { get; }
         public int Level { get; set; }
         public int Progress { get; set; }
 

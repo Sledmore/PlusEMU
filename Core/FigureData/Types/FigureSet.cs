@@ -6,21 +6,14 @@ namespace Plus.Core.FigureData.Types
     {
         public SetType Type { get; set; }
         public int PalletId { get; set; }
-
-        private Dictionary<int, Set> _sets;
+        public Dictionary<int, Set> Sets { get; set; }
 
         public FigureSet(SetType type, int palletId)
         {
-            this.Type = type;
-            this.PalletId = palletId;
+            Type = type;
+            PalletId = palletId;
 
-            this._sets = new Dictionary<int, Set>();
-        }
-
-        public Dictionary<int, Set> Sets
-        {
-            get { return this._sets; }
-            set { this._sets = value; }
+            Sets = new Dictionary<int, Set>();
         }
     }
 }

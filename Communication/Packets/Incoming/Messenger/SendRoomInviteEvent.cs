@@ -44,7 +44,7 @@ namespace Plus.Communication.Packets.Incoming.Messenger
                 if (!Session.GetHabbo().GetMessenger().FriendshipExists(UserId))
                     continue;
 
-                GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+                GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId);
                 if (Client == null || Client.GetHabbo() == null || Client.GetHabbo().AllowMessengerInvites == true || Client.GetHabbo().AllowConsoleMessages == false)
                     continue;
 

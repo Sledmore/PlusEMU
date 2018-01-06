@@ -22,7 +22,7 @@ namespace Plus.Communication.Packets.Incoming.Moderation
             if (ticket.Moderator.Id != session.GetHabbo().Id)
                 return;
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(ticket.Sender.Id);
+            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(ticket.Sender.Id);
             if (Client != null)
             {
                 Client.SendPacket(new ModeratorSupportTicketResponseComposer(Result));

@@ -10,25 +10,19 @@ namespace Plus.Core.FigureData.Types
         public bool Colorable { get; set; }
         public bool Selectable { get; set; }
         public bool Preselectable { get; set; }
-
-        private Dictionary<string, Part> _parts;
+        public Dictionary<string, Part> Parts { get; set; }
 
         public Set(int id, string gender, int clubLevel, bool colorable, bool selectable, bool preselectable)
         {
-            this.Id = id;
-            this.Gender = gender;
-            this.ClubLevel = clubLevel;
-            this.Colorable = colorable;
-            this.Selectable = selectable;
-            this.Preselectable = preselectable;
+            Id = id;
+            Gender = gender;
+            ClubLevel = clubLevel;
+            Colorable = colorable;
+            Selectable = selectable;
+            Preselectable = preselectable;
 
-            this._parts = new Dictionary<string, Part>();
+            Parts = new Dictionary<string, Part>();
         }
 
-        public Dictionary<string, Part> Parts
-        {
-            get { return this._parts; }
-            set { this._parts = value; }
-        }
     }
 }

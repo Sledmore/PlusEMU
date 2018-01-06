@@ -7,7 +7,7 @@ namespace Plus.Communication
     {
         public delegate void NoParamDelegate();
 
-        public byte[] currentData;
+        public byte[] CurrentData;
 
         public void HandlePacketData(byte[] packet)
         {
@@ -17,7 +17,7 @@ namespace Plus.Communication
             }
             else if (packet[0] != 67 && SwitchParserRequest != null)
             {
-                currentData = packet;
+                CurrentData = packet;
                 SwitchParserRequest.Invoke();
             }
         }

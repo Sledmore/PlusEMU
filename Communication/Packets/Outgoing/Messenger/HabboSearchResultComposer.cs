@@ -15,7 +15,7 @@ namespace Plus.Communication.Packets.Outgoing.Messenger
             base.WriteInteger(Friends.Count);
             foreach (SearchResult Friend in Friends.ToList())
             {
-                bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(Friend.UserId) != null);
+                bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Friend.UserId) != null);
 
                 base.WriteInteger(Friend.UserId);
                base.WriteString(Friend.Username);
@@ -31,7 +31,7 @@ namespace Plus.Communication.Packets.Outgoing.Messenger
             base.WriteInteger(OtherUsers.Count);
             foreach (SearchResult OtherUser in OtherUsers.ToList())
             {
-                bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(OtherUser.UserId) != null);
+                bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(OtherUser.UserId) != null);
 
                 base.WriteInteger(OtherUser.UserId);
                base.WriteString(OtherUser.Username);

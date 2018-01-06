@@ -40,10 +40,10 @@ namespace Plus.HabboHotel.Users.UserData
                 }
 
                 userId = Convert.ToInt32(dUserInfo["id"]);
-                if (PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
+                if (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId) != null)
                 {
                     errorCode = 2;
-                    PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(userId).Disconnect();
+                    PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId).Disconnect();
                     return null;
                 }
 
@@ -198,7 +198,7 @@ namespace Plus.HabboHotel.Users.UserData
                 if (dUserInfo == null)
                     return null;
 
-                if (PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId) != null)
+                if (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId) != null)
                     return null;
 
 

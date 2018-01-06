@@ -10,11 +10,11 @@
 
         public Color(int id, int index, int clubLevel, bool selectable, string value)
         {
-            this.Id = id;
-            this.Index = index;
-            this.ClubLevel = clubLevel;
-            this.Selectable = selectable;
-            this.Value = value;
+            Id = id;
+            Index = index;
+            ClubLevel = clubLevel;
+            Selectable = selectable;
+            Value = value;
         }
     }
 }

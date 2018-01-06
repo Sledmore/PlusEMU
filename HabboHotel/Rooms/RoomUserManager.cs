@@ -974,7 +974,7 @@ namespace Plus.HabboHotel.Rooms
 
                 foreach (RoomUser toRemove in ToRemove.ToList())
                 {
-                    GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(toRemove.HabboId);
+                    GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(toRemove.HabboId);
                     if (client != null)
                     {
                         RemoveUserFromRoom(client, true, false);
