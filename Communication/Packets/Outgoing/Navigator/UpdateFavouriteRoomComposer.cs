@@ -2,11 +2,11 @@
 {
     public class UpdateFavouriteRoomComposer : ServerPacket
     {
-        public UpdateFavouriteRoomComposer(int RoomId, bool Added)
+        public UpdateFavouriteRoomComposer(int roomId, bool added)
             : base(ServerPacketHeader.UpdateFavouriteRoomMessageComposer)
         {
-            base.WriteInteger(RoomId);
-            base.WriteBoolean(Added);
+            WriteInteger(roomId);
+            WriteBoolean(added);
         }
     }
 }
