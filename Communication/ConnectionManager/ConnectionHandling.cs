@@ -1,6 +1,4 @@
 ﻿using System;
-using Plus.Communication.ConnectionManager;
-using Plus.Communication;
 
 namespace Plus.Communication.ConnectionManager
 {
