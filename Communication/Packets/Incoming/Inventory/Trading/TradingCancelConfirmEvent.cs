@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Rooms.Trading;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Trading

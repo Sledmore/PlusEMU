@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -8,7 +7,6 @@ using System.Collections.Concurrent;
 using Plus.Communication.Packets.Incoming;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users;
-using Plus.Communication.Packets.Outgoing.Rooms.Chat;
 
 namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 {

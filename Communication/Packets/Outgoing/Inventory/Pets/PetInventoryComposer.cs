@@ -1,11 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Collections.Generic;
 
 using Plus.HabboHotel.Rooms.AI;
-using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Users.Inventory;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.Pets
 {

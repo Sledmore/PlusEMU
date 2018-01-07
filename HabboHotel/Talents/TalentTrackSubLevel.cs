@@ -1,12 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Achievements;
-
-namespace Plus.HabboHotel.Talents
+﻿namespace Plus.HabboHotel.Talents
 {
     public class TalentTrackSubLevel
     {

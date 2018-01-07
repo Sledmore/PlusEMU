@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Users.Effects;
+﻿using Plus.HabboHotel.Users.Effects;
 using Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.AvatarEffects

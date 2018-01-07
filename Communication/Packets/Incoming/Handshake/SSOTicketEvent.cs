@@ -1,8 +1,4 @@
-﻿using System;
-
-using Plus.Communication.Packets.Incoming;
-using Plus.HabboHotel.GameClients;
-using Plus.Communication.Packets.Outgoing.Handshake;
+﻿using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Handshake
 {

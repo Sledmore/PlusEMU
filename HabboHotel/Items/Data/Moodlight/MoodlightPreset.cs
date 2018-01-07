@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.HabboHotel.Items.Data.Moodlight
+﻿namespace Plus.HabboHotel.Items.Data.Moodlight
 {
     public class MoodlightPreset
     {

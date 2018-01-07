@@ -1,5 +1,4 @@
 ﻿using Plus.HabboHotel.GameClients;
-using Plus.Communication.Packets.Incoming;
 
 namespace Plus.Communication.Packets.Incoming.Handshake
 {

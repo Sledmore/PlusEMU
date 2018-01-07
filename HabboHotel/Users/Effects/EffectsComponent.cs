@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Data;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-
-
-using Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Plus.Communication.Packets.Outgoing.Rooms.Avatar;
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Rooms;

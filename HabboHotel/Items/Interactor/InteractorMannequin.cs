@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
-using Plus.Communication.Packets.Incoming;
-
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Plus.Database.Interfaces;

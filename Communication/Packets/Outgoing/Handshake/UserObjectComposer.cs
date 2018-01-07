@@ -1,6 +1,4 @@
-﻿using System;
-
-using Plus.HabboHotel.Users;
+﻿using Plus.HabboHotel.Users;
 
 namespace Plus.Communication.Packets.Outgoing.Handshake
 {

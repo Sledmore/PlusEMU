@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.Communication.Packets.Outgoing.Inventory.Trading
+﻿namespace Plus.Communication.Packets.Outgoing.Inventory.Trading
 {
     class TradingAcceptComposer : ServerPacket
     {

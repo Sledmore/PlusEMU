@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.Utilities;
+﻿using Plus.Utilities;
 
 
 using Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects;

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 using Plus.Core;
 using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Groups;
 using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Rooms.AI;
 using Plus.HabboHotel.Rooms.Games;

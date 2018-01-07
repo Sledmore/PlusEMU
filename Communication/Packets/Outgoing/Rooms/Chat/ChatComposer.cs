@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Plus.Communication.Packets.Outgoing.Rooms.Chat
+﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Chat
 {
     public class ChatComposer : ServerPacket
     {

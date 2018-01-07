@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.Communication.Packets.Incoming.Messenger
+﻿namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class FriendListUpdateEvent : IPacketEvent
     {

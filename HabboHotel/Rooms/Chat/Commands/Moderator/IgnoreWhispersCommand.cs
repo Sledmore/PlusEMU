@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
+﻿namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
 {
     class IgnoreWhispersCommand : IChatCommand
     {

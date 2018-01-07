@@ -11,8 +11,6 @@ using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Rooms.AI;
 using Plus.HabboHotel.Rooms.Trading;
 using Plus.Utilities;
-
-using System.Data;
 using Plus.Communication.Packets.Outgoing.Rooms.Session;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 using Plus.Communication.Packets.Outgoing.Rooms.Permissions;

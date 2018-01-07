@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Users;
+﻿using Plus.HabboHotel.Users;
 
 namespace Plus.Communication.Packets.Outgoing.Groups
 {

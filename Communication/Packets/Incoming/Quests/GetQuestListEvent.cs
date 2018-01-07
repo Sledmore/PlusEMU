@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Quests;
-using Plus.Communication.Packets.Incoming;
+﻿using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Quests
 {

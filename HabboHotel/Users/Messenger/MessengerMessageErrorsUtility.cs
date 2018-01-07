@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.HabboHotel.Users.Messenger
+﻿namespace Plus.HabboHotel.Users.Messenger
 {
     public static class MessengerMessageErrorsUtility
     {

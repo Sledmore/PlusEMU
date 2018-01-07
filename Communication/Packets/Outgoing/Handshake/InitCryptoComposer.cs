@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Plus.Communication.Packets.Outgoing.Handshake
+﻿namespace Plus.Communication.Packets.Outgoing.Handshake
 {
     public class InitCryptoComposer : ServerPacket
     {

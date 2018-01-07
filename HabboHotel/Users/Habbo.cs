@@ -3,9 +3,6 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-
-using log4net;
-
 using Plus.Core;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Groups;
@@ -31,7 +28,6 @@ using Plus.Database.Interfaces;
 using Plus.HabboHotel.Rooms.Chat.Commands;
 using Plus.HabboHotel.Users.Permissions;
 using Plus.HabboHotel.Subscriptions;
-using Plus.HabboHotel.Users.Calendar;
 using Plus.HabboHotel.Users.Ignores;
 
 namespace Plus.HabboHotel.Users

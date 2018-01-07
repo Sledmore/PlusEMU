@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Data;
-using System.Collections.Generic;
-
-using Plus.Core;
+﻿using System.Data;
 using Plus.Communication.Packets.Outgoing.Moderation;
 using Plus.Database.Interfaces;
 

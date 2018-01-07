@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
-using System.Data;
-using System.Collections.Generic;
-
 using Plus.HabboHotel.Games;
 using Plus.Communication.Packets.Outgoing.GameCenter;
-using Plus.Database.Interfaces;
 
 namespace Plus.Communication.Packets.Incoming.GameCenter
 {

@@ -1,10 +1,4 @@
-﻿using System;
-
-using Plus.Communication.Packets.Incoming;
-using Plus.Utilities;
-using Plus.HabboHotel.GameClients;
-
-using Plus.Communication.Encryption;
+﻿using Plus.Communication.Encryption;
 using Plus.Communication.Encryption.Crypto.Prng;
 using Plus.Communication.Packets.Outgoing.Handshake;
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plus.HabboHotel.Rooms.Chat.Styles
+﻿namespace Plus.HabboHotel.Rooms.Chat.Styles
 {
     public sealed class ChatStyle
     {

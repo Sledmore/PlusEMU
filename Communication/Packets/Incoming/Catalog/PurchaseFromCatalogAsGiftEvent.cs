@@ -1,14 +1,9 @@
 ﻿using System;
-using Plus.Communication.Packets.Incoming;
-
 using Plus.Utilities;
 using Plus.HabboHotel.Users;
 using Plus.HabboHotel.Items;
-using Plus.HabboHotel.Groups;
 using Plus.HabboHotel.Catalog;
 using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Users.Inventory;
-
 using Plus.Communication.Packets.Outgoing.Catalog;
 using Plus.Communication.Packets.Outgoing.Inventory.Purse;
 using Plus.Communication.Packets.Outgoing.Inventory.Furni;

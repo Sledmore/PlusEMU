@@ -3,8 +3,6 @@ using Plus.Communication.Packets.Outgoing.Navigator;
 
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Users;
-using Plus.Communication.Packets.Incoming;
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {

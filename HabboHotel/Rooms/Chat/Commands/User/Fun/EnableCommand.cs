@@ -1,11 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms;
-using Plus.HabboHotel.Rooms.Games;
-using Plus.HabboHotel.Rooms.Games.Teams;
+﻿using Plus.HabboHotel.Rooms.Games.Teams;
 
 namespace Plus.HabboHotel.Rooms.Chat.Commands.User.Fun
 {

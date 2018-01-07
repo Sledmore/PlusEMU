@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.HabboHotel.Users.Clothing.Parts
+﻿namespace Plus.HabboHotel.Users.Clothing.Parts
 {
     public sealed class ClothingParts
     {

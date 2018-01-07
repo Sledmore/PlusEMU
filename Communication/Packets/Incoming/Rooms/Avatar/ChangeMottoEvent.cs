@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Plus.Utilities;
-using Plus.Core;
-using Plus.Communication.Packets.Incoming;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Quests;
 using Plus.HabboHotel.GameClients;

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
-
-using Plus.Communication.Packets.Incoming;
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Avatar;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
@@ -14,7 +10,6 @@ using Plus.HabboHotel.Rooms.AI;
 using Plus.HabboHotel.Rooms.AI.Speech;
 
 using Plus.Database.Interfaces;
-using Plus.Utilities;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.AI.Bots
 {

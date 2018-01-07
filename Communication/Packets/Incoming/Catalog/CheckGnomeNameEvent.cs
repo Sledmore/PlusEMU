@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
 
 using Plus.HabboHotel.Rooms;
@@ -12,7 +10,6 @@ using Plus.Communication.Packets.Outgoing.Inventory.Furni;
 
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Catalog.Utilities;
-using Plus.HabboHotel.Rooms.AI.Responses;
 
 namespace Plus.Communication.Packets.Incoming.Catalog
 {

@@ -1,7 +1,4 @@
-﻿using System;
-
-using Plus.Communication.Packets.Incoming;
-using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.GameClients;
 using Plus.Communication.Packets.Outgoing.Rooms.Chat;
 

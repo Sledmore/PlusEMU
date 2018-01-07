@@ -1,10 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Plus.Database.Interfaces;
-using Plus.HabboHotel.Rooms;
 
 
 namespace Plus.HabboHotel.Rooms.Instance

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
+﻿using System.Linq;
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Navigator;
 using Plus.Communication.Packets.Outgoing.Rooms.Settings;

@@ -1,6 +1,4 @@
-﻿using Plus.HabboHotel.Rooms;
-
-namespace Plus.Communication.Packets.Outgoing.Rooms.Avatar
+﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Avatar
 {
     public class ActionComposer : ServerPacket
     {

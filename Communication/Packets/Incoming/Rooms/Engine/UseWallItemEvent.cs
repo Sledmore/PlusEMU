@@ -1,13 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Quests;
+﻿using Plus.HabboHotel.Quests;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Items.Wired;
-using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Engine

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-
-using Plus.HabboHotel.Rooms;
-using Plus.HabboHotel.GameClients;
+﻿using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Data;
 using System.Threading;
-using System.Collections.Generic;
-
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
-using Plus.HabboHotel.Users;
 using Plus.HabboHotel.GameClients;
 
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
@@ -16,7 +11,6 @@ using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 using Plus.Communication.Packets.Outgoing.Rooms.Furni;
 
 using Plus.Database.Interfaces;
-using Plus.HabboHotel.Cache;
 using Plus.HabboHotel.Cache.Type;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni

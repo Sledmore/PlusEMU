@@ -1,12 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Users;
+﻿using System.Collections.Generic;
 using Plus.HabboHotel.Groups;
-using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Cache;
 using Plus.HabboHotel.Cache.Type;
 
 namespace Plus.Communication.Packets.Outgoing.Groups

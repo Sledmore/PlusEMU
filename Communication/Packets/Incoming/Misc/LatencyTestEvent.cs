@@ -1,11 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.Communication.Packets.Outgoing.Misc;
-
-namespace Plus.Communication.Packets.Incoming.Misc
+﻿namespace Plus.Communication.Packets.Incoming.Misc
 {
     class LatencyTestEvent : IPacketEvent
     {
