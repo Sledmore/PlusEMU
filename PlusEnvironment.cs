@@ -152,7 +152,7 @@ namespace Plus
 
                 //Accept connections.
                 _connectionManager = new ConnectionHandling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]), GetConfig().data["game.tcp.enablenagles"].ToLower() == "true");
-                _connectionManager.init();
+                _connectionManager.Init();
 
                 _game = new Game();
                 _game.StartGameLoop();

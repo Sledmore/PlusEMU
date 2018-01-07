@@ -14,45 +14,45 @@ namespace Plus.Communication.ConnectionManager
         /// <param name="state">The new state of the connection</param>
         public delegate void ConnectionChange(ConnectionInformation information, ConnectionState state);
 
-        private static bool disableSend = false;
-        private static bool disableReceive = false;
+        private const bool DisableSend = false;
+        private const bool DisableReceive = false;
 
         /// <summary>
         ///     Buffer of the connection
         /// </summary>
-        private readonly byte[] buffer;
+        private readonly byte[] _buffer;
 
         /// <summary>
         ///     The id of this connection
         /// </summary>
-        private readonly int connectionID;
+        private readonly int _connectionId;
 
         /// <summary>
         ///     The socket this connection is based upon
         /// </summary>
-        private readonly Socket dataSocket;
+        private readonly Socket _dataSocket;
 
         /// <summary>
         ///     The ip of this connection
         /// </summary>
-        private readonly string ip;
+        private readonly string _ip;
 
-        private readonly AsyncCallback sendCallback;
+        private readonly AsyncCallback _sendCallback;
 
         /// <summary>
         ///     Boolean indicating of this instance is connected to the user or not
         /// </summary>
-        private bool isConnected;
+        private bool _isConnected;
 
         /// <summary>
         ///     This item contains the data parser for the connection
         /// </summary>
-        public IDataParser parser { get; set; }
+        public IDataParser Parser { get; set; }
 
         /// <summary>
         ///     Is triggered when the user connects/disconnects
         /// </summary>
-        public event ConnectionChange connectionChanged;
+        public event ConnectionChange ConnectionChanged;
 
         #endregion
 
@@ -62,19 +62,20 @@ namespace Plus.Communication.ConnectionManager
         ///     Creates a new Connection witht he given information
         /// </summary>
         /// <param name="dataStream">The Socket of the connection</param>
-        /// <param name="connectionID">The id of the connection</param>
-        public ConnectionInformation(int connectionID, Socket dataStream, SocketManager manager, IDataParser parser, string ip)
+        /// <param name="connectionId">The id of the connection</param>
+        /// <param name="parser">The data parser for the connection</param>
+        /// <param name="ip">The IP Address for the connection</param>
+        public ConnectionInformation(int connectionId, Socket dataStream, IDataParser parser, string ip)
         {
-            this.parser = parser;
-            buffer = new byte[GameSocketManagerStatics.BUFFER_SIZE];
-            //this.manager = manager;
-            dataSocket = dataStream;
-            dataSocket.SendBufferSize = GameSocketManagerStatics.BUFFER_SIZE;
-            this.ip = ip;
-            sendCallback = sentData;
-            this.connectionID = connectionID;
-            if (connectionChanged != null)
-                connectionChanged.Invoke(this, ConnectionState.Open);
+            Parser = parser;
+            _buffer = new byte[GameSocketManagerStatics.BufferSize];
+            _dataSocket = dataStream;
+            _dataSocket.SendBufferSize = GameSocketManagerStatics.BufferSize;
+            _ip = ip;
+            _sendCallback = SentData;
+            _connectionId = connectionId;
+            if (ConnectionChanged != null)
+                ConnectionChanged.Invoke(this, ConnectionState.Open);
 
         }
 
@@ -82,19 +83,19 @@ namespace Plus.Communication.ConnectionManager
         ///     Starts this item packet processor
         ///     MUST be called before sending data
         /// </summary>
-        public void startPacketProcessing()
+        public void StartPacketProcessing()
         {
-            if (!isConnected)
+            if (!_isConnected)
             {
-                isConnected = true;
+                _isConnected = true;
                 //Out.writeLine("Starting packet processsing of client [" + this.connectionID + "]", Out.logFlags.lowLogLevel);
                 try
                 {
-                    dataSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, incomingDataPacket, dataSocket);
+                    _dataSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, IncomingDataPacket, _dataSocket);
                 }
                 catch
                 {
-                    disconnect();
+                    Disconnect();
                 }
             }
         }
@@ -107,18 +108,18 @@ namespace Plus.Communication.ConnectionManager
         ///     Returns the ip of the current connection
         /// </summary>
         /// <returns>The ip of this connection</returns>
-        public string GetIP()
+        public string GetIp()
         {
-            return ip;
+            return _ip;
         }
 
         /// <summary>
         ///     Returns the connection id
         /// </summary>
         /// <returns>The id of the connection</returns>
-        public int GetConnectionID()
+        public int GetConnectionId()
         {
-            return connectionID;
+            return _connectionId;
         }
 
         #endregion
@@ -132,9 +133,9 @@ namespace Plus.Communication.ConnectionManager
         /// </summary>
         public void Dispose()
         {
-            if (isConnected)
+            if (_isConnected)
             {
-                disconnect();
+                Disconnect();
             }
 
             GC.SuppressFinalize(this);
@@ -143,38 +144,40 @@ namespace Plus.Communication.ConnectionManager
         /// <summary>
         ///     Disconnects the current connection
         /// </summary>
-        public void disconnect()
+        public void Disconnect()
         {
             try
             {
-                if (isConnected)
+                if (_isConnected)
                 {
-                    isConnected = false;
+                    _isConnected = false;
 
                     //Out.writeLine("Connection [" + this.connectionID + "] has been disconnected", Out.logFlags.BelowStandardlogLevel);
                     try
                     {
-                        if (dataSocket != null && dataSocket.Connected)
+                        if (_dataSocket != null && _dataSocket.Connected)
                         {
-                            dataSocket.Shutdown(SocketShutdown.Both);
-                            dataSocket.Close();
+                            _dataSocket.Shutdown(SocketShutdown.Both);
+                            _dataSocket.Close();
                         }
                     }
                     catch
                     {
+                        //ignored
                     }
-                    dataSocket.Dispose();
-                    parser.Dispose();
+                    _dataSocket.Dispose();
+                    Parser.Dispose();
 
                     try
                     {
-                        if (connectionChanged != null)
-                            connectionChanged.Invoke(this, ConnectionState.Closed);
+                        if (ConnectionChanged != null)
+                            ConnectionChanged.Invoke(this, ConnectionState.Closed);
                     }
                     catch
                     {
+                        //ignored
                     }
-                    connectionChanged = null;
+                    ConnectionChanged = null;
                 }
                 else
                 {
@@ -194,39 +197,39 @@ namespace Plus.Communication.ConnectionManager
         ///     Receives a packet of data and processes it
         /// </summary>
         /// <param name="iAr">The interface of an async result</param>
-        private void incomingDataPacket(IAsyncResult iAr)
+        private void IncomingDataPacket(IAsyncResult iAr)
         {
             //Out.writeLine("Packet received from client [" + this.connectionID + "]", Out.logFlags.lowLogLevel);
             int bytesReceived;
             try
             {
                 //The amount of bytes received in the packet
-                bytesReceived = dataSocket.EndReceive(iAr);
+                bytesReceived = _dataSocket.EndReceive(iAr);
             }
             catch //(Exception e)
             {
-                disconnect();
+                Disconnect();
                 return;
             }
 
             if (bytesReceived == 0)
             {
-                disconnect();
+                Disconnect();
                 return;
             }
 
             try
             {
-                if (!disableReceive)
+                if (!DisableReceive)
                 {
                     var packet = new byte[bytesReceived];
-                    Array.Copy(buffer, packet, bytesReceived);
-                    handlePacketData(packet);
+                    Array.Copy(_buffer, packet, bytesReceived);
+                    HandlePacketData(packet);
                 }
             }
             catch //(Exception e)
             {
-                disconnect();
+                Disconnect();
             }
             finally
             {
@@ -234,11 +237,11 @@ namespace Plus.Communication.ConnectionManager
                 {
                     //and we keep looking for the next packet
 
-                    dataSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, incomingDataPacket, dataSocket);
+                    _dataSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, IncomingDataPacket, _dataSocket);
                 }
                 catch //(Exception e)
                 {
-                    disconnect();
+                    Disconnect();
                 }
             }
         }
@@ -247,11 +250,11 @@ namespace Plus.Communication.ConnectionManager
         ///     Handles packet data
         /// </summary>
         /// <param name="packet">The data received by the </param>
-        private void handlePacketData(byte[] packet)
+        private void HandlePacketData(byte[] packet)
         {
-            if (parser != null)
+            if (Parser != null)
             {
-                parser.HandlePacketData(packet);
+                Parser.HandlePacketData(packet);
             }
         }
 
@@ -263,21 +266,15 @@ namespace Plus.Communication.ConnectionManager
         {
             try
             {
-                if (!isConnected || disableSend)
+                if (!_isConnected || DisableSend)
                     return;
 
-                //if(RC4Server == null)
-                //  RC4Server = new ARC4(new byte[] { 10 });
-                //if (RC4Server != null)
-                //packet = RC4Server.Parse(packet);
-
-                string packetData = Encoding.Default.GetString(packet);
                 //Console.WriteLine(string.Format("Data from server => [{0}]", packetData));
-                dataSocket.BeginSend(packet, 0, packet.Length, 0, sendCallback, null);
+                _dataSocket.BeginSend(packet, 0, packet.Length, 0, _sendCallback, null);
             }
             catch
             {
-                disconnect();
+                Disconnect();
             }
         }
 
@@ -285,15 +282,15 @@ namespace Plus.Communication.ConnectionManager
         ///     Same as sendData
         /// </summary>
         /// <param name="iAr">The a-synchronious interface</param>
-        private void sentData(IAsyncResult iAr)
+        private void SentData(IAsyncResult iAr)
         {
             try
             {
-                 dataSocket.EndSend(iAr);
+                 _dataSocket.EndSend(iAr);
             }
             catch
             {
-                disconnect();
+                Disconnect();
             }
         }
         #endregion

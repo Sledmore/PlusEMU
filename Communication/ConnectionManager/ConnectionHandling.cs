@@ -6,27 +6,27 @@ namespace Plus.Communication.ConnectionManager
 {
     public class ConnectionHandling
     {
-        private readonly SocketManager manager;
+        private readonly SocketManager _manager;
 
-        public ConnectionHandling(int port, int maxConnections, int connectionsPerIP, bool enabeNagles)
+        public ConnectionHandling(int port, int maxConnections, int connectionsPerIp, bool enabeNagles)
         {
-            manager = new SocketManager();
-            manager.Init(port, maxConnections, connectionsPerIP, new InitialPacketParser(), !enabeNagles);
+            _manager = new SocketManager();
+            _manager.Init(port, maxConnections, connectionsPerIp, new InitialPacketParser(), !enabeNagles);
         }
 
-        public void init()
+        public void Init()
         {
-            manager.connectionEvent += manager_connectionEvent;
-            manager.initializeConnectionRequests();
+            _manager.OnConnectionEvent += OnConnectionEvent;
+            _manager.InitializeConnectionRequests();
         }
 
-        private void manager_connectionEvent(ConnectionInformation connection)
+        private void OnConnectionEvent(ConnectionInformation connection)
         {
-            connection.connectionChanged += connectionChanged;
-            PlusEnvironment.GetGame().GetClientManager().CreateAndStartClient(Convert.ToInt32(connection.GetConnectionID()), connection);
+            connection.ConnectionChanged += OnConnectionChanged;
+            PlusEnvironment.GetGame().GetClientManager().CreateAndStartClient(Convert.ToInt32(connection.GetConnectionId()), connection);
         }
 
-        private void connectionChanged(ConnectionInformation information, ConnectionState state)
+        private void OnConnectionChanged(ConnectionInformation information, ConnectionState state)
         {
             if (state == ConnectionState.Closed)
             {
@@ -34,12 +34,12 @@ namespace Plus.Communication.ConnectionManager
             }
         }
 
-        private void CloseConnection(ConnectionInformation Connection)
+        private void CloseConnection(ConnectionInformation connection)
         {
             try
             {
-                Connection.Dispose();
-                PlusEnvironment.GetGame().GetClientManager().DisposeConnection(Convert.ToInt32( Connection.GetConnectionID()));
+                connection.Dispose();
+                PlusEnvironment.GetGame().GetClientManager().DisposeConnection(Convert.ToInt32( connection.GetConnectionId()));
             }
             catch (Exception e)
             {
@@ -49,7 +49,7 @@ namespace Plus.Communication.ConnectionManager
 
         public void Destroy()
         {
-            manager.destroy();
+            _manager.Destroy();
         }
     }
 }

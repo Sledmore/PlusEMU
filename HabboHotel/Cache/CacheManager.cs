@@ -35,7 +35,7 @@ namespace Plus.HabboHotel.Cache
                 if (TryGetUser(id, out user))
                     return user;
 
-            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(id);
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(id);
             if (client != null)
                 if (client.GetHabbo() != null)
                 {

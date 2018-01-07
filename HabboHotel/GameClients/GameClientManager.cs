@@ -332,9 +332,9 @@ namespace Plus.HabboHotel.GameClients
                     }
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-
+                    //ignored
                 }
             }
         }

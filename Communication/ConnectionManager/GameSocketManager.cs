@@ -9,7 +9,7 @@ namespace Plus.Communication.ConnectionManager
 {
     public class SocketManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.Communication.ConnectionManager");
+        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.ConnectionManager");
 
         #region declares
 
@@ -32,31 +32,31 @@ namespace Plus.Communication.ConnectionManager
         /// <summary>
         ///     The Socket used for incoming data requests.
         /// </summary>
-        private Socket connectionListener;
+        private Socket _connectionListener;
 
-        private bool disableNagleAlgorithm;
+        private bool _disableNagleAlgorithm;
 
         /// <summary>
         ///     Contains the max conenctions per ip count
         /// </summary>
-        private int maxIpConnectionCount;
+        private int _maxIpConnectionCount;
 
         /// <summary>
         ///     The maximum amount of connections the server should be allowed to have
         /// </summary>
-        private int maximumConnections;
+        private int _maximumConnections;
 
-        private IDataParser parser;
+        private IDataParser _parser;
 
         /// <summary>
         ///     The port information, contains the nummeric value the socket should listen on.
         /// </summary>
-        private int portInformation;
+        private int _portInformation;
 
         /// <summary>
         ///     Occurs when a new connection was established
         /// </summary>
-        public event ConnectionEvent connectionEvent;
+        public event ConnectionEvent OnConnectionEvent;
 
         /// <summary>
         /// Contains the ip's and their connection counts
@@ -70,36 +70,39 @@ namespace Plus.Communication.ConnectionManager
         /// <summary>
         ///     Initializes the connection instance
         /// </summary>
-        /// <param name="portID">The ID of the port this item should listen on</param>
+        /// <param name="portId">The ID of the port this item should listen on</param>
         /// <param name="maxConnections">The maximum amount of connections</param>
-        public void Init(int portID, int maxConnections, int connectionsPerIP, IDataParser parser,  bool disableNaglesAlgorithm)
+        /// <param name="connectionsPerIp">The maximum allowed connections per IP Address</param>
+        /// <param name="parser">The data parser for the connection</param>
+        /// <param name="disableNaglesAlgorithm">Disable nagles algorithm</param>
+        public void Init(int portId, int maxConnections, int connectionsPerIp, IDataParser parser,  bool disableNaglesAlgorithm)
         {
-            this._ipConnectionsCount = new ConcurrentDictionary<string, int>();
+            _ipConnectionsCount = new ConcurrentDictionary<string, int>();
 
-            this.parser = parser;
-            disableNagleAlgorithm = disableNaglesAlgorithm;
-            maximumConnections = maxConnections;
-            portInformation = portID;
-            maxIpConnectionCount = connectionsPerIP;
-            prepareConnectionDetails();
+            _parser = parser;
+            _disableNagleAlgorithm = disableNaglesAlgorithm;
+            _maximumConnections = maxConnections;
+            _portInformation = portId;
+            _maxIpConnectionCount = connectionsPerIp;
+            PrepareConnectionDetails();
             _acceptedConnections = 0;
-            log.Info("Successfully setup GameSocketManager on port (" + portID + ")!");
-            log.Info("Maximum connections per IP has been set to [" + connectionsPerIP + "]!");
+            Log.Info("Successfully setup GameSocketManager on port (" + portId + ")!");
+            Log.Info("Maximum connections per IP has been set to [" + connectionsPerIp + "]!");
         }
 
         /// <summary>
         ///     Prepares the socket for connections
         /// </summary>
-        private void prepareConnectionDetails()
+        private void PrepareConnectionDetails()
         {
-            connectionListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+            _connectionListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
             {
-                NoDelay = disableNagleAlgorithm
+                NoDelay = _disableNagleAlgorithm
             };
 
             try
             {
-                connectionListener.Bind(new IPEndPoint(IPAddress.Any, portInformation));
+                _connectionListener.Bind(new IPEndPoint(IPAddress.Any, _portInformation));
             }
             catch (SocketException ex)
             {
@@ -110,19 +113,19 @@ namespace Plus.Communication.ConnectionManager
         /// <summary>
         ///     Initializes the incoming data requests
         /// </summary>
-        public void initializeConnectionRequests()
+        public void InitializeConnectionRequests()
         {
             //Out.writeLine("Starting to listen to connection requests", Out.logFlags.ImportantLogLevel);
-            connectionListener.Listen(100);
+            _connectionListener.Listen(100);
             _acceptConnections = true;
 
             try
             {
-                connectionListener.BeginAccept(newConnectionRequest, connectionListener);
+                _connectionListener.BeginAccept(NewConnectionRequest, _connectionListener);
             }
             catch
             {
-                destroy();
+                Destroy();
             }
         }
 
@@ -133,12 +136,14 @@ namespace Plus.Communication.ConnectionManager
         /// <summary>
         ///     Destroys the current connection manager and disconnects all users
         /// </summary>
-        public void destroy()
+        public void Destroy()
         {
             _acceptConnections = false;
-            try { connectionListener.Close(); }
-            catch { }
-            connectionListener = null;
+            try { _connectionListener.Close(); }
+            catch {
+                //ignored
+            }
+            _connectionListener = null;
         }
 
         #endregion
@@ -149,33 +154,33 @@ namespace Plus.Communication.ConnectionManager
         ///     Handels a new incoming data request from some computer from arround the world
         /// </summary>
         /// <param name="iAr">the IAsyncResult of the connection</param>
-        private void newConnectionRequest(IAsyncResult iAr)
+        private void NewConnectionRequest(IAsyncResult iAr)
         {
-            if (connectionListener != null)
+            if (_connectionListener != null)
             {
                 if (_acceptConnections)
                 {
                     try
                     {
                         Socket replyFromComputer = ((Socket)iAr.AsyncState).EndAccept(iAr);
-                        replyFromComputer.NoDelay = disableNagleAlgorithm;
+                        replyFromComputer.NoDelay = _disableNagleAlgorithm;
 
-                        string Ip = replyFromComputer.RemoteEndPoint.ToString().Split(':')[0];
+                        string ip = replyFromComputer.RemoteEndPoint.ToString().Split(':')[0];
 
-                        int ConnectionCount = getAmountOfConnectionFromIp(Ip);
-                        if (ConnectionCount < maxIpConnectionCount)
+                        int connectionCount = GetAmountOfConnectionFromIp(ip);
+                        if (connectionCount < _maxIpConnectionCount)
                         {
                             _acceptedConnections++;
-                            ConnectionInformation c = new ConnectionInformation(_acceptedConnections, replyFromComputer, this, parser.Clone() as IDataParser, Ip);
-                            reportUserLogin(Ip);
-                            c.connectionChanged += c_connectionChanged;
+                            ConnectionInformation c = new ConnectionInformation(_acceptedConnections, replyFromComputer, _parser.Clone() as IDataParser, ip);
+                            ReportUserLogin(ip);
+                            c.ConnectionChanged += OnConnectionChanged;
 
-                            if (connectionEvent != null)
-                                connectionEvent(c);
+                            if (OnConnectionEvent != null)
+                                OnConnectionEvent(c);
                         }
                         else
                         {
-                            log.Info("Connection denied from [" + replyFromComputer.RemoteEndPoint.ToString().Split(':')[0] + "]. Too many connections (" + ConnectionCount + ").");
+                            Log.Info("Connection denied from [" + replyFromComputer.RemoteEndPoint.ToString().Split(':')[0] + "]. Too many connections (" + connectionCount + ").");
                         }
                     }
                     catch
@@ -183,20 +188,17 @@ namespace Plus.Communication.ConnectionManager
                     }
                     finally
                     {
-                        connectionListener.BeginAccept(newConnectionRequest, connectionListener);
+                        _connectionListener.BeginAccept(NewConnectionRequest, _connectionListener);
                     }
-                }
-                else
-                {
                 }
             }
         }
 
-        private void c_connectionChanged(ConnectionInformation information, ConnectionState state)
+        private void OnConnectionChanged(ConnectionInformation information, ConnectionState state)
         {
             if (state == ConnectionState.Closed)
             {
-                reportDisconnect(information);
+                ReportDisconnect(information);
             }
         }
 
@@ -208,10 +210,10 @@ namespace Plus.Communication.ConnectionManager
         ///     Reports a gameconnection as disconnected
         /// </summary>
         /// <param name="gameConnection">The connection which is logging out</param>
-        public void reportDisconnect(ConnectionInformation gameConnection)
+        public void ReportDisconnect(ConnectionInformation gameConnection)
         {
-            gameConnection.connectionChanged -= c_connectionChanged;
-            reportUserLogout(gameConnection.GetIP());
+            gameConnection.ConnectionChanged -= OnConnectionChanged;
+            ReportUserLogout(gameConnection.GetIp());
             //activeConnections.Remove(gameConnection.getConnectionID());
         }
 
@@ -223,18 +225,18 @@ namespace Plus.Communication.ConnectionManager
         ///     reports the user with an ip as "logged in"
         /// </summary>
         /// <param name="ip">The ip of the user</param>
-        private void reportUserLogin(string ip)
+        private void ReportUserLogin(string ip)
         {
-            alterIpConnectionCount(ip, (getAmountOfConnectionFromIp(ip) + 1));
+            AlterIpConnectionCount(ip, (GetAmountOfConnectionFromIp(ip) + 1));
         }
 
         /// <summary>
         ///     reports the user with an ip as "logged out"
         /// </summary>
         /// <param name="ip">The ip of the user</param>
-        private void reportUserLogout(string ip)
+        private void ReportUserLogout(string ip)
         {
-            alterIpConnectionCount(ip, (getAmountOfConnectionFromIp(ip) - 1));
+            AlterIpConnectionCount(ip, (GetAmountOfConnectionFromIp(ip) - 1));
         }
 
         /// <summary>
@@ -242,12 +244,11 @@ namespace Plus.Communication.ConnectionManager
         /// </summary>
         /// <param name="ip">The ip of the user</param>
         /// <param name="amount">The amount of connections</param>
-        private void alterIpConnectionCount(string ip, int amount)
+        private void AlterIpConnectionCount(string ip, int amount)
         {
             if (_ipConnectionsCount.ContainsKey(ip))
             {
-                int am;
-                _ipConnectionsCount.TryRemove(ip, out am);
+                _ipConnectionsCount.TryRemove(ip, out int _);
             }
             _ipConnectionsCount.TryAdd(ip, amount);
         }
@@ -257,16 +258,14 @@ namespace Plus.Communication.ConnectionManager
         /// </summary>
         /// <param name="ip">The ip of the user</param>
         /// <returns>The amount of connections from the given ip address</returns>
-        private int getAmountOfConnectionFromIp(string ip)
+        private int GetAmountOfConnectionFromIp(string ip)
         {
             if (_ipConnectionsCount.ContainsKey(ip))
             {
                 return _ipConnectionsCount[ip];
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         #endregion

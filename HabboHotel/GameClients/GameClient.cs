@@ -48,11 +48,11 @@ namespace Plus.HabboHotel.GameClients
         private void SwitchParserRequest()
         {
             _packetParser.SetConnection(_connection);
-            _packetParser.onNewPacket += Parser_onNewPacket;
-            byte[] data = (_connection.parser as InitialPacketParser).currentData;
-            _connection.parser.Dispose();
-            _connection.parser = _packetParser;
-            _connection.parser.HandlePacketData(data);
+            _packetParser.OnNewPacket += Parser_onNewPacket;
+            byte[] data = (_connection.Parser as InitialPacketParser).CurrentData;
+            _connection.Parser.Dispose();
+            _connection.Parser = _packetParser;
+            _connection.Parser.HandlePacketData(data);
         }
 
         private void Parser_onNewPacket(ClientPacket message)
@@ -84,9 +84,9 @@ namespace Plus.HabboHotel.GameClients
 
             PingCount = 0;
 
-            (_connection.parser as InitialPacketParser).PolicyRequest += PolicyRequest;
-            (_connection.parser as InitialPacketParser).SwitchParserRequest += SwitchParserRequest;
-            _connection.startPacketProcessing();
+            (_connection.Parser as InitialPacketParser).PolicyRequest += PolicyRequest;
+            (_connection.Parser as InitialPacketParser).SwitchParserRequest += SwitchParserRequest;
+            _connection.StartPacketProcessing();
         }
 
         public bool TryAuthenticate(string authTicket)
@@ -149,7 +149,7 @@ namespace Plus.HabboHotel.GameClients
                     SendPacket(new BuildersClubMembershipComposer());
                     SendPacket(new CfhTopicsInitComposer(PlusEnvironment.GetGame().GetModerationManager().UserActionPresets));
 
-                    SendPacket(new BadgeDefinitionsComposer(PlusEnvironment.GetGame().GetAchievementManager()._achievements));
+                    SendPacket(new BadgeDefinitionsComposer(PlusEnvironment.GetGame().GetAchievementManager().Achievements));
                     SendPacket(new SoundSettingsComposer(_habbo.ClientVolume, _habbo.ChatPreference, _habbo.AllowMessengerInvites, _habbo.FocusPreference, FriendBarStateUtility.GetInt(_habbo.FriendbarState)));
                     //SendMessage(new TalentTrackLevelComposer());
 
