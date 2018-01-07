@@ -28,7 +28,7 @@ namespace Plus.Communication.Packets.Incoming.Catalog
                 return;
             }
 
-            DataRow row = null;
+            DataRow row;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `user_vouchers` WHERE `user_id` = @userId AND `voucher` = @Voucher LIMIT 1");

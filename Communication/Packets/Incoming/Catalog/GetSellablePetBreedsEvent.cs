@@ -6,17 +6,17 @@ namespace Plus.Communication.Packets.Incoming.Catalog
 {
     public class GetSellablePetBreedsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            string Type = Packet.PopString();
+            string type = packet.PopString();
 
-            ItemData Item = PlusEnvironment.GetGame().GetItemManager().GetItemByName(Type);
-            if (Item == null)
+            ItemData item = PlusEnvironment.GetGame().GetItemManager().GetItemByName(type);
+            if (item == null)
                 return;
 
-            int PetId = Item.BehaviourData;
+            int petId = item.BehaviourData;
 
-            Session.SendPacket(new SellablePetBreedsComposer(Type, PetId, PlusEnvironment.GetGame().GetCatalog().GetPetRaceManager().GetRacesForRaceId(PetId)));
+            session.SendPacket(new SellablePetBreedsComposer(type, petId, PlusEnvironment.GetGame().GetCatalog().GetPetRaceManager().GetRacesForRaceId(petId)));
         }
     }
 }

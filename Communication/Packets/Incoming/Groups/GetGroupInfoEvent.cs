@@ -1,20 +1,20 @@
 ﻿using Plus.HabboHotel.Groups;
 using Plus.Communication.Packets.Outgoing.Groups;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class GetGroupInfoEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int GroupId = Packet.PopInt();
-            bool NewWindow = Packet.PopBoolean();
+            int groupId = packet.PopInt();
+            bool newWindow = packet.PopBoolean();
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            Session.SendPacket(new GroupInfoComposer(Group, Session, NewWindow));     
+            session.SendPacket(new GroupInfoComposer(group, session, newWindow));     
         }
     }
 }

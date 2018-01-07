@@ -6,19 +6,20 @@ using Plus.Communication.Packets.Outgoing.Catalog;
 using Plus.Communication.Packets.Outgoing.Rooms.Session;
 using Plus.Communication.Packets.Outgoing.Inventory.Purse;
 using Plus.Communication.Packets.Outgoing.Moderation;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class PurchaseGroupEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            string Name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-            string Description = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-            int RoomId = packet.PopInt();
-            int Colour1 = packet.PopInt();
-            int Colour2 = packet.PopInt();
-            int Unknown = packet.PopInt();
+            string name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string description = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            int roomId = packet.PopInt();
+            int mainColour = packet.PopInt();
+            int secondaryColour = packet.PopInt();
+            packet.PopInt(); //unknown
 
             int groupCost = Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("catalog.group.purchase.cost"));
 
@@ -27,28 +28,24 @@ namespace Plus.Communication.Packets.Incoming.Groups
                 session.SendPacket(new BroadcastMessageAlertComposer("A group costs " + groupCost + " credits! You only have " + session.GetHabbo().Credits + "!"));
                 return;
             }
-            else
-            {
-                session.GetHabbo().Credits -= groupCost;
-                session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
-            }
 
-            RoomData Room = null;
-            if (!RoomFactory.TryGetData(RoomId, out Room))
-                return;
-            
-            if (Room == null || Room.OwnerId != session.GetHabbo().Id || Room.Group != null)
+            session.GetHabbo().Credits -= groupCost;
+            session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
+
+            if (!RoomFactory.TryGetData(roomId, out RoomData room))
                 return;
 
-            string Badge = string.Empty;
+            if (room == null || room.OwnerId != session.GetHabbo().Id || room.Group != null)
+                return;
+
+            string badge = string.Empty;
 
             for (int i = 0; i < 5; i++)
             {
-                Badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
+                badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
             }
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetHabbo(), Name, Description, RoomId, Badge, Colour1, Colour2, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetHabbo(), name, description, roomId, badge, mainColour, secondaryColour, out Group group))
             {
                 session.SendNotification("An error occured whilst trying to create this group.\n\nTry again. If you get this message more than once, report it at the link below.\r\rhttp://boonboards.com");
                 return;
@@ -56,12 +53,12 @@ namespace Plus.Communication.Packets.Incoming.Groups
 
             session.SendPacket(new PurchaseOKComposer());
 
-            Room.Group = Group;
+            room.Group = group;
 
-            if (session.GetHabbo().CurrentRoomId != Room.Id)
-                session.SendPacket(new RoomForwardComposer(Room.Id));
+            if (session.GetHabbo().CurrentRoomId != room.Id)
+                session.SendPacket(new RoomForwardComposer(room.Id));
 
-            session.SendPacket(new NewGroupInfoComposer(RoomId, Group.Id));
+            session.SendPacket(new NewGroupInfoComposer(roomId, group.Id));
         }
     }
 }

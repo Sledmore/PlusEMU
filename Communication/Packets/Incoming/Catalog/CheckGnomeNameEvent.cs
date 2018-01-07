@@ -10,99 +10,100 @@ using Plus.Communication.Packets.Outgoing.Inventory.Furni;
 
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Catalog.Utilities;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Catalog
 {
     class CheckGnomeNameEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            int ItemId = Packet.PopInt();
-            Item Item = Room.GetRoomItemHandler().GetItem(ItemId);
+            int itemId = packet.PopInt();
+            Item item = room.GetRoomItemHandler().GetItem(itemId);
 
-            if (Item == null || Item.Data == null || Item.UserID != Session.GetHabbo().Id || Item.Data.InteractionType != InteractionType.GNOME_BOX)
+            if (item == null || item.Data == null || item.UserID != session.GetHabbo().Id || item.Data.InteractionType != InteractionType.GNOME_BOX)
                 return;
 
-            string PetName = Packet.PopString();
-            if (string.IsNullOrEmpty(PetName))
+            string petName = packet.PopString();
+            if (string.IsNullOrEmpty(petName))
             {
-                Session.SendPacket(new CheckGnomeNameComposer(PetName, 1));
+                session.SendPacket(new CheckGnomeNameComposer(petName, 1));
                 return;
             }
 
-            if (!PlusEnvironment.IsValidAlphaNumeric(PetName))
+            if (!PlusEnvironment.IsValidAlphaNumeric(petName))
             {
-                Session.SendPacket(new CheckGnomeNameComposer(PetName, 1));
+                session.SendPacket(new CheckGnomeNameComposer(petName, 1));
                 return;
             }
 
-            int X = Item.GetX;
-            int Y = Item.GetY;
+            int x = item.GetX;
+            int y = item.GetY;
 
             //Quickly delete it from the database.
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("DELETE FROM `items` WHERE `id` = @ItemId LIMIT 1");
-                dbClient.AddParameter("ItemId", Item.Id);
+                dbClient.AddParameter("ItemId", item.Id);
                 dbClient.RunQuery();
             }
 
             //Remove the item.
-            Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id);
+            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
 
             //Apparently we need this for success.
-            Session.SendPacket(new CheckGnomeNameComposer(PetName, 0));
+            session.SendPacket(new CheckGnomeNameComposer(petName, 0));
 
             //Create the pet here.
-            Pet Pet = PetUtility.CreatePet(Session.GetHabbo().Id, PetName, 26, "30", "ffffff");
-            if (Pet == null)
+            Pet pet = PetUtility.CreatePet(session.GetHabbo().Id, petName, 26, "30", "ffffff");
+            if (pet == null)
             {
-                Session.SendNotification("Oops, an error occoured. Please report this!");
+                session.SendNotification("Oops, an error occoured. Please report this!");
                 return;
             }
 
-            List<RandomSpeech> RndSpeechList = new List<RandomSpeech>();
+            List<RandomSpeech> rndSpeechList = new List<RandomSpeech>();
 
-            Pet.RoomId = Session.GetHabbo().CurrentRoomId;
-            Pet.GnomeClothing = RandomClothing();
+            pet.RoomId = session.GetHabbo().CurrentRoomId;
+            pet.GnomeClothing = RandomClothing();
 
             //Update the pets gnome clothing.
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `bots_petdata` SET `gnome_clothing` = @GnomeClothing WHERE `id` = @PetId LIMIT 1");
-                dbClient.AddParameter("GnomeClothing", Pet.GnomeClothing);
-                dbClient.AddParameter("PetId", Pet.PetId);
+                dbClient.AddParameter("GnomeClothing", pet.GnomeClothing);
+                dbClient.AddParameter("PetId", pet.PetId);
                 dbClient.RunQuery();
             }
 
             //Make a RoomUser of the pet.
-            RoomUser PetUser = Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.RoomId, "pet", "freeroam", Pet.Name, "", Pet.Look, X, Y, 0, 0, 0, 0, 0, 0, ref RndSpeechList, "", 0, Pet.OwnerId, false, 0, false, 0), Pet);
+            room.GetRoomUserManager().DeployBot(new RoomBot(pet.PetId, pet.RoomId, "pet", "freeroam", pet.Name, "", pet.Look, x, y, 0, 0, 0, 0, 0, 0, ref rndSpeechList, "", 0, pet.OwnerId, false, 0, false, 0), pet);
 
             //Give the food.
-            if (PlusEnvironment.GetGame().GetItemManager().GetItem(320, out ItemData PetFood))
+            if (PlusEnvironment.GetGame().GetItemManager().GetItem(320, out ItemData petFood))
             {
-                Item Food = ItemFactory.CreateSingleItemNullable(PetFood, Session.GetHabbo(), "", "");
-                if (Food != null)
+                Item food = ItemFactory.CreateSingleItemNullable(petFood, session.GetHabbo(), "", "");
+                if (food != null)
                 {
-                    Session.GetHabbo().GetInventoryComponent().TryAddItem(Food);
-                    Session.SendPacket(new FurniListNotificationComposer(Food.Id, 1));
+                    session.GetHabbo().GetInventoryComponent().TryAddItem(food);
+                    session.SendPacket(new FurniListNotificationComposer(food.Id, 1));
                 }
             }
         }
 
         private static string RandomClothing()
         {
-            Random Random = new Random();
+            Random random = new Random();
 
-            int RandomNumber = Random.Next(1, 6);
-            switch (RandomNumber)
+            int randomNumber = random.Next(1, 6);
+            switch (randomNumber)
             {
                 default:
                 case 1:

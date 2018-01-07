@@ -1,36 +1,36 @@
 ﻿using Plus.HabboHotel.Groups;
 using Plus.Communication.Packets.Outgoing.Groups;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Users;
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class AcceptGroupMembershipEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int GroupId = Packet.PopInt();
-            int UserId = Packet.PopInt();
+            int groupId = packet.PopInt();
+            int userId = packet.PopInt();
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            if ((Session.GetHabbo().Id != Group.CreatorId && !Group.IsAdmin(Session.GetHabbo().Id)) && !Session.GetHabbo().GetPermissions().HasRight("fuse_group_accept_any"))
+            if (session.GetHabbo().Id != group.CreatorId && !group.IsAdmin(session.GetHabbo().Id) && !session.GetHabbo().GetPermissions().HasRight("fuse_group_accept_any"))
                 return;
 
-            if (!Group.HasRequest(UserId))
+            if (!group.HasRequest(userId))
                 return;
 
-            Habbo Habbo = PlusEnvironment.GetHabboById(UserId);
-            if (Habbo == null)
+            Habbo habbo = PlusEnvironment.GetHabboById(userId);
+            if (habbo == null)
             {
-                Session.SendNotification("Oops, an error occurred whilst finding this user.");
+                session.SendNotification("Oops, an error occurred whilst finding this user.");
                 return;
             }
 
-            Group.HandleRequest(UserId, true);
+            group.HandleRequest(userId, true);
 
-            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, Habbo, 4));
+            session.SendPacket(new GroupMemberUpdatedComposer(groupId, habbo, 4));
         }
     }
 }

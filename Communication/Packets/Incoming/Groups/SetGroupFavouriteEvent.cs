@@ -2,48 +2,46 @@
 using Plus.Communication.Packets.Outgoing.Groups;
 using Plus.Database.Interfaces;
 using Plus.Communication.Packets.Outgoing.Users;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class SetGroupFavouriteEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null)
+            if (session == null)
                 return;
 
-            int GroupId = Packet.PopInt();
-            if (GroupId == 0)
+            int groupId = packet.PopInt();
+            if (groupId == 0)
                 return;
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            Session.GetHabbo().GetStats().FavouriteGroupId = Group.Id;
+            session.GetHabbo().GetStats().FavouriteGroupId = group.Id;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `user_stats` SET `groupid` = @groupId WHERE `id` = @userId LIMIT 1");
-                dbClient.AddParameter("groupId", Session.GetHabbo().GetStats().FavouriteGroupId);
-                dbClient.AddParameter("userId", Session.GetHabbo().Id);
+                dbClient.AddParameter("groupId", session.GetHabbo().GetStats().FavouriteGroupId);
+                dbClient.AddParameter("userId", session.GetHabbo().Id);
                 dbClient.RunQuery();
             }
 
-            if (Session.GetHabbo().InRoom && Session.GetHabbo().CurrentRoom != null)
+            if (session.GetHabbo().InRoom && session.GetHabbo().CurrentRoom != null)
             {
-                Session.GetHabbo().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
-                if (Group != null)
-                {
-                    Session.GetHabbo().CurrentRoom.SendPacket(new HabboGroupBadgesComposer(Group));
+                session.GetHabbo().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetHabbo().Id));
+                session.GetHabbo().CurrentRoom.SendPacket(new HabboGroupBadgesComposer(group));
 
-                    RoomUser User = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-                    if (User != null)
-                    Session.GetHabbo().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
-                }
+                RoomUser user = session.GetHabbo().CurrentRoom.GetRoomUserManager()
+                    .GetRoomUserByHabbo(session.GetHabbo().Id);
+                if (user != null)
+                    session.GetHabbo().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, user.VirtualId));
             }
             else
-                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
+                session.SendPacket(new RefreshFavouriteGroupComposer(session.GetHabbo().Id));
         }
     }
 }

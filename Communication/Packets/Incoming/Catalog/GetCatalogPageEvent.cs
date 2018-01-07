@@ -6,20 +6,19 @@ namespace Plus.Communication.Packets.Incoming.Catalog
 {
     public class GetCatalogPageEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int PageId = Packet.PopInt();
-            int Something = Packet.PopInt();
-            string CataMode = Packet.PopString();
+            int pageId = packet.PopInt();
+            packet.PopInt();
+            string cataMode = packet.PopString();
 
-            CatalogPage Page = null;
-            if (!PlusEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out Page))
+            if (!PlusEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page))
                 return;
 
-            if (!Page.Enabled || !Page.Visible || Page.MinimumRank > Session.GetHabbo().Rank || (Page.MinimumVIP > Session.GetHabbo().VIPRank && Session.GetHabbo().Rank == 1))
+            if (!page.Enabled || !page.Visible || page.MinimumRank > session.GetHabbo().Rank || (page.MinimumVIP > session.GetHabbo().VIPRank && session.GetHabbo().Rank == 1))
                 return;
 
-           Session.SendPacket(new CatalogPageComposer(Page, CataMode));
+           session.SendPacket(new CatalogPageComposer(page, cataMode));
         }
     }
 }

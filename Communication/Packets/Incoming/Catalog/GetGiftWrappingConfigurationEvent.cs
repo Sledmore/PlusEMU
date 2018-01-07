@@ -5,9 +5,9 @@ namespace Plus.Communication.Packets.Incoming.Catalog
 {
     public class GetGiftWrappingConfigurationEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new GiftWrappingConfigurationComposer());
+            session.SendPacket(new GiftWrappingConfigurationComposer());
         }
     }
 }

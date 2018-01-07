@@ -3,48 +3,47 @@ using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Groups;
 using Plus.Communication.Packets.Outgoing.Groups;
 using Plus.Communication.Packets.Outgoing.Rooms.Permissions;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class TakeAdminRightsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int GroupId = Packet.PopInt();
-            int UserId = Packet.PopInt();
+            int groupId = packet.PopInt();
+            int userId = packet.PopInt();
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            if (Session.GetHabbo().Id != Group.CreatorId || !Group.IsMember(UserId))
+            if (session.GetHabbo().Id != group.CreatorId || !group.IsMember(userId))
                 return;
 
-            Habbo Habbo = PlusEnvironment.GetHabboById(UserId);
-            if (Habbo == null)
+            Habbo habbo = PlusEnvironment.GetHabboById(userId);
+            if (habbo == null)
             {
-                Session.SendNotification("Oops, an error occurred whilst finding this user.");
+                session.SendNotification("Oops, an error occurred whilst finding this user.");
                 return;
             }
 
-            Group.TakeAdmin(UserId);
+            group.TakeAdmin(userId);
 
-            Room Room = null;
-            if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room))
+            if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out Room room))
             {
-                RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(UserId);
-                if (User != null)
+                RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(userId);
+                if (user != null)
                 {
-                    if (User.Statusses.ContainsKey("flatctrl 3"))
-                        User.RemoveStatus("flatctrl 3");
-                    User.UpdateNeeded = true;
-                    if (User.GetClient() != null)
-                        User.GetClient().SendPacket(new YouAreControllerComposer(0));
+                    if (user.Statusses.ContainsKey("flatctrl 3"))
+                        user.RemoveStatus("flatctrl 3");
+                    user.UpdateNeeded = true;
+                    if (user.GetClient() != null)
+                        user.GetClient().SendPacket(new YouAreControllerComposer(0));
                 }
             }
 
-            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, Habbo, 2));
+            session.SendPacket(new GroupMemberUpdatedComposer(groupId, habbo, 2));
         }
     }
 }

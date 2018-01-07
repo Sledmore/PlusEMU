@@ -5,90 +5,88 @@ using Plus.Communication.Packets.Outgoing.Groups;
 using Plus.Communication.Packets.Outgoing.Rooms.Permissions;
 
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class UpdateGroupSettingsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int GroupId = Packet.PopInt();
+            int groupId = packet.PopInt();
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            if (Group.CreatorId != Session.GetHabbo().Id)
+            if (group.CreatorId != session.GetHabbo().Id)
                 return;
 
-            int Type = Packet.PopInt();
-            int FurniOptions = Packet.PopInt();
+            int type = packet.PopInt();
+            int furniOptions = packet.PopInt();
 
-            switch (Type)
+            switch (type)
             {
                 default:
-                case 0:
-                    Group.Type = GroupType.Open;
+                    group.Type = GroupType.Open;
                     break;
                 case 1:
-                    Group.Type = GroupType.Locked;
+                    group.Type = GroupType.Locked;
                     break;
                 case 2:
-                    Group.Type = GroupType.Private;
+                    group.Type = GroupType.Private;
                     break;
             }
 
-            if (Group.Type != GroupType.Locked)
+            if (group.Type != GroupType.Locked)
             {
-                if (Group.GetRequests.Count > 0)
+                if (group.GetRequests.Count > 0)
                 {
-                    foreach (int UserId in Group.GetRequests.ToList())
+                    foreach (int userId in group.GetRequests.ToList())
                     {
-                        Group.HandleRequest(UserId, false);
+                        group.HandleRequest(userId, false);
                     }
 
-                    Group.ClearRequests();
+                    group.ClearRequests();
                 }
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `groups` SET `state` = @GroupState, `admindeco` = @AdminDeco WHERE `id` = @groupId LIMIT 1");
-                dbClient.AddParameter("GroupState", (Group.Type == GroupType.Open ? 0 : Group.Type == GroupType.Locked ? 1 : 2).ToString());
-                dbClient.AddParameter("AdminDeco", (FurniOptions == 1 ? 1 : 0).ToString());
-                dbClient.AddParameter("groupId", Group.Id);
+                dbClient.AddParameter("GroupState", (group.Type == GroupType.Open ? 0 : group.Type == GroupType.Locked ? 1 : 2).ToString());
+                dbClient.AddParameter("AdminDeco", (furniOptions == 1 ? 1 : 0).ToString());
+                dbClient.AddParameter("groupId", group.Id);
                 dbClient.RunQuery();
             }
 
-            Group.AdminOnlyDeco = FurniOptions;
+            group.AdminOnlyDeco = furniOptions;
 
-            Room Room;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out Room room))
                 return;
 
-            foreach (RoomUser User in Room.GetRoomUserManager().GetRoomUsers().ToList())
+            foreach (RoomUser user in room.GetRoomUserManager().GetRoomUsers().ToList())
             {
-                if (Room.OwnerId == User.UserId || Group.IsAdmin(User.UserId) || !Group.IsMember(User.UserId))
+                if (room.OwnerId == user.UserId || group.IsAdmin(user.UserId) || !group.IsMember(user.UserId))
                     continue;
 
-                if (FurniOptions == 1)
+                if (furniOptions == 1)
                 {
-                    User.RemoveStatus("flatctrl 1");
-                    User.UpdateNeeded = true;
+                    user.RemoveStatus("flatctrl 1");
+                    user.UpdateNeeded = true;
 
-                    User.GetClient().SendPacket(new YouAreControllerComposer(0));
+                    user.GetClient().SendPacket(new YouAreControllerComposer(0));
                 }
-                else if (FurniOptions == 0 && !User.Statusses.ContainsKey("flatctrl 1"))
+                else if (furniOptions == 0 && !user.Statusses.ContainsKey("flatctrl 1"))
                 {
-                    User.SetStatus("flatctrl 1", "");
-                    User.UpdateNeeded = true;
+                    user.SetStatus("flatctrl 1", "");
+                    user.UpdateNeeded = true;
 
-                    User.GetClient().SendPacket(new YouAreControllerComposer(1));
+                    user.GetClient().SendPacket(new YouAreControllerComposer(1));
                 }
             }
 
-            Session.SendPacket(new GroupInfoComposer(Group, Session));
+            session.SendPacket(new GroupInfoComposer(group, session));
         }
     }
 }

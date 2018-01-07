@@ -1,5 +1,6 @@
 ﻿using System;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Groups;
 
 using Plus.HabboHotel.Rooms;
@@ -8,7 +9,7 @@ namespace Plus.Communication.Packets.Incoming.Groups
 {
     class DeleteGroupEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out Group group))
             {
@@ -31,7 +32,7 @@ namespace Plus.Communication.Packets.Incoming.Groups
             if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out Room room))
                 return;
             
-            if (!RoomFactory.TryGetData(group.RoomId, out RoomData data))
+            if (!RoomFactory.TryGetData(group.RoomId, out RoomData _))
                 return;
 
             room.Group = null;
@@ -55,7 +56,6 @@ namespace Plus.Communication.Packets.Incoming.Groups
 
             //Say hey!
             session.SendNotification("You have successfully deleted your group.");
-            return;
         }
     }
 }

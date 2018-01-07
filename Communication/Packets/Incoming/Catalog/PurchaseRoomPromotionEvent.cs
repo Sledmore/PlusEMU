@@ -9,55 +9,54 @@ namespace Plus.Communication.Packets.Incoming.Catalog
 {
     public class PurchaseRoomPromotionEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
-            int PageId = Packet.PopInt();
-            int ItemId = Packet.PopInt();
-            int RoomId = Packet.PopInt();
-            string Name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-            bool junk3 = Packet.PopBoolean();
-            string Desc = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-            int CategoryId = Packet.PopInt();
+            packet.PopInt(); //pageId
+            packet.PopInt(); //itemId
+            int roomId = packet.PopInt();
+            string name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            packet.PopBoolean(); //junk
+            string desc = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            int categoryId = packet.PopInt();
 
-            RoomData Data = null;
-            if (!RoomFactory.TryGetData(RoomId, out Data))
+            if (!RoomFactory.TryGetData(roomId, out RoomData data))
                 return;
 
-            if (Data.OwnerId != Session.GetHabbo().Id)
+            if (data.OwnerId != session.GetHabbo().Id)
                 return;
 
-            if (Data.Promotion == null)
-                Data.Promotion = new RoomPromotion(Name, Desc, CategoryId);
+            if (data.Promotion == null)
+                data.Promotion = new RoomPromotion(name, desc, categoryId);
             else
             {
-                Data.Promotion.Name = Name;
-                Data.Promotion.Description = Desc;
-                Data.Promotion.TimestampExpires += 7200;
+                data.Promotion.Name = name;
+                data.Promotion.Description = desc;
+                data.Promotion.TimestampExpires += 7200;
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("REPLACE INTO `room_promotions` (`room_id`,`title`,`description`,`timestamp_start`,`timestamp_expire`,`category_id`) VALUES (@room_id, @title, @description, @start, @expires, @CategoryId)");
-                dbClient.AddParameter("room_id", RoomId);
-                dbClient.AddParameter("title", Name);
-                dbClient.AddParameter("description", Desc);
-                dbClient.AddParameter("start", Data.Promotion.TimestampStarted);
-                dbClient.AddParameter("expires", Data.Promotion.TimestampExpires);
-                dbClient.AddParameter("CategoryId", CategoryId);
+                dbClient.AddParameter("room_id", roomId);
+                dbClient.AddParameter("title", name);
+                dbClient.AddParameter("description", desc);
+                dbClient.AddParameter("start", data.Promotion.TimestampStarted);
+                dbClient.AddParameter("expires", data.Promotion.TimestampExpires);
+                dbClient.AddParameter("CategoryId", categoryId);
                 dbClient.RunQuery();
             }
 
-            if (!Session.GetHabbo().GetBadgeComponent().HasBadge("RADZZ"))
-                Session.GetHabbo().GetBadgeComponent().GiveBadge("RADZZ", true, Session);
+            if (!session.GetHabbo().GetBadgeComponent().HasBadge("RADZZ"))
+                session.GetHabbo().GetBadgeComponent().GiveBadge("RADZZ", true, session);
 
-            Session.SendPacket(new PurchaseOKComposer());
-            if (Session.GetHabbo().InRoom && Session.GetHabbo().CurrentRoomId == RoomId)
-                Session.GetHabbo().CurrentRoom.SendPacket(new RoomEventComposer(Data, Data.Promotion));
+            session.SendPacket(new PurchaseOKComposer());
+            if (session.GetHabbo().InRoom && session.GetHabbo().CurrentRoomId == roomId)
+                session.GetHabbo().CurrentRoom.SendPacket(new RoomEventComposer(data, data.Promotion));
 
-            Session.GetHabbo().GetMessenger().BroadcastAchievement(Session.GetHabbo().Id, HabboHotel.Users.Messenger.MessengerEventTypes.EventStarted, Name);
+            session.GetHabbo().GetMessenger().BroadcastAchievement(session.GetHabbo().Id, HabboHotel.Users.Messenger.MessengerEventTypes.EventStarted, name);
         }
     }
 }
