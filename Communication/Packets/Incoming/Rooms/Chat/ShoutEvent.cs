@@ -1,6 +1,5 @@
 ﻿using System;
 using Plus.Communication.Packets.Outgoing.Rooms.Chat;
-using Plus.Core;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Quests;
 using Plus.HabboHotel.Rooms;

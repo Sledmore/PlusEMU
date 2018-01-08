@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Collections.Generic;
-
 using log4net;
-
-using Plus.Communication.Packets.Outgoing.Inventory.Furni;
-using Plus.Communication.Packets.Outgoing.Catalog;
-using Plus.HabboHotel.Items;
 using Plus.Communication.Packets.Outgoing.Handshake;
 using Plus.Database.Interfaces;
 

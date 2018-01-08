@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-
-using Plus.Communication.Packets.Incoming;
-using Plus.HabboHotel.GameClients;
+﻿using Plus.HabboHotel.GameClients;
 using Plus.Communication.Packets.Outgoing.Inventory.Purse;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Purse

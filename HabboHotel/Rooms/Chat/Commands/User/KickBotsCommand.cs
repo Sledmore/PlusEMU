@@ -1,13 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
-using System.Drawing;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms.AI;
-using Plus.HabboHotel.Rooms;
-using Plus.HabboHotel.GameClients;
-
 using Plus.HabboHotel.Users.Inventory.Bots;
 using Plus.Communication.Packets.Outgoing.Inventory.Bots;
 

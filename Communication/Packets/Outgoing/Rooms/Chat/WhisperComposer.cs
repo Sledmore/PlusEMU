@@ -1,6 +1,4 @@
-﻿using Plus.HabboHotel.Rooms;
-
-namespace Plus.Communication.Packets.Outgoing.Rooms.Chat
+﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Chat
 {
     public class WhisperComposer : ServerPacket
     {

@@ -1,6 +1,4 @@
-﻿using System;
-using Plus.Database.Interfaces;
-using Plus.HabboHotel.GameClients;
+﻿using Plus.HabboHotel.GameClients;
 using Plus.Communication.Packets.Outgoing.Handshake;
 
 namespace Plus.Communication.Packets.Incoming.Handshake

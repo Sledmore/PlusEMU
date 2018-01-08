@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.Communication.Packets.Incoming;
-using Plus.HabboHotel.Users;
+﻿using System.Collections.Generic;
 using Plus.HabboHotel.Navigator;
 using Plus.HabboHotel.GameClients;
 using Plus.Communication.Packets.Outgoing.Navigator;

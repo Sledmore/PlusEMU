@@ -4,78 +4,79 @@ using System.Collections.Generic;
 using Plus.HabboHotel.Groups;
 using Plus.Communication.Packets.Outgoing.Groups;
 using Plus.HabboHotel.Cache.Type;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class GetGroupMembersEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int GroupId = Packet.PopInt();
-            int Page = Packet.PopInt();
-            string SearchVal = Packet.PopString();
-            int RequestType = Packet.PopInt();
+            int groupId = packet.PopInt();
+            int page = packet.PopInt();
+            string searchVal = packet.PopString();
+            int requestType = packet.PopInt();
 
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            List<UserCache> Members = new List<UserCache>();
+            List<UserCache> members = new List<UserCache>();
 
-            switch (RequestType)
+            switch (requestType)
             {
                 case 0:
                     {
-                        List<int> MemberIds = Group.GetAllMembers;
-                        foreach (int Id in MemberIds.ToList())
+                        List<int> memberIds = group.GetAllMembers;
+                        foreach (int id in memberIds.ToList())
                         {
-                            UserCache GroupMember = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Id);
-                            if (GroupMember == null)
+                            UserCache groupMember = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(id);
+                            if (groupMember == null)
                                 continue;
 
-                            if (!Members.Contains(GroupMember))
-                                Members.Add(GroupMember);
+                            if (!members.Contains(groupMember))
+                                members.Add(groupMember);
                         }
                         break;
                     }
 
                 case 1:
                     {
-                        List<int> AdminIds = Group.GetAdministrators;
-                        foreach (int Id in AdminIds.ToList())
+                        List<int> adminIds = group.GetAdministrators;
+                        foreach (int id in adminIds.ToList())
                         {
-                            UserCache GroupMember = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Id);
-                            if (GroupMember == null)
+                            UserCache groupMember = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(id);
+                            if (groupMember == null)
                                 continue;
 
-                            if (!Members.Contains(GroupMember))
-                                Members.Add(GroupMember);
+                            if (!members.Contains(groupMember))
+                                members.Add(groupMember);
                         }
                         break;
                     }
 
                 case 2:
                     {
-                        List<int> RequestIds = Group.GetRequests;
-                        foreach (int Id in RequestIds.ToList())
+                        List<int> requestIds = group.GetRequests;
+                        foreach (int id in requestIds.ToList())
                         {
-                            UserCache GroupMember = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Id);
-                            if (GroupMember == null)
+                            UserCache groupMember = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(id);
+                            if (groupMember == null)
                                 continue;
 
-                            if (!Members.Contains(GroupMember))
-                                Members.Add(GroupMember);
+                            if (!members.Contains(groupMember))
+                                members.Add(groupMember);
                         }
                         break;
                     }
             }
 
-            if (!string.IsNullOrEmpty(SearchVal))
-                Members = Members.Where(x => x.Username.StartsWith(SearchVal)).ToList();
+            if (!string.IsNullOrEmpty(searchVal))
+                members = members.Where(x => x.Username.StartsWith(searchVal)).ToList();
 
-            int StartIndex = ((Page - 1) * 14 + 14);
-            int FinishIndex = Members.Count;
+            int startIndex = ((page - 1) * 14 + 14);
+            int finishIndex = members.Count;
 
-            Session.SendPacket(new GroupMembersComposer(Group, Members.Skip(StartIndex).Take(FinishIndex - StartIndex).ToList(), Members.Count, Page, (Group.CreatorId == Session.GetHabbo().Id || Group.IsAdmin(Session.GetHabbo().Id)), RequestType, SearchVal));
+            session.SendPacket(new GroupMembersComposer(group, members.Skip(startIndex).Take(finishIndex - startIndex).ToList(), members.Count, page, (group.CreatorId == session.GetHabbo().Id || group.IsAdmin(session.GetHabbo().Id)), requestType, searchVal));
         }
     }
 }

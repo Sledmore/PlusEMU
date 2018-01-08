@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
+﻿namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
 {
     class InitializeFloorPlanSessionEvent : IPacketEvent
     {

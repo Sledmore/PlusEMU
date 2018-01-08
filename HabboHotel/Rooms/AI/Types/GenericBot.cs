@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Drawing;
-using System.Collections.Generic;
-
-using Plus.Core;
-using Plus.HabboHotel.Rooms;
-using Plus.HabboHotel.Items;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms.AI.Speech;
-using Plus.Communication.Packets.Outgoing.Rooms.Chat;
-using Plus.HabboHotel.Rooms.AI.Responses;
 
 namespace Plus.HabboHotel.Rooms.AI.Types
 {

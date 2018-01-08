@@ -1,9 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Collections.Generic;
-using Plus.HabboHotel.Users.Clothing;
-
 using Plus.HabboHotel.Users.Clothing.Parts;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects

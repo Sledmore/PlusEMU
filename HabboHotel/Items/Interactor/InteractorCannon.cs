@@ -1,11 +1,4 @@
-﻿using Plus.Communication.Packets.Outgoing.Rooms.Notifications;
-using Plus.HabboHotel.Rooms;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Plus.HabboHotel.Rooms;
 
 namespace Plus.HabboHotel.Items.Interactor
 {

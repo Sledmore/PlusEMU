@@ -1,11 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Plus.HabboHotel.Items;
-using Plus.HabboHotel.Groups;
-using Plus.HabboHotel.Users;
 using Plus.HabboHotel.Catalog.Utilities;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.Furni

@@ -22,7 +22,7 @@ namespace Plus.Communication.Packets.Outgoing.Users
             WriteInteger(friendCount); // Friend Count
             WriteBoolean(habbo.Id != session.GetHabbo().Id && session.GetHabbo().GetMessenger().FriendshipExists(habbo.Id)); //  Is friend
             WriteBoolean(habbo.Id != session.GetHabbo().Id && !session.GetHabbo().GetMessenger().FriendshipExists(habbo.Id) && session.GetHabbo().GetMessenger().RequestExists(habbo.Id)); // Sent friend request
-            WriteBoolean((PlusEnvironment.GetGame().GetClientManager().GetClientByUserID(habbo.Id)) != null);
+            WriteBoolean((PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(habbo.Id)) != null);
 
             WriteInteger(groups.Count);
             foreach (Group group in groups)

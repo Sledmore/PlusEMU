@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
+﻿using System.Linq;
 using Plus.Communication.Packets.Outgoing.Inventory.Achievements;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Achievements
@@ -11,7 +7,7 @@ namespace Plus.Communication.Packets.Incoming.Inventory.Achievements
     {
         public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
         {
-            Session.SendPacket(new AchievementsComposer(Session, PlusEnvironment.GetGame().GetAchievementManager()._achievements.Values.ToList()));
+            Session.SendPacket(new AchievementsComposer(Session, PlusEnvironment.GetGame().GetAchievementManager().Achievements.Values.ToList()));
         }
     }
 }

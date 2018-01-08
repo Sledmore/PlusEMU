@@ -3,8 +3,6 @@ using System.Data;
 using System.Collections.Generic;
 
 using log4net;
-using Plus.Core;
-
 using Plus.Database.Interfaces;
 
 

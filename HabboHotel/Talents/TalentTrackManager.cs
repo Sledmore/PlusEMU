@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Data;
 using System.Collections.Generic;
 
 using log4net;
 using Plus.Database.Interfaces;
-
-using Plus.HabboHotel.Achievements;
 
 namespace Plus.HabboHotel.Talents
 {

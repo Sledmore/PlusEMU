@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
+﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
 {
     class RoomSettingsSavedComposer : ServerPacket
     {

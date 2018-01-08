@@ -1,6 +1,4 @@
-﻿using System;
-
-using Plus.Communication.Encryption;
+﻿using Plus.Communication.Encryption;
 using Plus.Communication.Packets.Outgoing.Handshake;
 
 namespace Plus.Communication.Packets.Incoming.Handshake

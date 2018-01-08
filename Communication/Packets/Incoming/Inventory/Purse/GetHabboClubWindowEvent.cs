@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.Communication.Packets.Incoming.Inventory.Purse
+﻿namespace Plus.Communication.Packets.Incoming.Inventory.Purse
 {
     class GetHabboClubWindowEvent : IPacketEvent
     {

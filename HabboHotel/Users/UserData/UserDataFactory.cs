@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Achievements;
-using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users.Authenticator;
 using Plus.HabboHotel.Users.Badges;
 using Plus.HabboHotel.Users.Messenger;

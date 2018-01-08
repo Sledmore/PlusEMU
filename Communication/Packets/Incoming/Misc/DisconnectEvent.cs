@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-namespace Plus.Communication.Packets.Incoming.Misc
+﻿namespace Plus.Communication.Packets.Incoming.Misc
 {
     class DisconnectEvent : IPacketEvent
     {

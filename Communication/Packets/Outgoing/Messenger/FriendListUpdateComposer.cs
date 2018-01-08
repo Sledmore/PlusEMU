@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
 using Plus.HabboHotel.GameClients;
-using Plus.HabboHotel.Users;
 using Plus.HabboHotel.Users.Relationships;
 using Plus.HabboHotel.Users.Messenger;
 

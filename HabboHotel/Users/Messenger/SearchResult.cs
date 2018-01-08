@@ -1,6 +1,4 @@
-﻿using Plus.Communication.Packets.Incoming;
-
-namespace Plus.HabboHotel.Users.Messenger
+﻿namespace Plus.HabboHotel.Users.Messenger
 {
     public struct SearchResult
     {

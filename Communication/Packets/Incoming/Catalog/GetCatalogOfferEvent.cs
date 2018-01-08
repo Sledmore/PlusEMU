@@ -1,37 +1,31 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Catalog;
+﻿using Plus.HabboHotel.Catalog;
 using Plus.Communication.Packets.Outgoing.Catalog;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Catalog
 {
     class GetCatalogOfferEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int OfferId = Packet.PopInt();
-            if (!PlusEnvironment.GetGame().GetCatalog().ItemOffers.ContainsKey(OfferId))
+            int offerId = packet.PopInt();
+            if (!PlusEnvironment.GetGame().GetCatalog().ItemOffers.ContainsKey(offerId))
                 return;
 
-            int PageId = PlusEnvironment.GetGame().GetCatalog().ItemOffers[OfferId];
+            int pageId = PlusEnvironment.GetGame().GetCatalog().ItemOffers[offerId];
 
-            CatalogPage Page;
-            if (!PlusEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out Page))
+            if (!PlusEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page))
                 return;
 
-            if (!Page.Enabled || !Page.Visible || Page.MinimumRank > Session.GetHabbo().Rank || (Page.MinimumVIP > Session.GetHabbo().VIPRank && Session.GetHabbo().Rank == 1))
+            if (!page.Enabled || !page.Visible || page.MinimumRank > session.GetHabbo().Rank || (page.MinimumVIP > session.GetHabbo().VIPRank && session.GetHabbo().Rank == 1))
                 return;
 
-            CatalogItem Item = null;
-            if (!Page.ItemOffers.ContainsKey(OfferId))
+            if (!page.ItemOffers.ContainsKey(offerId))
                 return;
 
-            Item = (CatalogItem)Page.ItemOffers[OfferId];
-            if (Item != null)
-                Session.SendPacket(new CatalogOfferComposer(Item));
+            var item = page.ItemOffers[offerId];
+            if (item != null)
+                session.SendPacket(new CatalogOfferComposer(item));
         }
     }
 }

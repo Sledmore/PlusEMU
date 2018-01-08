@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Rooms.Chat.Logs;
+﻿using Plus.HabboHotel.Rooms.Chat.Logs;
 using Plus.HabboHotel.Rooms.Chat.Filter;
 using Plus.HabboHotel.Rooms.Chat.Emotions;
 using Plus.HabboHotel.Rooms.Chat.Commands;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Plus.HabboHotel.Catalog;
-
-namespace Plus.Communication.Packets.Outgoing.Catalog
+﻿namespace Plus.Communication.Packets.Outgoing.Catalog
 {
     public class RecyclerRewardsComposer : ServerPacket
     {

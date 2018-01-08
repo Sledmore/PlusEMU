@@ -1,37 +1,39 @@
 ﻿using Plus.Communication.Packets.Outgoing.Catalog;
 using Plus.HabboHotel.GameClients;
-using Plus.Communication.Packets.Incoming;
 
 namespace Plus.Communication.Packets.Incoming.Catalog
 {
     public class CheckPetNameEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            string PetName = Packet.PopString();
+            string petName = packet.PopString();
 
-            if (PetName.Length < 2)
+            if (petName.Length < 2)
             {
-                Session.SendPacket(new CheckPetNameComposer(2, "2"));
-                return;
-            }
-            else if (PetName.Length > 15)
-            {
-                Session.SendPacket(new CheckPetNameComposer(1, "15"));
-                return;
-            }
-            else if (!PlusEnvironment.IsValidAlphaNumeric(PetName))
-            {
-                Session.SendPacket(new CheckPetNameComposer(3, ""));
-                return;
-            }
-            else if (PlusEnvironment.GetGame().GetChatManager().GetFilter().IsFiltered(PetName))
-            {
-                Session.SendPacket(new CheckPetNameComposer(4, ""));
+                session.SendPacket(new CheckPetNameComposer(2, "2"));
                 return;
             }
 
-            Session.SendPacket(new CheckPetNameComposer(0, ""));
+            if (petName.Length > 15)
+            {
+                session.SendPacket(new CheckPetNameComposer(1, "15"));
+                return;
+            }
+
+            if (!PlusEnvironment.IsValidAlphaNumeric(petName))
+            {
+                session.SendPacket(new CheckPetNameComposer(3, string.Empty));
+                return;
+            }
+
+            if (PlusEnvironment.GetGame().GetChatManager().GetFilter().IsFiltered(petName))
+            {
+                session.SendPacket(new CheckPetNameComposer(4, string.Empty));
+                return;
+            }
+
+            session.SendPacket(new CheckPetNameComposer(0, string.Empty));
         }
     }
 }

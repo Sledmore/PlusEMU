@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Data;
 using System.Collections.Generic;
 
@@ -8,7 +7,6 @@ using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Session;
 using Plus.Communication.Packets.Outgoing.Rooms.Notifications;
 using Plus.Database.Interfaces;
-using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
 {

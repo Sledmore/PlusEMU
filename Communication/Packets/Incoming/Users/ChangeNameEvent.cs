@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users;

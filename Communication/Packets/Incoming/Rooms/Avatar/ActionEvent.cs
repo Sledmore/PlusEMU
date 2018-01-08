@@ -2,7 +2,6 @@
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Quests;
 using Plus.HabboHotel.Rooms;
-using Plus.Communication.Packets.Incoming;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
 {

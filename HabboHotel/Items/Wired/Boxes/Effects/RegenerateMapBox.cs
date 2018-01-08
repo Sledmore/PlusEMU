@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Plus.HabboHotel.Rooms;
-using Plus.HabboHotel.Users;
 using Plus.Communication.Packets.Incoming;
 
 namespace Plus.HabboHotel.Items.Wired.Boxes.Effects

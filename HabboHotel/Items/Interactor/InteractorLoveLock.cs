@@ -1,5 +1,4 @@
-﻿using Plus.Communication.Packets.Outgoing;
-using Plus.Communication.Packets.Outgoing.Rooms.Furni.LoveLocks;
+﻿using Plus.Communication.Packets.Outgoing.Rooms.Furni.LoveLocks;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using System;

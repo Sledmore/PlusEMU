@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Data;
-using System.Collections.Generic;
-
-using Plus.Utilities;
 
 namespace Plus.Communication.Packets.Outgoing.Moderation
 {

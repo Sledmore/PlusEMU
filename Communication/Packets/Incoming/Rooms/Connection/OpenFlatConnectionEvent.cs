@@ -1,7 +1,4 @@
-﻿using System;
-
-using Plus.Communication.Packets.Incoming;
-using Plus.HabboHotel.GameClients;
+﻿using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Connection
 {

@@ -1,41 +1,41 @@
 ﻿using Plus.HabboHotel.Groups;
 using Plus.Database.Interfaces;
 using Plus.Communication.Packets.Outgoing.Groups;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class UpdateGroupBadgeEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int GroupId = Packet.PopInt();
+            int groupId = packet.PopInt();
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            if (Group.CreatorId != Session.GetHabbo().Id)
+            if (group.CreatorId != session.GetHabbo().Id)
                 return;
 
-            int Count = Packet.PopInt();
+            int count = packet.PopInt();
 
-            string Badge = "";
-            for (int i = 0; i < Count; i++)
+            string badge = "";
+            for (int i = 0; i < count; i++)
             {
-                Badge += BadgePartUtility.WorkBadgeParts(i == 0, Packet.PopInt().ToString(), Packet.PopInt().ToString(), Packet.PopInt().ToString());
+                badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
             }
 
-            Group.Badge = (string.IsNullOrWhiteSpace(Badge) ? "b05114s06114" : Badge);
+            group.Badge = (string.IsNullOrWhiteSpace(badge) ? "b05114s06114" : badge);
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `groups` SET `badge` = @badge WHERE `id` = @groupId LIMIT 1");
-                dbClient.AddParameter("badge", Group.Badge);
-                dbClient.AddParameter("groupId", Group.Id);
+                dbClient.AddParameter("badge", group.Badge);
+                dbClient.AddParameter("groupId", group.Id);
                 dbClient.RunQuery();
             }
 
-            Session.SendPacket(new GroupInfoComposer(Group, Session));
+            session.SendPacket(new GroupInfoComposer(group, session));
         }
     }
 }

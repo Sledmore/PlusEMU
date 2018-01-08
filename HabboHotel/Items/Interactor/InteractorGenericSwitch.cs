@@ -1,6 +1,5 @@
 ﻿using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Quests;
-using Plus.HabboHotel.Rooms;
 
 
 namespace Plus.HabboHotel.Items.Interactor
