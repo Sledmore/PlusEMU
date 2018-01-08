@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator.Fun
             get { return "Pull another user to you, with no limits!"; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

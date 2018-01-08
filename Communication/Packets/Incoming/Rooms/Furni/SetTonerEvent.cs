@@ -2,55 +2,54 @@
 using Plus.HabboHotel.Items;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class SetTonerEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session, true))
+            if (!room.CheckRights(session, true))
                 return;
 
-            if (Room.TonerData == null)
+            if (room.TonerData == null)
                 return;
 
-            Item Item = Room.GetRoomItemHandler().GetItem(Room.TonerData.ItemId);
+            Item item = room.GetRoomItemHandler().GetItem(room.TonerData.ItemId);
 
-            if (Item == null || Item.GetBaseItem().InteractionType != InteractionType.TONER)
+            if (item == null || item.GetBaseItem().InteractionType != InteractionType.TONER)
                 return;
 
-            int Id = Packet.PopInt();
-            int Int1 = Packet.PopInt();
-            int Int2 = Packet.PopInt();
-            int Int3 = Packet.PopInt();
+            packet.PopInt(); //id
+            int int1 = packet.PopInt();
+            int int2 = packet.PopInt();
+            int int3 = packet.PopInt();
 
-            if (Int1 > 255 || Int2 > 255 || Int3 > 255)
+            if (int1 > 255 || int2 > 255 || int3 > 255)
                 return;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `room_items_toner` SET `enabled` = '1', `data1` = @data1, `data2` = @data2, `data3` = @data3 WHERE `id` = @itemId LIMIT 1");
-                dbClient.AddParameter("itemId", Item.Id);
-                dbClient.AddParameter("data1", Int1);
-                dbClient.AddParameter("data3", Int3);
-                dbClient.AddParameter("data2", Int2);
+                dbClient.AddParameter("itemId", item.Id);
+                dbClient.AddParameter("data1", int1);
+                dbClient.AddParameter("data3", int3);
+                dbClient.AddParameter("data2", int2);
                 dbClient.RunQuery();
             }
 
-            Room.TonerData.Hue = Int1;
-            Room.TonerData.Saturation = Int2;
-            Room.TonerData.Lightness = Int3;
-            Room.TonerData.Enabled = 1;
+            room.TonerData.Hue = int1;
+            room.TonerData.Saturation = int2;
+            room.TonerData.Lightness = int3;
+            room.TonerData.Enabled = 1;
 
-            Room.SendPacket(new ObjectUpdateComposer(Item, Room.OwnerId));
-            Item.UpdateState();
+            room.SendPacket(new ObjectUpdateComposer(item, room.OwnerId));
+            item.UpdateState();
         }
     }
 }

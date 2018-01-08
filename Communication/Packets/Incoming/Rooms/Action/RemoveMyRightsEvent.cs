@@ -9,39 +9,38 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class RemoveMyRightsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session, false))
+            if (!room.CheckRights(session, false))
                 return;
             
-            if (Room.UsersWithRights.Contains(Session.GetHabbo().Id))
+            if (room.UsersWithRights.Contains(session.GetHabbo().Id))
             {
-                RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-                if (User != null && !User.IsBot)
+                RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+                if (user != null && !user.IsBot)
                 {
-                    User.RemoveStatus("flatctrl 1");
-                    User.UpdateNeeded = true;
+                    user.RemoveStatus("flatctrl 1");
+                    user.UpdateNeeded = true;
 
-                    User.GetClient().SendPacket(new YouAreNotControllerComposer());
+                    user.GetClient().SendPacket(new YouAreNotControllerComposer());
                 }
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dbClient.SetQuery("DELETE FROM `room_rights` WHERE `user_id` = @uid AND `room_id` = @rid LIMIT 1");
-                    dbClient.AddParameter("uid", Session.GetHabbo().Id);
-                    dbClient.AddParameter("rid", Room.Id);
+                    dbClient.AddParameter("uid", session.GetHabbo().Id);
+                    dbClient.AddParameter("rid", room.Id);
                     dbClient.RunQuery();
                 }
 
-                if (Room.UsersWithRights.Contains(Session.GetHabbo().Id))
-                    Room.UsersWithRights.Remove(Session.GetHabbo().Id);
+                if (room.UsersWithRights.Contains(session.GetHabbo().Id))
+                    room.UsersWithRights.Remove(session.GetHabbo().Id);
             }
         }
     }

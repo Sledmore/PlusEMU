@@ -24,10 +24,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
 
         public UserFurniCollision(Room instance, Item item)
         {
-            this.Instance = instance;
-            this.Item = item;
-            this.StringData = "";
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            Instance = instance;
+            Item = item;
+            StringData = "";
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket packet)

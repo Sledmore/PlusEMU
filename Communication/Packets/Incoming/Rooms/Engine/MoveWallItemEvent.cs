@@ -1,37 +1,37 @@
 ﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class MoveWallItemEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session))
+            if (!room.CheckRights(session))
                 return;
 
-            int itemID = Packet.PopInt();
-            string wallPositionData = Packet.PopString();
+            int itemId = packet.PopInt();
+            string wallPositionData = packet.PopString();
 
-            Item Item = Room.GetRoomItemHandler().GetItem(itemID);
+            Item item = room.GetRoomItemHandler().GetItem(itemId);
 
-            if (Item == null)
+            if (item == null)
                 return;
 
             try
             {
-                string WallPos = Room.GetRoomItemHandler().WallPositionCheck(":" + wallPositionData.Split(':')[1]);
-                Item.wallCoord = WallPos;
+                string wallPos = room.GetRoomItemHandler().WallPositionCheck(":" + wallPositionData.Split(':')[1]);
+                item.wallCoord = wallPos;
             }
             catch { return; }
 
-            Room.GetRoomItemHandler().UpdateItem(Item);
-            Room.SendPacket(new ItemUpdateComposer(Item, Room.OwnerId));
+            room.GetRoomItemHandler().UpdateItem(item);
+            room.SendPacket(new ItemUpdateComposer(item, room.OwnerId));
         }
     }
 }

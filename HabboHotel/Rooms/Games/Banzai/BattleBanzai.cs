@@ -27,11 +27,11 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
 
         public BattleBanzai(Room room)
         {
-            this._room = room;
+            _room = room;
             banzaiStarted = false;
             timestarted = 0;
-            this._pucks = new ConcurrentDictionary<int, Item>();
-            this._banzaiTiles = new ConcurrentDictionary<int, Item>();
+            _pucks = new ConcurrentDictionary<int, Item>();
+            _banzaiTiles = new ConcurrentDictionary<int, Item>();
         }
 
         public bool IsBanzaiActive
@@ -123,7 +123,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                         NewY = user.Y + 2;
                     }
 
-                    if (!this._room.GetRoomItemHandler().CheckPosItem(item, NewX, NewY, item.Rotation))
+                    if (!_room.GetRoomItemHandler().CheckPosItem(item, NewX, NewY, item.Rotation))
                     {
                         if (user.RotBody == 0)
                         {
@@ -215,7 +215,7 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                 tile.UpdateState();
             }
 
-            this.ResetTiles();
+            ResetTiles();
             banzaiStarted = true;
 
             _room.GetWired().TriggerEvent(WiredBoxType.TriggerGameStarts, null);
@@ -372,16 +372,16 @@ namespace Plus.HabboHotel.Rooms.Games.Banzai
                     {
                         user.LockedTilesCount++;
                         _room.GetGameManager().AddPointToTeam(item.team, 1);
-                        field.updateLocation(item.GetX, item.GetY, (byte)team);
-                        List<PointField> gfield = field.doUpdate();
+                        field.UpdateLocation(item.GetX, item.GetY, (byte)team);
+                        List<PointField> gfield = field.DoUpdate();
                         Team t;
                         foreach (PointField gameField in gfield)
                         {
-                            t = (Team)gameField.forValue;
-                            foreach (Point p in gameField.getPoints())
+                            t = (Team)gameField.ForValue;
+                            foreach (Point p in gameField.GetPoints())
                             {
                                 HandleMaxBanzaiTiles(new Point(p.X, p.Y), t);
-                                floorMap[p.Y, p.X] = gameField.forValue;
+                                floorMap[p.Y, p.X] = gameField.ForValue;
                             }
                         }
                     }

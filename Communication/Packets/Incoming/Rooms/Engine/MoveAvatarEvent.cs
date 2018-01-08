@@ -1,39 +1,40 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class MoveAvatarEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null || !User.CanWalk)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null || !user.CanWalk)
                 return;
 
-            int MoveX = Packet.PopInt();
-            int MoveY = Packet.PopInt();
+            int moveX = packet.PopInt();
+            int moveY = packet.PopInt();
 
-            if (MoveX == User.X && MoveY == User.Y)
+            if (moveX == user.X && moveY == user.Y)
                 return;
 
-            if (User.RidingHorse)
+            if (user.RidingHorse)
             {
-                RoomUser Horse = Room.GetRoomUserManager().GetRoomUserByVirtualId(User.HorseID);
-                if (Horse != null)
-                    Horse.MoveTo(MoveX, MoveY);
+                RoomUser horse = room.GetRoomUserManager().GetRoomUserByVirtualId(user.HorseID);
+                if (horse != null)
+                    horse.MoveTo(moveX, moveY);
             }
 
-            User.MoveTo(MoveX, MoveY);        
+            user.MoveTo(moveX, moveY);        
         }
     }
 }

@@ -11,16 +11,16 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
         public ModeratorUserRoomVisitsComposer(Habbo Data, Dictionary<double, RoomData> Visits)
             : base(ServerPacketHeader.ModeratorUserRoomVisitsMessageComposer)
         {
-            base.WriteInteger(Data.Id);
-            base.WriteString(Data.Username);
-            base.WriteInteger(Visits.Count);
+            WriteInteger(Data.Id);
+            WriteString(Data.Username);
+            WriteInteger(Visits.Count);
 
             foreach (KeyValuePair<double, RoomData> Visit in Visits)
             {
-                base.WriteInteger(Visit.Value.Id);
-                base.WriteString(Visit.Value.Name);
-                base.WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Hour);
-                base.WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Minute);
+                WriteInteger(Visit.Value.Id);
+                WriteString(Visit.Value.Name);
+                WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Hour);
+                WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Minute);
             }
         }
     }

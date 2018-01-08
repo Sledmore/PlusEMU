@@ -8,16 +8,16 @@ namespace Plus.Communication.Packets.Outgoing.Inventory.Achievements
         public BadgeDefinitionsComposer(Dictionary<string, Achievement> Achievements)
             : base(ServerPacketHeader.BadgeDefinitionsMessageComposer)
         {
-            base.WriteInteger(Achievements.Count);
+            WriteInteger(Achievements.Count);
 
             foreach (Achievement Achievement in Achievements.Values)
             {
-               base.WriteString(Achievement.GroupName.Replace("ACH_", ""));
-                base.WriteInteger(Achievement.Levels.Count);
+               WriteString(Achievement.GroupName.Replace("ACH_", ""));
+                WriteInteger(Achievement.Levels.Count);
                 foreach (AchievementLevel Level in Achievement.Levels.Values)
                 {
-                    base.WriteInteger(Level.Level);
-                    base.WriteInteger(Level.Requirement);
+                    WriteInteger(Level.Level);
+                    WriteInteger(Level.Requirement);
                 }
             }
         }

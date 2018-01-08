@@ -9,21 +9,21 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
         public RoomRightsListComposer(Room Instance)
             : base(ServerPacketHeader.RoomRightsListMessageComposer)
         {
-            base.WriteInteger(Instance.Id);
+            WriteInteger(Instance.Id);
 
-            base.WriteInteger(Instance.UsersWithRights.Count);
+            WriteInteger(Instance.UsersWithRights.Count);
             foreach (int Id in Instance.UsersWithRights.ToList())
             {
                 UserCache Data = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Id);
                 if (Data == null)
                 {
-                    base.WriteInteger(0);
-                    base.WriteString("Unknown Error");
+                    WriteInteger(0);
+                    WriteString("Unknown Error");
                 }
                 else
                 {
-                    base.WriteInteger(Data.Id);
-                    base.WriteString(Data.Username);
+                    WriteInteger(Data.Id);
+                    WriteString(Data.Username);
                 }
             }
         }

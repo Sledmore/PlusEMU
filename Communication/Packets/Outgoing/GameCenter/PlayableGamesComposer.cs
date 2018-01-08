@@ -5,8 +5,8 @@
         public PlayableGamesComposer(int GameID)
             : base(ServerPacketHeader.PlayableGamesMessageComposer)
         {
-            base.WriteInteger(GameID);
-            base.WriteInteger(0);
+            WriteInteger(GameID);
+            WriteInteger(0);
         }
     }
 }

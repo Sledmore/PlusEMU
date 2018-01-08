@@ -5,7 +5,7 @@
         public RecyclerRewardsComposer()
             : base(ServerPacketHeader.RecyclerRewardsMessageComposer)
         {
-            base.WriteInteger(0);// Count of items
+            WriteInteger(0);// Count of items
         }
     }
 }

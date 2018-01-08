@@ -19,7 +19,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
             get { return "Give a badge to the entire room!"; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

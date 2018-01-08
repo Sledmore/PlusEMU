@@ -13,36 +13,36 @@ namespace Plus.HabboHotel.Rooms.Chat.Logs
 
         public ChatlogManager()
         {
-            this._chatlogs = new List<ChatlogEntry>();
-            this._lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            _chatlogs = new List<ChatlogEntry>();
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         }
 
         public void StoreChatlog(ChatlogEntry Entry)
         {
-            this._lock.EnterUpgradeableReadLock();
+            _lock.EnterUpgradeableReadLock();
 
-            this._chatlogs.Add(Entry);
+            _chatlogs.Add(Entry);
 
-            this.OnChatlogStore();
+            OnChatlogStore();
 
-            this._lock.ExitUpgradeableReadLock();
+            _lock.ExitUpgradeableReadLock();
         }
 
         private void OnChatlogStore()
         {
-            if (this._chatlogs.Count >= FLUSH_ON_COUNT)
-                this.FlushAndSave();
+            if (_chatlogs.Count >= FLUSH_ON_COUNT)
+                FlushAndSave();
         }
 
         public void FlushAndSave()
         {
-            this._lock.EnterWriteLock();
+            _lock.EnterWriteLock();
 
-            if (this._chatlogs.Count > 0)
+            if (_chatlogs.Count > 0)
             {
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    foreach (ChatlogEntry Entry in this._chatlogs)
+                    foreach (ChatlogEntry Entry in _chatlogs)
                     {
                         dbClient.SetQuery("INSERT INTO chatlogs (`user_id`, `room_id`, `timestamp`, `message`) VALUES " + "(@uid, @rid, @time, @msg)");
                         dbClient.AddParameter("uid", Entry.PlayerId);
@@ -54,8 +54,8 @@ namespace Plus.HabboHotel.Rooms.Chat.Logs
                 }
             }
 
-            this._chatlogs.Clear();
-            this._lock.ExitWriteLock();
+            _chatlogs.Clear();
+            _lock.ExitWriteLock();
         }
     }
 }

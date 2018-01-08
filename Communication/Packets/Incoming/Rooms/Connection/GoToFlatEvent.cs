@@ -5,13 +5,13 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Connection
 {
     class GoToFlatEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            if (!Session.GetHabbo().EnterRoom(Session.GetHabbo().CurrentRoom))
-                Session.SendPacket(new CloseConnectionComposer());
+            if (!session.GetHabbo().EnterRoom(session.GetHabbo().CurrentRoom))
+                session.SendPacket(new CloseConnectionComposer());
         }
     }
 }

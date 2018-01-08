@@ -11,16 +11,16 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
         public ModeratorRoomChatlogComposer(Room room, ICollection<ChatlogEntry> chats)
             : base(ServerPacketHeader.ModeratorRoomChatlogMessageComposer)
         {
-            base.WriteByte(1);
-            base.WriteShort(2);//Count
-            base.WriteString("roomName");
-            base.WriteByte(2);
-            base.WriteString(room.Name);
-            base.WriteString("roomId");
-            base.WriteByte(1);
-            base.WriteInteger(room.Id);
+            WriteByte(1);
+            WriteShort(2);//Count
+            WriteString("roomName");
+            WriteByte(2);
+            WriteString(room.Name);
+            WriteString("roomId");
+            WriteByte(1);
+            WriteInteger(room.Id);
 
-            base.WriteShort(chats.Count);
+            WriteShort(chats.Count);
             foreach (ChatlogEntry Entry in chats)
             {
                 string Username = "Unknown";
@@ -29,11 +29,11 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
                     Username = Entry.PlayerNullable().Username;
                 }
 
-                base.WriteString(UnixTimestamp.FromUnixTimestamp(Entry.Timestamp).ToShortTimeString()); // time?
-                base.WriteInteger(Entry.PlayerId); // User Id
-                base.WriteString(Username); // Username
-                base.WriteString(!string.IsNullOrEmpty(Entry.Message) ? Entry.Message : "** user sent a blank message **"); // Message        
-                base.WriteBoolean(false); //TODO, AI's?
+                WriteString(UnixTimestamp.FromUnixTimestamp(Entry.Timestamp).ToShortTimeString()); // time?
+                WriteInteger(Entry.PlayerId); // User Id
+                WriteString(Username); // Username
+                WriteString(!string.IsNullOrEmpty(Entry.Message) ? Entry.Message : "** user sent a blank message **"); // Message        
+                WriteBoolean(false); //TODO, AI's?
             }
         }
     }

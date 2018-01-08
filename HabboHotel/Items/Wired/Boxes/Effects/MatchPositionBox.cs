@@ -23,7 +23,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 
         public bool BoolData { get; set; }
 
-        public int Delay { get { return this._delay; } set { this._delay = value; this.TickCount = value + 1; } }
+        public int Delay { get { return _delay; } set { _delay = value; TickCount = value + 1; } }
 
         public int TickCount { get; set; }
 
@@ -34,15 +34,15 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
-            this.TickCount = Delay;
-            this.Requested = false;
+            SetItems = new ConcurrentDictionary<int, Item>();
+            TickCount = Delay;
+            Requested = false;
         }
 
         public void HandleSave(ClientPacket Packet)
         {
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int Unknown = Packet.PopInt();
             int State = Packet.PopInt();
@@ -58,7 +58,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     SetItems.TryAdd(SelectedItem.Id, SelectedItem);
             }
 
-            this.StringData = State + ";" + Direction + ";" + Placement;
+            StringData = State + ";" + Direction + ";" + Placement;
 
             int Delay = Packet.PopInt();
             this.Delay = Delay;
@@ -68,23 +68,23 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             if (!Requested)
             {
-                this.TickCount = this.Delay;
-                this.Requested = true;
+                TickCount = Delay;
+                Requested = true;
             }
             return true;
         }
 
         public bool OnCycle()
         {
-            if (!this.Requested || String.IsNullOrEmpty(this.StringData) || this.StringData == "0;0;0" || this.SetItems.Count == 0)
+            if (!Requested || String.IsNullOrEmpty(StringData) || StringData == "0;0;0" || SetItems.Count == 0)
                 return false;
 
-            foreach (Item item in this.SetItems.Values.ToList())
+            foreach (Item item in SetItems.Values.ToList())
             {
                 if (Instance.GetRoomItemHandler().GetFloor == null && !Instance.GetRoomItemHandler().GetFloor.Contains(item))
                     continue;
 
-                foreach (string I in this.ItemsData.Split(';'))
+                foreach (string I in ItemsData.Split(';'))
                 {
                     if (string.IsNullOrEmpty(I))
                         continue;
@@ -106,32 +106,32 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 
                     try
                     {
-                        if (int.Parse(this.StringData.Split(';')[0]) == 1)//State
+                        if (int.Parse(StringData.Split(';')[0]) == 1)//State
                         {
                             if (part.Count() >= 4)
-                                this.SetState(II, part[4].ToString());
+                                SetState(II, part[4].ToString());
                             else
-                                this.SetState(II, "1");
+                                SetState(II, "1");
                         }
                     }
                     catch (Exception e) { ExceptionLogger.LogWiredException(e); }
 
                     try
                     {
-                        if (int.Parse(this.StringData.Split(';')[1]) == 1)//Direction
-                            this.SetRotation(II, Convert.ToInt32(part[3]));
+                        if (int.Parse(StringData.Split(';')[1]) == 1)//Direction
+                            SetRotation(II, Convert.ToInt32(part[3]));
                     }
                     catch (Exception e) { ExceptionLogger.LogWiredException(e); }
 
                     try
                     {
-                        if (int.Parse(this.StringData.Split(';')[2]) == 1)//Position
-                            this.SetPosition(II, Convert.ToInt32(part[0].ToString()), Convert.ToInt32(part[1].ToString()), Convert.ToDouble(part[2].ToString()));
+                        if (int.Parse(StringData.Split(';')[2]) == 1)//Position
+                            SetPosition(II, Convert.ToInt32(part[0].ToString()), Convert.ToInt32(part[1].ToString()), Convert.ToDouble(part[2].ToString()));
                     }
                     catch (Exception e) { ExceptionLogger.LogWiredException(e); }
                 }
             }
-            this.Requested = false;
+            Requested = false;
             return true;
         }
 

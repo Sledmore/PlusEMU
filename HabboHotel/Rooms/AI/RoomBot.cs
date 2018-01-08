@@ -141,8 +141,8 @@ namespace Plus.HabboHotel.Rooms.AI
 
         public int ChatBubble
         {
-            get { return this._chatBubble; }
-            set { this._chatBubble = value; }
+            get { return _chatBubble; }
+            set { _chatBubble = value; }
         }
     }
 }

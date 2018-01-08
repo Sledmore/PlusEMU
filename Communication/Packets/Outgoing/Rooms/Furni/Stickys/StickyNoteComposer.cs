@@ -5,8 +5,8 @@
         public StickyNoteComposer(string ItemId, string Extradata)
             : base(ServerPacketHeader.StickyNoteMessageComposer)
         {
-           base.WriteString(ItemId);
-           base.WriteString(Extradata);
+           WriteString(ItemId);
+           WriteString(Extradata);
         }
     }
 }

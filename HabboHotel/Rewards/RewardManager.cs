@@ -90,7 +90,7 @@ namespace Plus.HabboHotel.Rewards
                 int Id = Entry.Key;
                 Reward Reward = Entry.Value;
 
-                if (this.HasReward(Session.GetHabbo().Id, Id))
+                if (HasReward(Session.GetHabbo().Id, Id))
                     continue;
 
                 if (Reward.Active)
@@ -129,7 +129,7 @@ namespace Plus.HabboHotel.Rewards
                     if (!String.IsNullOrEmpty(Reward.Message))
                         Session.SendNotification(Reward.Message);
 
-                    this.LogReward(Session.GetHabbo().Id, Id);
+                    LogReward(Session.GetHabbo().Id, Id);
                 }
                 else
                     continue;

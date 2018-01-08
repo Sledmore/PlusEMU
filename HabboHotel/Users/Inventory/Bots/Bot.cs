@@ -21,38 +21,38 @@
 
         public int Id
         {
-            get { return this._id; }
-            set { this._id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         public int OwnerId
         {
-            get { return this._ownerId; }
-            set { this._ownerId = value; }
+            get { return _ownerId; }
+            set { _ownerId = value; }
         }
 
         public string Name
         {
-            get { return this._name; }
-            set { this._name = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
         public string Motto
         {
-            get { return this._motto; }
-            set { this._motto = value; }
+            get { return _motto; }
+            set { _motto = value; }
         }
 
         public string Figure
         {
-            get { return this._figure; }
-            set { this._figure = value; }
+            get { return _figure; }
+            set { _figure = value; }
         }
 
         public string Gender
         {
-            get { return this._gender; }
-            set { this._gender = value; }
+            get { return _gender; }
+            set { _gender = value; }
         }
     }
 }

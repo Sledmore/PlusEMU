@@ -8,35 +8,34 @@ namespace Plus.Communication.Packets.Incoming.Navigator
     {
         public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            string Category = packet.PopString();
-            string Search = packet.PopString();
+            string category = packet.PopString();
+            string search = packet.PopString();
 
-            ICollection<SearchResultList> Categories = new List<SearchResultList>();
+            ICollection<SearchResultList> categories = new List<SearchResultList>();
 
-            if (!string.IsNullOrEmpty(Search))
+            if (!string.IsNullOrEmpty(search))
             {
-                SearchResultList QueryResult = null;
-                if (PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(0, out QueryResult))
+                if (PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(0, out SearchResultList queryResult))
                 {
-                    Categories.Add(QueryResult);
+                    categories.Add(queryResult);
                 }
             }
             else
             {
-                Categories = PlusEnvironment.GetGame().GetNavigator().GetCategorysForSearch(Category);
-                if (Categories.Count == 0)
+                categories = PlusEnvironment.GetGame().GetNavigator().GetCategorysForSearch(category);
+                if (categories.Count == 0)
                 {
                     //Are we going in deep?!
-                    Categories = PlusEnvironment.GetGame().GetNavigator().GetResultByIdentifier(Category);
-                    if (Categories.Count > 0)
+                    categories = PlusEnvironment.GetGame().GetNavigator().GetResultByIdentifier(category);
+                    if (categories.Count > 0)
                     {
-                        session.SendPacket(new NavigatorSearchResultSetComposer(Category, Search, Categories, session, 2, 100));
+                        session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session, 2, 100));
                         return;
                     }
                 }
             }
 
-            session.SendPacket(new NavigatorSearchResultSetComposer(Category, Search, Categories, session));
+            session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session));
         }
     }
 }

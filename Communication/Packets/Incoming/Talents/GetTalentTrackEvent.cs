@@ -2,18 +2,19 @@
 
 using Plus.HabboHotel.Talents;
 using Plus.Communication.Packets.Outgoing.Talents;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Talents
 {
     class GetTalentTrackEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            string Type = Packet.PopString();
+            string type = packet.PopString();
 
-            ICollection<TalentTrackLevel> Levels = PlusEnvironment.GetGame().GetTalentTrackManager().GetLevels();
+            ICollection<TalentTrackLevel> levels = PlusEnvironment.GetGame().GetTalentTrackManager().GetLevels();
 
-            Session.SendPacket(new TalentTrackComposer(Levels, Type));
+            session.SendPacket(new TalentTrackComposer(levels, type));
         }
     }
 }

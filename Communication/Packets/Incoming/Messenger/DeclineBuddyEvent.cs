@@ -2,21 +2,21 @@
 {
     class DeclineBuddyEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null)
                 return;
 
-            bool DeclineAll = Packet.PopBoolean();
-            int Amount = Packet.PopInt();
+            bool declineAll = packet.PopBoolean();
+            packet.PopInt(); //amount
          
-            if (!DeclineAll)
+            if (!declineAll)
             {
-                int RequestId = Packet.PopInt();
-                Session.GetHabbo().GetMessenger().HandleRequest(RequestId);
+                int requestId = packet.PopInt();
+                session.GetHabbo().GetMessenger().HandleRequest(requestId);
             }
             else
-                Session.GetHabbo().GetMessenger().HandleAllRequests();          
+                session.GetHabbo().GetMessenger().HandleAllRequests();          
         }
     }
 }

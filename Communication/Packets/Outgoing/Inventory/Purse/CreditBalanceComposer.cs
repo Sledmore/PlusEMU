@@ -5,7 +5,7 @@
         public CreditBalanceComposer(int creditsBalance)
             : base(ServerPacketHeader.CreditBalanceMessageComposer)
         {
-           base.WriteString(creditsBalance + ".0");
+           WriteString(creditsBalance + ".0");
         }
     }
 }

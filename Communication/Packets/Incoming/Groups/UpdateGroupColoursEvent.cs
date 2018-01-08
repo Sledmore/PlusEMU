@@ -6,49 +6,49 @@ using Plus.Communication.Packets.Outgoing.Groups;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Groups
 {
     class UpdateGroupColoursEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int GroupId = Packet.PopInt();
-            int Colour1 = Packet.PopInt();
-            int Colour2 = Packet.PopInt();
+            int groupId = packet.PopInt();
+            int mainColour = packet.PopInt();
+            int secondaryColour = packet.PopInt();
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
-          
-            if (Group.CreatorId != Session.GetHabbo().Id)
+
+            if (group.CreatorId != session.GetHabbo().Id)
                 return;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `groups` SET `colour1` = @colour1, `colour2` = @colour2 WHERE `id` = @groupId LIMIT 1");
-                dbClient.AddParameter("colour1", Colour1);
-                dbClient.AddParameter("colour2", Colour2);
-                dbClient.AddParameter("groupId", Group.Id);
+                dbClient.AddParameter("colour1", mainColour);
+                dbClient.AddParameter("colour2", secondaryColour);
+                dbClient.AddParameter("groupId", group.Id);
                 dbClient.RunQuery();
             }
 
-            Group.Colour1 = Colour1;
-            Group.Colour2 = Colour2;
+            group.Colour1 = mainColour;
+            group.Colour2 = secondaryColour;
 
-            Session.SendPacket(new GroupInfoComposer(Group, Session));
-            if (Session.GetHabbo().CurrentRoom != null)
+            session.SendPacket(new GroupInfoComposer(group, session));
+            if (session.GetHabbo().CurrentRoom != null)
             {
-                foreach (Item Item in Session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetFloor.ToList())
+                foreach (Item item in session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetFloor.ToList())
                 {
-                    if (Item == null || Item.GetBaseItem() == null)
+                    if (item == null || item.GetBaseItem() == null)
                         continue;
 
-                    if (Item.GetBaseItem().InteractionType != InteractionType.GUILD_ITEM && Item.GetBaseItem().InteractionType != InteractionType.GUILD_GATE || Item.GetBaseItem().InteractionType != InteractionType.GUILD_FORUM)
+                    if (item.GetBaseItem().InteractionType != InteractionType.GUILD_ITEM && item.GetBaseItem().InteractionType != InteractionType.GUILD_GATE || item.GetBaseItem().InteractionType != InteractionType.GUILD_FORUM)
                         continue;
 
-                    Session.GetHabbo().CurrentRoom.SendPacket(new ObjectUpdateComposer(Item, Convert.ToInt32(Item.UserID)));
+                    session.GetHabbo().CurrentRoom.SendPacket(new ObjectUpdateComposer(item, Convert.ToInt32(item.UserID)));
                 }
             }
         }

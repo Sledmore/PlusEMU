@@ -6,20 +6,20 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Chat
 {
     public class StartTypingEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Username);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Username);
+            if (user == null)
                 return;
 
-            Session.GetHabbo().CurrentRoom.SendPacket(new UserTypingComposer(User.VirtualId, true));
+            session.GetHabbo().CurrentRoom.SendPacket(new UserTypingComposer(user.VirtualId, true));
         }
     }
 }

@@ -5,10 +5,10 @@
         public VideoOffersRewardsComposer(int Id, string Type, string Message)
             : base(ServerPacketHeader.VideoOffersRewardsMessageComposer)
         {
-            base.WriteString(Type);
-            base.WriteInteger(Id);
-            base.WriteString(Message);
-            base.WriteString("");
+            WriteString(Type);
+            WriteInteger(Id);
+            WriteString(Message);
+            WriteString("");
         }
     }
 }

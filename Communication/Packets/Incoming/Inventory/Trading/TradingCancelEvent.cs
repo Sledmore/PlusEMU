@@ -1,32 +1,32 @@
 ﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Rooms.Trading;
 using Plus.Communication.Packets.Outgoing.Inventory.Trading;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Trading
 {
     class TradingCancelEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            RoomUser RoomUser = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (RoomUser == null)
+            RoomUser roomUser = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (roomUser == null)
                 return;
 
-            Trade Trade = null;
-            if (!Room.GetTrading().TryGetTrade(RoomUser.TradeId, out Trade))
+            if (!room.GetTrading().TryGetTrade(roomUser.TradeId, out Trade trade))
             {
-                Session.SendPacket(new TradingClosedComposer(Session.GetHabbo().Id));
+                session.SendPacket(new TradingClosedComposer(session.GetHabbo().Id));
                 return;
             }
 
-            Trade.EndTrade(Session.GetHabbo().Id);
+            trade.EndTrade(session.GetHabbo().Id);
         }
     }
 }

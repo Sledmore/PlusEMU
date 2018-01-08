@@ -27,13 +27,13 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
         {
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int Unknown = Packet.PopInt();
             int State = Packet.PopInt();
@@ -49,7 +49,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
                     SetItems.TryAdd(SelectedItem.Id, SelectedItem);
             }
 
-            this.StringData = State + ";" + Direction + ";" + Placement;
+            StringData = State + ";" + Direction + ";" + Placement;
         }
 
         public bool Execute(params object[] Params)
@@ -57,15 +57,15 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             if (Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData) || this.StringData == "0;0;0" || this.SetItems.Count == 0)
+            if (String.IsNullOrEmpty(StringData) || StringData == "0;0;0" || SetItems.Count == 0)
                 return false;
 
-            foreach (Item Item in this.SetItems.Values.ToList())
+            foreach (Item Item in SetItems.Values.ToList())
             {
                 if (!Instance.GetRoomItemHandler().GetFloor.Contains(Item))
                     continue;
 
-                foreach (String I in this.ItemsData.Split(';'))
+                foreach (String I in ItemsData.Split(';'))
                 {
                     if (String.IsNullOrEmpty(I))
                         continue;
@@ -77,19 +77,19 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
                     string[] partsString = I.Split(':');
                     string[] part = partsString[1].Split(',');
 
-                    if (int.Parse(this.StringData.Split(';')[0]) == 1)//State
+                    if (int.Parse(StringData.Split(';')[0]) == 1)//State
                     {
                         if (II.ExtraData == part[4].ToString())
                             return false;
                     }
 
-                    if (int.Parse(this.StringData.Split(';')[1]) == 1)//Direction
+                    if (int.Parse(StringData.Split(';')[1]) == 1)//Direction
                     {
                         if (II.Rotation == Convert.ToInt32(part[3]))
                             return false;
                     }
 
-                    if (int.Parse(this.StringData.Split(';')[2]) == 1)//Position
+                    if (int.Parse(StringData.Split(';')[2]) == 1)//Position
                     {
                         if (II.GetX == Convert.ToInt32(part[0]) && II.GetY == Convert.ToInt32(part[1]) && II.GetZ == Convert.ToDouble(part[2]))
                             return false;

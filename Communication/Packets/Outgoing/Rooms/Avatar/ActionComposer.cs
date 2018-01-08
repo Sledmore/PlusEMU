@@ -5,8 +5,8 @@
         public ActionComposer(int VirtualId, int Action)
             : base(ServerPacketHeader.ActionMessageComposer)
         {
-            base.WriteInteger(VirtualId);
-            base.WriteInteger(Action);
+            WriteInteger(VirtualId);
+            WriteInteger(Action);
         }
     }
 }

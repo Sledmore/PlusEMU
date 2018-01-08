@@ -106,7 +106,6 @@ namespace Plus.Communication.Packets.Incoming.Catalog
             switch (randomNumber)
             {
                 default:
-                case 1:
                     return "5 0 -1 0 4 402 5 3 301 4 1 101 2 2 201 3";
                 case 2:
                     return "5 0 -1 0 1 102 13 3 301 4 4 401 5 2 201 3";

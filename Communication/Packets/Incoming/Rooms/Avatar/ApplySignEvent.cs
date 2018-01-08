@@ -1,28 +1,27 @@
 ﻿using Plus.HabboHotel.Rooms;
 using System;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
 {
     class ApplySignEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int SignId = Packet.PopInt();
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            int signId = packet.PopInt();
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null)
                 return;
 
 
-            User.UnIdle();
+            user.UnIdle();
 
-            User.SetStatus("sign", Convert.ToString(SignId));
-            User.UpdateNeeded = true;
-            User.SignTime = PlusEnvironment.GetUnixTimestamp() + 5;
+            user.SetStatus("sign", Convert.ToString(signId));
+            user.UpdateNeeded = true;
+            user.SignTime = PlusEnvironment.GetUnixTimestamp() + 5;
         }
     }
 }

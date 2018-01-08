@@ -7,27 +7,27 @@
         {
             bool IsItem = ItemId > 0;
 
-            base.WriteInteger(FromX);
-            base.WriteInteger(FromY);
-            base.WriteInteger(ToX);
-            base.WriteInteger(ToY);
-            base.WriteInteger(IsItem ? 1 : 0);
+            WriteInteger(FromX);
+            WriteInteger(FromY);
+            WriteInteger(ToX);
+            WriteInteger(ToY);
+            WriteInteger(IsItem ? 1 : 0);
 
             if (IsItem)
-                base.WriteInteger(ItemId);
+                WriteInteger(ItemId);
             else
             {
-                base.WriteInteger(RollerId);
-                base.WriteInteger(2);
-                base.WriteInteger(AvatarId);
+                WriteInteger(RollerId);
+                WriteInteger(2);
+                WriteInteger(AvatarId);
             }
 
-            base.WriteDouble(FromZ);
-            base.WriteDouble(ToZ);
+            WriteDouble(FromZ);
+            WriteDouble(ToZ);
 
             if (IsItem)
             {
-                base.WriteInteger(RollerId);
+                WriteInteger(RollerId);
             }
         }
     }

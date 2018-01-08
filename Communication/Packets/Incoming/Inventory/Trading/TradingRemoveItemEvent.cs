@@ -2,50 +2,50 @@
 using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Rooms.Trading;
 using Plus.Communication.Packets.Outgoing.Inventory.Trading;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Trading
 {
     class TradingRemoveItemEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            RoomUser RoomUser = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (RoomUser == null)
+            RoomUser roomUser = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (roomUser == null)
                 return;
 
-            int ItemId = Packet.PopInt();
+            int itemId = packet.PopInt();
 
-            Trade Trade = null;
-            if (!Room.GetTrading().TryGetTrade(RoomUser.TradeId, out Trade))
+            if (!room.GetTrading().TryGetTrade(roomUser.TradeId, out Trade trade))
             {
-                Session.SendPacket(new TradingClosedComposer(Session.GetHabbo().Id));
+                session.SendPacket(new TradingClosedComposer(session.GetHabbo().Id));
                 return;
             }
 
-            Item Item = Session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
-            if (Item == null)
+            Item item = session.GetHabbo().GetInventoryComponent().GetItem(itemId);
+            if (item == null)
                 return;
 
-            if (!Trade.CanChange)
+            if (!trade.CanChange)
                 return;
 
-            TradeUser User = Trade.Users[0];
-            if (User.RoomUser != RoomUser)
-                User = Trade.Users[1];
+            TradeUser user = trade.Users[0];
+            if (user.RoomUser != roomUser)
+                user = trade.Users[1];
 
-            if (!User.OfferedItems.ContainsKey(Item.Id))
+            if (!user.OfferedItems.ContainsKey(item.Id))
                 return;
 
-            Trade.RemoveAccepted();
-            User.OfferedItems.Remove(Item.Id);
-            Trade.SendPacket(new TradingUpdateComposer(Trade));
+            trade.RemoveAccepted();
+            user.OfferedItems.Remove(item.Id);
+            trade.SendPacket(new TradingUpdateComposer(trade));
         }
     }
 }

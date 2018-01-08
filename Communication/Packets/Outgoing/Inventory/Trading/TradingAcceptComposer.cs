@@ -5,8 +5,8 @@
         public TradingAcceptComposer(int UserId, bool Accept)
             : base(ServerPacketHeader.TradingAcceptMessageComposer)
         {
-            base.WriteInteger(UserId);
-            base.WriteInteger(Accept ? 1 : 0);
+            WriteInteger(UserId);
+            WriteInteger(Accept ? 1 : 0);
         }
     }
 }

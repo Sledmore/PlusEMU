@@ -1,32 +1,36 @@
-﻿using System;
-using Plus.Communication.Packets.Outgoing.LandingView;
+﻿using Plus.Communication.Packets.Outgoing.LandingView;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.LandingView
 {
     class RefreshCampaignEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             try
             {
-                String parseCampaings = Packet.PopString();
+                string parseCampaings = packet.PopString();
                 if (parseCampaings.Contains("gamesmaker"))
                     return;
 
-                String campaingName = "";
-                String[] parser = parseCampaings.Split(';');
+                string campaingName = "";
+                string[] parser = parseCampaings.Split(';');
 
-                for (int i = 0; i < parser.Length; i++)
+                foreach (var value in parser)
                 {
-                    if (String.IsNullOrEmpty(parser[i]) || parser[i].EndsWith(","))
+                    if (string.IsNullOrEmpty(value) || value.EndsWith(","))
                         continue;
 
-                    String[] data = parser[i].Split(',');
+                    string[] data = value.Split(',');
                     campaingName = data[1];
                 }
-                Session.SendPacket(new CampaignComposer(parseCampaings, campaingName));
+
+                session.SendPacket(new CampaignComposer(parseCampaings, campaingName));
             }
-            catch {  }
+            catch
+            {
+                //ignored
+            }
         }
     }
 }

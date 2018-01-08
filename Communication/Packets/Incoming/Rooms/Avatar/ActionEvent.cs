@@ -7,37 +7,36 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
 {
     public class ActionEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            int Action = Packet.PopInt();
+            int action = packet.PopInt();
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null)
                 return;
 
-            if (User.DanceId > 0)
-                User.DanceId = 0;
+            if (user.DanceId > 0)
+                user.DanceId = 0;
 
-            if (Session.GetHabbo().Effects().CurrentEffect > 0)
-                Room.SendPacket(new AvatarEffectComposer(User.VirtualId, 0));
+            if (session.GetHabbo().Effects().CurrentEffect > 0)
+                room.SendPacket(new AvatarEffectComposer(user.VirtualId, 0));
 
-            User.UnIdle();
-            Room.SendPacket(new ActionComposer(User.VirtualId, Action));
+            user.UnIdle();
+            room.SendPacket(new ActionComposer(user.VirtualId, action));
 
-            if (Action == 5) // idle
+            if (action == 5) // idle
             {
-                User.IsAsleep = true;
-                Room.SendPacket(new SleepComposer(User, true));
+                user.IsAsleep = true;
+                room.SendPacket(new SleepComposer(user, true));
             }
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialWave);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialWave);
         }
     }
 }

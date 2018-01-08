@@ -9,14 +9,14 @@ namespace Plus.Communication.Packets.Outgoing.Inventory.Bots
         public BotInventoryComposer(ICollection<Bot> Bots)
             : base(ServerPacketHeader.BotInventoryMessageComposer)
         {
-            base.WriteInteger(Bots.Count);
+            WriteInteger(Bots.Count);
             foreach (Bot Bot in Bots.ToList())
             {
-                base.WriteInteger(Bot.Id);
-               base.WriteString(Bot.Name);
-               base.WriteString(Bot.Motto);
-               base.WriteString(Bot.Gender);
-               base.WriteString(Bot.Figure);
+                WriteInteger(Bot.Id);
+               WriteString(Bot.Name);
+               WriteString(Bot.Motto);
+               WriteString(Bot.Gender);
+               WriteString(Bot.Figure);
             }
         }
     }

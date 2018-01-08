@@ -21,41 +21,39 @@ namespace Plus.Communication.Packets.Incoming.Navigator
                 return;
             }
 
-            string Name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-            string Description = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-            string ModelName = packet.PopString();
+            string name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string description = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string modelName = packet.PopString();
 
-            int Category = packet.PopInt();
-            int MaxVisitors = packet.PopInt();//10 = min, 25 = max.
-            int TradeSettings = packet.PopInt();//2 = All can trade, 1 = owner only, 0 = no trading.
+            int category = packet.PopInt();
+            int maxVisitors = packet.PopInt();//10 = min, 25 = max.
+            int tradeSettings = packet.PopInt();//2 = All can trade, 1 = owner only, 0 = no trading.
 
-            if (Name.Length < 3)
+            if (name.Length < 3)
                 return;
 
-            if (Name.Length > 25)
+            if (name.Length > 25)
                 return;
 
-            RoomModel model = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetModel(ModelName, out model))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetModel(modelName, out RoomModel model))
                 return;
 
-            SearchResultList SearchResultList = null;
-            if (!PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(Category, out SearchResultList))
-                Category = 36;
+            if (!PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(category, out SearchResultList searchResultList))
+                category = 36;
 
-            if (SearchResultList.CategoryType != NavigatorCategoryType.Category || SearchResultList.RequiredRank > session.GetHabbo().Rank)
-                Category = 36;
+            if (searchResultList.CategoryType != NavigatorCategoryType.Category || searchResultList.RequiredRank > session.GetHabbo().Rank)
+                category = 36;
 
-            if (MaxVisitors < 10 || MaxVisitors > 25)
-                MaxVisitors = 10;
+            if (maxVisitors < 10 || maxVisitors > 25)
+                maxVisitors = 10;
 
-            if (TradeSettings < 0 || TradeSettings > 2)
-                TradeSettings = 0;
+            if (tradeSettings < 0 || tradeSettings > 2)
+                tradeSettings = 0;
 
-            RoomData NewRoom = PlusEnvironment.GetGame().GetRoomManager().CreateRoom(session, Name, Description, Category, MaxVisitors, TradeSettings, model);
-            if (NewRoom != null)
+            RoomData newRoom = PlusEnvironment.GetGame().GetRoomManager().CreateRoom(session, name, description, category, maxVisitors, tradeSettings, model);
+            if (newRoom != null)
             {
-                session.SendPacket(new FlatCreatedComposer(NewRoom.Id, Name));
+                session.SendPacket(new FlatCreatedComposer(newRoom.Id, name));
             }
 
             if (session.GetHabbo() != null && session.GetHabbo().GetMessenger() != null)

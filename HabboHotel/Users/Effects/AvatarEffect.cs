@@ -30,51 +30,51 @@ namespace Plus.HabboHotel.Users.Effects
 
         public int Id
         {
-            get { return this._id; }
-            set { this._id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         public int UserId
         {
-            get { return this._userId; }
-            set { this._userId = value; }
+            get { return _userId; }
+            set { _userId = value; }
         }
 
         public int SpriteId
         {
-            get { return this._spriteId; }
-            set { this._spriteId = value; }
+            get { return _spriteId; }
+            set { _spriteId = value; }
         }
 
         public double Duration
         {
-            get { return this._duration; }
-            set { this._duration = value; }
+            get { return _duration; }
+            set { _duration = value; }
         }
 
         public bool Activated
         {
-            get { return this._activated; }
-            set { this._activated = value; }
+            get { return _activated; }
+            set { _activated = value; }
         }
 
         public double TimestampActivated
         {
-            get { return this._timestampActivated; }
-            set { this._timestampActivated = value; }
+            get { return _timestampActivated; }
+            set { _timestampActivated = value; }
         }
 
         public int Quantity
         {
-            get { return this._quantity; }
-            set { this._quantity = value; }
+            get { return _quantity; }
+            set { _quantity = value; }
         }
 
         public double TimeUsed
         {
             get
             {
-                return (UnixTimestamp.GetNow() - this._timestampActivated);
+                return (UnixTimestamp.GetNow() - _timestampActivated);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Plus.HabboHotel.Users.Effects
         {
             get
             {
-                double tl = (this._activated ? this._duration - TimeUsed : this._duration);
+                double tl = (_activated ? _duration - TimeUsed : _duration);
 
                 if (tl < 0)
                 {
@@ -97,7 +97,7 @@ namespace Plus.HabboHotel.Users.Effects
         {
             get
             {
-                return (this._activated && TimeLeft <= 0);
+                return (_activated && TimeLeft <= 0);
             }
         }
 
@@ -112,35 +112,35 @@ namespace Plus.HabboHotel.Users.Effects
             {
                 dbClient.SetQuery("UPDATE `user_effects` SET `is_activated` = '1', `activated_stamp` = @ts WHERE `id` = @id");
                 dbClient.AddParameter("ts", TsNow);
-                dbClient.AddParameter("id", this.Id);
+                dbClient.AddParameter("id", Id);
                 dbClient.RunQuery();
 
-                this._activated = true;
-                this._timestampActivated = TsNow;
+                _activated = true;
+                _timestampActivated = TsNow;
                 return true;
             }
         }
 
         public void HandleExpiration(Habbo Habbo)
         {
-            this._quantity--;
+            _quantity--;
 
-            this._activated = false;
-            this._timestampActivated = 0;
+            _activated = false;
+            _timestampActivated = 0;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                if (this._quantity < 1)
+                if (_quantity < 1)
                 {
                     dbClient.SetQuery("DELETE FROM `user_effects` WHERE `id` = @id");
-                    dbClient.AddParameter("id", this.Id);
+                    dbClient.AddParameter("id", Id);
                     dbClient.RunQuery();
                 }
                 else
                 {
                     dbClient.SetQuery("UPDATE `user_effects` SET `quantity` = @qt, `is_activated` = '0', `activated_stamp` = 0 WHERE `id` = @id");
-                    dbClient.AddParameter("qt", this.Quantity);
-                    dbClient.AddParameter("id", this.Id);
+                    dbClient.AddParameter("qt", Quantity);
+                    dbClient.AddParameter("id", Id);
                     dbClient.RunQuery();
                 }
             }
@@ -151,13 +151,13 @@ namespace Plus.HabboHotel.Users.Effects
 
         public void AddToQuantity()
         {
-            this._quantity++;
+            _quantity++;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `user_effects` SET `quantity` = @qt WHERE `id` = @id");
-                dbClient.AddParameter("qt", this.Quantity);
-                dbClient.AddParameter("id", this.Id);
+                dbClient.AddParameter("qt", Quantity);
+                dbClient.AddParameter("id", Id);
                 dbClient.RunQuery();
             }
         }

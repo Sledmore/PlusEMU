@@ -38,8 +38,8 @@ namespace Plus.HabboHotel.Items
             string VendingIds, string AdjustableHeights, int EffectId, bool IsRare, bool ExtraRot)
         {
             this.Id = Id;
-            this.SpriteId = Sprite;
-            this.ItemName = Name;
+            SpriteId = Sprite;
+            ItemName = Name;
             this.PublicName = PublicName;
             this.Type = char.Parse(Type);
             this.Width = Width;
@@ -48,13 +48,13 @@ namespace Plus.HabboHotel.Items
             this.Stackable = Stackable;
             this.Walkable = Walkable;
             this.IsSeat = IsSeat;
-            this.AllowEcotronRecycle = AllowRecycle;
+            AllowEcotronRecycle = AllowRecycle;
             this.AllowTrade = AllowTrade;
             this.AllowMarketplaceSell = AllowMarketplaceSell;
             this.AllowGift = AllowGift;
             this.AllowInventoryStack = AllowInventoryStack;
             this.InteractionType = InteractionType;
-            this.BehaviourData = behaviourData;
+            BehaviourData = behaviourData;
             this.Modes = Modes;
             this.VendingIds = new List<int>();
             if (VendingIds.Contains(","))
@@ -90,9 +90,9 @@ namespace Plus.HabboHotel.Items
 
             int wiredId = 0;
             if (this.InteractionType == InteractionType.WIRED_CONDITION || this.InteractionType == InteractionType.WIRED_TRIGGER || this.InteractionType == InteractionType.WIRED_EFFECT)
-                wiredId = this.BehaviourData;
+                wiredId = BehaviourData;
 
-            this.WiredType = WiredBoxTypeUtility.FromWiredId(wiredId);
+            WiredType = WiredBoxTypeUtility.FromWiredId(wiredId);
 
             this.IsRare = IsRare;
             this.ExtraRot = ExtraRot;

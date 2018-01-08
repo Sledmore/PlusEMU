@@ -1,35 +1,35 @@
-﻿using Plus.HabboHotel.Users.Messenger;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Users.Messenger;
 
 namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class AcceptBuddyEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null)
                 return;
 
-            int Amount = Packet.PopInt();
-            if (Amount > 50)
-                Amount = 50;
-            else if (Amount < 0)
+            int amount = packet.PopInt();
+            if (amount > 50)
+                amount = 50;
+            else if (amount < 0)
                 return;
 
-            for (int i = 0; i < Amount; i++)
+            for (int i = 0; i < amount; i++)
             {
-                int RequestId = Packet.PopInt();
+                int requestId = packet.PopInt();
 
-                MessengerRequest Request = null;
-                if (!Session.GetHabbo().GetMessenger().TryGetRequest(RequestId, out Request))
+                if (!session.GetHabbo().GetMessenger().TryGetRequest(requestId, out MessengerRequest request))
                     continue;
 
-                if (Request.To != Session.GetHabbo().Id)
+                if (request.To != session.GetHabbo().Id)
                     return;
 
-                if (!Session.GetHabbo().GetMessenger().FriendshipExists(Request.To))
-                    Session.GetHabbo().GetMessenger().CreateFriendship(Request.From);
+                if (!session.GetHabbo().GetMessenger().FriendshipExists(request.To))
+                    session.GetHabbo().GetMessenger().CreateFriendship(request.From);
 
-                Session.GetHabbo().GetMessenger().HandleRequest(RequestId);
+                session.GetHabbo().GetMessenger().HandleRequest(requestId);
             }
         }
     }

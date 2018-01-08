@@ -23,31 +23,31 @@ namespace Plus.HabboHotel.Talents
 
             foreach (string Str in DataActions.Split('|'))
             {
-                if (this._dataActions == null) { this._dataActions = new List<string>(); }
-                this._dataActions.Add(Str);
+                if (_dataActions == null) { _dataActions = new List<string>(); }
+                _dataActions.Add(Str);
             }
 
             foreach (string Str in DataGifts.Split('|'))
             {
-                if (this._dataGifts == null) { this._dataGifts = new List<string>(); }
-                this._dataGifts.Add(Str);
+                if (_dataGifts == null) { _dataGifts = new List<string>(); }
+                _dataGifts.Add(Str);
             }
 
-            this._subLevels = new Dictionary<int, TalentTrackSubLevel>();
+            _subLevels = new Dictionary<int, TalentTrackSubLevel>();
 
-            this.Init();
+            Init();
         }
 
         public List<string> Actions
         {
-            get { return this._dataActions; }
-            private set { this._dataActions = value; }
+            get { return _dataActions; }
+            private set { _dataActions = value; }
         }
 
         public List<string> Gifts
         {
-            get { return this._dataGifts; }
-            private set { this._dataGifts = value; }
+            get { return _dataGifts; }
+            private set { _dataGifts = value; }
         }
 
         public void Init()
@@ -56,7 +56,7 @@ namespace Plus.HabboHotel.Talents
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `sub_level`,`badge_code`,`required_progress` FROM `talents_sub_levels` WHERE `talent_level` = @TalentLevel");
-                dbClient.AddParameter("TalentLevel", this.Level);
+                dbClient.AddParameter("TalentLevel", Level);
                 GetTable = dbClient.GetTable();
             }
 
@@ -64,14 +64,14 @@ namespace Plus.HabboHotel.Talents
             {
                 foreach (DataRow Row in GetTable.Rows)
                 {
-                    this._subLevels.Add(Convert.ToInt32(Row["sub_level"]), new TalentTrackSubLevel(Convert.ToInt32(Row["sub_level"]), Convert.ToString(Row["badge_code"]), Convert.ToInt32(Row["required_progress"])));
+                    _subLevels.Add(Convert.ToInt32(Row["sub_level"]), new TalentTrackSubLevel(Convert.ToInt32(Row["sub_level"]), Convert.ToString(Row["badge_code"]), Convert.ToInt32(Row["required_progress"])));
                 }
             }
         }
 
         public ICollection<TalentTrackSubLevel> GetSubLevels()
         {
-            return this._subLevels.Values;
+            return _subLevels.Values;
         }
     }
 }

@@ -17,7 +17,7 @@
             get { return "Is the game map of your room broken? Fix it with this command!"; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (!Room.CheckRights(Session, true))
             {

@@ -1,12 +1,13 @@
 ﻿using Plus.Communication.Packets.Outgoing.Navigator;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {
     class CanCreateRoomEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new CanCreateRoomComposer(false, 150));
+            session.SendPacket(new CanCreateRoomComposer(false, 150));
         }
     }
 }

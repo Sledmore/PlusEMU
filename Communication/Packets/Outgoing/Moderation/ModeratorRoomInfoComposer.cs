@@ -7,22 +7,22 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
         public ModeratorRoomInfoComposer(RoomData Data, bool OwnerInRoom)
             : base(ServerPacketHeader.ModeratorRoomInfoMessageComposer)
         {
-            base.WriteInteger(Data.Id);
-            base.WriteInteger(Data.UsersNow);
-            base.WriteBoolean(OwnerInRoom); // owner in room
-            base.WriteInteger(Data.OwnerId);
-           base.WriteString(Data.OwnerName);
-            base.WriteBoolean(Data != null);
-           base.WriteString(Data.Name);
-           base.WriteString(Data.Description);
+            WriteInteger(Data.Id);
+            WriteInteger(Data.UsersNow);
+            WriteBoolean(OwnerInRoom); // owner in room
+            WriteInteger(Data.OwnerId);
+           WriteString(Data.OwnerName);
+            WriteBoolean(Data != null);
+           WriteString(Data.Name);
+           WriteString(Data.Description);
            
-            base.WriteInteger(Data.Tags.Count);
+            WriteInteger(Data.Tags.Count);
             foreach (string Tag in Data.Tags)
             {
-               base.WriteString(Tag);
+               WriteString(Tag);
             }
 
-            base.WriteBoolean(false);
+            WriteBoolean(false);
         }
     }
 }

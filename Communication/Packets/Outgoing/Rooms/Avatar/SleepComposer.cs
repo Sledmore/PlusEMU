@@ -7,8 +7,8 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Avatar
         public SleepComposer(RoomUser User, bool IsSleeping)
             : base(ServerPacketHeader.SleepMessageComposer)
         {
-            base.WriteInteger(User.VirtualId);
-            base.WriteBoolean(IsSleeping);
+            WriteInteger(User.VirtualId);
+            WriteBoolean(IsSleeping);
         }
     }
 }

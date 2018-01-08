@@ -22,10 +22,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
 
         public UserSaysBox(Room instance, Item item)
         {
-            this.Instance = instance;
-            this.Item = item;
-            this.StringData = "";
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            Instance = instance;
+            Item = item;
+            StringData = "";
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket packet)
@@ -34,8 +34,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             int OwnerOnly = packet.PopInt();
             string Message = packet.PopString();
 
-            this.BoolData = OwnerOnly == 1;
-            this.StringData = Message;
+            BoolData = OwnerOnly == 1;
+            StringData = Message;
         }
 
         public bool Execute(params object[] Params)
@@ -49,10 +49,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
                 return false;
 
             string Message = Convert.ToString(Params[1]);
-            if ((BoolData && Instance.OwnerId != Player.Id) || Player == null || string.IsNullOrWhiteSpace(Message) || string.IsNullOrWhiteSpace(this.StringData))
+            if ((BoolData && Instance.OwnerId != Player.Id) || Player == null || string.IsNullOrWhiteSpace(Message) || string.IsNullOrWhiteSpace(StringData))
                 return false;
 
-            if (Message.Contains(" " + this.StringData) || Message.Contains(this.StringData + " ") || Message == this.StringData)
+            if (Message.Contains(" " + StringData) || Message.Contains(StringData + " ") || Message == StringData)
             {
                 Player.WiredInteraction = true;
                 ICollection<IWiredItem> Effects = Instance.GetWired().GetEffects(this);

@@ -1,10 +1,12 @@
-﻿namespace Plus.Communication.Packets.Incoming.Handshake
+﻿using Plus.HabboHotel.GameClients;
+
+namespace Plus.Communication.Packets.Incoming.Handshake
 {
     class PingEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.PingCount = 0;
+            session.PingCount = 0;
         }
     }
 }

@@ -5,7 +5,7 @@
         public FurnitureAliasesComposer()
             : base(ServerPacketHeader.FurnitureAliasesMessageComposer)
         {
-            base.WriteInteger(0);          
+            WriteInteger(0);          
         }
     }
 }

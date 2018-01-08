@@ -1,8 +1,10 @@
-﻿namespace Plus.Communication.Packets.Incoming.Messenger
+﻿using Plus.HabboHotel.GameClients;
+
+namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class FriendListUpdateEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             
         }

@@ -20,22 +20,22 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
         }
 
         public void HandleSave(ClientPacket Packet)
         {
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int Unknown = Packet.PopInt();
             int Time = Packet.PopInt();
             string Message = Packet.PopString();
 
-            this.StringData = Time + ";" + Message;
+            StringData = Time + ";" + Message;
         }
 
         public bool Execute(params object[] Params)
@@ -51,7 +51,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (User == null)
                 return false;
 
-            if (Player.GetPermissions().HasRight("mod_tool") || this.Instance.OwnerId == Player.Id)
+            if (Player.GetPermissions().HasRight("mod_tool") || Instance.OwnerId == Player.Id)
             {
                 Player.GetClient().SendPacket(new WhisperComposer(User.VirtualId, "Wired Mute Exception: Unmutable Player", 0, 0));
                 return false;

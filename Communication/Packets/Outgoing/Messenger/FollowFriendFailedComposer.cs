@@ -5,7 +5,7 @@
         public FollowFriendFailedComposer(int ErrorCode)
             : base(ServerPacketHeader.FollowFriendFailedMessageComposer)
         {
-            base.WriteInteger(ErrorCode);
+            WriteInteger(ErrorCode);
         }
     }
 }

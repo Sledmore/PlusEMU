@@ -6,15 +6,15 @@ namespace Plus.Communication.Packets.Incoming.Users
 {
     class SetUserFocusPreferenceEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            bool FocusPreference = Packet.PopBoolean();
+            bool focusPreference = packet.PopBoolean();
 
-            Session.GetHabbo().FocusPreference = FocusPreference;
+            session.GetHabbo().FocusPreference = focusPreference;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `users` SET `focus_preference` = @focusPreference WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
-                dbClient.AddParameter("focusPreference", PlusEnvironment.BoolToEnum(FocusPreference));
+                dbClient.SetQuery("UPDATE `users` SET `focus_preference` = @focusPreference WHERE `id` = '" + session.GetHabbo().Id + "' LIMIT 1");
+                dbClient.AddParameter("focusPreference", PlusEnvironment.BoolToEnum(focusPreference));
                 dbClient.RunQuery();
             }
         }

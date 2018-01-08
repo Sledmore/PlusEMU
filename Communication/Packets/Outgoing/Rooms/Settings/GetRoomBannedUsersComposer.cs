@@ -9,22 +9,22 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
         public GetRoomBannedUsersComposer(Room instance)
             : base(ServerPacketHeader.GetRoomBannedUsersMessageComposer)
         {
-            base.WriteInteger(instance.Id);
+            WriteInteger(instance.Id);
 
-            base.WriteInteger(instance.GetBans().BannedUsers().Count);//Count
+            WriteInteger(instance.GetBans().BannedUsers().Count);//Count
             foreach (int Id in instance.GetBans().BannedUsers().ToList())
             {
                 UserCache Data = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Id);
 
                 if (Data == null)
                 {
-                    base.WriteInteger(0);
-                    base.WriteString("Unknown Error");
+                    WriteInteger(0);
+                    WriteString("Unknown Error");
                 }
                 else
                 {
-                    base.WriteInteger(Data.Id);
-                    base.WriteString(Data.Username);
+                    WriteInteger(Data.Id);
+                    WriteString(Data.Username);
                 }
             }
         }

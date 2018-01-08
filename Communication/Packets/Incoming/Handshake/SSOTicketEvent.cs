@@ -2,18 +2,18 @@
 
 namespace Plus.Communication.Packets.Incoming.Handshake
 {
-    public class SSOTicketEvent : IPacketEvent
+    public class SsoTicketEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.Rc4Client == null || Session.GetHabbo() != null)
+            if (session == null || session.Rc4Client == null || session.GetHabbo() != null)
                 return;
 
-            string SSO = Packet.PopString();
-            if (string.IsNullOrEmpty(SSO) || SSO.Length < 15)
+            string sso = packet.PopString();
+            if (string.IsNullOrEmpty(sso) || sso.Length < 15)
                 return;
 
-            Session.TryAuthenticate(SSO);
+            session.TryAuthenticate(sso);
         }
     }
 }

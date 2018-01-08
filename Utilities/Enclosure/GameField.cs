@@ -8,67 +8,65 @@ namespace Plus.Utilities.Enclosure
 {
     public class GameField : IPathNode
     {
-        private readonly AStarSolver<GameField> astarSolver;
-        private readonly bool diagonal;
-        private readonly Queue<GametileUpdate> _newEntries;// = new Queue<GametileUpdate>();
-        private byte[,] currentField;
-        private GametileUpdate currentlyChecking;
+        private readonly AStarSolver<GameField> _astarSolver;
+        private readonly bool _diagonal;
+        private readonly Queue<FieldUpdate> _newEntries;// = new Queue<FieldUpdate>();
+        private byte[,] _currentField;
+        private FieldUpdate _currentlyChecking;
 
         public GameField(byte[,] theArray, bool diagonalAllowed)
         {
-            currentField = theArray;
-            diagonal = diagonalAllowed;
-            this._newEntries = new Queue<GametileUpdate>();
-            astarSolver = new AStarSolver<GameField>(diagonalAllowed, AStarHeuristicType.EXPERIMENTAL_SEARCH, this, theArray.GetUpperBound(1) + 1, theArray.GetUpperBound(0) + 1);
+            _currentField = theArray;
+            _diagonal = diagonalAllowed;
+            _newEntries = new Queue<FieldUpdate>();
+            _astarSolver = new AStarSolver<GameField>(diagonalAllowed, AStarHeuristicType.EXPERIMENTAL_SEARCH, this, theArray.GetUpperBound(1) + 1, theArray.GetUpperBound(0) + 1);
         }
 
         public bool this[int y, int x]
         {
             get
             {
-                if (currentField == null)
+                if (_currentField == null)
                     return false;
 
                 if (y < 0 || x < 0)
                     return false;
-                else if (y > currentField.GetUpperBound(0) || x > currentField.GetUpperBound(1))
-                    return false;
-                return true;
+                return y <= _currentField.GetUpperBound(0) && x <= _currentField.GetUpperBound(1);
             }
         }
 
         public bool IsBlocked(int x, int y, bool lastTile)
         {
-            if (currentlyChecking.x == x && currentlyChecking.y == y)
+            if (_currentlyChecking.X == x && _currentlyChecking.Y == y)
                 return true;
-            return !(getValue(x, y) == currentlyChecking.value);
+            return GetValue(x, y) != _currentlyChecking.Value;
         }
 
-        public void updateLocation(int x, int y, byte value)
+        public void UpdateLocation(int x, int y, byte value)
         {
-            _newEntries.Enqueue(new GametileUpdate(x, y, value));
+            _newEntries.Enqueue(new FieldUpdate(x, y, value));
         }
 
-        public List<PointField> doUpdate()
+        public List<PointField> DoUpdate()
         {
             var returnList = new List<PointField>();
             while (_newEntries.Count > 0)
             {
-                currentlyChecking = _newEntries.Dequeue();
+                _currentlyChecking = _newEntries.Dequeue();
 
-                List<Point> pointList = getConnectedItems(currentlyChecking);
+                List<Point> pointList = GetConnectedItems(_currentlyChecking);
                 if (pointList == null)
                     return null;
 
                 if (pointList.Count > 1)
                 {
-                    List<LinkedList<AStarSolver<GameField>.PathNode>> RouteList = handleListOfConnectedPoints(  pointList);
+                    IEnumerable<LinkedList<AStarSolver<GameField>.PathNode>> routeList = HandleListOfConnectedPoints(  pointList);
 
-                    foreach (var nodeList in RouteList)
+                    foreach (var nodeList in routeList)
                     {
                         if (nodeList.Count >= 4)
                         {
-                            PointField field = findClosed(nodeList);
+                            PointField field = FindClosed(nodeList);
                             if (field != null)
                             {
                                 returnList.Add(field);
@@ -77,15 +75,15 @@ namespace Plus.Utilities.Enclosure
                     }
                 }
 
-                currentField[currentlyChecking.y, currentlyChecking.x] = currentlyChecking.value;
+                _currentField[_currentlyChecking.Y, _currentlyChecking.X] = _currentlyChecking.Value;
 
             }
             return returnList;
         }
 
-        private PointField findClosed(LinkedList<AStarSolver<GameField>.PathNode> nodeList)
+        private PointField FindClosed(IEnumerable<AStarSolver<GameField>.PathNode> nodeList)
         {
-            var returnList = new PointField(currentlyChecking.value);
+            var returnList = new PointField(_currentlyChecking.Value);
 
             int minX = int.MaxValue;
             int maxX = int.MinValue;
@@ -111,19 +109,14 @@ namespace Plus.Utilities.Enclosure
             int middleY = Convert.ToInt32(Math.Ceiling(((maxY - minY) / 2f)) + minY);
             //Console.WriteLine("Middle: x:[{0}]  y:[{1}]", middleX, middleY);
 
-            Point current;
             var toFill = new List<Point>();
-            var checkedItems = new List<Point>();
-            checkedItems.Add(new Point(currentlyChecking.x, currentlyChecking.y));
-            Point toAdd;
+            var checkedItems = new List<Point> {new Point(_currentlyChecking.X, _currentlyChecking.Y)};
             toFill.Add(new Point(middleX, middleY));
-            int x;
-            int y;
             while (toFill.Count > 0)
             {
-                current = toFill[0];
-                x = current.X;
-                y = current.Y;
+                Point current = toFill[0];
+                int x = current.X;
+                int y = current.Y;
 
                 if (x < minX)
                     return null; //OOB
@@ -134,32 +127,33 @@ namespace Plus.Utilities.Enclosure
                 if (y > maxY)
                     return null; //OOB
 
-                if (this[y - 1, x] && currentField[y - 1, x] == 0)
+                Point toAdd;
+                if (this[y - 1, x] && _currentField[y - 1, x] == 0)
                 {
                     toAdd = new Point(x, y - 1);
                     if (!toFill.Contains(toAdd) && !checkedItems.Contains(toAdd))
                         toFill.Add(toAdd);
                 }
-                if (this[y + 1, x] && currentField[y + 1, x] == 0)
+                if (this[y + 1, x] && _currentField[y + 1, x] == 0)
                 {
                     toAdd = new Point(x, y + 1);
                     if (!toFill.Contains(toAdd) && !checkedItems.Contains(toAdd))
                         toFill.Add(toAdd);
                 }
-                if (this[y, x - 1] && currentField[y, x - 1] == 0)
+                if (this[y, x - 1] && _currentField[y, x - 1] == 0)
                 {
                     toAdd = new Point(x - 1, y);
                     if (!toFill.Contains(toAdd) && !checkedItems.Contains(toAdd))
                         toFill.Add(toAdd);
                 }
-                if (this[y, x + 1] && currentField[y, x + 1] == 0)
+                if (this[y, x + 1] && _currentField[y, x + 1] == 0)
                 {
                     toAdd = new Point(x + 1, y);
                     if (!toFill.Contains(toAdd) && !checkedItems.Contains(toAdd))
                         toFill.Add(toAdd);
                 }
-                if (getValue(current) == 0)
-                    returnList.add(current);
+                if (GetValue(current) == 0)
+                    returnList.Add(current);
                 checkedItems.Add(current);
                 toFill.RemoveAt(0);
             }
@@ -167,7 +161,7 @@ namespace Plus.Utilities.Enclosure
             return returnList;
         }
 
-        private List<LinkedList<AStarSolver<GameField>.PathNode>> handleListOfConnectedPoints(List<Point> pointList)
+        private IEnumerable<LinkedList<AStarSolver<GameField>.PathNode>> HandleListOfConnectedPoints(List<Point> pointList)
         {
             var returnList = new List<LinkedList<AStarSolver<GameField>.PathNode>>();
             int amount = 0;
@@ -180,7 +174,7 @@ namespace Plus.Utilities.Enclosure
                 {
                     if (begin == end)
                         continue;
-                    LinkedList<AStarSolver<GameField>.PathNode> list = astarSolver.Search(end, begin);
+                    LinkedList<AStarSolver<GameField>.PathNode> list = _astarSolver.Search(end, begin);
                     if (list != null)
                     {
                         returnList.Add(list);
@@ -190,87 +184,79 @@ namespace Plus.Utilities.Enclosure
             return returnList;
         }
 
-        private List<Point> getConnectedItems(GametileUpdate update)
+        private List<Point> GetConnectedItems(FieldUpdate update)
         {
             if (update == null)
                 return null;
 
-            var ConnectedItems = new List<Point>();
-            int x = update.x;
-            int y = update.y;
-            if (diagonal)
+            var connectedItems = new List<Point>();
+            int x = update.X;
+            int y = update.Y;
+            if (_diagonal)
             {
-                if (this[y - 1, x - 1] && currentField[y - 1, x - 1] == update.value)
+                if (this[y - 1, x - 1] && _currentField[y - 1, x - 1] == update.Value)
                 {
-                    ConnectedItems.Add(new Point(x - 1, y - 1));
+                    connectedItems.Add(new Point(x - 1, y - 1));
                 }
-                if (this[y - 1, x + 1] && currentField[y - 1, x + 1] == update.value)
+                if (this[y - 1, x + 1] && _currentField[y - 1, x + 1] == update.Value)
                 {
-                    ConnectedItems.Add(new Point(x + 1, y - 1));
+                    connectedItems.Add(new Point(x + 1, y - 1));
                 }
-                if (this[y + 1, x - 1] && currentField[y + 1, x - 1] == update.value)
+                if (this[y + 1, x - 1] && _currentField[y + 1, x - 1] == update.Value)
                 {
-                    ConnectedItems.Add(new Point(x - 1, y + 1));
+                    connectedItems.Add(new Point(x - 1, y + 1));
                 }
-                if (this[y + 1, x + 1] && currentField[y + 1, x + 1] == update.value)
+                if (this[y + 1, x + 1] && _currentField[y + 1, x + 1] == update.Value)
                 {
-                    ConnectedItems.Add(new Point(x + 1, y + 1));
+                    connectedItems.Add(new Point(x + 1, y + 1));
                 }
             }
 
 
-            if (this[y - 1, x] && currentField[y - 1, x] == update.value)
+            if (this[y - 1, x] && _currentField[y - 1, x] == update.Value)
             {
-                ConnectedItems.Add(new Point(x, y - 1));
+                connectedItems.Add(new Point(x, y - 1));
             }
-            if (this[y + 1, x] && currentField[y + 1, x] == update.value)
+            if (this[y + 1, x] && _currentField[y + 1, x] == update.Value)
             {
-                ConnectedItems.Add(new Point(x, y + 1));
+                connectedItems.Add(new Point(x, y + 1));
             }
-            if (this[y, x - 1] && currentField[y, x - 1] == update.value)
+            if (this[y, x - 1] && _currentField[y, x - 1] == update.Value)
             {
-                ConnectedItems.Add(new Point(x - 1, y));
+                connectedItems.Add(new Point(x - 1, y));
             }
-            if (this[y, x + 1] && currentField[y, x + 1] == update.value)
+            if (this[y, x + 1] && _currentField[y, x + 1] == update.Value)
             {
-                ConnectedItems.Add(new Point(x + 1, y));
+                connectedItems.Add(new Point(x + 1, y));
             }
 
-            return ConnectedItems;
+            return connectedItems;
         }
 
-        private void setValue(int x, int y, byte value)
+        private void SetValue(int x, int y, byte value)
         {
             if (this[y, x])
             {
-                currentField[y, x] = value;
+                _currentField[y, x] = value;
             }
         }
 
-        public byte getValue(int x, int y)
+        public byte GetValue(int x, int y)
         {
-            if (this[y, x])
-            {
-                return currentField[y, x];
-            }
-            return 0;
+            return this[y, x] ? _currentField[y, x] : (byte) 0;
         }
 
-        public byte getValue(Point p)
+        public byte GetValue(Point p)
         {
-            if (this[p.Y, p.X])
-            {
-                return currentField[p.Y, p.X];
-            }
-            return 0;
+            return this[p.Y, p.X] ? _currentField[p.Y, p.X] : (byte) 0;
         }
 
         public void Dispose()
         {
-            currentField = null;
+            _currentField = null;
 
-            if (this._newEntries != null)
-                this._newEntries.Clear();
+            if (_newEntries != null)
+                _newEntries.Clear();
         }
     }
 }

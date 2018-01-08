@@ -7,48 +7,48 @@ using Plus.HabboHotel.Catalog.Clothing;
 using Plus.Communication.Packets.Outgoing.Rooms.Notifications;
 using Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class UseSellableClothingEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            int ItemId = Packet.PopInt();
+            int itemId = packet.PopInt();
 
-            Item Item = Room.GetRoomItemHandler().GetItem(ItemId);
-            if (Item == null)
+            Item item = room.GetRoomItemHandler().GetItem(itemId);
+            if (item == null)
                 return;
 
-            if (Item.Data == null)
+            if (item.Data == null)
                 return;
 
-            if (Item.UserID != Session.GetHabbo().Id)
+            if (item.UserID != session.GetHabbo().Id)
                 return;
 
-            if (Item.Data.InteractionType != InteractionType.PURCHASABLE_CLOTHING)
+            if (item.Data.InteractionType != InteractionType.PURCHASABLE_CLOTHING)
             {
-                Session.SendNotification("Oops, this item isn't set as a sellable clothing item!");
+                session.SendNotification("Oops, this item isn't set as a sellable clothing item!");
                 return;
             }
 
-            if (Item.Data.BehaviourData == 0)
+            if (item.Data.BehaviourData == 0)
             {
-                Session.SendNotification("Oops, this item doesn't have a linking clothing configuration, please report it!");
+                session.SendNotification("Oops, this item doesn't have a linking clothing configuration, please report it!");
                 return;
             }
 
-            ClothingItem Clothing = null;
-            if (!PlusEnvironment.GetGame().GetCatalog().GetClothingManager().TryGetClothing(Item.Data.BehaviourData, out Clothing))
+            if (!PlusEnvironment.GetGame().GetCatalog().GetClothingManager().TryGetClothing(item.Data.BehaviourData, out ClothingItem clothing))
             {
-                Session.SendNotification("Oops, we couldn't find this clothing part!");
+                session.SendNotification("Oops, we couldn't find this clothing part!");
                 return;
             }
 
@@ -56,17 +56,17 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("DELETE FROM `items` WHERE `id` = @ItemId LIMIT 1");
-                dbClient.AddParameter("ItemId", Item.Id);
+                dbClient.AddParameter("ItemId", item.Id);
                 dbClient.RunQuery();
             }
 
             //Remove the item.
-            Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id);
+            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
 
-            Session.GetHabbo().GetClothing().AddClothing(Clothing.ClothingName, Clothing.PartIds);
-            Session.SendPacket(new FigureSetIdsComposer(Session.GetHabbo().GetClothing().GetClothingParts));
-            Session.SendPacket(new RoomNotificationComposer("figureset.redeemed.success"));
-            Session.SendWhisper("If for some reason cannot see your new clothing, reload the hotel!");
+            session.GetHabbo().GetClothing().AddClothing(clothing.ClothingName, clothing.PartIds);
+            session.SendPacket(new FigureSetIdsComposer(session.GetHabbo().GetClothing().GetClothingParts));
+            session.SendPacket(new RoomNotificationComposer("figureset.redeemed.success"));
+            session.SendWhisper("If for some reason cannot see your new clothing, reload the hotel!");
         }
     }
 }

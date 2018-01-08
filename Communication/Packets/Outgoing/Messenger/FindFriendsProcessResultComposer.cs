@@ -5,7 +5,7 @@
         public FindFriendsProcessResultComposer(bool Found)
             : base(ServerPacketHeader.FindFriendsProcessResultMessageComposer)
         {
-            base.WriteBoolean(Found);
+            WriteBoolean(Found);
         }
     }
 }

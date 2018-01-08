@@ -1,25 +1,25 @@
 ﻿using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Moderation;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class GetModeratorRoomInfoEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (!session.GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            int roomId = Packet.PopInt();
+            int roomId = packet.PopInt();
 
-            RoomData data = null;
-            if (!RoomFactory.TryGetData(roomId, out data))
+            if (!RoomFactory.TryGetData(roomId, out RoomData data))
                 return;
 
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
                 return;
 
-            Session.SendPacket(new ModeratorRoomInfoComposer(data, (Room.GetRoomUserManager().GetRoomUserByHabbo(data.OwnerName) != null)));
+            session.SendPacket(new ModeratorRoomInfoComposer(data, room.GetRoomUserManager().GetRoomUserByHabbo(data.OwnerName) != null));
         }
     }
 }

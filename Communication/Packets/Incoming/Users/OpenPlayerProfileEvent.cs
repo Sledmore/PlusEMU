@@ -4,16 +4,17 @@ using Plus.HabboHotel.Users;
 using Plus.HabboHotel.Groups;
 using Plus.Communication.Packets.Outgoing.Users;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Users
 {
     class OpenPlayerProfileEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             int userId = packet.PopInt();
-            bool IsMe = packet.PopBoolean();
+            packet.PopBoolean(); //IsMe?
 
             Habbo targetData = PlusEnvironment.GetHabboById(userId);
             if (targetData == null)
@@ -24,7 +25,7 @@ namespace Plus.Communication.Packets.Incoming.Users
             
             List<Group> groups = PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.Id);
             
-            int friendCount = 0;
+            int friendCount;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT COUNT(0) FROM `messenger_friendships` WHERE (`user_one_id` = @userid OR `user_two_id` = @userid)");

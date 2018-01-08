@@ -19,11 +19,11 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
             get { return "Disconnects another user from the hotel."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {
-                Session.SendWhisper("Please enter the username of the user you wish to disconnect.");
+                Session.SendWhisper("Please enter the username of the user you wish to Disconnect.");
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
 
             if (TargetClient.GetHabbo().GetPermissions().HasRight("mod_tool") && !Session.GetHabbo().GetPermissions().HasRight("mod_disconnect_any"))
             {
-                Session.SendWhisper("You are not allowed to disconnect that user.");
+                Session.SendWhisper("You are not allowed to Disconnect that user.");
                 return;
             }
 

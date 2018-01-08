@@ -4,15 +4,15 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Connection
 {
     public class OpenFlatConnectionEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
-            int RoomId = Packet.PopInt();
-            string Password = Packet.PopString();
+            int roomId = packet.PopInt();
+            string password = packet.PopString();
         
-            Session.GetHabbo().PrepareRoom(RoomId, Password);
+            session.GetHabbo().PrepareRoom(roomId, password);
         }
     }
 }

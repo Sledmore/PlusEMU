@@ -23,7 +23,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -31,7 +31,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             int Unknown = Packet.PopInt();
             string BadgeCode = Packet.PopString();
 
-            this.StringData = BadgeCode;
+            StringData = BadgeCode;
         }
 
         public bool Execute(params object[] Params)
@@ -39,14 +39,14 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             if (Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData))
+            if (String.IsNullOrEmpty(StringData))
                 return false;
 
             Habbo Player = (Habbo)Params[0];
             if (Player == null)
                 return false;
 
-            if (!Player.GetBadgeComponent().GetBadges().Contains(Player.GetBadgeComponent().GetBadge(this.StringData)))
+            if (!Player.GetBadgeComponent().GetBadges().Contains(Player.GetBadgeComponent().GetBadge(StringData)))
                 return true;
 
             foreach (Badge Badge in Player.GetBadgeComponent().GetBadges().ToList())
@@ -54,7 +54,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
                 if (Badge.Slot <= 0)
                     continue;
 
-                if (Badge.Code == this.StringData)
+                if (Badge.Code == StringData)
                     return false;
             }
 

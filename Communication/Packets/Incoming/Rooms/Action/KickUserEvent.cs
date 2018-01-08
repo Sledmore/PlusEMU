@@ -1,32 +1,33 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class KickUserEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            if (!Room.CheckRights(Session) && Room.WhoCanKick != 2 && Room.Group == null)
+            if (!room.CheckRights(session) && room.WhoCanKick != 2 && room.Group == null)
                 return;
 
-            if (Room.Group != null && !Room.CheckRights(Session, false, true))
+            if (room.Group != null && !room.CheckRights(session, false, true))
                 return;
 
-            int UserId = Packet.PopInt();
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(UserId);
-            if (User == null || User.IsBot)
+            int userId = packet.PopInt();
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(userId);
+            if (user == null || user.IsBot)
                 return;
 
             //Cannot kick owner or moderators.
-            if (Room.CheckRights(User.GetClient(), true) || User.GetClient().GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (room.CheckRights(user.GetClient(), true) || user.GetClient().GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            Room.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, true);
-            PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_SelfModKickSeen", 1);
+            room.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, true);
+            PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_SelfModKickSeen", 1);
         }
     }
 }

@@ -5,9 +5,9 @@
         public GameAccountStatusComposer(int GameID)
             : base(ServerPacketHeader.GameAccountStatusMessageComposer)
         {
-            base.WriteInteger(GameID);
-            base.WriteInteger(-1); // Games Left
-            base.WriteInteger(0);//Was 16?
+            WriteInteger(GameID);
+            WriteInteger(-1); // Games Left
+            WriteInteger(0);//Was 16?
         }
     }
 }

@@ -11,94 +11,91 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
 {
     class PickUpPetEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetInventoryComponent() == null)
+            if (session.GetHabbo() == null || session.GetHabbo().GetInventoryComponent() == null)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            int PetId = Packet.PopInt();
+            int petId = packet.PopInt();
 
-            RoomUser Pet = null;
-            if (!Room.GetRoomUserManager().TryGetPet(PetId, out Pet))
+            if (!room.GetRoomUserManager().TryGetPet(petId, out RoomUser pet))
             {
                 //Check kick rights, just because it seems most appropriate.
-                if ((!Room.CheckRights(Session) && Room.WhoCanKick != 2 && Room.Group == null) || (Room.Group != null && !Room.CheckRights(Session, false, true)))
+                if ((!room.CheckRights(session) && room.WhoCanKick != 2 && room.Group == null) || (room.Group != null && !room.CheckRights(session, false, true)))
                     return;
 
                 //Okay so, we've established we have no pets in this room by this virtual Id, let us check out users, maybe they're creeping as a pet?!
-                RoomUser TargetUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(PetId);
-                if (TargetUser == null)
+                RoomUser targetUser = session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(petId);
+                if (targetUser == null)
                     return;
 
                 //Check some values first, please!
-                if (TargetUser.GetClient() == null || TargetUser.GetClient().GetHabbo() == null)
+                if (targetUser.GetClient() == null || targetUser.GetClient().GetHabbo() == null)
                     return;
 
                 //Update the targets PetId.
-                TargetUser.GetClient().GetHabbo().PetId = 0;
+                targetUser.GetClient().GetHabbo().PetId = 0;
 
                 //Quickly remove the old user instance.
-                Room.SendPacket(new UserRemoveComposer(TargetUser.VirtualId));
+                room.SendPacket(new UserRemoveComposer(targetUser.VirtualId));
 
                 //Add the new one, they won't even notice a thing!!11 8-)
-                Room.SendPacket(new UsersComposer(TargetUser));
+                room.SendPacket(new UsersComposer(targetUser));
                 return;
             }
 
-            if (Session.GetHabbo().Id != Pet.PetData.OwnerId && !Room.CheckRights(Session, true, false))
+            if (session.GetHabbo().Id != pet.PetData.OwnerId && !room.CheckRights(session, true))
             {
-                Session.SendWhisper("You can only pickup your own pets, to kick a pet you must have room rights.");
+                session.SendWhisper("You can only pickup your own pets, to kick a pet you must have room rights.");
                 return;
             }
 
-            if (Pet.RidingHorse)
+            if (pet.RidingHorse)
             {
-                RoomUser UserRiding = Room.GetRoomUserManager().GetRoomUserByVirtualId(Pet.HorseID);
-                if (UserRiding != null)
+                RoomUser userRiding = room.GetRoomUserManager().GetRoomUserByVirtualId(pet.HorseID);
+                if (userRiding != null)
                 {
-                    UserRiding.RidingHorse = false;
-                    UserRiding.ApplyEffect(-1);
-                    UserRiding.MoveTo(new Point(UserRiding.X + 1, UserRiding.Y + 1));
+                    userRiding.RidingHorse = false;
+                    userRiding.ApplyEffect(-1);
+                    userRiding.MoveTo(new Point(userRiding.X + 1, userRiding.Y + 1));
                 }
                 else
-                    Pet.RidingHorse = false;
+                    pet.RidingHorse = false;
             }
 
-            Pet.PetData.RoomId = 0;
-            Pet.PetData.PlacedInRoom = false;
+            pet.PetData.RoomId = 0;
+            pet.PetData.PlacedInRoom = false;
 
-            Pet pet = Pet.PetData;
-            if (pet != null)
+            Pet data = pet.PetData;
+            if (data != null)
             {
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE `bots` SET `room_id` = '0', `x` = '0', `Y` = '0', `Z` = '0' WHERE `id` = '" + pet.PetId + "' LIMIT 1");
-                    dbClient.RunQuery("UPDATE `bots_petdata` SET `experience` = '" + pet.experience + "', `energy` = '" + pet.Energy + "', `nutrition` = '" + pet.Nutrition + "', `respect` = '" + pet.Respect + "' WHERE `id` = '" + pet.PetId + "' LIMIT 1");
+                    dbClient.RunQuery("UPDATE `bots` SET `room_id` = '0', `x` = '0', `Y` = '0', `Z` = '0' WHERE `id` = '" + data.PetId + "' LIMIT 1");
+                    dbClient.RunQuery("UPDATE `bots_petdata` SET `experience` = '" + data.experience + "', `energy` = '" + data.Energy + "', `nutrition` = '" + data.Nutrition + "', `respect` = '" + data.Respect + "' WHERE `id` = '" + data.PetId + "' LIMIT 1");
                 }
             }
 
-            if (pet.OwnerId != Session.GetHabbo().Id)
+            if (data.OwnerId != session.GetHabbo().Id)
             {
-                GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(pet.OwnerId);
-                if (Target != null)
+                GameClient target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(data.OwnerId);
+                if (target != null)
                 {
-                    Target.GetHabbo().GetInventoryComponent().TryAddPet(Pet.PetData);
-                    Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
+                    target.GetHabbo().GetInventoryComponent().TryAddPet(pet.PetData);
+                    room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
 
-                    Target.SendPacket(new PetInventoryComposer(Target.GetHabbo().GetInventoryComponent().GetPets()));
+                    target.SendPacket(new PetInventoryComposer(target.GetHabbo().GetInventoryComponent().GetPets()));
                     return;
                 }
             }
             
-            Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
+            room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
         }
     }
 }

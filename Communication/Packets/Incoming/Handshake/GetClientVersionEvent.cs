@@ -4,12 +4,12 @@ namespace Plus.Communication.Packets.Incoming.Handshake
 {
     public class GetClientVersionEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            string Build = Packet.PopString();
+            string build = packet.PopString();
 
-            if (PlusEnvironment.SWFRevision != Build)
-                PlusEnvironment.SWFRevision = Build;
+            if (PlusEnvironment.SWFRevision != build)
+                PlusEnvironment.SWFRevision = build;
         }
     }
 }

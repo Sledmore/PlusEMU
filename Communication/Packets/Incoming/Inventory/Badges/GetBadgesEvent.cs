@@ -1,12 +1,13 @@
 ﻿using Plus.Communication.Packets.Outgoing.Inventory.Badges;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Badges
 {
     class GetBadgesEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new BadgesComposer(Session));
+            session.SendPacket(new BadgesComposer(session));
         }
     }
 }

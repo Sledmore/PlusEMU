@@ -5,8 +5,8 @@
         public UserTypingComposer(int VirtualId, bool Typing)
             : base(ServerPacketHeader.UserTypingMessageComposer)
         {
-            base.WriteInteger(VirtualId);
-            base.WriteInteger(Typing ? 1 : 0);
+            WriteInteger(VirtualId);
+            WriteInteger(Typing ? 1 : 0);
         }
     }
 }

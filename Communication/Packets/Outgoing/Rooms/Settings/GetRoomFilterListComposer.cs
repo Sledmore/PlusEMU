@@ -7,10 +7,10 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
         public GetRoomFilterListComposer(Room Instance)
             : base(ServerPacketHeader.GetRoomFilterListMessageComposer)
         {
-            base.WriteInteger(Instance.WordFilterList.Count);
+            WriteInteger(Instance.WordFilterList.Count);
             foreach (string Word in Instance.WordFilterList)
             {
-               base.WriteString(Word);
+               WriteString(Word);
             }
         }
     }

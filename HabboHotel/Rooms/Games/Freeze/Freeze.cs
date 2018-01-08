@@ -23,22 +23,22 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         public Freeze(Room room)
         {
-            this._room = room;
-            this._gameStarted = false;
-            this._exitTeleports = new ConcurrentDictionary<int, Item>();
-            this._random = new Random();
-            this._freezeTiles = new ConcurrentDictionary<int, Item>();
-            this._freezeBlocks = new ConcurrentDictionary<int, Item>();
+            _room = room;
+            _gameStarted = false;
+            _exitTeleports = new ConcurrentDictionary<int, Item>();
+            _random = new Random();
+            _freezeTiles = new ConcurrentDictionary<int, Item>();
+            _freezeBlocks = new ConcurrentDictionary<int, Item>();
         }
 
         public bool GameIsStarted
         {
-            get { return this._gameStarted; }
+            get { return _gameStarted; }
         }
 
         public ConcurrentDictionary<int, Item> ExitTeleports
         {
-            get { return this._exitTeleports; }
+            get { return _exitTeleports; }
         }
 
         public void AddExitTile(Item Item)
@@ -61,11 +61,11 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         public void StartGame()
         {
-            this._gameStarted = true;
+            _gameStarted = true;
             CountTeamPoints();
             ResetGame();
 
-            if (this.ExitTeleports.Count > 0)
+            if (ExitTeleports.Count > 0)
             {
                 foreach (Item ExitTile in ExitTeleports.Values.ToList())
                 {
@@ -76,18 +76,18 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 }
             }
 
-            this._room.GetGameManager().LockGates();
+            _room.GetGameManager().LockGates();
         }
 
         public void StopGame(bool userTriggered = false)
         {
-            this._gameStarted = false;
-            this._room.GetGameManager().UnlockGates();
-            this._room.GetGameManager().StopGame();
+            _gameStarted = false;
+            _room.GetGameManager().UnlockGates();
+            _room.GetGameManager().StopGame();
 
             ResetGame();
 
-            if (this.ExitTeleports.Count > 0)
+            if (ExitTeleports.Count > 0)
             {
                 foreach (Item ExitTile in ExitTeleports.Values.ToList())
                 {
@@ -98,15 +98,15 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 }
             }
 
-            Team Winners = this._room.GetGameManager().GetWinningTeam();
-            foreach (RoomUser User in this._room.GetRoomUserManager().GetUserList().ToList())
+            Team Winners = _room.GetGameManager().GetWinningTeam();
+            foreach (RoomUser User in _room.GetRoomUserManager().GetUserList().ToList())
             {
                 User.FreezeLives = 0;
                 if (User.Team == Winners)
                 {
                     User.UnIdle();
                     User.DanceId = 0;
-                    this._room.SendPacket(new ActionComposer(User.VirtualId, 1));
+                    _room.SendPacket(new ActionComposer(User.VirtualId, 1));
                 }
 
                 if (ExitTeleports.Count > 0)
@@ -167,7 +167,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                     Item.interactionCountHelper = 0;
                     Item.ExtraData = "";
                     Item.UpdateState(false, true);
-                    this._room.GetGameMap().AddItemToMap(Item, false);
+                    _room.GetGameMap().AddItemToMap(Item, false);
                 }
             }
 
@@ -184,10 +184,10 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         public void OnUserWalk(RoomUser User)
         {
-            if (!this._gameStarted || User.Team == Team.None)
+            if (!_gameStarted || User.Team == Team.None)
                 return;
 
-            foreach (Item Item in this._freezeTiles.Values.ToList())
+            foreach (Item Item in _freezeTiles.Values.ToList())
             {
                 if (User.GoalX == Item.GetX && User.GoalY == Item.GetY && User.FreezeInteracting)
                 {
@@ -214,7 +214,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 }
             }
 
-            foreach (Item Item in this._freezeBlocks.Values.ToList())
+            foreach (Item Item in _freezeBlocks.Values.ToList())
             {
                 if (User.GoalX == Item.GetX && User.GoalY == Item.GetY)
                 {
@@ -228,9 +228,9 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         private void CountTeamPoints()
         {
-            this._room.GetGameManager().Reset();
+            _room.GetGameManager().Reset();
 
-            foreach (RoomUser User in this._room.GetRoomUserManager().GetUserList().ToList())
+            foreach (RoomUser User in _room.GetRoomUserManager().GetUserList().ToList())
             {
                 if (User.IsBot || User.Team == Team.None || User.GetClient() == null)
                     continue;
@@ -406,27 +406,27 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         public void AddFreezeTile(Item Item)
         {
-            if (!this._freezeTiles.ContainsKey(Item.Id))
-                this._freezeTiles.TryAdd(Item.Id, Item);
+            if (!_freezeTiles.ContainsKey(Item.Id))
+                _freezeTiles.TryAdd(Item.Id, Item);
         }
 
         public void RemoveFreezeTile(int itemID)
         {
             Item Item = null;
-            if (this._freezeTiles.ContainsKey(itemID))
-                this._freezeTiles.TryRemove(itemID, out Item);
+            if (_freezeTiles.ContainsKey(itemID))
+                _freezeTiles.TryRemove(itemID, out Item);
         }
 
         public void AddFreezeBlock(Item Item)
         {
-            if (!this._freezeBlocks.ContainsKey(Item.Id))
-                this._freezeBlocks.TryAdd(Item.Id, Item);
+            if (!_freezeBlocks.ContainsKey(Item.Id))
+                _freezeBlocks.TryAdd(Item.Id, Item);
         }
 
         public void RemoveFreezeBlock(int ItemID)
         {
             Item Item = null;
-            this._freezeBlocks.TryRemove(ItemID, out Item);
+            _freezeBlocks.TryRemove(ItemID, out Item);
         }
 
         private void HandleUserFreeze(Point point)
@@ -463,7 +463,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
                 t.OnUserLeave(User);
                 User.Team = Team.None;
                 if (_exitTeleports.Count > 0)
-                    _room.GetGameMap().TeleportToItem(User, this.GetRandomExitTile());
+                    _room.GetGameMap().TeleportToItem(User, GetRandomExitTile());
 
                 User.Freezed = false;
                 User.SetStep = false;
@@ -621,7 +621,7 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         private List<Item> GetItemsForSquare(Point point)
         {
-            return this._room.GetGameMap().GetCoordinatedItems(point);
+            return _room.GetGameMap().GetCoordinatedItems(point);
         }
 
         private static bool SquareGotFreezeTile(List<Item> items)
@@ -648,11 +648,11 @@ namespace Plus.HabboHotel.Rooms.Games.Freeze
 
         public void Dispose()
         {
-            this._room = null;
-            this._random = null;
-            this._exitTeleports.Clear();
-            this._freezeTiles.Clear();
-            this._freezeBlocks.Clear();
+            _room = null;
+            _random = null;
+            _exitTeleports.Clear();
+            _freezeTiles.Clear();
+            _freezeBlocks.Clear();
         }
     }
 }

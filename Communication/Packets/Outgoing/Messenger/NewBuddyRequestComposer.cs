@@ -7,9 +7,9 @@ namespace Plus.Communication.Packets.Outgoing.Messenger
         public NewBuddyRequestComposer(UserCache Habbo)
             : base(ServerPacketHeader.NewBuddyRequestMessageComposer)
         {
-            base.WriteInteger(Habbo.Id);
-           base.WriteString(Habbo.Username);
-           base.WriteString(Habbo.Look);
+            WriteInteger(Habbo.Id);
+           WriteString(Habbo.Username);
+           WriteString(Habbo.Look);
         }
     }
 }

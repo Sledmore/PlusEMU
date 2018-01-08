@@ -7,32 +7,32 @@ namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class FollowFriendEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null)
                 return;
 
-            int BuddyId = Packet.PopInt();
-            if (BuddyId == 0 || BuddyId == Session.GetHabbo().Id)
+            int buddyId = packet.PopInt();
+            if (buddyId == 0 || buddyId == session.GetHabbo().Id)
                 return;
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(BuddyId);
-            if (Client == null || Client.GetHabbo() == null)
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(buddyId);
+            if (client == null || client.GetHabbo() == null)
                 return;
 
-            if (!Client.GetHabbo().InRoom)
+            if (!client.GetHabbo().InRoom)
             {
-                Session.SendPacket(new FollowFriendFailedComposer(2));
-                Session.GetHabbo().GetMessenger().UpdateFriend(Client.GetHabbo().Id, Client, true);
+                session.SendPacket(new FollowFriendFailedComposer(2));
+                session.GetHabbo().GetMessenger().UpdateFriend(client.GetHabbo().Id, client, true);
                 return;
             }
-            else if (Session.GetHabbo().CurrentRoom != null && Client.GetHabbo().CurrentRoom != null)
+            else if (session.GetHabbo().CurrentRoom != null && client.GetHabbo().CurrentRoom != null)
             {
-                if (Session.GetHabbo().CurrentRoom.RoomId == Client.GetHabbo().CurrentRoom.RoomId)
+                if (session.GetHabbo().CurrentRoom.RoomId == client.GetHabbo().CurrentRoom.RoomId)
                     return;
             }
 
-            Session.SendPacket(new RoomForwardComposer(Client.GetHabbo().CurrentRoomId));
+            session.SendPacket(new RoomForwardComposer(client.GetHabbo().CurrentRoomId));
         }
     }
 }

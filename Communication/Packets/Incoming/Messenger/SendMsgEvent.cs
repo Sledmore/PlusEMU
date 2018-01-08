@@ -1,28 +1,30 @@
-﻿namespace Plus.Communication.Packets.Incoming.Messenger
+﻿using Plus.HabboHotel.GameClients;
+
+namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class SendMsgEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null)
                 return;
 
-            int userId = Packet.PopInt();
-            if (userId == 0 || userId == Session.GetHabbo().Id)
+            int userId = packet.PopInt();
+            if (userId == 0 || userId == session.GetHabbo().Id)
                 return;
 
-            string message = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+            string message = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
             if (string.IsNullOrWhiteSpace(message))
                 return;
 
 
-            if (Session.GetHabbo().TimeMuted > 0)
+            if (session.GetHabbo().TimeMuted > 0)
             {
-                Session.SendNotification("Oops, you're currently muted - you cannot send messages.");
+                session.SendNotification("Oops, you're currently muted - you cannot send messages.");
                 return;
             }
 
-            Session.GetHabbo().GetMessenger().SendInstantMessage(userId, message);
+            session.GetHabbo().GetMessenger().SendInstantMessage(userId, message);
 
         }
     }

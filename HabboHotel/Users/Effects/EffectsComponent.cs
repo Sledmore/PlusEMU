@@ -41,7 +41,7 @@ namespace Plus.HabboHotel.Users.Effects
                 {
                     foreach (DataRow Row in getEffects.Rows)
                     {
-                        if (this._effects.TryAdd(Convert.ToInt32(Row["id"]), new AvatarEffect(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["effect_id"]), Convert.ToDouble(Row["total_duration"]), PlusEnvironment.EnumToBool(Row["is_activated"].ToString()), Convert.ToDouble(Row["activated_stamp"]), Convert.ToInt32(Row["quantity"]))))
+                        if (_effects.TryAdd(Convert.ToInt32(Row["id"]), new AvatarEffect(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["effect_id"]), Convert.ToDouble(Row["total_duration"]), PlusEnvironment.EnumToBool(Row["is_activated"].ToString()), Convert.ToDouble(Row["activated_stamp"]), Convert.ToInt32(Row["quantity"]))))
                         {
                             //umm?
                         }
@@ -49,14 +49,14 @@ namespace Plus.HabboHotel.Users.Effects
                 }
             }
 
-            this._habbo = habbo;
-            this._currentEffect = 0;
+            _habbo = habbo;
+            _currentEffect = 0;
             return true;
         }
 
         public bool TryAdd(AvatarEffect Effect)
         {
-            return this._effects.TryAdd(Effect.Id, Effect);
+            return _effects.TryAdd(Effect.Id, Effect);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Plus.HabboHotel.Users.Effects
         /// <returns></returns>
         public AvatarEffect GetEffectNullable(int SpriteId, bool ActivatedOnly = false, bool UnactivatedOnly = false)
         {
-            foreach (AvatarEffect Effect in this._effects.Values.ToList())
+            foreach (AvatarEffect Effect in _effects.Values.ToList())
             {
                 if (!Effect.HasExpired && Effect.SpriteId == SpriteId && (!ActivatedOnly || Effect.Activated) && (!UnactivatedOnly || !Effect.Activated))
                 {
@@ -96,7 +96,7 @@ namespace Plus.HabboHotel.Users.Effects
         /// <param name="Habbo"></param>
         public void CheckEffectExpiry(Habbo Habbo)
         {
-            foreach (AvatarEffect Effect in this._effects.Values.ToList())
+            foreach (AvatarEffect Effect in _effects.Values.ToList())
             {
                 if (Effect.HasExpired)
                 {
@@ -107,29 +107,29 @@ namespace Plus.HabboHotel.Users.Effects
 
         public void ApplyEffect(int EffectId)
         {
-            if (this._habbo == null || this._habbo.CurrentRoom == null)
+            if (_habbo == null || _habbo.CurrentRoom == null)
                 return;
 
-            RoomUser User = this._habbo.CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(this._habbo.Id);
+            RoomUser User = _habbo.CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(_habbo.Id);
             if (User == null)
                 return;
 
-            this._currentEffect = EffectId;
+            _currentEffect = EffectId;
 
             if (User.IsDancing)
-                this._habbo.CurrentRoom.SendPacket(new DanceComposer(User, 0));
-            this._habbo.CurrentRoom.SendPacket(new AvatarEffectComposer(User.VirtualId, EffectId));
+                _habbo.CurrentRoom.SendPacket(new DanceComposer(User, 0));
+            _habbo.CurrentRoom.SendPacket(new AvatarEffectComposer(User.VirtualId, EffectId));
         }
 
         public ICollection<AvatarEffect> GetAllEffects
         {
-            get { return this._effects.Values; }
+            get { return _effects.Values; }
         }
 
         public int CurrentEffect
         {
-            get { return this._currentEffect; }
-            set { this._currentEffect = value; }
+            get { return _currentEffect; }
+            set { _currentEffect = value; }
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Plus.HabboHotel.Users.Effects
         /// </summary>
         public void Dispose()
         {
-            this._effects.Clear();
+            _effects.Clear();
         }
     }
 }

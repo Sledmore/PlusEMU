@@ -4,81 +4,81 @@ using Plus.HabboHotel.Quests;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class ApplyDecorationEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session, true))
+            if (!room.CheckRights(session, true))
                 return;
 
-            Item Item = Session.GetHabbo().GetInventoryComponent().GetItem(Packet.PopInt());
-            if (Item == null)
+            Item item = session.GetHabbo().GetInventoryComponent().GetItem(packet.PopInt());
+            if (item == null)
                 return;
 
-            if (Item.GetBaseItem() == null)
+            if (item.GetBaseItem() == null)
                 return;
 
-            string DecorationKey = string.Empty;
-            switch (Item.GetBaseItem().InteractionType)
+            string decorationKey = string.Empty;
+            switch (item.GetBaseItem().InteractionType)
             {
                 case InteractionType.FLOOR:
-                    DecorationKey = "floor";
+                    decorationKey = "floor";
                     break;
 
                 case InteractionType.WALLPAPER:
-                    DecorationKey = "wallpaper";
+                    decorationKey = "wallpaper";
                     break;
 
                 case InteractionType.LANDSCAPE:
-                    DecorationKey = "landscape";
+                    decorationKey = "landscape";
                     break;
             }
 
-            switch (DecorationKey)
+            switch (decorationKey)
             {
                 case "floor":
-                    Room.Floor = Item.ExtraData;
+                    room.Floor = item.ExtraData;
 
-                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniDecoFloor);
-                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomDecoFloor", 1);
+                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniDecoFloor);
+                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomDecoFloor", 1);
                     break;
 
                 case "wallpaper":
-                    Room.Wallpaper = Item.ExtraData;
+                    room.Wallpaper = item.ExtraData;
 
-                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FurniDecoWall);
-                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomDecoWallpaper", 1);
+                    PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniDecoWall);
+                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomDecoWallpaper", 1);
                     break;
 
                 case "landscape":
-                    Room.Landscape = Item.ExtraData;
+                    room.Landscape = item.ExtraData;
 
-                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomDecoLandscape", 1);
+                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomDecoLandscape", 1);
                     break;
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `rooms` SET `" + DecorationKey + "` = @extradata WHERE `id` = '" + Room.RoomId + "' LIMIT 1");
-                dbClient.AddParameter("extradata", Item.ExtraData);
+                dbClient.SetQuery("UPDATE `rooms` SET `" + decorationKey + "` = @extradata WHERE `id` = '" + room.RoomId + "' LIMIT 1");
+                dbClient.AddParameter("extradata", item.ExtraData);
                 dbClient.RunQuery();
 
-                dbClient.RunQuery("DELETE FROM `items` WHERE `id` = '" + Item.Id + "' LIMIT 1");
+                dbClient.RunQuery("DELETE FROM `items` WHERE `id` = '" + item.Id + "' LIMIT 1");
             }
 
-            Session.GetHabbo().GetInventoryComponent().RemoveItem(Item.Id);
-            Room.SendPacket(new RoomPropertyComposer(DecorationKey, Item.ExtraData));
+            session.GetHabbo().GetInventoryComponent().RemoveItem(item.Id);
+            room.SendPacket(new RoomPropertyComposer(decorationKey, item.ExtraData));
         }
     }
 }

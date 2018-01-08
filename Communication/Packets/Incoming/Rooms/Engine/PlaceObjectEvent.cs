@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 using Plus.Communication.Packets.Outgoing.Rooms.Notifications;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Items.Data.Moodlight;
 using Plus.HabboHotel.Items.Data.Toner;
 
@@ -10,78 +12,73 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class PlaceObjectEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            int ItemId = 0;
-            string[] Data = null;
+            string rawData = packet.PopString();
+            var data = rawData.Split(' ');
 
-            string RawData = Packet.PopString();
-            Data = RawData.Split(' ');
-
-            if (!int.TryParse(Data[0], out ItemId))
+            if (!int.TryParse(data[0], out int itemId))
                 return;
 
-            bool HasRights = false;
-            if (Room.CheckRights(Session, false, true))
-                HasRights = true;
+            bool hasRights = room.CheckRights(session, false, true);
 
-            if (!HasRights)
+            if (!hasRights)
             {
-                Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
+                session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
                 return;
             }
 
-            Item Item = Session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
-            if (Item == null)
+            Item item = session.GetHabbo().GetInventoryComponent().GetItem(itemId);
+            if (item == null)
                 return;
 
-            if (Room.GetRoomItemHandler().GetWallAndFloor.Count() > Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.item.placement_limit")))
+            if (room.GetRoomItemHandler().GetWallAndFloor.Count() > Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.item.placement_limit")))
             {
-                Session.SendNotification("You cannot have more than " + Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.item.placement_limit")) + " items in a room!");
+                session.SendNotification("You cannot have more than " + Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.item.placement_limit")) + " items in a room!");
                 return;
             }
-            else if (Item.Data.InteractionType == InteractionType.EXCHANGE && Room.OwnerId != Session.GetHabbo().Id && !Session.GetHabbo().GetPermissions().HasRight("room_item_place_exchange_anywhere"))
+
+            if (item.Data.InteractionType == InteractionType.EXCHANGE && room.OwnerId != session.GetHabbo().Id && !session.GetHabbo().GetPermissions().HasRight("room_item_place_exchange_anywhere"))
             {
-                Session.SendNotification("You cannot place exchange items in other people's rooms!");
+                session.SendNotification("You cannot place exchange items in other people's rooms!");
                 return;
             }
 
             //TODO: Make neat.
-            switch (Item.GetBaseItem().InteractionType)
+            switch (item.GetBaseItem().InteractionType)
             {
                 #region Interaction Types
                 case InteractionType.MOODLIGHT:
                     {
-                        MoodlightData moodData = Room.MoodlightData;
-                        if (moodData != null && Room.GetRoomItemHandler().GetItem(moodData.ItemId) != null)
+                        MoodlightData moodData = room.MoodlightData;
+                        if (moodData != null && room.GetRoomItemHandler().GetItem(moodData.ItemId) != null)
                         {
-                            Session.SendNotification("You can only have one background moodlight per room!");
+                            session.SendNotification("You can only have one background moodlight per room!");
                             return;
                         }
                         break;
                     }
                 case InteractionType.TONER:
                     {
-                        TonerData tonerData = Room.TonerData;
-                        if (tonerData != null && Room.GetRoomItemHandler().GetItem(tonerData.ItemId) != null)
+                        TonerData tonerData = room.TonerData;
+                        if (tonerData != null && room.GetRoomItemHandler().GetItem(tonerData.ItemId) != null)
                         {
-                            Session.SendNotification("You can only have one background toner per room!");
+                            session.SendNotification("You can only have one background toner per room!");
                             return;
                         }
                         break;
                     }
                 case InteractionType.HOPPER:
                     {
-                        if (Room.GetRoomItemHandler().HopperCount > 0)
+                        if (room.GetRoomItemHandler().HopperCount > 0)
                         {
-                            Session.SendNotification("You can only have one hopper per room!");
+                            session.SendNotification("You can only have one hopper per room!");
                             return;
                         }
                         break;
@@ -90,86 +87,77 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                 case InteractionType.TENT:
                 case InteractionType.TENT_SMALL:
                     {
-                        Room.AddTent(Item.Id);
+                        room.AddTent(item.Id);
                         break;
                     }
                 #endregion
             }
 
-            if (!Item.IsWallItem)
+            if (!item.IsWallItem)
             {
-                if (Data.Length < 4)
+                if (data.Length < 4)
                     return;
 
-                int X = 0;
-                int Y = 0;
-                int Rotation = 0;
+                if (!int.TryParse(data[1], out int x)) { return; }
+                if (!int.TryParse(data[2], out int y)) { return; }
+                if (!int.TryParse(data[3], out int rotation)) { return; }
 
-                if (!int.TryParse(Data[1], out X)) { return; }
-                if (!int.TryParse(Data[2], out Y)) { return; }
-                if (!int.TryParse(Data[3], out Rotation)) { return; }
-
-                Item RoomItem = new Item(Item.Id, Room.RoomId, Item.BaseItem, Item.ExtraData, X, Y, 0, Rotation, Session.GetHabbo().Id, Item.GroupId, Item.LimitedNo, Item.LimitedTot, string.Empty, Room);
-                if (Room.GetRoomItemHandler().SetFloorItem(Session, RoomItem, X, Y, Rotation, true, false, true))
+                Item roomItem = new Item(item.Id, room.RoomId, item.BaseItem, item.ExtraData, x, y, 0, rotation, session.GetHabbo().Id, item.GroupId, item.LimitedNo, item.LimitedTot, string.Empty, room);
+                if (room.GetRoomItemHandler().SetFloorItem(session, roomItem, x, y, rotation, true, false, true))
                 {
-                    Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+                    session.GetHabbo().GetInventoryComponent().RemoveItem(itemId);
 
-                    if (Session.GetHabbo().Id == Room.OwnerId)
-                        PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomDecoFurniCount", 1, false);
+                    if (session.GetHabbo().Id == room.OwnerId)
+                        PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomDecoFurniCount", 1);
 
-                    if (RoomItem.IsWired)
+                    if (roomItem.IsWired)
                     {
-                        try { Room.GetWired().LoadWiredBox(RoomItem); }
-                        catch { Console.WriteLine(Item.GetBaseItem().InteractionType); }
+                        try { room.GetWired().LoadWiredBox(roomItem); }
+                        catch { Console.WriteLine(item.GetBaseItem().InteractionType); }
                     }
                 }
                 else
                 {
-                    Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
-                    return;
+                    session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
                 }
             }
-            else if (Item.IsWallItem)
+            else if (item.IsWallItem)
             {
-                string[] CorrectedData = new string[Data.Length - 1];
+                string[] correctedData = new string[data.Length - 1];
 
-                for (int i = 1; i < Data.Length; i++)
+                for (int i = 1; i < data.Length; i++)
                 {
-                    CorrectedData[i - 1] = Data[i];
+                    correctedData[i - 1] = data[i];
                 }
 
-                string WallPos = string.Empty;
-
-                if (TrySetWallItem( CorrectedData, out WallPos))
+                if (TrySetWallItem( correctedData, out string wallPos))
                 {
                     try
                     {
-                        Item RoomItem = new Item(Item.Id, Room.RoomId, Item.BaseItem, Item.ExtraData, 0, 0, 0, 0, Session.GetHabbo().Id, Item.GroupId, Item.LimitedNo, Item.LimitedTot, WallPos, Room);
+                        Item roomItem = new Item(item.Id, room.RoomId, item.BaseItem, item.ExtraData, 0, 0, 0, 0, session.GetHabbo().Id, item.GroupId, item.LimitedNo, item.LimitedTot, wallPos, room);
 
-                        if (Room.GetRoomItemHandler().SetWallItem(Session, RoomItem))
+                        if (room.GetRoomItemHandler().SetWallItem(session, roomItem))
                         {
-                            Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
-                            if (Session.GetHabbo().Id == Room.OwnerId)
-                                PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomDecoFurniCount", 1, false);
+                            session.GetHabbo().GetInventoryComponent().RemoveItem(itemId);
+                            if (session.GetHabbo().Id == room.OwnerId)
+                                PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomDecoFurniCount", 1);
                         }
                     }
                     catch
                     {
-                        Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
-                        return;
+                        session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
                     }
                 }
                 else
                 {
-                    Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
-                    return;
+                    session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
                 }
             }
         }
 
-        private static bool TrySetWallItem(string[] data, out string position)
+        private static bool TrySetWallItem(IReadOnlyList<string> data, out string position)
         {
-            if (data.Length != 3 || !data[0].StartsWith(":w=") || !data[1].StartsWith("l=") || (data[2] != "r" && data[2] != "l"))
+            if (data.Count != 3 || !data[0].StartsWith(":w=") || !data[1].StartsWith("l=") || (data[2] != "r" && data[2] != "l"))
             {
                 position = null;
                 return false;
@@ -184,15 +172,10 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                 return false;
             }
 
-            int w1 = 0;
-            int w2 = 0;
-            int l1 = 0;
-            int l2 = 0;
-
-            int.TryParse(wBit.Split(',')[0], out w1);
-            int.TryParse(wBit.Split(',')[1], out w2);
-            int.TryParse(lBit.Split(',')[0], out l1);
-            int.TryParse(lBit.Split(',')[1], out l2);
+            int.TryParse(wBit.Split(',')[0], out int w1);
+            int.TryParse(wBit.Split(',')[1], out int w2);
+            int.TryParse(lBit.Split(',')[0], out int l1);
+            int.TryParse(lBit.Split(',')[1], out int l2);
             //
             //if (!Habbo.HasFuse("super_admin") && (w1 < 0 || w2 < 0 || l1 < 0 || l2 < 0 || w1 > 200 || w2 > 200 || l1 > 200 || l2 > 200))
             //{
@@ -202,14 +185,14 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 
 
 
-            string WallPos = ":w=" + w1 + "," + w2 + " l=" + l1 + "," + l2 + " " + data[2];
+            string wallPos = ":w=" + w1 + "," + w2 + " l=" + l1 + "," + l2 + " " + data[2];
 
-            position = WallPositionCheck(WallPos);
+            position = WallPositionCheck(wallPos);
 
             return (position != null);
         }
 
-        public static string WallPositionCheck(string wallPosition)
+        private static string WallPositionCheck(string wallPosition)
         {
             //:w=3,2 l=9,63 l
             try

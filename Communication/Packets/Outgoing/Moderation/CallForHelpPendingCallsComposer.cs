@@ -8,11 +8,11 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
         public CallForHelpPendingCallsComposer(ModerationTicket ticket)
             : base(ServerPacketHeader.CallForHelpPendingCallsMessageComposer)
         {
-            base.WriteInteger(1);// Count for whatever reason?
+            WriteInteger(1);// Count for whatever reason?
             {
-                base.WriteString(ticket.Id.ToString());
-                base.WriteString(UnixTimestamp.FromUnixTimestamp(ticket.Timestamp).ToShortTimeString());// "11-02-2017 04:07:05";
-                base.WriteString(ticket.Issue);
+                WriteString(ticket.Id.ToString());
+                WriteString(UnixTimestamp.FromUnixTimestamp(ticket.Timestamp).ToShortTimeString());// "11-02-2017 04:07:05";
+                WriteString(ticket.Issue);
             }
         }
     }

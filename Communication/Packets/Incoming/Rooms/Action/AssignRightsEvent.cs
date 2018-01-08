@@ -5,12 +5,13 @@ using Plus.Communication.Packets.Outgoing.Rooms.Settings;
 
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Cache.Type;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class AssignRightsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             if (session == null || session.GetHabbo() == null)
                 return;
@@ -36,15 +37,15 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
                 dbClient.RunQuery("INSERT INTO `room_rights` (`room_id`,`user_id`) VALUES ('" + room.RoomId + "','" + userId + "')");
             }
 
-            RoomUser RoomUser = room.GetRoomUserManager().GetRoomUserByHabbo(userId);
-            if (RoomUser != null && !RoomUser.IsBot)
+            RoomUser roomUser = room.GetRoomUserManager().GetRoomUserByHabbo(userId);
+            if (roomUser != null && !roomUser.IsBot)
             {
-                RoomUser.SetStatus("flatctrl 1", "");
-                RoomUser.UpdateNeeded = true;
-                if (RoomUser.GetClient() != null)
-                    RoomUser.GetClient().SendPacket(new YouAreControllerComposer(1));
+                roomUser.SetStatus("flatctrl 1");
+                roomUser.UpdateNeeded = true;
+                if (roomUser.GetClient() != null)
+                    roomUser.GetClient().SendPacket(new YouAreControllerComposer(1));
 
-                session.SendPacket(new FlatControllerAddedComposer(room.RoomId, RoomUser.GetClient().GetHabbo().Id, RoomUser.GetClient().GetHabbo().Username));
+                session.SendPacket(new FlatControllerAddedComposer(room.RoomId, roomUser.GetClient().GetHabbo().Id, roomUser.GetClient().GetHabbo().Username));
             }
             else
             {

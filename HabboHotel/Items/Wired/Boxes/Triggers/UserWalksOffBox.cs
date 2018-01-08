@@ -21,10 +21,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
 
         public UserWalksOffBox(Room instance, Item item)
         {
-            this.Instance = instance;
-            this.Item = item;
-            this.StringData = "";
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            Instance = instance;
+            Item = item;
+            StringData = "";
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket packet)
@@ -32,8 +32,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             int Unknown = packet.PopInt();
             string Unknown2 = packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int FurniCount = packet.PopInt();
             for (int i = 0; i < FurniCount; i++)
@@ -54,7 +54,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             if (Item == null)
                 return false;
 
-            if (!this.SetItems.ContainsKey(Item.Id))
+            if (!SetItems.ContainsKey(Item.Id))
                 return false;
 
             ICollection<IWiredItem> Effects = Instance.GetWired().GetEffects(this);

@@ -23,8 +23,8 @@ namespace Plus.HabboHotel.Rooms.Instance
 
         public WiredComponent(Room Instance)//, RoomItem Items)
         {
-            this._room = Instance;
-            this._wiredItems = new ConcurrentDictionary<int, IWiredItem>();
+            _room = Instance;
+            _wiredItems = new ConcurrentDictionary<int, IWiredItem>();
         }
 
         public void OnCycle()
@@ -35,7 +35,7 @@ namespace Plus.HabboHotel.Rooms.Instance
                 Item SelectedItem = _room.GetRoomItemHandler().GetItem(Item.Value.Item.Id);
 
                 if (SelectedItem == null)
-                    this.TryRemove(Item.Key);
+                    TryRemove(Item.Key);
 
                 if (Item.Value is IWiredCycle)
                 {
@@ -118,11 +118,11 @@ namespace Plus.HabboHotel.Rooms.Instance
                     NewBox.ItemsData = "";
                     NewBox.StringData = "";
                     NewBox.BoolData = false;
-                    this.SaveBox(NewBox);
+                    SaveBox(NewBox);
                 }
             }
 
-            if (!this.AddBox(NewBox))
+            if (!AddBox(NewBox))
             {
                 // ummm
             }
@@ -315,7 +315,7 @@ namespace Plus.HabboHotel.Rooms.Instance
                 if (Type == WiredBoxType.TriggerUserSays)
                 {
                     List<IWiredItem> RanBoxes = new List<IWiredItem>();
-                    foreach (IWiredItem Box in this._wiredItems.Values.ToList())
+                    foreach (IWiredItem Box in _wiredItems.Values.ToList())
                     {
                         if (Box == null)
                             continue;
@@ -368,7 +368,7 @@ namespace Plus.HabboHotel.Rooms.Instance
             List<IWiredItem> Items = new List<IWiredItem>();
             foreach (IWiredItem I in _wiredItems.Values)
             {
-                if (this.IsTrigger(I.Item) && I.Item.GetX == Item.Item.GetX && I.Item.GetY == Item.Item.GetY)
+                if (IsTrigger(I.Item) && I.Item.GetX == Item.Item.GetX && I.Item.GetY == Item.Item.GetY)
                 {
                     Items.Add(I);
                 }
@@ -383,7 +383,7 @@ namespace Plus.HabboHotel.Rooms.Instance
 
             foreach (IWiredItem I in _wiredItems.Values)
             {
-                if (this.IsEffect(I.Item) && I.Item.GetX == Item.Item.GetX && I.Item.GetY == Item.Item.GetY)
+                if (IsEffect(I.Item) && I.Item.GetX == Item.Item.GetX && I.Item.GetY == Item.Item.GetY)
                 {
                     Items.Add(I);
                 }
@@ -433,7 +433,7 @@ namespace Plus.HabboHotel.Rooms.Instance
 
             foreach (IWiredItem I in _wiredItems.Values)
             {
-                if (this.IsCondition(I.Item) && I.Item.GetX == Item.Item.GetX && I.Item.GetY == Item.Item.GetY)
+                if (IsCondition(I.Item) && I.Item.GetX == Item.Item.GetX && I.Item.GetY == Item.Item.GetY)
                 {
                     Items.Add(I);
                 }
@@ -490,23 +490,23 @@ namespace Plus.HabboHotel.Rooms.Instance
 
         public bool AddBox(IWiredItem Item)
         {
-            return this._wiredItems.TryAdd(Item.Item.Id, Item);
+            return _wiredItems.TryAdd(Item.Item.Id, Item);
         }
 
         public bool TryRemove(int ItemId)
         {
             IWiredItem Item = null;
-            return this._wiredItems.TryRemove(ItemId, out Item);
+            return _wiredItems.TryRemove(ItemId, out Item);
         }
 
         public bool TryGet(int id, out IWiredItem Item)
         {
-            return this._wiredItems.TryGetValue(id, out Item);
+            return _wiredItems.TryGetValue(id, out Item);
         }
 
         public void Cleanup()
         {
-            this._wiredItems.Clear();
+            _wiredItems.Clear();
         }
     }
 }

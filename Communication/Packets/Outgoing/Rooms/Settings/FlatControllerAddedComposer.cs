@@ -5,9 +5,9 @@
         public FlatControllerAddedComposer(int RoomId, int UserId, string Username)
             : base(ServerPacketHeader.FlatControllerAddedMessageComposer)
         {
-            base.WriteInteger(RoomId);
-            base.WriteInteger(UserId);
-           base.WriteString(Username);
+            WriteInteger(RoomId);
+            WriteInteger(UserId);
+           WriteString(Username);
         }
     }
 }

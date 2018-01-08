@@ -7,9 +7,9 @@ namespace Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects
         public AvatarEffectActivatedComposer(AvatarEffect Effect)
             : base(ServerPacketHeader.AvatarEffectActivatedMessageComposer)
         {
-            base.WriteInteger(Effect.SpriteId);
-            base.WriteInteger((int)Effect.Duration);
-            base.WriteBoolean(false);//Permanent
+            WriteInteger(Effect.SpriteId);
+            WriteInteger((int)Effect.Duration);
+            WriteBoolean(false);//Permanent
         }
     }
 }

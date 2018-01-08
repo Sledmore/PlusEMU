@@ -12,58 +12,58 @@ namespace Plus.HabboHotel.Rooms
 
         public RoomPromotion(string name, string description, int categoryId)
         {
-            this._name = name;
-            this._description = description;
-            this._timestampStarted = PlusEnvironment.GetUnixTimestamp();
-            this._timestampExpires = (PlusEnvironment.GetUnixTimestamp()) + (Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.promotion.lifespan")) * 60);
-            this._categoryId = categoryId;
+            _name = name;
+            _description = description;
+            _timestampStarted = PlusEnvironment.GetUnixTimestamp();
+            _timestampExpires = (PlusEnvironment.GetUnixTimestamp()) + (Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.promotion.lifespan")) * 60);
+            _categoryId = categoryId;
         }
 
         public RoomPromotion(string name, string description, double started, double expires, int categoryId)
         {
-            this._name = name;
-            this._description = description;
-            this._timestampStarted = started;
-            this._timestampExpires = expires;
-            this._categoryId = categoryId;
+            _name = name;
+            _description = description;
+            _timestampStarted = started;
+            _timestampExpires = expires;
+            _categoryId = categoryId;
         }
 
         public string Name
         {
-            get { return this._name; }
-            set { this._name = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
         public string Description
         {
-            get { return this._description; }
-            set { this._description = value; }
+            get { return _description; }
+            set { _description = value; }
         }
         public double TimestampStarted
         {
-            get { return this._timestampStarted; }
+            get { return _timestampStarted; }
         }
 
         public double TimestampExpires
         {
-            get { return this._timestampExpires; }
-            set { this._timestampExpires = value; }
+            get { return _timestampExpires; }
+            set { _timestampExpires = value; }
         }
 
         public bool HasExpired
         {
-            get { return (this.TimestampExpires - PlusEnvironment.GetUnixTimestamp()) < 0; }
+            get { return (TimestampExpires - PlusEnvironment.GetUnixTimestamp()) < 0; }
         }
 
         public int MinutesLeft
         {
-            get { return Convert.ToInt32(Math.Ceiling((this.TimestampExpires - PlusEnvironment.GetUnixTimestamp()) / 60)); }
+            get { return Convert.ToInt32(Math.Ceiling((TimestampExpires - PlusEnvironment.GetUnixTimestamp()) / 60)); }
         }
 
         public int CategoryId
         {
-            get { return this._categoryId; }
-            set { this._categoryId = value; }
+            get { return _categoryId; }
+            set { _categoryId = value; }
         }
     }
 }

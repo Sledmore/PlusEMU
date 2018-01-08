@@ -17,7 +17,7 @@
             get { return "Allows you to enable or disable the ability to receive whispers."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             Session.GetHabbo().ReceiveWhispers = !Session.GetHabbo().ReceiveWhispers;
             Session.SendWhisper("You're " + (Session.GetHabbo().ReceiveWhispers ? "now" : "no longer") + " receiving whispers!");

@@ -5,7 +5,7 @@
         public LatencyTestComposer(int testResponce)
             : base(ServerPacketHeader.LatencyResponseMessageComposer)
         {
-            base.WriteInteger(testResponce);
+            WriteInteger(testResponce);
         }
     }
 }

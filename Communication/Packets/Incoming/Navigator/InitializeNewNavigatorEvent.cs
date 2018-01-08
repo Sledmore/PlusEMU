@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using Plus.Communication.Packets.Outgoing.Navigator.New;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Navigator;
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {
     class InitializeNewNavigatorEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            ICollection<TopLevelItem> TopLevelItems = PlusEnvironment.GetGame().GetNavigator().GetTopLevelItems();
+            ICollection<TopLevelItem> topLevelItems = PlusEnvironment.GetGame().GetNavigator().GetTopLevelItems();
 
-            Session.SendPacket(new NavigatorMetaDataParserComposer(TopLevelItems));
-            Session.SendPacket(new NavigatorLiftedRoomsComposer());
-            Session.SendPacket(new NavigatorCollapsedCategoriesComposer());
-            Session.SendPacket(new NavigatorPreferencesComposer());
+            session.SendPacket(new NavigatorMetaDataParserComposer(topLevelItems));
+            session.SendPacket(new NavigatorLiftedRoomsComposer());
+            session.SendPacket(new NavigatorCollapsedCategoriesComposer());
+            session.SendPacket(new NavigatorPreferencesComposer());
         }
     }
 }

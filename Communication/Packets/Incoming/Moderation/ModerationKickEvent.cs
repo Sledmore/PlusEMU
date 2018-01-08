@@ -5,29 +5,28 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class ModerationKickEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().GetPermissions().HasRight("mod_kick"))
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().GetPermissions().HasRight("mod_kick"))
                 return;
 
-            int UserId = Packet.PopInt();
-            string Message = Packet.PopString();
+            int userId = packet.PopInt();
+            packet.PopString(); //message
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId);
-            if (Client == null || Client.GetHabbo() == null || Client.GetHabbo().CurrentRoomId < 1 || Client.GetHabbo().Id == Session.GetHabbo().Id)
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
+            if (client == null || client.GetHabbo() == null || client.GetHabbo().CurrentRoomId < 1 || client.GetHabbo().Id == session.GetHabbo().Id)
                 return;
 
-            if (Client.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            if (client.GetHabbo().Rank >= session.GetHabbo().Rank)
             {
-                Session.SendNotification(PlusEnvironment.GetLanguageManager().TryGetValue("moderation.kick.disallowed"));
+                session.SendNotification(PlusEnvironment.GetLanguageManager().TryGetValue("moderation.kick.disallowed"));
                 return;
             }
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
-            
-            Room.GetRoomUserManager().RemoveUserFromRoom(Client, true, false);
+
+            room.GetRoomUserManager().RemoveUserFromRoom(client, true);
         }
     }
 }

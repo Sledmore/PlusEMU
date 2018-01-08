@@ -1,29 +1,30 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 {
     class ModifyRoomFilterListEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Instance = Session.GetHabbo().CurrentRoom;
-            if (Instance == null)
+            Room instance = session.GetHabbo().CurrentRoom;
+            if (instance == null)
                 return;
 
-            if (!Instance.CheckRights(Session))
+            if (!instance.CheckRights(session))
                 return;
 
-            int RoomId = Packet.PopInt();
-            bool Added = Packet.PopBoolean();
-            string Word = Packet.PopString();
+            packet.PopInt(); //roomId
+            bool added = packet.PopBoolean();
+            string word = packet.PopString();
 
-            if (Added)
-                Instance.GetFilter().AddFilter(Word);
+            if (added)
+                instance.GetFilter().AddFilter(word);
             else
-                Instance.GetFilter().RemoveFilter(Word);
+                instance.GetFilter().RemoveFilter(word);
         }
     }
 }

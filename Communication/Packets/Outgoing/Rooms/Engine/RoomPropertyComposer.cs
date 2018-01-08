@@ -5,8 +5,8 @@
         public RoomPropertyComposer(string name, string val)
             : base(ServerPacketHeader.RoomPropertyMessageComposer)
         {
-           base.WriteString(name);
-           base.WriteString(val);
+           WriteString(name);
+           WriteString(val);
         }
     }
 }

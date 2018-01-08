@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -29,8 +29,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int ChatMode = Packet.PopInt();
             string ChatConfig = Packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             //this.StringData = ChatConfig.Replace('\t', ';') + ";" + ChatMode;
         }
@@ -40,10 +40,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Params == null || Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData))
+            if (String.IsNullOrEmpty(StringData))
                 return false;
 
-            RoomUser User = this.Instance.GetRoomUserManager().GetBotByName(this.StringData);
+            RoomUser User = Instance.GetRoomUserManager().GetBotByName(StringData);
             if (User == null)
                 return false;
 

@@ -5,7 +5,7 @@
         public QuestAbortedComposer()
             : base(ServerPacketHeader.QuestAbortedMessageComposer)
         {
-            base.WriteBoolean(false);
+            WriteBoolean(false);
         }
     }
 }

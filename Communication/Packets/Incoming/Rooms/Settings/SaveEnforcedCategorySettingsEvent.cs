@@ -1,34 +1,33 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Navigator;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 {
     class SaveEnforcedCategorySettingsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Packet.PopInt(), out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(packet.PopInt(), out Room room))
                 return;
 
-            if (!Room.CheckRights(Session, true))
+            if (!room.CheckRights(session, true))
                 return;
 
-            int CategoryId = Packet.PopInt();
-            int TradeSettings = Packet.PopInt();
+            int categoryId = packet.PopInt();
+            int tradeSettings = packet.PopInt();
 
-            if (TradeSettings < 0 || TradeSettings > 2)
-                TradeSettings = 0;
+            if (tradeSettings < 0 || tradeSettings > 2)
+                tradeSettings = 0;
 
-            SearchResultList SearchResultList = null;
-            if (!PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(CategoryId, out SearchResultList))
+            if (!PlusEnvironment.GetGame().GetNavigator().TryGetSearchResultList(categoryId, out SearchResultList searchResultList))
             {
-                CategoryId = 36;
+                categoryId = 36;
             }
 
-            if (SearchResultList.CategoryType != NavigatorCategoryType.Category || SearchResultList.RequiredRank > Session.GetHabbo().Rank)
+            if (searchResultList.CategoryType != NavigatorCategoryType.Category || searchResultList.RequiredRank > session.GetHabbo().Rank)
             {
-                CategoryId = 36;
+                categoryId = 36;
             }
         }
     }

@@ -1,42 +1,39 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Moodlight
 {
     class MoodlightUpdateEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
             
-            if (!Room.CheckRights(Session, true) || Room.MoodlightData == null)
+            if (!room.CheckRights(session, true) || room.MoodlightData == null)
                 return;
 
-            Item Item = Room.GetRoomItemHandler().GetItem(Room.MoodlightData.ItemId);
-            if (Item == null || Item.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+            Item item = room.GetRoomItemHandler().GetItem(room.MoodlightData.ItemId);
+            if (item == null || item.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
                 return;
 
-            int Preset = Packet.PopInt();
-            int BackgroundMode = Packet.PopInt();
-            string ColorCode = Packet.PopString();
-            int Intensity = Packet.PopInt();
+            int preset = packet.PopInt();
+            int backgroundMode = packet.PopInt();
+            string colorCode = packet.PopString();
+            int intensity = packet.PopInt();
 
-            bool BackgroundOnly = false;
-            if (BackgroundMode >= 2)
-                BackgroundOnly = true;
+            bool backgroundOnly = backgroundMode >= 2;
 
-            Room.MoodlightData.Enabled = true;
-            Room.MoodlightData.CurrentPreset = Preset;
-            Room.MoodlightData.UpdatePreset(Preset, ColorCode, Intensity, BackgroundOnly);
+            room.MoodlightData.Enabled = true;
+            room.MoodlightData.CurrentPreset = preset;
+            room.MoodlightData.UpdatePreset(preset, colorCode, intensity, backgroundOnly);
 
-            Item.ExtraData = Room.MoodlightData.GenerateExtraData();
-            Item.UpdateState();
+            item.ExtraData = room.MoodlightData.GenerateExtraData();
+            item.UpdateState();
         }
     }
 }

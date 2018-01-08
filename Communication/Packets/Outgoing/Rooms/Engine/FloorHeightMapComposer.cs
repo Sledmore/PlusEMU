@@ -5,9 +5,9 @@
         public FloorHeightMapComposer(string Map, int WallHeight)
             : base(ServerPacketHeader.FloorHeightMapMessageComposer)
         {
-            base.WriteBoolean(false);
-            base.WriteInteger(WallHeight);
-           base.WriteString(Map);
+            WriteBoolean(false);
+            WriteInteger(WallHeight);
+           WriteString(Map);
         }
     }
 }

@@ -5,7 +5,7 @@
         public RoomForwardComposer(int RoomId)
             : base(ServerPacketHeader.RoomForwardMessageComposer)
         {
-            base.WriteInteger(RoomId);
+            WriteInteger(RoomId);
         }
     }
 }

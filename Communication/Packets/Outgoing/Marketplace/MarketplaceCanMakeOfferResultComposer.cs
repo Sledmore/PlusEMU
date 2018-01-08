@@ -5,8 +5,8 @@
         public MarketplaceCanMakeOfferResultComposer(int Result)
             : base(ServerPacketHeader.MarketplaceCanMakeOfferResultMessageComposer)
         {
-            base.WriteInteger(Result);
-            base.WriteInteger(0);
+            WriteInteger(Result);
+            WriteInteger(0);
         }
     }
 }

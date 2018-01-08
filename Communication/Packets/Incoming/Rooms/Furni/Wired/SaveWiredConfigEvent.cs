@@ -2,43 +2,43 @@
 using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Items.Wired;
 using Plus.Communication.Packets.Outgoing.Rooms.Furni.Wired;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Wired
 {
     class SaveWiredConfigEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null || !Room.CheckRights(Session, false, true))
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null || !room.CheckRights(session, false, true))
                 return;
 
-            int ItemId = Packet.PopInt();
+            int itemId = packet.PopInt();
 
-            Session.SendPacket(new HideWiredConfigComposer());
+            session.SendPacket(new HideWiredConfigComposer());
 
-            Item SelectedItem = Room.GetRoomItemHandler().GetItem(ItemId);
-            if (SelectedItem == null)
+            Item selectedItem = room.GetRoomItemHandler().GetItem(itemId);
+            if (selectedItem == null)
                 return;
 
-            IWiredItem Box = null;
-            if (!Session.GetHabbo().CurrentRoom.GetWired().TryGet(ItemId, out Box))
+            if (!session.GetHabbo().CurrentRoom.GetWired().TryGet(itemId, out IWiredItem box))
                 return;
 
-            if (Box.Type == WiredBoxType.EffectGiveUserBadge && !Session.GetHabbo().GetPermissions().HasRight("room_item_wired_rewards"))
+            if (box.Type == WiredBoxType.EffectGiveUserBadge && !session.GetHabbo().GetPermissions().HasRight("room_item_wired_rewards"))
             {
-                Session.SendNotification("You don't have the correct permissions to do this.");
+                session.SendNotification("You don't have the correct permissions to do this.");
                 return;
             }
 
-            Box.HandleSave(Packet);
-            Session.GetHabbo().CurrentRoom.GetWired().SaveBox(Box);
+            box.HandleSave(packet);
+            session.GetHabbo().CurrentRoom.GetWired().SaveBox(box);
         }
     }
 }

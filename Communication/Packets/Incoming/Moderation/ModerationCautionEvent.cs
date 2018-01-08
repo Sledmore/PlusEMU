@@ -1,29 +1,28 @@
-﻿using System;
-using Plus.Database.Interfaces;
+﻿using Plus.Database.Interfaces;
 using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class ModerationCautionEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().GetPermissions().HasRight("mod_caution"))
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().GetPermissions().HasRight("mod_caution"))
                 return;
 
-            int UserId = Packet.PopInt();
-            String Message = Packet.PopString();
+            int userId = packet.PopInt();
+            string message = packet.PopString();
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId);
-            if (Client == null || Client.GetHabbo() == null)
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
+            if (client == null || client.GetHabbo() == null)
                 return;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `user_info` SET `cautions` = `cautions` + '1' WHERE `user_id` = '" + Client.GetHabbo().Id + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE `user_info` SET `cautions` = `cautions` + '1' WHERE `user_id` = '" + client.GetHabbo().Id + "' LIMIT 1");
             }
 
-            Client.SendNotification(Message);
+            client.SendNotification(message);
         }
     }
 }

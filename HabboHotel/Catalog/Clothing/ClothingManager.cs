@@ -16,8 +16,8 @@ namespace Plus.HabboHotel.Catalog.Clothing
 
         public void Init()
         {
-            if (this._clothing.Count > 0)
-                this._clothing.Clear();
+            if (_clothing.Count > 0)
+                _clothing.Clear();
 
             DataTable data = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())

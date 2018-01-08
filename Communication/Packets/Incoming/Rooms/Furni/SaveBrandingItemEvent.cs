@@ -1,4 +1,5 @@
 ﻿using System;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
@@ -6,36 +7,36 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class SaveBrandingItemEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            if (!Room.CheckRights(Session, true) || !Session.GetHabbo().GetPermissions().HasRight("room_item_save_branding_items"))
+            if (!room.CheckRights(session, true) || !session.GetHabbo().GetPermissions().HasRight("room_item_save_branding_items"))
                 return;
 
-            int ItemId = Packet.PopInt();
-            Item Item = Room.GetRoomItemHandler().GetItem(ItemId);
-            if (Item == null)
+            int itemId = packet.PopInt();
+            Item item = room.GetRoomItemHandler().GetItem(itemId);
+            if (item == null)
                 return;
 
-            if (Item.Data.InteractionType == InteractionType.BACKGROUND)
+            if (item.Data.InteractionType == InteractionType.BACKGROUND)
             {
-                int Data = Packet.PopInt();
-                string BrandData = "state" + Convert.ToChar(9) + "0";
+                int data = packet.PopInt();
+                string brandData = "state" + Convert.ToChar(9) + "0";
 
-                for (int i = 1; i <= Data; i++)
+                for (int i = 1; i <= data; i++)
                 {
-                    BrandData = BrandData + Convert.ToChar(9) + Packet.PopString();
+                    brandData = brandData + Convert.ToChar(9) + packet.PopString();
                 }
 
-                Item.ExtraData = BrandData;
+                item.ExtraData = brandData;
             }
-            else if (Item.Data.InteractionType == InteractionType.FX_PROVIDER)
+            else if (item.Data.InteractionType == InteractionType.FX_PROVIDER)
             {
                 /*int Unknown = Packet.PopInt();
                 string Data = Packet.PopString();
@@ -44,7 +45,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
                 Item.ExtraData = Convert.ToString(EffectId);*/
             }
 
-            Room.GetRoomItemHandler().SetFloorItem(Session, Item, Item.GetX, Item.GetY, Item.Rotation, false, false, true);
+            room.GetRoomItemHandler().SetFloorItem(session, item, item.GetX, item.GetY, item.Rotation, false, false, true);
         }
     }
 }

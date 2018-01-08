@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
         {
             this.Item = Item;
             this.Instance = Instance;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)

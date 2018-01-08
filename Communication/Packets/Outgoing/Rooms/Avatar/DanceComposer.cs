@@ -7,8 +7,8 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Avatar
         public DanceComposer(RoomUser Avatar, int Dance)
             : base(ServerPacketHeader.DanceMessageComposer)
         {
-            base.WriteInteger(Avatar.VirtualId);
-            base.WriteInteger(Dance);
+            WriteInteger(Avatar.VirtualId);
+            WriteInteger(Dance);
         }
     }
 }

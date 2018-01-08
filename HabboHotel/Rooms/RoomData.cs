@@ -61,8 +61,8 @@ namespace Plus.HabboHotel.Rooms
 
         public RoomModel Model
         {
-            get { return this._model; }
-            set { this._model = value; }
+            get { return _model; }
+            set { _model = value; }
         }
 
         public RoomData(int id, string caption, string modelName, string ownerName, int ownerId, string password, int score, string type, string access, int usersNow, int usersMax, int category, string description,
@@ -70,122 +70,122 @@ namespace Plus.HabboHotel.Rooms
             int banSettings, int kickSettings, int chatMode, int chatSize, int chatSpeed, int extraFlood, int chatDistance, int tradeSettings, bool pushEnabled, bool pullEnabled, bool superPushEnabled,
             bool superPullEnabled, bool enablesEnabled, bool respectedNotificationsEnabled, bool petMorphsAllowed, int groupId, int salePrice, bool layEnabled, RoomModel model)
         {
-            this.Id = id;
-            this.Name = caption;
-            this.ModelName = modelName;
-            this.OwnerName = ownerName;
-            this.OwnerId = ownerId;
-            this.Password = password;
-            this.Score = score;
-            this.Type = type;
-            this.Access = RoomAccessUtility.ToRoomAccess(access);
-            this.UsersNow = usersNow;
-            this.UsersMax = usersMax;
-            this.Category = category;
-            this.Description = description;
+            Id = id;
+            Name = caption;
+            ModelName = modelName;
+            OwnerName = ownerName;
+            OwnerId = ownerId;
+            Password = password;
+            Score = score;
+            Type = type;
+            Access = RoomAccessUtility.ToRoomAccess(access);
+            UsersNow = usersNow;
+            UsersMax = usersMax;
+            Category = category;
+            Description = description;
 
-            this.Tags = new List<string>();
+            Tags = new List<string>();
             foreach (string Tag in tags.ToString().Split(','))
             {
                 Tags.Add(Tag);
             }
 
-            this.Floor = floor;
-            this.Landscape = landscape;
-            this.AllowPets = allowPets;
-            this.AllowPetsEating = allowPetsEating;
-            this.RoomBlockingEnabled = roomBlockingEnabled;
-            this.Hidewall = hidewall;
-            this.WallThickness = wallThickness;
-            this.FloorThickness = floorThickness;
-            this.Wallpaper = wallpaper;
-            this.WhoCanMute = muteSettings;
-            this.WhoCanBan = banSettings;
-            this.WhoCanKick = kickSettings;
-            this.ChatMode = chatMode;
-            this.ChatSize = chatSize;
-            this.ChatSpeed = chatSpeed;
-            this.ExtraFlood = extraFlood;
-            this.ChatDistance = chatDistance;
-            this.TradeSettings = tradeSettings;
-            this.PushEnabled = pushEnabled;
-            this.PullEnabled = pullEnabled;
-            this.SuperPushEnabled = superPushEnabled;
-            this.SuperPullEnabled = superPullEnabled;
-            this.EnablesEnabled = enablesEnabled;
-            this.RespectNotificationsEnabled = respectedNotificationsEnabled;
-            this.PetMorphsAllowed = petMorphsAllowed;
-            this.SalePrice = salePrice;
-            this.ReverseRollers = false;
-            this.LayEnabled = layEnabled;
+            Floor = floor;
+            Landscape = landscape;
+            AllowPets = allowPets;
+            AllowPetsEating = allowPetsEating;
+            RoomBlockingEnabled = roomBlockingEnabled;
+            Hidewall = hidewall;
+            WallThickness = wallThickness;
+            FloorThickness = floorThickness;
+            Wallpaper = wallpaper;
+            WhoCanMute = muteSettings;
+            WhoCanBan = banSettings;
+            WhoCanKick = kickSettings;
+            ChatMode = chatMode;
+            ChatSize = chatSize;
+            ChatSpeed = chatSpeed;
+            ExtraFlood = extraFlood;
+            ChatDistance = chatDistance;
+            TradeSettings = tradeSettings;
+            PushEnabled = pushEnabled;
+            PullEnabled = pullEnabled;
+            SuperPushEnabled = superPushEnabled;
+            SuperPullEnabled = superPullEnabled;
+            EnablesEnabled = enablesEnabled;
+            RespectNotificationsEnabled = respectedNotificationsEnabled;
+            PetMorphsAllowed = petMorphsAllowed;
+            SalePrice = salePrice;
+            ReverseRollers = false;
+            LayEnabled = layEnabled;
 
             if (groupId > 0)
-                PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out this._group);
+                PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out _group);
 
             LoadPromotions();
 
-            this._model = model;
+            _model = model;
         }
 
         public RoomPromotion Promotion
         {
-            get { return this._promotion; }
-            set { this._promotion = value; }
+            get { return _promotion; }
+            set { _promotion = value; }
         }
 
         public Group Group
         {
-            get { return this._group; }
-            set { this._group = value; }
+            get { return _group; }
+            set { _group = value; }
         }
 
         public RoomData(RoomData data)
         {
-            this.Id = data.Id;
-            this.Name = data.Name;
-            this.ModelName = data.ModelName;
-            this.OwnerName = data.OwnerName;
-            this.OwnerId = data.OwnerId;
-            this.Password = data.Password;
-            this.Score = data.Score;
-            this.Type = data.Type;
-            this.Access = data.Access;
-            this.UsersNow = data.UsersNow;
-            this.UsersMax = data.UsersMax;
-            this.Category = data.Category;
-            this.Description = data.Description;
-            this.Tags = data.Tags;
-            this.Floor = data.Floor;
-            this.Landscape = data.Landscape;
-            this.AllowPets = data.AllowPets;
-            this.AllowPetsEating = data.AllowPetsEating;
-            this.RoomBlockingEnabled = data.RoomBlockingEnabled;
-            this.Hidewall = data.Hidewall;
-            this.WallThickness = data.WallThickness;
-            this.FloorThickness = data.FloorThickness;
-            this.Wallpaper = data.Wallpaper;
-            this.WhoCanMute = data.WhoCanMute;
-            this.WhoCanBan = data.WhoCanBan;
-            this.WhoCanKick = data.WhoCanKick;
-            this.ChatMode = data.ChatMode;
-            this.ChatSize = data.ChatSize;
-            this.ChatSpeed = data.ChatSpeed;
-            this.ExtraFlood = data.ExtraFlood;
-            this.ChatDistance = data.ChatDistance;
-            this.TradeSettings = data.TradeSettings;
-            this.PushEnabled = data.PushEnabled;
-            this.PullEnabled = data.PullEnabled;
-            this.SuperPushEnabled = data.SuperPushEnabled;
-            this.SuperPullEnabled = data.SuperPullEnabled;
-            this.RespectNotificationsEnabled = data.RespectNotificationsEnabled;
-            this.PetMorphsAllowed = data.PetMorphsAllowed;
-            this.Group = data.Group;
-            this.SalePrice = data.SalePrice;
-            this.EnablesEnabled = data.EnablesEnabled;
-            this.ReverseRollers = data.ReverseRollers;
-            this.LayEnabled = data.LayEnabled;
+            Id = data.Id;
+            Name = data.Name;
+            ModelName = data.ModelName;
+            OwnerName = data.OwnerName;
+            OwnerId = data.OwnerId;
+            Password = data.Password;
+            Score = data.Score;
+            Type = data.Type;
+            Access = data.Access;
+            UsersNow = data.UsersNow;
+            UsersMax = data.UsersMax;
+            Category = data.Category;
+            Description = data.Description;
+            Tags = data.Tags;
+            Floor = data.Floor;
+            Landscape = data.Landscape;
+            AllowPets = data.AllowPets;
+            AllowPetsEating = data.AllowPetsEating;
+            RoomBlockingEnabled = data.RoomBlockingEnabled;
+            Hidewall = data.Hidewall;
+            WallThickness = data.WallThickness;
+            FloorThickness = data.FloorThickness;
+            Wallpaper = data.Wallpaper;
+            WhoCanMute = data.WhoCanMute;
+            WhoCanBan = data.WhoCanBan;
+            WhoCanKick = data.WhoCanKick;
+            ChatMode = data.ChatMode;
+            ChatSize = data.ChatSize;
+            ChatSpeed = data.ChatSpeed;
+            ExtraFlood = data.ExtraFlood;
+            ChatDistance = data.ChatDistance;
+            TradeSettings = data.TradeSettings;
+            PushEnabled = data.PushEnabled;
+            PullEnabled = data.PullEnabled;
+            SuperPushEnabled = data.SuperPushEnabled;
+            SuperPullEnabled = data.SuperPullEnabled;
+            RespectNotificationsEnabled = data.RespectNotificationsEnabled;
+            PetMorphsAllowed = data.PetMorphsAllowed;
+            Group = data.Group;
+            SalePrice = data.SalePrice;
+            EnablesEnabled = data.EnablesEnabled;
+            ReverseRollers = data.ReverseRollers;
+            LayEnabled = data.LayEnabled;
 
-            this.Model = data.Model;
+            Model = data.Model;
         }
 
         public void LoadPromotions()
@@ -198,23 +198,23 @@ namespace Plus.HabboHotel.Rooms
 
                 if (GetPromotion != null)
                 {
-                    if (Convert.ToDouble(GetPromotion["timestamp_expire"]) > Plus.Utilities.UnixTimestamp.GetNow())
-                        this._promotion = new RoomPromotion(Convert.ToString(GetPromotion["title"]), Convert.ToString(GetPromotion["description"]), Convert.ToDouble(GetPromotion["timestamp_start"]), Convert.ToDouble(GetPromotion["timestamp_expire"]), Convert.ToInt32(GetPromotion["category_id"]));
+                    if (Convert.ToDouble(GetPromotion["timestamp_expire"]) > Utilities.UnixTimestamp.GetNow())
+                        _promotion = new RoomPromotion(Convert.ToString(GetPromotion["title"]), Convert.ToString(GetPromotion["description"]), Convert.ToDouble(GetPromotion["timestamp_start"]), Convert.ToDouble(GetPromotion["timestamp_expire"]), Convert.ToInt32(GetPromotion["category_id"]));
                 }
             }
         }
 
         public bool HasActivePromotion
         {
-            get { return this.Promotion != null; }
+            get { return Promotion != null; }
         }
 
         public void EndPromotion()
         {
-            if (!this.HasActivePromotion)
+            if (!HasActivePromotion)
                 return;
 
-            this.Promotion = null;
+            Promotion = null;
         }
     }
 }

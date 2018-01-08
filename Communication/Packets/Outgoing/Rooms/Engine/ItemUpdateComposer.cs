@@ -12,22 +12,22 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 
         private void WriteWallItem(Item Item, int UserId)
         {
-           base.WriteString(Item.Id.ToString());
-            base.WriteInteger(Item.GetBaseItem().SpriteId);
-           base.WriteString(Item.wallCoord);
+           WriteString(Item.Id.ToString());
+            WriteInteger(Item.GetBaseItem().SpriteId);
+           WriteString(Item.wallCoord);
             switch (Item.GetBaseItem().InteractionType)
             {
                 case InteractionType.POSTIT:
-                   base.WriteString(Item.ExtraData.Split(' ')[0]);
+                   WriteString(Item.ExtraData.Split(' ')[0]);
                     break;
 
                 default:
-                   base.WriteString(Item.ExtraData);
+                   WriteString(Item.ExtraData);
                     break;
             }
-            base.WriteInteger(-1);
-            base.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
-            base.WriteInteger(UserId);
+            WriteInteger(-1);
+            WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
+            WriteInteger(UserId);
         }
     }
 }

@@ -4,34 +4,35 @@ using Plus.HabboHotel.Items;
 
 using Plus.Communication.Packets.Outgoing.Rooms.Furni;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class UpdateMagicTileEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            if (!Room.CheckRights(Session, false, true) && !Session.GetHabbo().GetPermissions().HasRight("room_item_use_any_stack_tile"))
+            if (!room.CheckRights(session, false, true) && !session.GetHabbo().GetPermissions().HasRight("room_item_use_any_stack_tile"))
                 return;
 
-            int ItemId = Packet.PopInt();
-            int DecimalHeight = Packet.PopInt();
+            int itemId = packet.PopInt();
+            int decimalHeight = packet.PopInt();
 
-            Item Item = Room.GetRoomItemHandler().GetItem(ItemId);
-            if (Item == null)
+            Item item = room.GetRoomItemHandler().GetItem(itemId);
+            if (item == null)
                 return;
 
-            Item.GetZ = ((double)DecimalHeight) / 100.0;
+            item.GetZ = decimalHeight / 100.0;
 
-            Room.SendPacket(new ObjectUpdateComposer(Item, Convert.ToInt32(Session.GetHabbo().Id)));
-            Room.SendPacket(new UpdateMagicTileComposer(ItemId, DecimalHeight));
+            room.SendPacket(new ObjectUpdateComposer(item, Convert.ToInt32(session.GetHabbo().Id)));
+            room.SendPacket(new UpdateMagicTileComposer(itemId, decimalHeight));
         }
     }
 }

@@ -12,22 +12,22 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
         public ModeratorUserChatlogComposer(Habbo habbo, List<KeyValuePair<RoomData, List<ChatlogEntry>>> chatlogs)
             : base(ServerPacketHeader.ModeratorUserChatlogMessageComposer)
         {
-            base.WriteInteger(habbo.Id);
-            base.WriteString(habbo.Username);
+            WriteInteger(habbo.Id);
+            WriteString(habbo.Username);
 
-            base.WriteInteger(chatlogs.Count); // Room Visits Count
+            WriteInteger(chatlogs.Count); // Room Visits Count
             foreach (KeyValuePair<RoomData, List<ChatlogEntry>> Chatlog in chatlogs)
             {
-                base.WriteByte(1);
-                base.WriteShort(2);//Count
-                base.WriteString("roomName");
-                base.WriteByte(2);
-                base.WriteString(Chatlog.Key.Name); // room name
-                base.WriteString("roomId");
-                base.WriteByte(1);
-                base.WriteInteger(Chatlog.Key.Id);
+                WriteByte(1);
+                WriteShort(2);//Count
+                WriteString("roomName");
+                WriteByte(2);
+                WriteString(Chatlog.Key.Name); // room name
+                WriteString("roomId");
+                WriteByte(1);
+                WriteInteger(Chatlog.Key.Id);
 
-                base.WriteShort(Chatlog.Value.Count); // Chatlogs Count
+                WriteShort(Chatlog.Value.Count); // Chatlogs Count
                 foreach (ChatlogEntry Entry in Chatlog.Value)
                 {
                     string Username = "NOT FOUND";
@@ -36,11 +36,11 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
                         Username = Entry.PlayerNullable().Username;
                     }
 
-                    base.WriteString(UnixTimestamp.FromUnixTimestamp(Entry.Timestamp).ToShortTimeString());
-                    base.WriteInteger(Entry.PlayerId); // UserId of message
-                    base.WriteString(Username); // Username of message
-                    base.WriteString(!string.IsNullOrEmpty(Entry.Message) ? Entry.Message : "** user sent a blank message **"); // Message        
-                    base.WriteBoolean(habbo.Id == Entry.PlayerId);
+                    WriteString(UnixTimestamp.FromUnixTimestamp(Entry.Timestamp).ToShortTimeString());
+                    WriteInteger(Entry.PlayerId); // UserId of message
+                    WriteString(Username); // Username of message
+                    WriteString(!string.IsNullOrEmpty(Entry.Message) ? Entry.Message : "** user sent a blank message **"); // Message        
+                    WriteBoolean(habbo.Id == Entry.PlayerId);
                 }
             }
         }

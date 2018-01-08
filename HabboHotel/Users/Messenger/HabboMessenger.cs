@@ -24,27 +24,27 @@ namespace Plus.HabboHotel.Users.Messenger
 
         public HabboMessenger(int userId)
         {
-            this._userId = userId;
+            _userId = userId;
             
-            this._requests = new Dictionary<int, MessengerRequest>();
-            this._friends = new Dictionary<int, MessengerBuddy>();
+            _requests = new Dictionary<int, MessengerRequest>();
+            _friends = new Dictionary<int, MessengerBuddy>();
         }
 
 
         public void Init(Dictionary<int, MessengerBuddy> friends, Dictionary<int, MessengerRequest> requests)
         {
-            this._requests = new Dictionary<int, MessengerRequest>(requests);
-            this._friends = new Dictionary<int, MessengerBuddy>(friends);
+            _requests = new Dictionary<int, MessengerRequest>(requests);
+            _friends = new Dictionary<int, MessengerBuddy>(friends);
         }
 
         public bool TryGetRequest(int senderID,  out MessengerRequest Request)
         {
-            return this._requests.TryGetValue(senderID, out Request);
+            return _requests.TryGetValue(senderID, out Request);
         }
 
         public bool TryGetFriend(int UserId, out MessengerBuddy Buddy)
         {
-            return this._friends.TryGetValue(UserId, out Buddy);
+            return _friends.TryGetValue(UserId, out Buddy);
         }
 
         public void ProcessOfflineMessages()
@@ -53,12 +53,12 @@ namespace Plus.HabboHotel.Users.Messenger
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `messenger_offline_messages` WHERE `to_id` = @id;");
-                dbClient.AddParameter("id", this._userId);
+                dbClient.AddParameter("id", _userId);
                 GetMessages = dbClient.GetTable();
 
                 if (GetMessages != null)
                 {
-                    GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(this._userId);
+                    GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(_userId);
                     if (Client == null)
                         return;
 
@@ -68,7 +68,7 @@ namespace Plus.HabboHotel.Users.Messenger
                     }
 
                     dbClient.SetQuery("DELETE FROM `messenger_offline_messages` WHERE `to_id` = @id");
-                    dbClient.AddParameter("id", this._userId);
+                    dbClient.AddParameter("id", _userId);
                     dbClient.RunQuery();
                 }
             }
@@ -419,7 +419,7 @@ namespace Plus.HabboHotel.Users.Messenger
 
         public void BroadcastAchievement(int UserId, MessengerEventTypes Type, string Data)
         {
-            IEnumerable<GameClient> MyFriends = PlusEnvironment.GetGame().GetClientManager().GetClientsById(this._friends.Keys);
+            IEnumerable<GameClient> MyFriends = PlusEnvironment.GetGame().GetClientManager().GetClientsById(_friends.Keys);
 
             foreach (GameClient Client in MyFriends.ToList())
             {
@@ -433,22 +433,22 @@ namespace Plus.HabboHotel.Users.Messenger
 
         public void ClearRequests()
         {
-          this.  _requests.Clear();
+            _requests.Clear();
         }
 
         private GameClient GetClient()
         {
-            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(this._userId);
+            return PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(_userId);
         }
 
         public ICollection<MessengerRequest> GetRequests()
         {
-            return this._requests.Values;
+            return _requests.Values;
         }
 
         public ICollection<MessengerBuddy> GetFriends()
         {
-            return this._friends.Values;
+            return _friends.Values;
         }
     }
 }

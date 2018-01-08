@@ -7,9 +7,9 @@ namespace Plus.Communication.Packets.Outgoing.Messenger
         public InstantMessageErrorComposer(MessengerMessageErrors Error, int Target)
             : base(ServerPacketHeader.InstantMessageErrorMessageComposer)
         {
-            base.WriteInteger(MessengerMessageErrorsUtility.GetMessageErrorPacketNum(Error));
-            base.WriteInteger(Target);
-           base.WriteString("");
+            WriteInteger(MessengerMessageErrorsUtility.GetMessageErrorPacketNum(Error));
+            WriteInteger(Target);
+           WriteString("");
         }
     }
 }

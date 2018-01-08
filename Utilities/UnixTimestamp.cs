@@ -10,7 +10,7 @@ namespace Plus.Utilities
         /// <returns>Unix Timestamp.</returns>
         public static double GetNow()
         {
-            TimeSpan ts = (DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0));
+            TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
             return ts.TotalSeconds;
         }
 
@@ -21,9 +21,9 @@ namespace Plus.Utilities
         /// <returns>DateTime object.</returns>
         public static DateTime FromUnixTimestamp(double timestamp)
         {
-            DateTime DT = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            DT = DT.AddSeconds(timestamp);
-            return DT;
+            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dt = dt.AddSeconds(timestamp);
+            return dt;
         }
     }
 }

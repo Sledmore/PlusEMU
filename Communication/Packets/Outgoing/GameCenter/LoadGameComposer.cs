@@ -7,27 +7,27 @@ namespace Plus.Communication.Packets.Outgoing.GameCenter
         public LoadGameComposer(GameData GameData, string SSOTicket)
             : base(ServerPacketHeader.LoadGameMessageComposer)
         {
-            base.WriteInteger(GameData.Id);
-           base.WriteString("1365260055982");
-           base.WriteString(GameData.ResourcePath + GameData.SWF);
-           base.WriteString("best");
-           base.WriteString("showAll");
-            base.WriteInteger(60);//FPS?
-            base.WriteInteger(10);
-            base.WriteInteger(8);
-            base.WriteInteger(6);//Asset count
-           base.WriteString("assetUrl");
-           base.WriteString(GameData.ResourcePath + GameData.Assets);
-           base.WriteString("habboHost");
-           base.WriteString("http://fuseus-private-httpd-fe-1");
-           base.WriteString("accessToken");
-           base.WriteString(SSOTicket);
-           base.WriteString("gameServerHost");
-           base.WriteString(GameData.ServerHost);
-           base.WriteString("gameServerPort");
-           base.WriteString(GameData.ServerPort);
-           base.WriteString("socketPolicyPort");
-           base.WriteString(GameData.ServerHost);
+            WriteInteger(GameData.Id);
+           WriteString("1365260055982");
+           WriteString(GameData.ResourcePath + GameData.SWF);
+           WriteString("best");
+           WriteString("showAll");
+            WriteInteger(60);//FPS?
+            WriteInteger(10);
+            WriteInteger(8);
+            WriteInteger(6);//Asset count
+           WriteString("assetUrl");
+           WriteString(GameData.ResourcePath + GameData.Assets);
+           WriteString("habboHost");
+           WriteString("http://fuseus-private-httpd-fe-1");
+           WriteString("accessToken");
+           WriteString(SSOTicket);
+           WriteString("gameServerHost");
+           WriteString(GameData.ServerHost);
+           WriteString("gameServerPort");
+           WriteString(GameData.ServerPort);
+           WriteString("socketPolicyPort");
+           WriteString(GameData.ServerHost);
         }
     }
 }

@@ -7,11 +7,11 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
         public UserChangeComposer(RoomUser User, bool Self)
             : base(ServerPacketHeader.UserChangeMessageComposer)
         {
-            base.WriteInteger((Self) ? -1 : User.VirtualId);
-           base.WriteString(User.GetClient().GetHabbo().Look);
-           base.WriteString(User.GetClient().GetHabbo().Gender);
-           base.WriteString(User.GetClient().GetHabbo().Motto);
-            base.WriteInteger(User.GetClient().GetHabbo().GetStats().AchievementPoints);
+            WriteInteger((Self) ? -1 : User.VirtualId);
+           WriteString(User.GetClient().GetHabbo().Look);
+           WriteString(User.GetClient().GetHabbo().Gender);
+           WriteString(User.GetClient().GetHabbo().Motto);
+            WriteInteger(User.GetClient().GetHabbo().GetStats().AchievementPoints);
         }
     }
 }

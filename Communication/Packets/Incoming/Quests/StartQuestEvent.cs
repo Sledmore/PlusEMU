@@ -1,28 +1,29 @@
 ﻿using Plus.HabboHotel.Quests;
 using Plus.Database.Interfaces;
 using Plus.Communication.Packets.Outgoing.Quests;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Quests
 {
     class StartQuestEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int QuestId = Packet.PopInt();
+            int questId = packet.PopInt();
 
-            Quest Quest = PlusEnvironment.GetGame().GetQuestManager().GetQuest(QuestId);
-            if (Quest == null)
+            Quest quest = PlusEnvironment.GetGame().GetQuestManager().GetQuest(questId);
+            if (quest == null)
                 return;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("REPLACE INTO `user_quests` (`user_id`,`quest_id`) VALUES ('" + Session.GetHabbo().Id + "', '" + Quest.Id + "')");
-                dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '" + Quest.Id + "' WHERE `id` = '" + Session.GetHabbo().Id + "' LIMIT 1");
+                dbClient.RunQuery("REPLACE INTO `user_quests` (`user_id`,`quest_id`) VALUES ('" + session.GetHabbo().Id + "', '" + quest.Id + "')");
+                dbClient.RunQuery("UPDATE `user_stats` SET `quest_id` = '" + quest.Id + "' WHERE `id` = '" + session.GetHabbo().Id + "' LIMIT 1");
             }
 
-            Session.GetHabbo().GetStats().QuestId = Quest.Id;
-            PlusEnvironment.GetGame().GetQuestManager().GetList(Session, null);
-            Session.SendPacket(new QuestStartedComposer(Session, Quest));
+            session.GetHabbo().GetStats().QuestId = quest.Id;
+            PlusEnvironment.GetGame().GetQuestManager().GetList(session, null);
+            session.SendPacket(new QuestStartedComposer(session, quest));
         }
     }
 }

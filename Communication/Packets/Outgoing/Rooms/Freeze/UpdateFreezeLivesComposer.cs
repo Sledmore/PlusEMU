@@ -5,8 +5,8 @@
         public UpdateFreezeLivesComposer(int UserId, int FreezeLives)
             : base(ServerPacketHeader.UpdateFreezeLivesMessageComposer)
         {
-            base.WriteInteger(UserId);
-            base.WriteInteger(FreezeLives);
+            WriteInteger(UserId);
+            WriteInteger(FreezeLives);
         }
     }
 }

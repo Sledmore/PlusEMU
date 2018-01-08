@@ -13,21 +13,21 @@ namespace Plus.Communication.Packets.Outgoing.Inventory.Badges
         {
             List<Badge> EquippedBadges = new List<Badge>();
 
-            base.WriteInteger(Session.GetHabbo().GetBadgeComponent().Count);
+            WriteInteger(Session.GetHabbo().GetBadgeComponent().Count);
             foreach (Badge Badge in Session.GetHabbo().GetBadgeComponent().GetBadges().ToList())
             {
-                base.WriteInteger(1);
-                base.WriteString(Badge.Code);
+                WriteInteger(1);
+                WriteString(Badge.Code);
 
                 if (Badge.Slot > 0)
                     EquippedBadges.Add(Badge);
             }
 
-            base.WriteInteger(EquippedBadges.Count);
+            WriteInteger(EquippedBadges.Count);
             foreach (Badge Badge in EquippedBadges)
             {
-                base.WriteInteger(Badge.Slot);
-                base.WriteString(Badge.Code);
+                WriteInteger(Badge.Slot);
+                WriteString(Badge.Code);
             }
         }
     }

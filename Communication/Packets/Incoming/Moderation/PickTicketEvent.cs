@@ -1,24 +1,24 @@
 ﻿using Plus.HabboHotel.Moderation;
 using Plus.Communication.Packets.Outgoing.Moderation;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class PickTicketEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            int Junk = Packet.PopInt();//??
-            int TicketId = Packet.PopInt();
+            packet.PopInt();//Junk
+            int ticketId = packet.PopInt();
 
-            ModerationTicket Ticket = null;
-            if (!PlusEnvironment.GetGame().GetModerationManager().TryGetTicket(TicketId, out Ticket))
+            if (!PlusEnvironment.GetGame().GetModerationManager().TryGetTicket(ticketId, out ModerationTicket ticket))
                 return;
 
-            Ticket.Moderator = Session.GetHabbo();
-            PlusEnvironment.GetGame().GetClientManager().SendPacket(new ModeratorSupportTicketComposer(Session.GetHabbo().Id, Ticket), "mod_tool");
+            ticket.Moderator = session.GetHabbo();
+            PlusEnvironment.GetGame().GetClientManager().SendPacket(new ModeratorSupportTicketComposer(session.GetHabbo().Id, ticket), "mod_tool");
         }
     }
 }

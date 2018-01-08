@@ -20,8 +20,8 @@ namespace Plus.HabboHotel.Users.Calendar
 
         public CalendarComponent()
         {
-            this._lateBoxes = new List<int>();
-            this._openedBoxes = new List<int>();
+            _lateBoxes = new List<int>();
+            _openedBoxes = new List<int>();
         }
 
         /// <summary>
@@ -30,11 +30,11 @@ namespace Plus.HabboHotel.Users.Calendar
         /// <param name="Player"></param>
         public bool Init(Habbo Player)
         {
-            if (this._lateBoxes.Count > 0)
-                this._lateBoxes.Clear();
+            if (_lateBoxes.Count > 0)
+                _lateBoxes.Clear();
 
-            if (this._openedBoxes.Count > 0)
-                this._openedBoxes.Clear();
+            if (_openedBoxes.Count > 0)
+                _openedBoxes.Clear();
 
             DataTable GetData = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -49,11 +49,11 @@ namespace Plus.HabboHotel.Users.Calendar
                     {
                         if (Convert.ToInt32(Row["status"]) == 0)
                         {
-                            this._lateBoxes.Add(Convert.ToInt32(Row["day"]));
+                            _lateBoxes.Add(Convert.ToInt32(Row["day"]));
                         }
                         else
                         {
-                            this._openedBoxes.Add(Convert.ToInt32(Row["day"]));
+                            _openedBoxes.Add(Convert.ToInt32(Row["day"]));
                         }
                     }
                 }
@@ -63,12 +63,12 @@ namespace Plus.HabboHotel.Users.Calendar
 
         public List<int> GetOpenedBoxes()
         {
-            return this._openedBoxes;
+            return _openedBoxes;
         }
 
         public List<int> GetLateBoxes()
         {
-            return this._lateBoxes;
+            return _lateBoxes;
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace Plus.HabboHotel.Users.Calendar
         /// </summary>
         public void Dispose()
         {
-            this._lateBoxes.Clear();
-            this._openedBoxes.Clear();
+            _lateBoxes.Clear();
+            _openedBoxes.Clear();
         }
     }
 }

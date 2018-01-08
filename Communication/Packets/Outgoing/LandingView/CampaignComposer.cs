@@ -5,8 +5,8 @@
         public CampaignComposer(string campaignString, string campaignName)
             : base(ServerPacketHeader.CampaignMessageComposer)
         {
-           base.WriteString(campaignString);
-           base.WriteString(campaignName);
+           WriteString(campaignString);
+           WriteString(campaignName);
         }
     }
 }

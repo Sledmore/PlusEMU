@@ -5,9 +5,9 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class GetFurnitureAliasesEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new FurnitureAliasesComposer());
+            session.SendPacket(new FurnitureAliasesComposer());
         }
     }
 }

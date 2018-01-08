@@ -10,49 +10,49 @@ namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class SendRoomInviteEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session.GetHabbo().TimeMuted > 0)
+            if (session.GetHabbo().TimeMuted > 0)
             {
-                Session.SendNotification("Oops, you're currently muted - you cannot send room invitations.");
+                session.SendNotification("Oops, you're currently muted - you cannot send room invitations.");
                 return;
             }
 
-            int Amount = Packet.PopInt();
-            if (Amount > 500)
+            int amount = packet.PopInt();
+            if (amount > 500)
                 return; // don't send at all
 
-            List<int> Targets = new List<int>();
-            for (int i = 0; i < Amount; i++)
+            List<int> targets = new List<int>();
+            for (int i = 0; i < amount; i++)
             {
-                int uid = Packet.PopInt();
+                int uid = packet.PopInt();
                 if (i < 100) // limit to 100 people, keep looping until we fulfil the request though
                 {
-                    Targets.Add(uid);
+                    targets.Add(uid);
                 }
             }
 
-            string Message = StringCharFilter.Escape(Packet.PopString());
-            if (Message.Length > 121)
-                Message = Message.Substring(0, 121);
+            string message = StringCharFilter.Escape(packet.PopString());
+            if (message.Length > 121)
+                message = message.Substring(0, 121);
 
-            foreach (int UserId in Targets)
+            foreach (int userId in targets)
             {
-                if (!Session.GetHabbo().GetMessenger().FriendshipExists(UserId))
+                if (!session.GetHabbo().GetMessenger().FriendshipExists(userId))
                     continue;
 
-                GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId);
-                if (Client == null || Client.GetHabbo() == null || Client.GetHabbo().AllowMessengerInvites == true || Client.GetHabbo().AllowConsoleMessages == false)
+                GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
+                if (client == null || client.GetHabbo() == null || client.GetHabbo().AllowMessengerInvites || client.GetHabbo().AllowConsoleMessages == false)
                     continue;
 
-                Client.SendPacket(new RoomInviteComposer(Session.GetHabbo().Id, Message));
+                client.SendPacket(new RoomInviteComposer(session.GetHabbo().Id, message));
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("INSERT INTO `chatlogs_console_invitations` (`user_id`,`message`,`timestamp`) VALUES (@userId, @message, UNIX_TIMESTAMP())");
-                dbClient.AddParameter("userId", Session.GetHabbo().Id);
-                dbClient.AddParameter("message", Message);
+                dbClient.AddParameter("userId", session.GetHabbo().Id);
+                dbClient.AddParameter("message", message);
                 dbClient.RunQuery();
             }
         }

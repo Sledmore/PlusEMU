@@ -10,18 +10,18 @@
 
         public TelevisionItem(int Id, string YouTubeId, string Title, string Description, bool Enabled)
         {
-            this._id = Id;
-            this._youtubeId = YouTubeId;
-            this._title = Title;
-            this._description = Description;
-            this._enabled = Enabled;
+            _id = Id;
+            _youtubeId = YouTubeId;
+            _title = Title;
+            _description = Description;
+            _enabled = Enabled;
         }
 
         public int Id
         {
             get
             {
-                return this._id;
+                return _id;
             }
         }
 
@@ -29,7 +29,7 @@
         {
             get
             {
-                return this._youtubeId;
+                return _youtubeId;
             }
         }
 
@@ -38,7 +38,7 @@
         {
             get
             {
-                return this._title;
+                return _title;
             }
         }
 
@@ -46,7 +46,7 @@
         {
             get
             {
-                return this._description;
+                return _description;
             }
         }
 
@@ -54,7 +54,7 @@
         {
             get
             {
-                return this._enabled;
+                return _enabled;
             }
         }
     }

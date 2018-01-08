@@ -1,21 +1,22 @@
 ﻿using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Settings;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 {
     class GetRoomBannedUsersEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Instance = Session.GetHabbo().CurrentRoom;
-            if (Instance == null || !Instance.CheckRights(Session, true))
+            Room instance = session.GetHabbo().CurrentRoom;
+            if (instance == null || !instance.CheckRights(session, true))
                 return;
 
-            if (Instance.GetBans().BannedUsers().Count > 0)
-                Session.SendPacket(new GetRoomBannedUsersComposer(Instance));
+            if (instance.GetBans().BannedUsers().Count > 0)
+                session.SendPacket(new GetRoomBannedUsersComposer(instance));
         }
     }
 }

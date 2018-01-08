@@ -5,10 +5,10 @@ namespace Plus.Communication.Packets.Incoming.Handshake
 {
     public class InfoRetrieveEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new UserObjectComposer(Session.GetHabbo()));
-            Session.SendPacket(new UserPerksComposer(Session.GetHabbo()));
+            session.SendPacket(new UserObjectComposer(session.GetHabbo()));
+            session.SendPacket(new UserPerksComposer(session.GetHabbo()));
         }
     }
 }

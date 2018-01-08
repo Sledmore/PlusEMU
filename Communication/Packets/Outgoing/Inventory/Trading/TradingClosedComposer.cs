@@ -5,8 +5,8 @@
         public TradingClosedComposer(int UserId)
             : base(ServerPacketHeader.TradingClosedMessageComposer)
         {
-            base.WriteInteger(UserId);
-            base.WriteInteger(0);
+            WriteInteger(UserId);
+            WriteInteger(0);
         }
     }
 }

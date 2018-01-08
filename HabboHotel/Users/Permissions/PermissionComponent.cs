@@ -16,8 +16,8 @@ namespace Plus.HabboHotel.Users.Permissions
 
         public PermissionComponent()
         {
-            this._permissions = new List<string>();
-            this._commands = new List<string>();
+            _permissions = new List<string>();
+            _commands = new List<string>();
         }
 
         /// <summary>
@@ -26,14 +26,14 @@ namespace Plus.HabboHotel.Users.Permissions
         /// <param name="habbo"></param>
         public bool Init(Habbo habbo)
         {
-            if (this._permissions.Count > 0)
-                this._permissions.Clear();
+            if (_permissions.Count > 0)
+                _permissions.Clear();
 
-            if (this._commands.Count > 0)
-                this._commands.Clear();
+            if (_commands.Count > 0)
+                _commands.Clear();
 
-            this._permissions.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetPermissionsForPlayer(habbo));
-            this._commands.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetCommandsForPlayer(habbo));
+            _permissions.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetPermissionsForPlayer(habbo));
+            _commands.AddRange(PlusEnvironment.GetGame().GetPermissionManager().GetCommandsForPlayer(habbo));
             return true;
         }
 
@@ -44,7 +44,7 @@ namespace Plus.HabboHotel.Users.Permissions
         /// <returns></returns>
         public bool HasRight(string Right)
         {
-            return this._permissions.Contains(Right);
+            return _permissions.Contains(Right);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Plus.HabboHotel.Users.Permissions
         /// <returns></returns>
         public bool HasCommand(string Command)
         {
-            return this._commands.Contains(Command);
+            return _commands.Contains(Command);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Plus.HabboHotel.Users.Permissions
         /// </summary>
         public void Dispose()
         {
-            this._permissions.Clear();
+            _permissions.Clear();
         }
     }
 }

@@ -10,36 +10,36 @@ namespace Plus.Communication.Packets.Outgoing.Groups
         public GroupCreationWindowComposer(ICollection<RoomData> rooms)
             : base(ServerPacketHeader.GroupCreationWindowMessageComposer)
         {
-            base.WriteInteger(Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("catalog.group.purchase.cost")));//Price
+            WriteInteger(Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("catalog.group.purchase.cost")));//Price
 
-            base.WriteInteger(rooms.Count);//Room count that the user has.
+            WriteInteger(rooms.Count);//Room count that the user has.
             foreach (RoomData room in rooms)
             {
-                base.WriteInteger(room.Id);//Room Id
-                base.WriteString(room.Name);//Room Name
-                base.WriteBoolean(false);//What?
+                WriteInteger(room.Id);//Room Id
+                WriteString(room.Name);//Room Name
+                WriteBoolean(false);//What?
             }
 
-            base.WriteInteger(5);
-            base.WriteInteger(5);
-            base.WriteInteger(11);
-            base.WriteInteger(4);
+            WriteInteger(5);
+            WriteInteger(5);
+            WriteInteger(11);
+            WriteInteger(4);
 
-            base.WriteInteger(6);
-            base.WriteInteger(11);
-            base.WriteInteger(4);
+            WriteInteger(6);
+            WriteInteger(11);
+            WriteInteger(4);
 
-            base.WriteInteger(0);
-            base.WriteInteger(0);
-            base.WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
 
-            base.WriteInteger(0);
-            base.WriteInteger(0);
-            base.WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
 
-            base.WriteInteger(0);
-            base.WriteInteger(0);
-            base.WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
+            WriteInteger(0);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Rooms
         public BotAI BotAI;
         public RoomBot BotData;
         public bool CanWalk;
-        public int CarryItemID; //byte
+        public int CarryItemId; //byte
         public int CarryTimer; //byte
         public int ChatSpamCount = 0;
         public int ChatSpamTicks = 16;
@@ -100,45 +100,45 @@ namespace Plus.HabboHotel.Rooms
 
         public RoomUser(int HabboId, int RoomId, int VirtualId, Room room)
         {
-            this.Freezed = false;
+            Freezed = false;
             this.HabboId = HabboId;
             this.RoomId = RoomId;
             this.VirtualId = VirtualId;
-            this.IdleTime = 0;
+            IdleTime = 0;
 
-            this.X = 0;
-            this.Y = 0;
-            this.Z = 0;
-            this.PrevTime = 0;
-            this.RotHead = 0;
-            this.RotBody = 0;
-            this.UpdateNeeded = true;
-            this._statusses = new Dictionary<string, string>();
+            X = 0;
+            Y = 0;
+            Z = 0;
+            PrevTime = 0;
+            RotHead = 0;
+            RotBody = 0;
+            UpdateNeeded = true;
+            _statusses = new Dictionary<string, string>();
 
-            this.TeleDelay = -1;
-            this.mRoom = room;
+            TeleDelay = -1;
+            mRoom = room;
 
-            this.AllowOverride = false;
-            this.CanWalk = true;
+            AllowOverride = false;
+            CanWalk = true;
 
 
-            this.SqState = 3;
+            SqState = 3;
 
-            this.InternalRoomID = 0;
-            this.CurrentItemEffect = ItemEffectType.None;
+            InternalRoomID = 0;
+            CurrentItemEffect = ItemEffectType.None;
 
-            this.FreezeLives = 0;
-            this.InteractingGate = false;
-            this.GateId = 0;
-            this.LastInteraction = 0;
-            this.LockedTilesCount = 0;
+            FreezeLives = 0;
+            InteractingGate = false;
+            GateId = 0;
+            LastInteraction = 0;
+            LockedTilesCount = 0;
 
-            this.IsJumping = false;
-            this.TimeInRoom = 0;
+            IsJumping = false;
+            TimeInRoom = 0;
 
-            this._tradeId = 0;
-            this._tradePartner = 0;
-            this._trading = false;
+            _tradeId = 0;
+            _tradePartner = 0;
+            _trading = false;
         }
 
 
@@ -173,26 +173,26 @@ namespace Plus.HabboHotel.Rooms
 
         public bool IsTrading
         {
-            get { return this._trading; }
-            set { this._trading = value; }
+            get { return _trading; }
+            set { _trading = value; }
         }
 
         public int TradePartner
         {
-            get { return this._tradePartner; }
-            set { this._tradePartner = value; }
+            get { return _tradePartner; }
+            set { _tradePartner = value; }
         }
 
         public int TradeId
         {
-            get { return this._tradeId; }
-            set { this._tradeId = value; }
+            get { return _tradeId; }
+            set { _tradeId = value; }
         }
 
 
         public Dictionary<string, string> Statusses
         {
-            get { return this._statusses; }
+            get { return _statusses; }
             //set { this._statusses = value; }
         }
 
@@ -379,7 +379,7 @@ namespace Plus.HabboHotel.Rooms
             {
                 mRoom.SendToTent(GetClient().GetHabbo().Id, GetClient().GetHabbo().TentId, Packet);
 
-                Packet = new WhisperComposer(this.VirtualId, "[Tent Chat] " + Message, 0, Colour);
+                Packet = new WhisperComposer(VirtualId, "[Tent Chat] " + Message, 0, Colour);
 
                 List<RoomUser> ToNotify = mRoom.GetRoomUserManager().GetRoomUserByRank(2);
 
@@ -404,7 +404,7 @@ namespace Plus.HabboHotel.Rooms
                     if (User == null || User.GetClient() == null || User.GetClient().GetHabbo() == null || User.GetClient().GetHabbo().GetIgnores().IgnoredUserIds().Contains(mClient.GetHabbo().Id))
                         continue;
 
-                    if (mRoom.ChatDistance > 0 && Gamemap.TileDistance(this.X, this.Y, User.X, User.Y) > mRoom.ChatDistance)
+                    if (mRoom.ChatDistance > 0 && Gamemap.TileDistance(X, Y, User.X, User.Y) > mRoom.ChatDistance)
                         continue;
 
                     User.GetClient().SendPacket(Packet);
@@ -504,7 +504,7 @@ namespace Plus.HabboHotel.Rooms
 
         public void CarryItem(int Item)
         {
-            CarryItemID = Item;
+            CarryItemId = Item;
 
             if (Item > 0)
                 CarryTimer = 240;
@@ -567,24 +567,24 @@ namespace Plus.HabboHotel.Rooms
 
         public bool HasStatus(string Key)
         {
-            return this._statusses.ContainsKey(Key);
+            return _statusses.ContainsKey(Key);
         }
 
         public void RemoveStatus(string Key)
         {
             if (HasStatus(Key))
-                this._statusses.Remove(Key);
+                _statusses.Remove(Key);
         }
 
         public void SetStatus(string Key, string Value = "")
         {
-            if (this._statusses.ContainsKey(Key))
+            if (_statusses.ContainsKey(Key))
             {
-                this._statusses[Key] = Value;
+                _statusses[Key] = Value;
             }
             else
             {
-                this._statusses.Add(Key, Value);
+                _statusses.Add(Key, Value);
             }
         }
 
@@ -593,7 +593,7 @@ namespace Plus.HabboHotel.Rooms
         {
             if (IsBot)
             {
-                this.mRoom.SendPacket(new AvatarEffectComposer(VirtualId, effectID));
+                mRoom.SendPacket(new AvatarEffectComposer(VirtualId, effectID));
                 return;
             }
 
@@ -607,7 +607,7 @@ namespace Plus.HabboHotel.Rooms
         {
             get
             {
-                var Sq = new Point(this.X, this.Y);
+                var Sq = new Point(X, Y);
 
                 if (RotBody == 0)
                 {
@@ -634,7 +634,7 @@ namespace Plus.HabboHotel.Rooms
         {
             get
             {
-                var Sq = new Point(this.X, this.Y);
+                var Sq = new Point(X, Y);
 
                 if (RotBody == 0)
                 {
@@ -661,7 +661,7 @@ namespace Plus.HabboHotel.Rooms
         {
             get
             {
-                var Sq = new Point(this.X, this.Y);
+                var Sq = new Point(X, Y);
 
                 if (RotBody == 0)
                 {
@@ -688,7 +688,7 @@ namespace Plus.HabboHotel.Rooms
         {
             get
             {
-                var Sq = new Point(this.X, this.Y);
+                var Sq = new Point(X, Y);
 
                 if (RotBody == 0)
                 {

@@ -3,16 +3,16 @@ using Plus.Communication.Packets.Outgoing.Handshake;
 
 namespace Plus.Communication.Packets.Incoming.Handshake
 {
-    public class UniqueIDEvent : IPacketEvent
+    public class UniqueIdEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            string Junk = Packet.PopString();
-            string MachineId = Packet.PopString();
+            packet.PopString();
+            string machineId = packet.PopString();
 
-            Session.MachineId = MachineId;
+            session.MachineId = machineId;
 
-            Session.SendPacket(new SetUniqueIdComposer(MachineId));
+            session.SendPacket(new SetUniqueIdComposer(machineId));
         }
     }
 }

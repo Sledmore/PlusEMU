@@ -2,46 +2,46 @@
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {
     class EditRoomEventEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int roomId = Packet.PopInt();
-            string Name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-            string Desc = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+            int roomId = packet.PopInt();
+            string name = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string desc = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
 
-            RoomData data = null;
-            if (!RoomFactory.TryGetData(roomId, out data))
+            if (!RoomFactory.TryGetData(roomId, out RoomData data))
                 return;
 
-            if (data.OwnerId != Session.GetHabbo().Id)
+            if (data.OwnerId != session.GetHabbo().Id)
                 return;
 
             if (data.Promotion == null)
             {
-                Session.SendNotification("Oops, it looks like there isn't a room promotion in this room?");
+                session.SendNotification("Oops, it looks like there isn't a room promotion in this room?");
                 return;
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `room_promotions` SET `title` = @title, `description` = @desc WHERE `room_id` = " + roomId + " LIMIT 1");
-                dbClient.AddParameter("title", Name);
-                dbClient.AddParameter("desc", Desc);
+                dbClient.AddParameter("title", name);
+                dbClient.AddParameter("desc", desc);
                 dbClient.RunQuery();
             }
 
-            Room Room;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Convert.ToInt32(roomId), out Room))
+            Room room;
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Convert.ToInt32(roomId), out room))
                 return;
 
-            data.Promotion.Name = Name;
-            data.Promotion.Description = Desc;
-            Room.SendPacket(new RoomEventComposer(data, data.Promotion));
+            data.Promotion.Name = name;
+            data.Promotion.Description = desc;
+            room.SendPacket(new RoomEventComposer(data, data.Promotion));
         }
     }
 }

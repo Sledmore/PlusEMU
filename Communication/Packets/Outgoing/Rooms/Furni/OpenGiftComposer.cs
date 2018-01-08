@@ -7,13 +7,13 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Furni
         public OpenGiftComposer(ItemData Data, string Text, Item Item, bool ItemIsInRoom)
             : base(ServerPacketHeader.OpenGiftMessageComposer)
         {
-           base.WriteString(Data.Type.ToString());
-            base.WriteInteger(Data.SpriteId);
-           base.WriteString(Data.ItemName);
-            base.WriteInteger(Item.Id);
-           base.WriteString(Data.Type.ToString());
-            base.WriteBoolean(ItemIsInRoom);//Is it in the room?
-           base.WriteString(Text);
+           WriteString(Data.Type.ToString());
+            WriteInteger(Data.SpriteId);
+           WriteString(Data.ItemName);
+            WriteInteger(Item.Id);
+           WriteString(Data.Type.ToString());
+            WriteBoolean(ItemIsInRoom);//Is it in the room?
+           WriteString(Text);
         }
     }
 }

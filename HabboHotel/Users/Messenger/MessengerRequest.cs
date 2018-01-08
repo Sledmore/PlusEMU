@@ -8,14 +8,14 @@
 
         public MessengerRequest(int ToUser, int FromUser, string Username)
         {
-            this._toUser = ToUser;
-            this._fromUser = FromUser;
-            this._username = Username;
+            _toUser = ToUser;
+            _fromUser = FromUser;
+            _username = Username;
         }
 
         public string Username
         {
-            get { return this._username; }
+            get { return _username; }
         }
 
         public int To

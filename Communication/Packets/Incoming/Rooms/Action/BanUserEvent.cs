@@ -1,44 +1,45 @@
 ﻿using System;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class BanUserEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            if (((Room.WhoCanBan == 0 && !Room.CheckRights(Session, true) && Room.Group == null) || (Room.WhoCanBan == 1 && !Room.CheckRights(Session)) && Room.Group == null) || (Room.Group != null && !Room.CheckRights(Session, false, true)))
+            if (((room.WhoCanBan == 0 && !room.CheckRights(session, true) && room.Group == null) || (room.WhoCanBan == 1 && !room.CheckRights(session)) && room.Group == null) || (room.Group != null && !room.CheckRights(session, false, true)))
                 return;
 
-            int UserId = Packet.PopInt();
-            int RoomId = Packet.PopInt();
-            string R = Packet.PopString();
+            int userId = packet.PopInt();
+            packet.PopInt(); //roomId
+            string r = packet.PopString();
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Convert.ToInt32(UserId));
-            if (User == null || User.IsBot)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(Convert.ToInt32(userId));
+            if (user == null || user.IsBot)
                 return;
 
-            if (Room.OwnerId == UserId)
+            if (room.OwnerId == userId)
                 return;
 
-            if (User.GetClient().GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (user.GetClient().GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            long Time = 0;
-            if (R.ToLower().Contains("hour"))
-                Time = 3600;
-            else if (R.ToLower().Contains("day"))
-                Time = 86400;
-            else if (R.ToLower().Contains("perm"))
-                Time = 78892200;
+            long time = 0;
+            if (r.ToLower().Contains("hour"))
+                time = 3600;
+            else if (r.ToLower().Contains("day"))
+                time = 86400;
+            else if (r.ToLower().Contains("perm"))
+                time = 78892200;
 
-            Room.GetBans().Ban(User, Time);
+            room.GetBans().Ban(user, time);
 
-            PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_SelfModBanSeen", 1);
+            PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_SelfModBanSeen", 1);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             get { return "Ignore bot chat or enable it again."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             Session.GetHabbo().AllowPetSpeech = !Session.GetHabbo().AllowPetSpeech;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())

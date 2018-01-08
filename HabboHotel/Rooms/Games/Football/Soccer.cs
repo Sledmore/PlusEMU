@@ -19,20 +19,20 @@ namespace Plus.HabboHotel.Rooms.Games.Football
 
         public Soccer(Room room)
         {
-            this._room = room;
-            this.gates = new Item[4];
-            this._balls = new ConcurrentDictionary<int, Item>();
-            this._gameStarted = false;
+            _room = room;
+            gates = new Item[4];
+            _balls = new ConcurrentDictionary<int, Item>();
+            _gameStarted = false;
         }
 
         public bool GameIsStarted
         {
-            get { return this._gameStarted; }
+            get { return _gameStarted; }
         }
 
         public void StopGame(bool triggeredByUser = false)
         {
-            this._gameStarted = false;
+            _gameStarted = false;
 
             if (!triggeredByUser)
                 _room.GetWired().TriggerEvent(WiredBoxType.TriggerGameEnds, null);
@@ -40,17 +40,17 @@ namespace Plus.HabboHotel.Rooms.Games.Football
 
         public void StartGame()
         {
-            this._gameStarted = true;
+            _gameStarted = true;
         }
 
         public void AddBall(Item item)
         {
-            this._balls.TryAdd(item.Id, item);
+            _balls.TryAdd(item.Id, item);
         }
 
         public void RemoveBall(int itemId)
         {
-            this._balls.TryRemove(itemId, out Item Item);
+            _balls.TryRemove(itemId, out Item Item);
         }
 
         public void OnUserWalk(RoomUser user)
@@ -58,7 +58,7 @@ namespace Plus.HabboHotel.Rooms.Games.Football
             if (user == null)
                 return;
 
-            foreach (Item item in this._balls.Values.ToList())
+            foreach (Item item in _balls.Values.ToList())
             {
                 int NewX = 0;
                 int NewY = 0;
@@ -115,7 +115,7 @@ namespace Plus.HabboHotel.Rooms.Games.Football
                         NewY = user.Y + 2;
                     }
 
-                    if (!this._room.GetRoomItemHandler().CheckPosItem(item, NewX, NewY, item.Rotation))
+                    if (!_room.GetRoomItemHandler().CheckPosItem(item, NewX, NewY, item.Rotation))
                     {
                         if (user.RotBody == 0)
                         {
@@ -283,7 +283,7 @@ namespace Plus.HabboHotel.Rooms.Games.Football
 
             _room.GetRoomItemHandler().SetFloorItem(null, item, newX, newY, item.Rotation, false, false, false, false);
 
-            this._room.OnUserShoot(user, item);
+            _room.OnUserShoot(user, item);
         }
 
         public void Dispose()

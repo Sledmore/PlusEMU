@@ -11,32 +11,32 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Furni.Wired
         public WiredTriggeRconfigComposer(IWiredItem box, List<int> blockedItems)
             : base(ServerPacketHeader.WiredTriggeRconfigMessageComposer)
         {
-            base.WriteBoolean(false);
-            base.WriteInteger(5);
+            WriteBoolean(false);
+            WriteInteger(5);
 
-            base.WriteInteger(box.SetItems.Count);
+            WriteInteger(box.SetItems.Count);
             foreach (Item item in box.SetItems.Values.ToList())
             {
-                base.WriteInteger(item.Id);
+                WriteInteger(item.Id);
             }
 
-            base.WriteInteger(box.Item.GetBaseItem().SpriteId);
-            base.WriteInteger(box.Item.Id);
-            base.WriteString(box.StringData);
+            WriteInteger(box.Item.GetBaseItem().SpriteId);
+            WriteInteger(box.Item.Id);
+            WriteString(box.StringData);
 
-            base.WriteInteger(box is IWiredCycle ? 1 : 0);
+            WriteInteger(box is IWiredCycle ? 1 : 0);
             if (box is IWiredCycle Cycle)
             {
-                base.WriteInteger(Cycle.Delay);
+                WriteInteger(Cycle.Delay);
             }
-            base.WriteInteger(0);
-            base.WriteInteger(WiredBoxTypeUtility.GetWiredId(box.Type));
-            base.WriteInteger(blockedItems.Count());
+            WriteInteger(0);
+            WriteInteger(WiredBoxTypeUtility.GetWiredId(box.Type));
+            WriteInteger(blockedItems.Count());
             if (blockedItems.Count() > 0)
             {
                 foreach (int itemId in blockedItems.ToList())
                 {
-                    base.WriteInteger(itemId);
+                    WriteInteger(itemId);
                 }
             }
         }

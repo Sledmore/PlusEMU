@@ -10,19 +10,19 @@ namespace Plus.Communication.Packets.Outgoing.Inventory.Pets
         public PetInventoryComposer(ICollection<Pet> Pets)
             : base(ServerPacketHeader.PetInventoryMessageComposer)
         {
-            base.WriteInteger(1);
-            base.WriteInteger(1);
-            base.WriteInteger(Pets.Count);
+            WriteInteger(1);
+            WriteInteger(1);
+            WriteInteger(Pets.Count);
             foreach (Pet Pet in Pets.ToList())
             {
-                base.WriteInteger(Pet.PetId);
-               base.WriteString(Pet.Name);
-                base.WriteInteger(Pet.Type);
-                base.WriteInteger(int.Parse(Pet.Race));
-               base.WriteString(Pet.Color);
-                base.WriteInteger(0);
-                base.WriteInteger(0);
-                base.WriteInteger(0);
+                WriteInteger(Pet.PetId);
+               WriteString(Pet.Name);
+                WriteInteger(Pet.Type);
+                WriteInteger(int.Parse(Pet.Race));
+               WriteString(Pet.Color);
+                WriteInteger(0);
+                WriteInteger(0);
+                WriteInteger(0);
             }
         }
     }

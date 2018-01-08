@@ -1,44 +1,43 @@
 ﻿using Plus.HabboHotel.Quests;
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Avatar;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
 {
     class DanceEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null)
                 return;
 
-            User.UnIdle();
+            user.UnIdle();
 
-            int DanceId = Packet.PopInt();
-            if (DanceId < 0 || DanceId > 4)
-                DanceId = 0;
+            int danceId = packet.PopInt();
+            if (danceId < 0 || danceId > 4)
+                danceId = 0;
 
-            if (DanceId > 0 && User.CarryItemID > 0)
-                User.CarryItem(0);
+            if (danceId > 0 && user.CarryItemId > 0)
+                user.CarryItem(0);
 
-            if (Session.GetHabbo().Effects().CurrentEffect > 0)
-                Room.SendPacket(new AvatarEffectComposer(User.VirtualId, 0));
+            if (session.GetHabbo().Effects().CurrentEffect > 0)
+                room.SendPacket(new AvatarEffectComposer(user.VirtualId, 0));
 
-            User.DanceId = DanceId;
+            user.DanceId = danceId;
 
-            Room.SendPacket(new DanceComposer(User, DanceId));
+            room.SendPacket(new DanceComposer(user, danceId));
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialDance);
-            if (Room.GetRoomUserManager().GetRoomUsers().Count > 19)
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.MassDance);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialDance);
+            if (room.GetRoomUserManager().GetRoomUsers().Count > 19)
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.MassDance);
         }
     }
 }

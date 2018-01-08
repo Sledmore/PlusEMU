@@ -15,8 +15,8 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public GameItemHandler(Room room)
         {
-            this._room = room;
-            this.rnd = new Random();
+            _room = room;
+            rnd = new Random();
 
             _banzaiPyramids = new ConcurrentDictionary<int, Item>();
             _banzaiTeleports = new ConcurrentDictionary<int, Item>();
@@ -129,14 +129,14 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public void Dispose()
         {
-            if (this._banzaiTeleports != null)
-                this._banzaiTeleports.Clear();
-            if (this._banzaiPyramids != null)
-                this._banzaiPyramids.Clear();
-            this._banzaiPyramids = null;
-            this._banzaiTeleports = null;
-            this._room = null;
-            this.rnd = null;
+            if (_banzaiTeleports != null)
+                _banzaiTeleports.Clear();
+            if (_banzaiPyramids != null)
+                _banzaiPyramids.Clear();
+            _banzaiPyramids = null;
+            _banzaiTeleports = null;
+            _room = null;
+            rnd = null;
         }
     }
 }

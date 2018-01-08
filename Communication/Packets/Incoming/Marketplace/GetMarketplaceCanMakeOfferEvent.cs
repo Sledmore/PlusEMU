@@ -1,14 +1,15 @@
 ﻿using Plus.Communication.Packets.Outgoing.Marketplace;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Marketplace
 {
     class GetMarketplaceCanMakeOfferEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int ErrorCode = (Session.GetHabbo().TradingLockExpiry > 0 ? 6 : 1);
+            int errorCode = session.GetHabbo().TradingLockExpiry > 0 ? 6 : 1;
 
-            Session.SendPacket(new MarketplaceCanMakeOfferResultComposer(ErrorCode));
+            session.SendPacket(new MarketplaceCanMakeOfferResultComposer(errorCode));
         }
     }
 }

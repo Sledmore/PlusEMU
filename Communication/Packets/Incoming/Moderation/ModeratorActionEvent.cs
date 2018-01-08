@@ -5,24 +5,24 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class ModeratorActionEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().GetPermissions().HasRight("mod_caution"))
+            if (!session.GetHabbo().GetPermissions().HasRight("mod_caution"))
                 return;
 
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room CurrentRoom = Session.GetHabbo().CurrentRoom;
-            if (CurrentRoom == null)
+            Room currentRoom = session.GetHabbo().CurrentRoom;
+            if (currentRoom == null)
                 return;
 
-            int AlertMode = Packet.PopInt(); 
-            string AlertMessage = Packet.PopString();
-            bool IsCaution = AlertMode != 3;
+            int alertMode = packet.PopInt(); 
+            string alertMessage = packet.PopString();
+            bool isCaution = alertMode != 3;
 
-            AlertMessage = IsCaution ? "Caution from Moderator:\n\n" + AlertMessage : "Message from Moderator:\n\n" + AlertMessage;
-            Session.GetHabbo().CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(AlertMessage));
+            alertMessage = isCaution ? "Caution from Moderator:\n\n" + alertMessage : "Message from Moderator:\n\n" + alertMessage;
+            session.GetHabbo().CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
         }
     }
 }

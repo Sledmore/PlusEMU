@@ -5,7 +5,7 @@
         public GenericErrorComposer(int errorId)
             : base(ServerPacketHeader.GenericErrorMessageComposer)
         {
-            base.WriteInteger(errorId);
+            WriteInteger(errorId);
         }
     }
 }

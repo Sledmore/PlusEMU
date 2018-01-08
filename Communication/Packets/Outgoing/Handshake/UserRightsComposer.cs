@@ -5,9 +5,9 @@
         public UserRightsComposer(int Rank)
             : base(ServerPacketHeader.UserRightsMessageComposer)
         {
-            base.WriteInteger(2);//Club level
-            base.WriteInteger(Rank);
-            base.WriteBoolean(false);//Is an ambassador
+            WriteInteger(2);//Club level
+            WriteInteger(Rank);
+            WriteBoolean(false);//Is an ambassador
         }
     }
 }

@@ -62,11 +62,11 @@ namespace Plus.HabboHotel.Users.Process
         {
             if (Player == null)
                 return false;
-            else if (this._player != null)
+            else if (_player != null)
                 return false;
 
-            this._player = Player;
-            this._timer = new Timer(new TimerCallback(Run), null, _runtimeInSec * 1000, _runtimeInSec * 1000);
+            _player = Player;
+            _timer = new Timer(new TimerCallback(Run), null, _runtimeInSec * 1000, _runtimeInSec * 1000);
             return true;
         }
 
@@ -78,78 +78,78 @@ namespace Plus.HabboHotel.Users.Process
         {
             try
             {
-                if (this._disabled)
+                if (_disabled)
                     return;
 
-                if (this._timerRunning)
+                if (_timerRunning)
                 {
-                    this._timerLagging = true;
-                    log.Warn("<Player " + this._player.Id + "> Server can't keep up, Player timer is lagging behind.");
+                    _timerLagging = true;
+                    log.Warn("<Player " + _player.Id + "> Server can't keep up, Player timer is lagging behind.");
                     return;
                 }
 
-                this._resetEvent.Reset();
+                _resetEvent.Reset();
 
                 // BEGIN CODE
 
                 #region Muted Checks
-                if (this._player.TimeMuted > 0)
-                    this._player.TimeMuted -= 60;
+                if (_player.TimeMuted > 0)
+                    _player.TimeMuted -= 60;
                 #endregion
 
                 #region Console Checks
-                if (this._player.MessengerSpamTime > 0)
-                    this._player.MessengerSpamTime -= 60;
-                if (this._player.MessengerSpamTime <= 0)
-                    this._player.MessengerSpamCount = 0;
+                if (_player.MessengerSpamTime > 0)
+                    _player.MessengerSpamTime -= 60;
+                if (_player.MessengerSpamTime <= 0)
+                    _player.MessengerSpamCount = 0;
                 #endregion
 
-                this._player.TimeAFK += 1;
+                _player.TimeAFK += 1;
 
                 #region Respect checking
-                if (this._player.GetStats().RespectsTimestamp != DateTime.Today.ToString("MM/dd"))
+                if (_player.GetStats().RespectsTimestamp != DateTime.Today.ToString("MM/dd"))
                 {
-                    this._player.GetStats().RespectsTimestamp = DateTime.Today.ToString("MM/dd");
+                    _player.GetStats().RespectsTimestamp = DateTime.Today.ToString("MM/dd");
                     using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("UPDATE `user_stats` SET `dailyRespectPoints` = '" + (this._player.Rank == 1 && this._player.VIPRank == 0 ? 10 : this._player.VIPRank == 1 ? 15 : 20) + "', `dailyPetRespectPoints` = '" + (this._player.Rank == 1 && this._player.VIPRank == 0 ? 10 : this._player.VIPRank == 1 ? 15 : 20) + "', `respectsTimestamp` = '" + DateTime.Today.ToString("MM/dd") + "' WHERE `id` = '" + this._player.Id + "' LIMIT 1");
+                        dbClient.RunQuery("UPDATE `user_stats` SET `dailyRespectPoints` = '" + (_player.Rank == 1 && _player.VIPRank == 0 ? 10 : _player.VIPRank == 1 ? 15 : 20) + "', `dailyPetRespectPoints` = '" + (_player.Rank == 1 && _player.VIPRank == 0 ? 10 : _player.VIPRank == 1 ? 15 : 20) + "', `respectsTimestamp` = '" + DateTime.Today.ToString("MM/dd") + "' WHERE `id` = '" + _player.Id + "' LIMIT 1");
                     }
 
-                    this._player.GetStats().DailyRespectPoints = (this._player.Rank == 1 && this._player.VIPRank == 0 ? 10 : this._player.VIPRank == 1 ? 15 : 20);
-                    this._player.GetStats().DailyPetRespectPoints = (this._player.Rank == 1 && this._player.VIPRank == 0 ? 10 : this._player.VIPRank == 1 ? 15 : 20);
+                    _player.GetStats().DailyRespectPoints = (_player.Rank == 1 && _player.VIPRank == 0 ? 10 : _player.VIPRank == 1 ? 15 : 20);
+                    _player.GetStats().DailyPetRespectPoints = (_player.Rank == 1 && _player.VIPRank == 0 ? 10 : _player.VIPRank == 1 ? 15 : 20);
 
-                    if (this._player.GetClient() != null)
+                    if (_player.GetClient() != null)
                     {
-                        this._player.GetClient().SendPacket(new UserObjectComposer(this._player));
+                        _player.GetClient().SendPacket(new UserObjectComposer(_player));
                     }
                 }
                 #endregion
 
                 #region Reset Scripting Warnings
-                if (this._player.GiftPurchasingWarnings < 15)
-                    this._player.GiftPurchasingWarnings = 0;
+                if (_player.GiftPurchasingWarnings < 15)
+                    _player.GiftPurchasingWarnings = 0;
 
-                if (this._player.MottoUpdateWarnings < 15)
-                    this._player.MottoUpdateWarnings = 0;
+                if (_player.MottoUpdateWarnings < 15)
+                    _player.MottoUpdateWarnings = 0;
 
-                if (this._player.ClothingUpdateWarnings < 15)
-                    this._player.ClothingUpdateWarnings = 0;
+                if (_player.ClothingUpdateWarnings < 15)
+                    _player.ClothingUpdateWarnings = 0;
                 #endregion
 
 
-                if (this._player.GetClient() != null)
-                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(this._player.GetClient(), "ACH_AllTimeHotelPresence", 1);
+                if (_player.GetClient() != null)
+                    PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(_player.GetClient(), "ACH_AllTimeHotelPresence", 1);
 
-                this._player.CheckCreditsTimer();
-                this._player.Effects().CheckEffectExpiry(this._player);
+                _player.CheckCreditsTimer();
+                _player.Effects().CheckEffectExpiry(_player);
 
                 // END CODE
 
                 // Reset the values
-                this._timerRunning = false;
-                this._timerLagging = false;
+                _timerRunning = false;
+                _timerLagging = false;
 
-                this._resetEvent.Set();
+                _resetEvent.Set();
             }
             catch { }
         }
@@ -162,26 +162,26 @@ namespace Plus.HabboHotel.Users.Process
             // Wait until any processing is complete first.
             try
             {
-                this._resetEvent.WaitOne(TimeSpan.FromMinutes(5));
+                _resetEvent.WaitOne(TimeSpan.FromMinutes(5));
             }
             catch { } // give up
 
             // Set the timer to disabled
-            this._disabled = true;
+            _disabled = true;
 
             // Dispose the timer to disable it.
             try
             {
-                if (this._timer != null)
-                    this._timer.Dispose();
+                if (_timer != null)
+                    _timer.Dispose();
             }
             catch { }
 
             // Remove reference to the timer.
-            this._timer = null;
+            _timer = null;
 
             // Null the player so we don't reference it here anymore
-            this._player = null;
+            _player = null;
         }
     }
 }

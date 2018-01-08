@@ -7,12 +7,12 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.AI.Bots
         public OpenBotActionComposer(RoomUser BotUser, int ActionId, string BotSpeech)
             : base(ServerPacketHeader.OpenBotActionMessageComposer)
         {
-            base.WriteInteger(BotUser.BotData.Id);
-            base.WriteInteger(ActionId);
+            WriteInteger(BotUser.BotData.Id);
+            WriteInteger(ActionId);
             if (ActionId == 2)
-               base.WriteString(BotSpeech);
+               WriteString(BotSpeech);
             else if (ActionId == 5)
-               base.WriteString(BotUser.BotData.Name);
+               WriteString(BotUser.BotData.Name);
         }
     }
 }

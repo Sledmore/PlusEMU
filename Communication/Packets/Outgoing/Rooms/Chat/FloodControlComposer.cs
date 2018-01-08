@@ -5,7 +5,7 @@
         public FloodControlComposer(int floodTime)
             : base(ServerPacketHeader.FloodControlMessageComposer)
         {
-            base.WriteInteger(floodTime);
+            WriteInteger(floodTime);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             this.Instance = Instance;
             this.Item = Item;
 
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)

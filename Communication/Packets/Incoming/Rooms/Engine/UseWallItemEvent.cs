@@ -1,4 +1,5 @@
-﻿using Plus.HabboHotel.Quests;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Quests;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Items.Wired;
@@ -8,32 +9,27 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class UseWallItemEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            int itemID = Packet.PopInt();
-            Item Item = Room.GetRoomItemHandler().GetItem(itemID);
-            if (Item == null)
+            int itemId = packet.PopInt();
+            Item item = room.GetRoomItemHandler().GetItem(itemId);
+            if (item == null)
                 return;
 
-            bool hasRights = false;
-            if (Room.CheckRights(Session, false, true))
-                hasRights = true;
+            bool hasRights = room.CheckRights(session, false, true);
 
-            string oldData = Item.ExtraData;
-            int request = Packet.PopInt();
+            int request = packet.PopInt();
 
-            Item.Interactor.OnTrigger(Session, Item, request, hasRights);
-            Item.GetRoom().GetWired().TriggerEvent(WiredBoxType.TriggerStateChanges, Session.GetHabbo(), Item);
+            item.Interactor.OnTrigger(session, item, request, hasRights);
+            item.GetRoom().GetWired().TriggerEvent(WiredBoxType.TriggerStateChanges, session.GetHabbo(), item);
         
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.ExploreFindItem, Item.GetBaseItem().Id);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, item.GetBaseItem().Id);
         }
     }
 }

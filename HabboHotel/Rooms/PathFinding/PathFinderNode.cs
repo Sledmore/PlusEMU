@@ -17,12 +17,12 @@ namespace Plus.HabboHotel.Rooms.PathFinding
 
         public override bool Equals(object obj)
         {
-            return (obj is PathFinderNode) && ((PathFinderNode)obj).Position.Equals(this.Position);
+            return (obj is PathFinderNode) && ((PathFinderNode)obj).Position.Equals(Position);
         }
 
         public bool Equals(PathFinderNode Breadcrumb)
         {
-            return Breadcrumb.Position.Equals(this.Position);
+            return Breadcrumb.Position.Equals(Position);
         }
 
         public override int GetHashCode()

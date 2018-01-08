@@ -8,7 +8,7 @@ namespace Plus.Communication.Packets.Outgoing.Quests
         public QuestStartedComposer(GameClient Session, Quest Quest)
             : base(ServerPacketHeader.QuestStartedMessageComposer)
         {
-            this.SerializeQuest(this, Session, Quest, Quest.Category);
+            SerializeQuest(this, Session, Quest, Quest.Category);
         }
 
         private void SerializeQuest(ServerPacket Message, GameClient Session, Quest Quest, string Category)

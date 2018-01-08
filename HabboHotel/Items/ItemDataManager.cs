@@ -17,14 +17,14 @@ namespace Plus.HabboHotel.Items
 
         public ItemDataManager()
         {
-            this._items = new Dictionary<int, ItemData>();
-            this._gifts = new Dictionary<int, ItemData>();
+            _items = new Dictionary<int, ItemData>();
+            _gifts = new Dictionary<int, ItemData>();
         }
 
         public void Init()
         {
-            if (this._items.Count > 0)
-                this._items.Clear();
+            if (_items.Count > 0)
+                _items.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -62,11 +62,11 @@ namespace Plus.HabboHotel.Items
                             bool IsRare = PlusEnvironment.EnumToBool(Row["is_rare"].ToString());
                             bool ExtraRot = PlusEnvironment.EnumToBool(Row["extra_rot"].ToString());
 
-                            if (!this._gifts.ContainsKey(spriteID))
-                                this._gifts.Add(spriteID, new ItemData(id, spriteID, itemName, PublicName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowMarketplace, allowGift, allowInventoryStack, interactionType, behaviourData, cycleCount, vendingIDS, heightAdjustable, EffectId, IsRare, ExtraRot));
+                            if (!_gifts.ContainsKey(spriteID))
+                                _gifts.Add(spriteID, new ItemData(id, spriteID, itemName, PublicName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowMarketplace, allowGift, allowInventoryStack, interactionType, behaviourData, cycleCount, vendingIDS, heightAdjustable, EffectId, IsRare, ExtraRot));
 
-                            if (!this._items.ContainsKey(id))
-                                this._items.Add(id, new ItemData(id, spriteID, itemName, PublicName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowMarketplace, allowGift, allowInventoryStack, interactionType, behaviourData, cycleCount, vendingIDS, heightAdjustable, EffectId, IsRare, ExtraRot));
+                            if (!_items.ContainsKey(id))
+                                _items.Add(id, new ItemData(id, spriteID, itemName, PublicName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowMarketplace, allowGift, allowInventoryStack, interactionType, behaviourData, cycleCount, vendingIDS, heightAdjustable, EffectId, IsRare, ExtraRot));
                         }
                         catch (Exception e)
                         {
@@ -83,7 +83,7 @@ namespace Plus.HabboHotel.Items
 
         public bool GetItem(int Id, out ItemData Item)
         {
-            if (this._items.TryGetValue(Id, out Item))
+            if (_items.TryGetValue(Id, out Item))
                 return true;
             return false;
         }
@@ -101,7 +101,7 @@ namespace Plus.HabboHotel.Items
 
         public bool GetGift(int SpriteId, out ItemData Item)
         {
-            if (this._gifts.TryGetValue(SpriteId, out Item))
+            if (_gifts.TryGetValue(SpriteId, out Item))
                 return true;
             return false;
         }

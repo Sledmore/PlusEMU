@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
@@ -6,30 +6,28 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Stickys
 {
     class UpdateStickyNoteEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            Item Item = Room.GetRoomItemHandler().GetItem(Packet.PopInt());
-            if (Item == null || Item.GetBaseItem().InteractionType != InteractionType.POSTIT)
+            Item item = room.GetRoomItemHandler().GetItem(packet.PopInt());
+            if (item == null || item.GetBaseItem().InteractionType != InteractionType.POSTIT)
                 return;
 
-            String Color = Packet.PopString();
-            String Text = Packet.PopString();
+            string color = packet.PopString();
+            string text = packet.PopString();
 
-            if (!Room.CheckRights(Session))
+            if (!room.CheckRights(session))
             {
-                if (!Text.StartsWith(Item.ExtraData))
+                if (!text.StartsWith(item.ExtraData))
                     return; // we can only ADD stuff! older stuff changed, this is not allowed
             }
 
-            switch (Color)
+            switch (color)
             {
                 case "FFFF33":
                 case "FF9CFF":
@@ -43,8 +41,8 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Stickys
                     return; // invalid color
             }
 
-            Item.ExtraData = Color + " " + Text;
-            Item.UpdateState(true, true);
+            item.ExtraData = color + " " + text;
+            item.UpdateState(true, true);
         }
     }
 }
