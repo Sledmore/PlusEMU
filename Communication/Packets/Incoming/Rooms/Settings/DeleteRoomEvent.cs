@@ -26,7 +26,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
             if (room.OwnerId != session.GetHabbo().Id && !session.GetHabbo().GetPermissions().HasRight("room_delete_any"))
                 return;
 
-            List<Item> ItemsToRemove = new List<Item>();
+            List<Item> itemsToRemove = new List<Item>();
             foreach (Item item in room.GetRoomItemHandler().GetWallAndFloor.ToList())
             {
                 if (item == null)
@@ -42,10 +42,10 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
                     }
                 }
 
-                ItemsToRemove.Add(item);
+                itemsToRemove.Add(item);
             }
 
-            foreach (Item item in ItemsToRemove)
+            foreach (Item item in itemsToRemove)
             {
                 GameClient targetClient = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(item.UserID);
                 if (targetClient != null && targetClient.GetHabbo() != null)//Again, do we have an active client?

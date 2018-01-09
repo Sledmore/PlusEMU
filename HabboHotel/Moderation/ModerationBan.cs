@@ -9,10 +9,10 @@
 
         public ModerationBan(ModerationBanType type, string value, string reason, double expire)
         {
-            this.Type = type;
-            this.Value = value;
-            this.Reason = reason;
-            this.Expire = expire;
+            Type = type;
+            Value = value;
+            Reason = reason;
+            Expire = expire;
         }
 
         public bool Expired

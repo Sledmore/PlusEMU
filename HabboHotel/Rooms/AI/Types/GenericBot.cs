@@ -136,7 +136,7 @@ namespace Plus.HabboHotel.Rooms.AI.Types
                         break;
                 }
 
-                ActionTimer = new Random(DateTime.Now.Millisecond + this.VirtualId ^ 2).Next(5, 15);
+                ActionTimer = new Random(DateTime.Now.Millisecond + VirtualId ^ 2).Next(5, 15);
             }
             else
                 ActionTimer--;

@@ -9,34 +9,34 @@
 
         public TopLevelItem(int id, string searchCode, string filter, string localization)
         {
-            this._id = id;
-            this._searchCode = searchCode;
-            this._filter = filter;
-            this._localization = localization;
+            _id = id;
+            _searchCode = searchCode;
+            _filter = filter;
+            _localization = localization;
         }
 
         public int Id
         {
-            get { return this._id; }
-            set { this._id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         public string SearchCode
         {
-            get { return this._searchCode; }
-            set { this._searchCode = value; }
+            get { return _searchCode; }
+            set { _searchCode = value; }
         }
 
         public string Filter
         {
-            get { return this._filter; }
-            set { this._filter = value; }
+            get { return _filter; }
+            set { _filter = value; }
         }
 
         public string Localization
         {
-            get { return this._localization; }
-            set { this._localization = value; }
+            get { return _localization; }
+            set { _localization = value; }
         }
     }
 }

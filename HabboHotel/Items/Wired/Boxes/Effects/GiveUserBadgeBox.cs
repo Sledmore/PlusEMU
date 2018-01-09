@@ -28,7 +28,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -36,7 +36,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int Unknown = Packet.PopInt();
             string Badge = Packet.PopString();
 
-            this.StringData = Badge;
+            StringData = Badge;
         }
 
         public bool Execute(params object[] Params)

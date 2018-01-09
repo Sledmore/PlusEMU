@@ -14,18 +14,18 @@ namespace Plus.HabboHotel.Rooms.Chat.Pets.Commands
 
         public PetCommandManager()
         {
-            this._petCommands = new Dictionary<string, PetCommand>();
-            this._commandRegister = new Dictionary<int, string>();
-            this._commandDatabase = new Dictionary<string, string>();
+            _petCommands = new Dictionary<string, PetCommand>();
+            _commandRegister = new Dictionary<int, string>();
+            _commandDatabase = new Dictionary<string, string>();
 
-            this.Init();
+            Init();
         }
 
         public void Init()
         {
-            this._petCommands.Clear();
-            this._commandRegister.Clear();
-            this._commandDatabase.Clear();
+            _petCommands.Clear();
+            _commandRegister.Clear();
+            _commandDatabase.Clear();
 
             DataTable Table = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -47,11 +47,11 @@ namespace Plus.HabboHotel.Rooms.Chat.Pets.Commands
             {
                 int commandID = pair.Key;
                 string commandStringedID = pair.Value;
-                string[] commandInput = this._commandDatabase[commandStringedID + ".input"].Split(',');
+                string[] commandInput = _commandDatabase[commandStringedID + ".input"].Split(',');
 
                 foreach (string command in commandInput)
                 {
-                    this._petCommands.Add(command, new PetCommand(commandID, command));
+                    _petCommands.Add(command, new PetCommand(commandID, command));
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Pets.Commands
         public int TryInvoke(string Input)
         {
             PetCommand Command = null;
-            if (this._petCommands.TryGetValue(Input.ToLower(), out Command))
+            if (_petCommands.TryGetValue(Input.ToLower(), out Command))
                 return Command.Id;
             return 0;
         }

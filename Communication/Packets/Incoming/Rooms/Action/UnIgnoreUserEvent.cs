@@ -2,40 +2,41 @@
 using Plus.HabboHotel.Users;
 using Plus.Communication.Packets.Outgoing.Rooms.Action;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class UnIgnoreUserEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            string Username = packet.PopString();
+            string username = packet.PopString();
 
-            Habbo Player = PlusEnvironment.GetHabboByUsername(Username);
-            if (Player == null)
+            Habbo player = PlusEnvironment.GetHabboByUsername(username);
+            if (player == null)
                 return;
 
-            if (!session.GetHabbo().GetIgnores().TryGet(Player.Id))
+            if (!session.GetHabbo().GetIgnores().TryGet(player.Id))
                 return;
 
-            if (session.GetHabbo().GetIgnores().TryRemove(Player.Id))
+            if (session.GetHabbo().GetIgnores().TryRemove(player.Id))
             {
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dbClient.SetQuery("DELETE FROM `user_ignores` WHERE `user_id` = @uid AND `ignore_id` = @ignoreId");
                     dbClient.AddParameter("uid", session.GetHabbo().Id);
-                    dbClient.AddParameter("ignoreId", Player.Id);
+                    dbClient.AddParameter("ignoreId", player.Id);
                     dbClient.RunQuery();
                 }
 
-                session.SendPacket(new IgnoreStatusComposer(3, Player.Username));
+                session.SendPacket(new IgnoreStatusComposer(3, player.Username));
             }
         }
     }

@@ -1,14 +1,15 @@
 ﻿using Plus.Communication.Packets.Outgoing.Users;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Users
 {
     class GetUserTagsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int UserId = Packet.PopInt();
+            int userId = packet.PopInt();
 
-            Session.SendPacket(new UserTagsComposer(UserId));
+            session.SendPacket(new UserTagsComposer(userId));
         }
     }
 }

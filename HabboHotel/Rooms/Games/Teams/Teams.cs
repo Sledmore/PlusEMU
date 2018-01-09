@@ -275,10 +275,10 @@ namespace Plus.HabboHotel.Rooms.Games.Teams
 
         public void Dispose()
         {
-            this.BlueTeam.Clear();
-            this.GreenTeam.Clear();
-            this.RedTeam.Clear();
-            this.YellowTeam.Clear();
+            BlueTeam.Clear();
+            GreenTeam.Clear();
+            RedTeam.Clear();
+            YellowTeam.Clear();
         }
     }
 }

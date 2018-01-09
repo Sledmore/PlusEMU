@@ -25,18 +25,18 @@ namespace Plus.Communication.Encryption.Crypto.RSA
             BigInteger dmp1, BigInteger dmq1,
             BigInteger coeff)
         {
-            this.E = e;
+            E = e;
             this.e = e;
-            this.N = n;
-            this.D = d;
-            this.P = p;
-            this.Q = q;
-            this.Dmp1 = dmp1;
-            this.Dmq1 = dmq1;
-            this.Coeff = coeff;
+            N = n;
+            D = d;
+            P = p;
+            Q = q;
+            Dmp1 = dmp1;
+            Dmq1 = dmq1;
+            Coeff = coeff;
 
-            this.CanEncrypt = (this.N != 0 && this.E != 0);
-            this.CanDecrypt = (this.CanEncrypt && this.D != 0);
+            CanEncrypt = (N != 0 && E != 0);
+            CanDecrypt = (CanEncrypt && D != 0);
 
             //this.GeneratePair(1024, this.e);
         }
@@ -51,9 +51,9 @@ namespace Plus.Communication.Encryption.Crypto.RSA
             {
                 while (true)
                 {
-                    this.P = BigInteger.genPseudoPrime(b - qs, 1, new Random());
+                    P = BigInteger.genPseudoPrime(b - qs, 1, new Random());
 
-                    if ((this.P - 1).gcd(this.e) == 1 && this.P.isProbablePrime(10))
+                    if ((P - 1).gcd(this.e) == 1 && P.isProbablePrime(10))
                     {
                         break;
                     }
@@ -61,35 +61,35 @@ namespace Plus.Communication.Encryption.Crypto.RSA
 
                 while (true)
                 {
-                    this.Q = BigInteger.genPseudoPrime(qs, 1, new Random());
+                    Q = BigInteger.genPseudoPrime(qs, 1, new Random());
 
-                    if ((this.Q - 1).gcd(this.e) == 1 && this.P.isProbablePrime(10))
+                    if ((Q - 1).gcd(this.e) == 1 && P.isProbablePrime(10))
                     {
                         break;
                     }
                 }
 
-                if (this.P < this.Q)
+                if (P < Q)
                 {
-                    BigInteger t = this.P;
-                    this.P = this.Q;
-                    this.Q = t;
+                    BigInteger t = P;
+                    P = Q;
+                    Q = t;
                 }
 
-                BigInteger phi = (this.P - 1) * (this.Q - 1);
+                BigInteger phi = (P - 1) * (Q - 1);
                 if (phi.gcd(this.e) == 1)
                 {
-                    this.N = this.P * this.Q;
-                    this.D = this.e.modInverse(phi);
-                    this.Dmp1 = this.D % (this.P - 1);
-                    this.Dmq1 = this.D % (this.Q - 1);
-                    this.Coeff = this.Q.modInverse(this.P);
+                    N = P * Q;
+                    D = this.e.modInverse(phi);
+                    Dmp1 = D % (P - 1);
+                    Dmq1 = D % (Q - 1);
+                    Coeff = Q.modInverse(P);
                     break;
                 }
             }
 
-            this.CanEncrypt = this.N != 0 && this.e != 0;
-            this.CanDecrypt = this.CanEncrypt && this.D != 0;
+            CanEncrypt = N != 0 && this.e != 0;
+            CanDecrypt = CanEncrypt && D != 0;
 
             Console.WriteLine(N.ToString(16));
             Console.WriteLine(D.ToString(16));
@@ -119,36 +119,36 @@ namespace Plus.Communication.Encryption.Crypto.RSA
 
         public int GetBlockSize()
         {
-            return (this.N.bitCount() + 7) / 8;
+            return (N.bitCount() + 7) / 8;
         }
 
         public byte[] Encrypt(byte[] src)
         {
-            return this.DoEncrypt(new DoCalculateionDelegate(this.DoPublic), src, Pkcs1PadType.FullByte);
+            return DoEncrypt(new DoCalculateionDelegate(DoPublic), src, Pkcs1PadType.FullByte);
         }
 
         public byte[] Decrypt(byte[] src)
         {
-            return this.DoDecrypt(new DoCalculateionDelegate(this.DoPublic), src, Pkcs1PadType.FullByte);
+            return DoDecrypt(new DoCalculateionDelegate(DoPublic), src, Pkcs1PadType.FullByte);
         }
 
         public byte[] Sign(byte[] src)
         {
-            return this.DoEncrypt(new DoCalculateionDelegate(this.DoPrivate), src, Pkcs1PadType.FullByte);
+            return DoEncrypt(new DoCalculateionDelegate(DoPrivate), src, Pkcs1PadType.FullByte);
         }
 
         public byte[] Verify(byte[] src)
         {
-            return this.DoDecrypt(new DoCalculateionDelegate(this.DoPrivate), src, Pkcs1PadType.FullByte);
+            return DoDecrypt(new DoCalculateionDelegate(DoPrivate), src, Pkcs1PadType.FullByte);
         }
 
         private byte[] DoEncrypt(DoCalculateionDelegate method, byte[] src, Pkcs1PadType type)
         {
             try
             {
-                int bl = this.GetBlockSize();
+                int bl = GetBlockSize();
 
-                byte[] paddedBytes = this.Pkcs1pad(src, bl, type);
+                byte[] paddedBytes = Pkcs1pad(src, bl, type);
                 BigInteger m = new BigInteger(paddedBytes);
                 if (m == 0)
                 {
@@ -180,9 +180,9 @@ namespace Plus.Communication.Encryption.Crypto.RSA
                     return null;
                 }
 
-                int bl = this.GetBlockSize();
+                int bl = GetBlockSize();
 
-                byte[] bytes = this.Pkcs1unpad(m.getBytes(), bl, type);
+                byte[] bytes = Pkcs1unpad(m.getBytes(), bl, type);
 
                 return bytes;
             }
@@ -254,14 +254,14 @@ namespace Plus.Communication.Encryption.Crypto.RSA
 
         protected BigInteger DoPublic(BigInteger m)
         {
-            return m.modPow(this.E, this.N);
+            return m.modPow(E, N);
         }
 
         protected BigInteger DoPrivate(BigInteger m)
         {
-            if (this.P == 0 && this.Q == 0)
+            if (P == 0 && Q == 0)
             {
-                return m.modPow(this.D, this.N);
+                return m.modPow(D, N);
             }
             else
             {

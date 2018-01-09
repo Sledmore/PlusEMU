@@ -10,36 +10,36 @@ namespace Plus.Communication.Packets.Outgoing.Messenger
         public HabboSearchResultComposer(List<SearchResult> Friends, List<SearchResult> OtherUsers)
             : base(ServerPacketHeader.HabboSearchResultMessageComposer)
         {
-            base.WriteInteger(Friends.Count);
+            WriteInteger(Friends.Count);
             foreach (SearchResult Friend in Friends.ToList())
             {
                 bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Friend.UserId) != null);
 
-                base.WriteInteger(Friend.UserId);
-               base.WriteString(Friend.Username);
-               base.WriteString(Friend.Motto);
-                base.WriteBoolean(Online);
-                base.WriteBoolean(false);
-               base.WriteString(string.Empty);
-                base.WriteInteger(0);
-               base.WriteString(Online ? Friend.Figure : "");
-               base.WriteString(Friend.LastOnline);
+                WriteInteger(Friend.UserId);
+               WriteString(Friend.Username);
+               WriteString(Friend.Motto);
+                WriteBoolean(Online);
+                WriteBoolean(false);
+               WriteString(string.Empty);
+                WriteInteger(0);
+               WriteString(Online ? Friend.Figure : "");
+               WriteString(Friend.LastOnline);
             }
 
-            base.WriteInteger(OtherUsers.Count);
+            WriteInteger(OtherUsers.Count);
             foreach (SearchResult OtherUser in OtherUsers.ToList())
             {
                 bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(OtherUser.UserId) != null);
 
-                base.WriteInteger(OtherUser.UserId);
-               base.WriteString(OtherUser.Username);
-               base.WriteString(OtherUser.Motto);
-                base.WriteBoolean(Online);
-                base.WriteBoolean(false);
-               base.WriteString(string.Empty);
-                base.WriteInteger(0);
-               base.WriteString(Online ? OtherUser.Figure : "");
-               base.WriteString(OtherUser.LastOnline);
+                WriteInteger(OtherUser.UserId);
+               WriteString(OtherUser.Username);
+               WriteString(OtherUser.Motto);
+                WriteBoolean(Online);
+                WriteBoolean(false);
+               WriteString(string.Empty);
+                WriteInteger(0);
+               WriteString(Online ? OtherUser.Figure : "");
+               WriteString(OtherUser.LastOnline);
             }
         }
     }

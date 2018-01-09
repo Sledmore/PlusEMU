@@ -5,14 +5,14 @@
         public MarketplaceItemStatsComposer(int ItemId, int SpriteId, int AveragePrice)
             : base(ServerPacketHeader.MarketplaceItemStatsMessageComposer)
         {
-            base.WriteInteger(AveragePrice);//Avg price in last 7 days.
-            base.WriteInteger(PlusEnvironment.GetGame().GetCatalog().GetMarketplace().OfferCountForSprite(SpriteId));
+            WriteInteger(AveragePrice);//Avg price in last 7 days.
+            WriteInteger(PlusEnvironment.GetGame().GetCatalog().GetMarketplace().OfferCountForSprite(SpriteId));
 
-            base.WriteInteger(0);//No idea.
-            base.WriteInteger(0);//No idea.
+            WriteInteger(0);//No idea.
+            WriteInteger(0);//No idea.
 
-            base.WriteInteger(ItemId);
-            base.WriteInteger(SpriteId);
+            WriteInteger(ItemId);
+            WriteInteger(SpriteId);
         }
     }
 }

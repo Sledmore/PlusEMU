@@ -9,7 +9,7 @@ namespace Plus.Communication.Packets.Outgoing.Quests
         public QuestListComposer(GameClient Session, bool Send, Dictionary<string, Quest> UserQuests)
             : base(ServerPacketHeader.QuestListMessageComposer)
         {
-            base.WriteInteger(UserQuests.Count);
+            WriteInteger(UserQuests.Count);
 
             // Active ones first
             foreach (var UserQuest in UserQuests)
@@ -29,7 +29,7 @@ namespace Plus.Communication.Packets.Outgoing.Quests
                 SerializeQuest(this, Session, UserQuest.Value, UserQuest.Key);
             }
 
-            base.WriteBoolean(Send);
+            WriteBoolean(Send);
         }
 
         private void SerializeQuest(ServerPacket Message, GameClient Session, Quest Quest, string Category)

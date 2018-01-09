@@ -9,16 +9,16 @@ namespace Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects
         public FigureSetIdsComposer(ICollection<ClothingParts> ClothingParts)
             : base(ServerPacketHeader.FigureSetIdsMessageComposer)
         {
-            base.WriteInteger(ClothingParts.Count);
+            WriteInteger(ClothingParts.Count);
             foreach (ClothingParts Part in ClothingParts.ToList())
             {
-                base.WriteInteger(Part.PartId);
+                WriteInteger(Part.PartId);
             }
 
-            base.WriteInteger(ClothingParts.Count);
+            WriteInteger(ClothingParts.Count);
             foreach (ClothingParts Part in ClothingParts.ToList())
             {
-               base.WriteString(Part.Part);
+               WriteString(Part.Part);
             }
         }
     }

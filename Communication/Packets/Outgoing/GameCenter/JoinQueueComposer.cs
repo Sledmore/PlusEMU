@@ -5,7 +5,7 @@
         public JoinQueueComposer(int GameId)
             : base(ServerPacketHeader.JoinQueueMessageComposer)
         {
-            base.WriteInteger(GameId);
+            WriteInteger(GameId);
         }
     }
 }

@@ -10,11 +10,11 @@
         {
             get
             {
-                return this.x;
+                return x;
             }
             set
             {
-                this.x = value;
+                x = value;
             }
         }
 
@@ -22,11 +22,11 @@
         {
             get
             {
-                return this.y;
+                return y;
             }
             set
             {
-                this.y = value;
+                y = value;
             }
         }
 
@@ -34,11 +34,11 @@
         {
             get
             {
-                return this.z;
+                return z;
             }
             set
             {
-                this.z = value;
+                z = value;
             }
         }
 
@@ -53,7 +53,7 @@
 
         public Vector2D ToVector2D()
         {
-            return new Vector2D(this.x, this.y);
+            return new Vector2D(x, y);
         }
     }
 }

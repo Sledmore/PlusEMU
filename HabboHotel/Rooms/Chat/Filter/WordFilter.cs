@@ -9,30 +9,30 @@
 
         public WordFilter(string word, string replacement, bool strict, bool bannable)
         {
-            this._word = word;
-            this._replacement = replacement;
-            this._strict = strict;
-            this._bannable = bannable;
+            _word = word;
+            _replacement = replacement;
+            _strict = strict;
+            _bannable = bannable;
         }
 
         public string Word
         {
-            get { return this._word; }
+            get { return _word; }
         }
 
         public string Replacement
         {
-            get { return this._replacement; }
+            get { return _replacement; }
         }
 
         public bool IsStrict
         {
-            get { return this._strict; }
+            get { return _strict; }
         }
 
         public bool IsBannable
         {
-            get { return this._bannable; }
+            get { return _bannable; }
         }
     }
 }

@@ -33,14 +33,14 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
         /// </summary>
         public CommandManager(string Prefix)
         {
-            this._prefix = Prefix;
-            this._commands = new Dictionary<string, IChatCommand>();
+            _prefix = Prefix;
+            _commands = new Dictionary<string, IChatCommand>();
 
-            this.RegisterVIP();
-            this.RegisterUser();
-            this.RegisterEvents();
-            this.RegisterModerator();
-            this.RegisterAdministrator();
+            RegisterVIP();
+            RegisterUser();
+            RegisterEvents();
+            RegisterModerator();
+            RegisterAdministrator();
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
             if (_commands.TryGetValue(Split[0].ToLower(), out Cmd))
             {
                 if (Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
-                    this.LogCommand(Session.GetHabbo().Id, Message, Session.GetHabbo().MachineId);
+                    LogCommand(Session.GetHabbo().Id, Message, Session.GetHabbo().MachineId);
 
                 if (!string.IsNullOrEmpty(Cmd.PermissionRequired))
                 {
@@ -108,7 +108,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
         /// </summary>
         private void RegisterVIP()
         {
-            this.Register("spull", new SuperPullCommand());
+            Register("spull", new SuperPullCommand());
         }
 
         /// <summary>
@@ -116,8 +116,8 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
         /// </summary>
         private void RegisterEvents()
         {
-            this.Register("eha", new EventAlertCommand());
-            this.Register("eventalert", new EventAlertCommand());
+            Register("eha", new EventAlertCommand());
+            Register("eventalert", new EventAlertCommand());
         }
 
         /// <summary>
@@ -125,46 +125,46 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
         /// </summary>
         private void RegisterUser()
         {
-            this.Register("about", new InfoCommand());
-            this.Register("pickall", new PickAllCommand());
-            this.Register("ejectall", new EjectAllCommand());
-            this.Register("lay", new LayCommand());
-            this.Register("sit", new SitCommand());
-            this.Register("stand", new StandCommand());
-            this.Register("mutepets", new MutePetsCommand());
-            this.Register("mutebots", new MuteBotsCommand());
+            Register("about", new InfoCommand());
+            Register("pickall", new PickAllCommand());
+            Register("ejectall", new EjectAllCommand());
+            Register("lay", new LayCommand());
+            Register("sit", new SitCommand());
+            Register("stand", new StandCommand());
+            Register("mutepets", new MutePetsCommand());
+            Register("mutebots", new MuteBotsCommand());
 
-            this.Register("mimic", new MimicCommand());
-            this.Register("dance", new DanceCommand());
-            this.Register("push", new PushCommand());
-            this.Register("pull", new PullCommand());
-            this.Register("enable", new EnableCommand());
-            this.Register("follow", new FollowCommand());
-            this.Register("faceless", new FacelessCommand());
-            this.Register("moonwalk", new MoonwalkCommand());
+            Register("mimic", new MimicCommand());
+            Register("dance", new DanceCommand());
+            Register("push", new PushCommand());
+            Register("pull", new PullCommand());
+            Register("enable", new EnableCommand());
+            Register("follow", new FollowCommand());
+            Register("faceless", new FacelessCommand());
+            Register("moonwalk", new MoonwalkCommand());
 
-            this.Register("unload", new UnloadCommand());
-            this.Register("regenmaps", new RegenMaps());
-            this.Register("emptyitems", new EmptyItems());
-            this.Register("setmax", new SetMaxCommand());
-            this.Register("setspeed", new SetSpeedCommand());
-            this.Register("disablediagonal", new DisableDiagonalCommand());
-            this.Register("flagme", new FlagMeCommand());
+            Register("unload", new UnloadCommand());
+            Register("regenmaps", new RegenMaps());
+            Register("emptyitems", new EmptyItems());
+            Register("setmax", new SetMaxCommand());
+            Register("setspeed", new SetSpeedCommand());
+            Register("disablediagonal", new DisableDiagonalCommand());
+            Register("flagme", new FlagMeCommand());
 
-            this.Register("stats", new StatsCommand());
-            this.Register("kickpets", new KickPetsCommand());
-            this.Register("kickbots", new KickBotsCommand());
+            Register("stats", new StatsCommand());
+            Register("kickpets", new KickPetsCommand());
+            Register("kickbots", new KickBotsCommand());
 
-            this.Register("room", new RoomCommand());
-            this.Register("dnd", new DNDCommand());
-            this.Register("disablegifts", new DisableGiftsCommand());
-            this.Register("convertcredits", new ConvertCreditsCommand());
-            this.Register("disablewhispers", new DisableWhispersCommand());
-            this.Register("disablemimic", new DisableMimicCommand()); ;
+            Register("room", new RoomCommand());
+            Register("dnd", new DNDCommand());
+            Register("disablegifts", new DisableGiftsCommand());
+            Register("convertcredits", new ConvertCreditsCommand());
+            Register("disablewhispers", new DisableWhispersCommand());
+            Register("disablemimic", new DisableMimicCommand()); ;
 
-            this.Register("pet", new PetCommand());
-            this.Register("spush", new SuperPushCommand());
-            this.Register("superpush", new SuperPushCommand());
+            Register("pet", new PetCommand());
+            Register("spush", new SuperPushCommand());
+            Register("superpush", new SuperPushCommand());
 
         }
 
@@ -173,54 +173,54 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
         /// </summary>
         private void RegisterModerator()
         {
-            this.Register("ban", new BanCommand());
-            this.Register("mip", new MIPCommand());
-            this.Register("ipban", new IPBanCommand());
+            Register("ban", new BanCommand());
+            Register("mip", new MIPCommand());
+            Register("ipban", new IPBanCommand());
 
-            this.Register("ui", new UserInfoCommand());
-            this.Register("userinfo", new UserInfoCommand());
-            this.Register("sa", new StaffAlertCommand());
-            this.Register("roomunmute", new RoomUnmuteCommand());
-            this.Register("roommute", new RoomMuteCommand());
-            this.Register("roombadge", new RoomBadgeCommand());
-            this.Register("roomalert", new RoomAlertCommand());
-            this.Register("roomkick", new RoomKickCommand());
-            this.Register("mute", new MuteCommand());
-            this.Register("smute", new MuteCommand());
-            this.Register("unmute", new UnmuteCommand());
-            this.Register("massbadge", new MassBadgeCommand());
-            this.Register("kick", new KickCommand());
-            this.Register("skick", new KickCommand());
-            this.Register("ha", new HotelAlertCommand());
-            this.Register("hotelalert", new HotelAlertCommand());
-            this.Register("hal", new HALCommand());
-            this.Register("give", new GiveCommand());
-            this.Register("givebadge", new GiveBadgeCommand());
-            this.Register("dc", new DisconnectCommand());
-            this.Register("kill", new DisconnectCommand());
-            this.Register("disconnect", new DisconnectCommand());
-            this.Register("alert", new AlertCommand());
-            this.Register("tradeban", new TradeBanCommand());
+            Register("ui", new UserInfoCommand());
+            Register("userinfo", new UserInfoCommand());
+            Register("sa", new StaffAlertCommand());
+            Register("roomunmute", new RoomUnmuteCommand());
+            Register("roommute", new RoomMuteCommand());
+            Register("roombadge", new RoomBadgeCommand());
+            Register("roomalert", new RoomAlertCommand());
+            Register("roomkick", new RoomKickCommand());
+            Register("mute", new MuteCommand());
+            Register("smute", new MuteCommand());
+            Register("unmute", new UnmuteCommand());
+            Register("massbadge", new MassBadgeCommand());
+            Register("kick", new KickCommand());
+            Register("skick", new KickCommand());
+            Register("ha", new HotelAlertCommand());
+            Register("hotelalert", new HotelAlertCommand());
+            Register("hal", new HALCommand());
+            Register("give", new GiveCommand());
+            Register("givebadge", new GiveBadgeCommand());
+            Register("dc", new DisconnectCommand());
+            Register("kill", new DisconnectCommand());
+            Register("Disconnect", new DisconnectCommand());
+            Register("alert", new AlertCommand());
+            Register("tradeban", new TradeBanCommand());
 
-            this.Register("teleport", new TeleportCommand());
-            this.Register("summon", new SummonCommand());
-            this.Register("override", new OverrideCommand());
-            this.Register("massenable", new MassEnableCommand());
-            this.Register("massdance", new MassDanceCommand());
-            this.Register("freeze", new FreezeCommand());
-            this.Register("unfreeze", new UnFreezeCommand());
-            this.Register("fastwalk", new FastwalkCommand());
-            this.Register("superfastwalk", new SuperFastwalkCommand());
-            this.Register("coords", new CoordsCommand());
-            this.Register("alleyesonme", new AllEyesOnMeCommand());
-            this.Register("allaroundme", new AllAroundMeCommand());
-            this.Register("forcesit", new ForceSitCommand());
+            Register("teleport", new TeleportCommand());
+            Register("summon", new SummonCommand());
+            Register("override", new OverrideCommand());
+            Register("massenable", new MassEnableCommand());
+            Register("massdance", new MassDanceCommand());
+            Register("freeze", new FreezeCommand());
+            Register("unfreeze", new UnFreezeCommand());
+            Register("fastwalk", new FastwalkCommand());
+            Register("superfastwalk", new SuperFastwalkCommand());
+            Register("coords", new CoordsCommand());
+            Register("alleyesonme", new AllEyesOnMeCommand());
+            Register("allaroundme", new AllAroundMeCommand());
+            Register("forcesit", new ForceSitCommand());
 
-            this.Register("ignorewhispers", new IgnoreWhispersCommand());
-            this.Register("forced_effects", new DisableForcedFXCommand());
+            Register("ignorewhispers", new IgnoreWhispersCommand());
+            Register("forced_effects", new DisableForcedFXCommand());
 
-            this.Register("makesay", new MakeSayCommand());
-            this.Register("flaguser", new FlagUserCommand());
+            Register("makesay", new MakeSayCommand());
+            Register("flaguser", new FlagUserCommand());
         }
 
         /// <summary>
@@ -228,11 +228,11 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
         /// </summary>
         private void RegisterAdministrator()
         {
-            this.Register("bubble", new BubbleCommand());
-            this.Register("update", new UpdateCommand());
-            this.Register("deletegroup", new DeleteGroupCommand());
-            this.Register("carry", new CarryCommand());
-            this.Register("goto", new GOTOCommand());
+            Register("bubble", new BubbleCommand());
+            Register("update", new UpdateCommand());
+            Register("deletegroup", new DeleteGroupCommand());
+            Register("carry", new CarryCommand());
+            Register("goto", new GOTOCommand());
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
         /// <param name="Command">The command to execute.</param>
         public void Register(string CommandText, IChatCommand Command)
         {
-            this._commands.Add(CommandText, Command);
+            _commands.Add(CommandText, Command);
         }
 
         public static string MergeParams(string[] Params, int Start)
@@ -273,7 +273,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
 
         public bool TryGetCommand(string Command, out IChatCommand IChatCommand)
         {
-            return this._commands.TryGetValue(Command, out IChatCommand);
+            return _commands.TryGetValue(Command, out IChatCommand);
         }
     }
 }

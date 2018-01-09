@@ -1,15 +1,16 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
 {
     class SitEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            RoomUser user = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
+            RoomUser user = session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
             if (user == null)
                 return;
 
@@ -22,9 +23,6 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
             {
                 if ((user.RotBody % 2) == 0)
                 {
-                    if (user == null)
-                        return;
-
                     try
                     {
                         user.Statusses.Add("sit", "1.0");
@@ -34,6 +32,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
                     }
                     catch
                     {
+                        //ignored
                     }
                 }
                 else

@@ -2,13 +2,14 @@
 using Plus.Communication.Packets.Outgoing.Navigator;
 
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class GiveRoomScoreEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             if (!session.GetHabbo().InRoom)
                 return;
@@ -19,24 +20,18 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
             if (session.GetHabbo().RatedRooms.Contains(room.RoomId) || room.CheckRights(session, true))
                 return;
 
-            int Rating = packet.PopInt();
-            switch (Rating)
+            int rating = packet.PopInt();
+            switch (rating)
             {
                 case -1:
-
                     room.Score--;
                     break;
-
                 case 1:
-
                     room.Score++;
                     break;
-
                 default:
-
                     return;
             }
-
           
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {

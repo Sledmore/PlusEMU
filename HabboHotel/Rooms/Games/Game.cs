@@ -19,19 +19,19 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public GameManager(Room room)
         {
-            this._room = room;
-            this._teamPoints = new int[5];
+            _room = room;
+            _teamPoints = new int[5];
 
-            this._redTeamItems = new ConcurrentDictionary<int, Item>();
-            this._blueTeamItems = new ConcurrentDictionary<int, Item>();
-            this._greenTeamItems = new ConcurrentDictionary<int, Item>();
-            this._yellowTeamItems = new ConcurrentDictionary<int, Item>();
+            _redTeamItems = new ConcurrentDictionary<int, Item>();
+            _blueTeamItems = new ConcurrentDictionary<int, Item>();
+            _greenTeamItems = new ConcurrentDictionary<int, Item>();
+            _yellowTeamItems = new ConcurrentDictionary<int, Item>();
         }
 
         public int[] Points
         {
-            get { return this._teamPoints; }
-            set { this._teamPoints = value; }
+            get { return _teamPoints; }
+            set { _teamPoints = value; }
         }
 
         public Team GetWinningTeam()
@@ -52,17 +52,17 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public void AddPointToTeam(Team team, int points)
         {
-            int newPoints = this._teamPoints[Convert.ToInt32(team)] += points;
+            int newPoints = _teamPoints[Convert.ToInt32(team)] += points;
             if (newPoints < 0)
                 newPoints = 0;
 
-            this._teamPoints[Convert.ToInt32(team)] = newPoints;
+            _teamPoints[Convert.ToInt32(team)] = newPoints;
 
             foreach (Item item in GetFurniItems(team).Values.ToList())
             {
                 if (!IsFootballGoal(item.GetBaseItem().InteractionType))
                 {
-                    item.ExtraData = this._teamPoints[Convert.ToInt32(team)].ToString();
+                    item.ExtraData = _teamPoints[Convert.ToInt32(team)].ToString();
                     item.UpdateState();
                 }
             }
@@ -112,13 +112,13 @@ namespace Plus.HabboHotel.Rooms.Games
                 default:
                     return new ConcurrentDictionary<int, Item>();
                 case Team.Blue:
-                    return this._blueTeamItems;
+                    return _blueTeamItems;
                 case Team.Green:
-                    return this._greenTeamItems;
+                    return _greenTeamItems;
                 case Team.Red:
-                    return this._redTeamItems;
+                    return _redTeamItems;
                 case Team.Yellow:
-                    return this._yellowTeamItems;
+                    return _yellowTeamItems;
             }
         }
 
@@ -168,22 +168,22 @@ namespace Plus.HabboHotel.Rooms.Games
         #region Gates
         public void LockGates()
         {
-            foreach (Item item in this._redTeamItems.Values.ToList())
+            foreach (Item item in _redTeamItems.Values.ToList())
             {
                 LockGate(item);
             }
 
-            foreach (Item item in this._greenTeamItems.Values.ToList())
+            foreach (Item item in _greenTeamItems.Values.ToList())
             {
                 LockGate(item);
             }
 
-            foreach (Item item in this._blueTeamItems.Values.ToList())
+            foreach (Item item in _blueTeamItems.Values.ToList())
             {
                 LockGate(item);
             }
 
-            foreach (Item item in this._yellowTeamItems.Values.ToList())
+            foreach (Item item in _yellowTeamItems.Values.ToList())
             {
                 LockGate(item);
             }
@@ -191,22 +191,22 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public void UnlockGates()
         {
-            foreach (Item item in this._redTeamItems.Values.ToList())
+            foreach (Item item in _redTeamItems.Values.ToList())
             {
                 UnlockGate(item);
             }
 
-            foreach (Item item in this._greenTeamItems.Values.ToList())
+            foreach (Item item in _greenTeamItems.Values.ToList())
             {
                 UnlockGate(item);
             }
 
-            foreach (Item item in this._blueTeamItems.Values.ToList())
+            foreach (Item item in _blueTeamItems.Values.ToList())
             {
                 UnlockGate(item);
             }
 
-            foreach (Item item in this._yellowTeamItems.Values.ToList())
+            foreach (Item item in _yellowTeamItems.Values.ToList())
             {
                 UnlockGate(item);
             }
@@ -247,7 +247,7 @@ namespace Plus.HabboHotel.Rooms.Games
 
         public void StopGame()
         {
-            this._room.lastTimerReset = DateTime.Now;
+            _room.lastTimerReset = DateTime.Now;
         }
 
         public void Dispose()

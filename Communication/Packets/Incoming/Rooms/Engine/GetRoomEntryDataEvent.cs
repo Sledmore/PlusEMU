@@ -3,12 +3,13 @@ using Plus.HabboHotel.Items.Wired;
 
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 using Plus.Communication.Packets.Outgoing.Rooms.Chat;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class GetRoomEntryDataEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             if (session == null || session.GetHabbo() == null)
                 return;
@@ -23,12 +24,12 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
                     return;
 
                 if (oldRoom.GetRoomUserManager() != null)
-                    oldRoom.GetRoomUserManager().RemoveUserFromRoom(session, false, false);
+                    oldRoom.GetRoomUserManager().RemoveUserFromRoom(session, false);
             }
 
             if (!room.GetRoomUserManager().AddAvatarToRoom(session))
             {
-                room.GetRoomUserManager().RemoveUserFromRoom(session, false, false);
+                room.GetRoomUserManager().RemoveUserFromRoom(session, false);
                 return;//TODO: Remove?
             }
 

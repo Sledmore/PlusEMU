@@ -5,7 +5,7 @@
         public FlatAccessibleComposer(string Username)
             : base(ServerPacketHeader.FlatAccessibleMessageComposer)
         {
-           base.WriteString(Username);
+           WriteString(Username);
         }
     }
 }

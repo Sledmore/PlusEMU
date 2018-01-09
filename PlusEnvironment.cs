@@ -116,7 +116,7 @@ namespace Plus
 
                 if (!_manager.IsConnected())
                 {
-                    log.Error("Failed to connect to the specified MySQL server.");
+                    log.Error("Failed to Connect to the specified MySQL server.");
                     Console.ReadKey(true);
                     Environment.Exit(1);
                     return;
@@ -146,7 +146,7 @@ namespace Plus
                 //Have our encryption ready.
                 HabboEncryptionV2.Initialize(new RSAKeys());
 
-                //Make sure Rcon is connected before we allow clients to connect.
+                //Make sure Rcon is connected before we allow clients to Connect.
                 _Rcon = new RconSocket(GetConfig().data["rcon.tcp.bindip"], int.Parse(GetConfig().data["rcon.tcp.port"]), GetConfig().data["rcon.tcp.allowedaddr"].Split(Convert.ToChar(";")));
 
                 //Accept connections.
@@ -262,11 +262,11 @@ namespace Plus
             if (Client != null && Client.GetHabbo() != null)
                 return Client.GetHabbo().Username;
 
-            UserCache User = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(UserId);
+            UserCache User = GetGame().GetCacheManager().GenerateUser(UserId);
             if (User != null)
                 return User.Username;
 
-            using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `username` FROM `users` WHERE `id` = @id LIMIT 1");
                 dbClient.AddParameter("id", UserId);
@@ -350,7 +350,7 @@ namespace Plus
             log.Info("Server shutting down...");
             Console.Title = "PLUS EMULATOR: SHUTTING DOWN!";
 
-            PlusEnvironment.GetGame().GetClientManager().SendPacket(new BroadcastMessageAlertComposer(GetLanguageManager().TryGetValue("server.shutdown.message")));
+            GetGame().GetClientManager().SendPacket(new BroadcastMessageAlertComposer(GetLanguageManager().TryGetValue("server.shutdown.message")));
             GetGame().StopGameLoop();
             Thread.Sleep(2500);
             GetConnectionManager().Destroy();//Stop listening.

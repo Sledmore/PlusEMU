@@ -180,7 +180,7 @@ namespace Plus.Communication.ConnectionManager
                 }
                 else
                 {
-                    //Out.writeLine("Connection [" + this.connectionID + "] has already been disconnected - ignoring disconnect call", Out.logFlags.BelowStandardlogLevel);
+                    //Out.writeLine("Connection [" + this.connectionID + "] has already been disconnected - ignoring Disconnect call", Out.logFlags.BelowStandardlogLevel);
                 }
             }
             catch

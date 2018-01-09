@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -29,10 +29,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int DrinkID = Packet.PopInt();
             string BotName = Packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
-            this.StringData = BotName.ToString() + ";" + DrinkID.ToString();
+            StringData = BotName.ToString() + ";" + DrinkID.ToString();
         }
 
         public bool Execute(params object[] Params)
@@ -40,7 +40,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Params == null || Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData))
+            if (String.IsNullOrEmpty(StringData))
                 return false;
 
             Habbo Player = (Habbo)Params[0];
@@ -48,12 +48,12 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if(Player == null)
                 return false;
 
-            RoomUser Actor = this.Instance.GetRoomUserManager().GetRoomUserByHabbo(Player.Id);
+            RoomUser Actor = Instance.GetRoomUserManager().GetRoomUserByHabbo(Player.Id);
 
             if(Actor == null)
                 return false;
 
-            RoomUser User = this.Instance.GetRoomUserManager().GetBotByName(this.StringData.Split(';')[0]);
+            RoomUser User = Instance.GetRoomUserManager().GetBotByName(StringData.Split(';')[0]);
 
             if (User == null)
                 return false;
@@ -63,7 +63,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                 if (!Instance.GetGameMap().CanWalk(Actor.SquareBehind.X, Actor.SquareBehind.Y, false))
                     return false;
 
-                string[] Data = this.StringData.Split(';');
+                string[] Data = StringData.Split(';');
 
                 int DrinkId;
 

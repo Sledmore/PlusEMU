@@ -18,8 +18,8 @@ namespace Plus.HabboHotel.Subscriptions
 
         public void Init()
         {
-            if (this._subscriptions.Count > 0)
-                this._subscriptions.Clear();
+            if (_subscriptions.Count > 0)
+                _subscriptions.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -30,18 +30,18 @@ namespace Plus.HabboHotel.Subscriptions
                 {
                     foreach (DataRow Row in GetSubscriptions.Rows)
                     {
-                        if (!this._subscriptions.ContainsKey(Convert.ToInt32(Row["id"])))
-                            this._subscriptions.Add(Convert.ToInt32(Row["id"]), new SubscriptionData(Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["badge_code"]), Convert.ToInt32(Row["credits"]), Convert.ToInt32(Row["duckets"]), Convert.ToInt32(Row["respects"])));
+                        if (!_subscriptions.ContainsKey(Convert.ToInt32(Row["id"])))
+                            _subscriptions.Add(Convert.ToInt32(Row["id"]), new SubscriptionData(Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["badge_code"]), Convert.ToInt32(Row["credits"]), Convert.ToInt32(Row["duckets"]), Convert.ToInt32(Row["respects"])));
                     }
                 }
             }
 
-            log.Info("Loaded " + this._subscriptions.Count + " subscriptions.");
+            log.Info("Loaded " + _subscriptions.Count + " subscriptions.");
         }
 
         public bool TryGetSubscriptionData(int Id, out SubscriptionData Data)
         {
-            return this._subscriptions.TryGetValue(Id, out Data);
+            return _subscriptions.TryGetValue(Id, out Data);
         }
     }
 }

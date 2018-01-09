@@ -11,18 +11,18 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
             if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Instance = session.GetHabbo().CurrentRoom;
-            if (Instance == null || !Instance.CheckRights(session, true))
+            Room instance = session.GetHabbo().CurrentRoom;
+            if (instance == null || !instance.CheckRights(session, true))
                 return;
 
-            int UserId = packet.PopInt();
-            int RoomId = packet.PopInt();
+            int userId = packet.PopInt();
+            int roomId = packet.PopInt();
 
-            if (Instance.GetBans().IsBanned(UserId))
+            if (instance.GetBans().IsBanned(userId))
             {
-                Instance.GetBans().Unban(UserId);
+                instance.GetBans().Unban(userId);
 
-                session.SendPacket(new UnbanUserFromRoomComposer(RoomId, UserId));
+                session.SendPacket(new UnbanUserFromRoomComposer(roomId, userId));
             }
         }
     }

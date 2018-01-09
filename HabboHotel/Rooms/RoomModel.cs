@@ -28,21 +28,21 @@ namespace Plus.HabboHotel.Rooms
         {
             try
             {
-                this.Id = id;
-                this.DoorX = doorX;
-                this.DoorY = doorY;
-                this.DoorZ = doorZ;
-                this.DoorOrientation = doorOrientation;
+                Id = id;
+                DoorX = doorX;
+                DoorY = doorY;
+                DoorZ = doorZ;
+                DoorOrientation = doorOrientation;
 
-                this.WallHeight = wallHeight;
+                WallHeight = wallHeight;
 
-                this.Heightmap = heightmap.ToLower();
+                Heightmap = heightmap.ToLower();
 
                 string[] tmpHeightmap = heightmap.Split(Convert.ToChar(13));
 
-                this.MapSizeX = tmpHeightmap[0].Length;
-                this.MapSizeY = tmpHeightmap.Length;
-                this.ClubOnly = clubOnly;
+                MapSizeX = tmpHeightmap[0].Length;
+                MapSizeY = tmpHeightmap.Length;
+                ClubOnly = clubOnly;
 
                 SqState = new SquareState[MapSizeX, MapSizeY];
                 SqFloorHeight = new short[MapSizeX, MapSizeY];

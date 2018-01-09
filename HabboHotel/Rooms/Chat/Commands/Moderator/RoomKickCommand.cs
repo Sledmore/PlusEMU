@@ -19,7 +19,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
             get { return "Kick the room and provide a message to the users."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

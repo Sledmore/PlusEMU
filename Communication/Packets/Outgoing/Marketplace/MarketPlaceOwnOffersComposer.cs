@@ -20,10 +20,10 @@ namespace Plus.Communication.Packets.Outgoing.Marketplace
                 dbClient.SetQuery("SELECT SUM(asking_price) FROM catalog_marketplace_offers WHERE state = '2' AND user_id = '" + UserId + "'");
                 i = dbClient.GetInteger();
 
-                base.WriteInteger(i);
+                WriteInteger(i);
                 if (table != null)
                 {
-                    base.WriteInteger(table.Rows.Count);
+                    WriteInteger(table.Rows.Count);
                     foreach (DataRow row in table.Rows)
                     {
                         int num2 = Convert.ToInt32(Math.Floor((double)(((((double)row["timestamp"]) + 172800.0) - PlusEnvironment.GetUnixTimestamp()) / 60.0)));
@@ -33,24 +33,24 @@ namespace Plus.Communication.Packets.Outgoing.Marketplace
                             num3 = 3;
                             num2 = 0;
                         }
-                        base.WriteInteger(Convert.ToInt32(row["offer_id"]));
-                        base.WriteInteger(num3);
-                        base.WriteInteger(1);
-                        base.WriteInteger(Convert.ToInt32(row["sprite_id"]));
+                        WriteInteger(Convert.ToInt32(row["offer_id"]));
+                        WriteInteger(num3);
+                        WriteInteger(1);
+                        WriteInteger(Convert.ToInt32(row["sprite_id"]));
 
-                        base.WriteInteger(256);
-                       base.WriteString("");
-                        base.WriteInteger(Convert.ToInt32(row["limited_number"]));
-                        base.WriteInteger(Convert.ToInt32(row["limited_stack"]));
+                        WriteInteger(256);
+                       WriteString("");
+                        WriteInteger(Convert.ToInt32(row["limited_number"]));
+                        WriteInteger(Convert.ToInt32(row["limited_stack"]));
 
-                        base.WriteInteger(Convert.ToInt32(row["total_price"]));
-                        base.WriteInteger(num2);
-                        base.WriteInteger(Convert.ToInt32(row["sprite_id"]));
+                        WriteInteger(Convert.ToInt32(row["total_price"]));
+                        WriteInteger(num2);
+                        WriteInteger(Convert.ToInt32(row["sprite_id"]));
                     }
                 }
                 else
                 {
-                    base.WriteInteger(0);
+                    WriteInteger(0);
                 }
             }
         }

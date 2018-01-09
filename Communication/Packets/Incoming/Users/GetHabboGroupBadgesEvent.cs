@@ -9,44 +9,42 @@ namespace Plus.Communication.Packets.Incoming.Users
 {
     class GetHabboGroupBadgesEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            Dictionary<int, string> Badges = new Dictionary<int, string>();
-            foreach (RoomUser User in Room.GetRoomUserManager().GetRoomUsers().ToList())
+            Dictionary<int, string> badges = new Dictionary<int, string>();
+            foreach (RoomUser user in room.GetRoomUserManager().GetRoomUsers().ToList())
             {
-                if (User.IsBot || User.IsPet || User.GetClient() == null || User.GetClient().GetHabbo() == null)
+                if (user.IsBot || user.IsPet || user.GetClient() == null || user.GetClient().GetHabbo() == null)
                     continue;
 
-                if (User.GetClient().GetHabbo().GetStats().FavouriteGroupId == 0 || Badges.ContainsKey(User.GetClient().GetHabbo().GetStats().FavouriteGroupId))
+                if (user.GetClient().GetHabbo().GetStats().FavouriteGroupId == 0 || badges.ContainsKey(user.GetClient().GetHabbo().GetStats().FavouriteGroupId))
                     continue;
 
-                Group Group = null;
-                if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetHabbo().GetStats().FavouriteGroupId, out Group))
+                if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(user.GetClient().GetHabbo().GetStats().FavouriteGroupId, out Group group))
                     continue;
 
-                if (!Badges.ContainsKey(Group.Id))
-                    Badges.Add(Group.Id, Group.Badge);
+                if (!badges.ContainsKey(group.Id))
+                    badges.Add(group.Id, group.Badge);
             }
 
-            if (Session.GetHabbo().GetStats().FavouriteGroupId > 0)
+            if (session.GetHabbo().GetStats().FavouriteGroupId > 0)
             {
-                Group Group = null;
-                if (PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(Session.GetHabbo().GetStats().FavouriteGroupId, out Group))
+                if (PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(session.GetHabbo().GetStats().FavouriteGroupId, out Group group))
                 {
-                    if (!Badges.ContainsKey(Group.Id))
-                        Badges.Add(Group.Id, Group.Badge);
+                    if (!badges.ContainsKey(group.Id))
+                        badges.Add(group.Id, group.Badge);
                 }
             }
 
-            Room.SendPacket(new HabboGroupBadgesComposer(Badges));
-            Session.SendPacket(new HabboGroupBadgesComposer(Badges));
+            room.SendPacket(new HabboGroupBadgesComposer(badges));
+            session.SendPacket(new HabboGroupBadgesComposer(badges));
         }
     }
 }

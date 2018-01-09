@@ -5,54 +5,54 @@
         public PetBreedingComposer()
             : base(ServerPacketHeader.PetBreedingMessageComposer)
         {
-            base.WriteInteger(219005779);//An Id?
+            WriteInteger(219005779);//An Id?
             {
                 //Pet 1.
-                base.WriteInteger(2169464);//Pet Id
-                base.WriteString("Tes");
-                base.WriteInteger(69);//Level
-                base.WriteString("1 22 F2E5CC");//Breed/figure?
-                base.WriteString("Sledmore");//Owner
+                WriteInteger(2169464);//Pet Id
+                WriteString("Tes");
+                WriteInteger(69);//Level
+                WriteString("1 22 F2E5CC");//Breed/figure?
+                WriteString("Sledmore");//Owner
 
                 //Pet 2.
-                base.WriteInteger(2169465);
-                base.WriteString("Testy");
-                base.WriteInteger(1337);
-                base.WriteString("1 0 D4D4D4");
-                base.WriteString("Sledmore");
+                WriteInteger(2169465);
+                WriteString("Testy");
+                WriteInteger(1337);
+                WriteString("1 0 D4D4D4");
+                WriteString("Sledmore");
 
-                base.WriteInteger(4);//Count
+                WriteInteger(4);//Count
                 {
-                    base.WriteInteger(1);
-                    base.WriteInteger(3);
-                    base.WriteInteger(18);
-                    base.WriteInteger(19);
-                    base.WriteInteger(20);
-                    base.WriteInteger(3);
-                    base.WriteInteger(6);
-                    base.WriteInteger(12);
-                    base.WriteInteger(13);
-                    base.WriteInteger(14);
-                    base.WriteInteger(15);
-                    base.WriteInteger(16);
-                    base.WriteInteger(17);
-                    base.WriteInteger(4);
-                    base.WriteInteger(5);
-                    base.WriteInteger(7);
-                    base.WriteInteger(8);
-                    base.WriteInteger(9);
-                    base.WriteInteger(10);
-                    base.WriteInteger(11);
-                    base.WriteInteger(92);
-                    base.WriteInteger(6);
-                    base.WriteInteger(1);
-                    base.WriteInteger(2);
-                    base.WriteInteger(3);
-                    base.WriteInteger(4);
-                    base.WriteInteger(5);
-                    base.WriteInteger(6);
+                    WriteInteger(1);
+                    WriteInteger(3);
+                    WriteInteger(18);
+                    WriteInteger(19);
+                    WriteInteger(20);
+                    WriteInteger(3);
+                    WriteInteger(6);
+                    WriteInteger(12);
+                    WriteInteger(13);
+                    WriteInteger(14);
+                    WriteInteger(15);
+                    WriteInteger(16);
+                    WriteInteger(17);
+                    WriteInteger(4);
+                    WriteInteger(5);
+                    WriteInteger(7);
+                    WriteInteger(8);
+                    WriteInteger(9);
+                    WriteInteger(10);
+                    WriteInteger(11);
+                    WriteInteger(92);
+                    WriteInteger(6);
+                    WriteInteger(1);
+                    WriteInteger(2);
+                    WriteInteger(3);
+                    WriteInteger(4);
+                    WriteInteger(5);
+                    WriteInteger(6);
                 }
-                base.WriteInteger(28);
+                WriteInteger(28);
             }
         }
     }

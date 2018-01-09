@@ -20,8 +20,8 @@ namespace Plus.HabboHotel.LandingView
 
         public void Init()
         {
-            if (this._promotionItems.Count > 0)
-                this._promotionItems.Clear();
+            if (_promotionItems.Count > 0)
+                _promotionItems.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -32,7 +32,7 @@ namespace Plus.HabboHotel.LandingView
                 {
                     foreach (DataRow Row in GetData.Rows)
                     {
-                        this._promotionItems.Add(Convert.ToInt32(Row[0]), new Promotion((int)Row[0], Row[1].ToString(), Row[2].ToString(), Row[3].ToString(), Convert.ToInt32(Row[4]), Row[5].ToString(), Row[6].ToString()));
+                        _promotionItems.Add(Convert.ToInt32(Row[0]), new Promotion((int)Row[0], Row[1].ToString(), Row[2].ToString(), Row[3].ToString(), Convert.ToInt32(Row[4]), Row[5].ToString(), Row[6].ToString()));
                     }
                 }
             }
@@ -43,7 +43,7 @@ namespace Plus.HabboHotel.LandingView
 
         public ICollection<Promotion> GetPromotionItems()
         {
-            return this._promotionItems.Values;
+            return _promotionItems.Values;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
         public ConcurrentDictionary<int, Item> SetItems { get; set; }
         public string StringData { get; set; }
         public bool BoolData { get; set; }
-        public int Delay { get { return this._delay; } set { this._delay = value; this.TickCount = value; } }
+        public int Delay { get { return _delay; } set { _delay = value; TickCount = value; } }
         public int TickCount { get; set; }
         public string ItemsData { get; set; }
 
@@ -25,7 +25,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -34,7 +34,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             int Delay = Packet.PopInt();
 
             this.Delay = Delay;
-            this.TickCount = Delay;
+            TickCount = Delay;
         }
 
         public bool Execute(params object[] Params)
@@ -109,7 +109,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
                 }
             }
 
-            this.TickCount = Delay;
+            TickCount = Delay;
 
             return true;
         }

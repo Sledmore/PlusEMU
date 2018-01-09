@@ -5,25 +5,25 @@ namespace Plus.Communication.Packets.Incoming.Inventory.AvatarEffects
 {
     class AvatarEffectSelectedEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int EffectId = Packet.PopInt();
-            if (EffectId < 0)
-                EffectId = 0;
+            int effectId = packet.PopInt();
+            if (effectId < 0)
+                effectId = 0;
 
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null)
                 return;
 
-            if (EffectId != 0 && Session.GetHabbo().Effects().HasEffect(EffectId, true))
-                User.ApplyEffect(EffectId);
+            if (effectId != 0 && session.GetHabbo().Effects().HasEffect(effectId, true))
+                user.ApplyEffect(effectId);
         }
     }
 }

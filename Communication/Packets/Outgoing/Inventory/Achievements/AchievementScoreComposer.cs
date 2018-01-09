@@ -5,7 +5,7 @@
         public AchievementScoreComposer(int achScore)
             : base(ServerPacketHeader.AchievementScoreMessageComposer)
         {
-            base.WriteInteger(achScore);
+            WriteInteger(achScore);
         }
     }
 }

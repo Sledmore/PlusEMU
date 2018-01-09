@@ -15,12 +15,12 @@ namespace Plus.HabboHotel.Items.Televisions
 
         public TelevisionManager()
         {
-            this._televisions =  new Dictionary<int, TelevisionItem>();
+            _televisions =  new Dictionary<int, TelevisionItem>();
         }
 
         public void Init()
         {
-            if (this._televisions.Count > 0)
+            if (_televisions.Count > 0)
                 _televisions.Clear();
 
             DataTable getData = null;
@@ -33,7 +33,7 @@ namespace Plus.HabboHotel.Items.Televisions
                 {
                     foreach (DataRow Row in getData.Rows)
                     {
-                        this._televisions.Add(Convert.ToInt32(Row["id"]), new TelevisionItem(Convert.ToInt32(Row["id"]), Row["youtube_id"].ToString(), Row["title"].ToString(), Row["description"].ToString(), PlusEnvironment.EnumToBool(Row["enabled"].ToString())));
+                        _televisions.Add(Convert.ToInt32(Row["id"]), new TelevisionItem(Convert.ToInt32(Row["id"]), Row["youtube_id"].ToString(), Row["title"].ToString(), Row["description"].ToString(), PlusEnvironment.EnumToBool(Row["enabled"].ToString())));
                     }
                 }
             }
@@ -47,13 +47,13 @@ namespace Plus.HabboHotel.Items.Televisions
         {
             get
             {
-                return this._televisions.Values;
+                return _televisions.Values;
             }
         }
 
         public bool TryGet(int ItemId, out TelevisionItem TelevisionItem)
         {
-            if (this._televisions.TryGetValue(ItemId, out TelevisionItem))
+            if (_televisions.TryGetValue(ItemId, out TelevisionItem))
                 return true;
             return false;
         }

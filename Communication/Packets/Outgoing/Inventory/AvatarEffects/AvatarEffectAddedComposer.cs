@@ -5,10 +5,10 @@
         public AvatarEffectAddedComposer(int SpriteId, int Duration)
             : base(ServerPacketHeader.AvatarEffectAddedMessageComposer)
         {
-            base.WriteInteger(SpriteId);
-            base.WriteInteger(0);//Types
-            base.WriteInteger(Duration);
-            base.WriteBoolean(false);//Permanent
+            WriteInteger(SpriteId);
+            WriteInteger(0);//Types
+            WriteInteger(Duration);
+            WriteBoolean(false);//Permanent
         }
     }
 }

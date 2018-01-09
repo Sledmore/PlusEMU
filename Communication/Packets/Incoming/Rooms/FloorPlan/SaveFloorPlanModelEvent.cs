@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Data;
 using System.Collections.Generic;
 
@@ -7,18 +6,19 @@ using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Session;
 using Plus.Communication.Packets.Outgoing.Rooms.Notifications;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
 {
     class SaveFloorPlanModelEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null || Session.GetHabbo().CurrentRoomId != Room.Id || !Room.CheckRights(Session, true))
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null || session.GetHabbo().CurrentRoomId != room.Id || !room.CheckRights(session, true))
                 return;
 
             char[] validLetters =
@@ -27,43 +27,43 @@ namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
                 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', '\r'
             };
 
-            string Map = Packet.PopString().ToLower().TrimEnd();
+            string map = packet.PopString().ToLower().TrimEnd();
 
-            if (Map.Length > 4159) //4096 + New Lines = 4159
+            if (map.Length > 4159) //4096 + New Lines = 4159
             {
-                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "(%%%general%%%): %%%too_large_area%%% (%%%max%%% 2048 %%%tiles%%%)"));
+                session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "(%%%general%%%): %%%too_large_area%%% (%%%max%%% 2048 %%%tiles%%%)"));
                 return;
             }
 
-            if(Map.Any(letter => !validLetters.Contains(letter)) || String.IsNullOrEmpty(Map))
+            if(map.Any(letter => !validLetters.Contains(letter)) || string.IsNullOrEmpty(map))
             {
-                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oops, it appears that you have entered an invalid floor map!"));
+                session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oops, it appears that you have entered an invalid floor map!"));
                 return;
             }
 
-            var modelData = Map.Split('\r');
+            var modelData = map.Split('\r');
 
-            int SizeY = modelData.Length;
-            int SizeX = modelData[0].Length;
+            int sizeY = modelData.Length;
+            int sizeX = modelData[0].Length;
 
-            if (SizeY > 64 || SizeX > 64)
+            if (sizeY > 64 || sizeX > 64)
             {
-                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "The maximum height and width of a model is 64x64!"));
+                session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "The maximum height and width of a model is 64x64!"));
                 return;
             }
 
             int lastLineLength = 0;
             bool isValid = true;
 
-            for (int i = 0; i < modelData.Length; i++)
+            foreach (var data in modelData)
             {
                 if (lastLineLength == 0)
                 {
-                    lastLineLength = modelData[i].Length;
+                    lastLineLength = data.Length;
                     continue;
                 }
 
-                if (lastLineLength != modelData[i].Length)
+                if (lastLineLength != data.Length)
                 {
                     isValid = false;
                 }
@@ -71,113 +71,114 @@ namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
 
             if (!isValid)
             {
-                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oops, it appears that you have entered an invalid floor map!"));
+                session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oops, it appears that you have entered an invalid floor map!"));
                 return;
             }
 
-            int DoorX = Packet.PopInt();
-            int DoorY = Packet.PopInt();
-            int DoorDirection = Packet.PopInt();
-            int WallThick = Packet.PopInt();
-            int FloorThick = Packet.PopInt();
-            int WallHeight = Packet.PopInt();
+            int doorX = packet.PopInt();
+            int doorY = packet.PopInt();
+            int doorDirection = packet.PopInt();
+            int wallThick = packet.PopInt();
+            int floorThick = packet.PopInt();
+            int wallHeight = packet.PopInt();
 
-            int DoorZ = 0;
+            int doorZ = 0;
 
             try
             {
-                DoorZ = Parse(modelData[DoorY][DoorX]);
+                doorZ = Parse(modelData[doorY][doorX]);
             }
-            catch { }
+            catch
+            {
+                //ignored
+            }
 
-            if (WallThick > 1)
-                WallThick = 1;
+            if (wallThick > 1)
+                wallThick = 1;
 
-            if (WallThick < -2)
-                WallThick = -2;
+            if (wallThick < -2)
+                wallThick = -2;
 
-            if (FloorThick > 1)
-                FloorThick = 1;
+            if (floorThick > 1)
+                floorThick = 1;
 
-            if (FloorThick < -2)
-                WallThick = -2;
+            if (floorThick < -2)
+                wallThick = -2;
 
-            if (WallHeight < 0)
-                WallHeight = 0;
+            if (wallHeight < 0)
+                wallHeight = 0;
 
-            if (WallHeight > 15)
-                WallHeight = 15;
+            if (wallHeight > 15)
+                wallHeight = 15;
 
-            string ModelName = "model_bc_" + Room.Id;
+            string modelName = "model_bc_" + room.Id;
 
-            Map += '\r' + new string('x', SizeX);
+            map += '\r' + new string('x', sizeX);
 
-            DataRow Row = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `room_models` WHERE `id` = @model AND `custom` = '1' LIMIT 1");
-                dbClient.AddParameter("model", "model_bc_" + Room.Id);
-                Row = dbClient.GetRow();
+                dbClient.AddParameter("model", "model_bc_" + room.Id);
+                DataRow row = dbClient.GetRow();
 
-                if (Row == null)//The row is still null, let's insert instead.
+                if (row == null)//The row is still null, let's insert instead.
                 {
                     dbClient.SetQuery("INSERT INTO `room_models` (`id`,`door_x`,`door_y`, `door_z`, `door_dir`,`heightmap`,`custom`,`wall_height`) VALUES (@ModelName, @DoorX, @DoorY, @DoorZ, @DoorDirection, @Map,'1',@WallHeight)");
-                    dbClient.AddParameter("ModelName", "model_bc_" + Room.Id);
-                    dbClient.AddParameter("DoorX", DoorX);
-                    dbClient.AddParameter("DoorY", DoorY);
-                    dbClient.AddParameter("DoorDirection", DoorDirection);
-                    dbClient.AddParameter("DoorZ", DoorZ);
-                    dbClient.AddParameter("Map", Map);
-                    dbClient.AddParameter("WallHeight", WallHeight);
+                    dbClient.AddParameter("ModelName", "model_bc_" + room.Id);
+                    dbClient.AddParameter("DoorX", doorX);
+                    dbClient.AddParameter("DoorY", doorY);
+                    dbClient.AddParameter("DoorDirection", doorDirection);
+                    dbClient.AddParameter("DoorZ", doorZ);
+                    dbClient.AddParameter("Map", map);
+                    dbClient.AddParameter("WallHeight", wallHeight);
                     dbClient.RunQuery();
                 }
                 else
                 {
                     dbClient.SetQuery("UPDATE `room_models` SET `heightmap` = @Map, `door_x` = @DoorX, `door_y` = @DoorY, `door_z` = @DoorZ,  `door_dir` = @DoorDirection, `wall_height` = @WallHeight WHERE `id` = @ModelName LIMIT 1");
-                    dbClient.AddParameter("ModelName", "model_bc_" + Room.Id);
-                    dbClient.AddParameter("Map", Map);
-                    dbClient.AddParameter("DoorX", DoorX);
-                    dbClient.AddParameter("DoorY", DoorY);
-                    dbClient.AddParameter("DoorZ", DoorZ);
-                    dbClient.AddParameter("DoorDirection", DoorDirection);
-                    dbClient.AddParameter("WallHeight", WallHeight);
+                    dbClient.AddParameter("ModelName", "model_bc_" + room.Id);
+                    dbClient.AddParameter("Map", map);
+                    dbClient.AddParameter("DoorX", doorX);
+                    dbClient.AddParameter("DoorY", doorY);
+                    dbClient.AddParameter("DoorZ", doorZ);
+                    dbClient.AddParameter("DoorDirection", doorDirection);
+                    dbClient.AddParameter("WallHeight", wallHeight);
                     dbClient.RunQuery();
                 }
 
                 dbClient.SetQuery("UPDATE `rooms` SET `model_name` = @ModelName, `wallthick` = @WallThick, `floorthick` = @FloorThick WHERE `id` = @roomId LIMIT 1");
-                dbClient.AddParameter("roomId", Room.Id);
-                dbClient.AddParameter("ModelName", "model_bc_" + Room.Id);
-                dbClient.AddParameter("WallThick", WallThick);
-                dbClient.AddParameter("FloorThick", FloorThick);
+                dbClient.AddParameter("roomId", room.Id);
+                dbClient.AddParameter("ModelName", "model_bc_" + room.Id);
+                dbClient.AddParameter("WallThick", wallThick);
+                dbClient.AddParameter("FloorThick", floorThick);
                 dbClient.RunQuery();
             }
 
-            Room.ModelName = ModelName;
-            Room.WallThickness = WallThick;
-            Room.FloorThickness = FloorThick;
+            room.ModelName = modelName;
+            room.WallThickness = wallThick;
+            room.FloorThickness = floorThick;
 
-            List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();
+            List<RoomUser> usersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
 
-            PlusEnvironment.GetGame().GetRoomManager().ReloadModel(ModelName);
-            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(Room.Id);
+            PlusEnvironment.GetGame().GetRoomManager().ReloadModel(modelName);
+            PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(room.Id);
 
 
-            foreach (RoomUser User in UsersToReturn)
+            foreach (RoomUser user in usersToReturn)
             {
-                if (User == null || User.GetClient() == null)
+                if (user == null || user.GetClient() == null)
                     continue;
 
-                User.GetClient().SendPacket(new RoomForwardComposer(Room.Id));
+                user.GetClient().SendPacket(new RoomForwardComposer(room.Id));
             }
         }
 
-        public static short Parse(char input)
+        private static short Parse(char input)
         {
 
             switch (input)
             {
                 default:
-                case '0':
                     return 0;
                 case '1':
                     return 1;

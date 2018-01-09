@@ -9,7 +9,7 @@
         public Relationship(int Id, int User, int Type)
         {
             this.Id = Id;
-            this.UserId = User;
+            UserId = User;
             this.Type = Type;
         }
     }

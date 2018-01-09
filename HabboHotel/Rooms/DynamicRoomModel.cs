@@ -36,7 +36,7 @@ namespace Plus.HabboHotel.Rooms
             MapSizeY = staticModel.MapSizeY;
             ClubOnly = staticModel.ClubOnly;
 
-            this._relativeHeightmap = string.Empty;
+            _relativeHeightmap = string.Empty;
 
             SqState = new SquareState[MapSizeX, MapSizeY];
             SqFloorHeight = new short[MapSizeX, MapSizeY];
@@ -85,7 +85,7 @@ namespace Plus.HabboHotel.Rooms
                 FloorMap.Append(Convert.ToChar(13));
             }
 
-            this._relativeHeightmap = FloorMap.ToString();
+            _relativeHeightmap = FloorMap.ToString();
         }
 
         public void RefreshArrays()
@@ -119,7 +119,7 @@ namespace Plus.HabboHotel.Rooms
 
         public string GetRelativeHeightmap()
         {
-            return this._relativeHeightmap;
+            return _relativeHeightmap;
         }
 
         public void AddX()

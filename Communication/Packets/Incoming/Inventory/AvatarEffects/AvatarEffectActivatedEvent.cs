@@ -1,24 +1,25 @@
 ﻿using Plus.HabboHotel.Users.Effects;
 using Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.AvatarEffects
 {
     class AvatarEffectActivatedEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int EffectId = Packet.PopInt();
+            int effectId = packet.PopInt();
 
-            AvatarEffect Effect = Session.GetHabbo().Effects().GetEffectNullable(EffectId, false, true);
+            AvatarEffect effect = session.GetHabbo().Effects().GetEffectNullable(effectId, false, true);
 
-            if (Effect == null || Session.GetHabbo().Effects().HasEffect(EffectId, true))
+            if (effect == null || session.GetHabbo().Effects().HasEffect(effectId, true))
             {
                 return;
             }
 
-            if (Effect.Activate())
+            if (effect.Activate())
             {
-                Session.SendPacket(new AvatarEffectActivatedComposer(Effect));
+                session.SendPacket(new AvatarEffectActivatedComposer(effect));
             }
         }
     }

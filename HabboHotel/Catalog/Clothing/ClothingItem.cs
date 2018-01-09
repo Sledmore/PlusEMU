@@ -19,7 +19,7 @@ namespace Plus.HabboHotel.Catalog.Clothing
             {
                 foreach (string PartId in partIds.Split(','))
                 {
-                    this.PartIds.Add(int.Parse(PartId));
+                    PartIds.Add(int.Parse(PartId));
                 }
             }
             else if (!String.IsNullOrEmpty(partIds) && (int.Parse(partIds)) > 0)

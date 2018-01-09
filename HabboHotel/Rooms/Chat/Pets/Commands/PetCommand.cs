@@ -7,8 +7,8 @@
 
         public PetCommand(int CommandId, string CommandInput)
         {
-            this.Id = CommandId;
-            this.Input = CommandInput;
+            Id = CommandId;
+            Input = CommandInput;
         }
     }
 }

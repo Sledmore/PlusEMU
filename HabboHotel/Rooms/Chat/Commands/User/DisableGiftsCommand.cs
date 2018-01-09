@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             get { return "Allows you to disable the ability to receive gifts or to enable the ability to receive gifts."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             Session.GetHabbo().AllowGifts = !Session.GetHabbo().AllowGifts;
             Session.SendWhisper("You're " + (Session.GetHabbo().AllowGifts == true ? "now" : "no longer") + " accepting gifts.");

@@ -13,84 +13,82 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Chat
 {
     public class ChatEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null)
                 return;
 
-            string Message = StringCharFilter.Escape(Packet.PopString());
-            if (Message.Length > 100)
-                Message = Message.Substring(0, 100);
+            string message = StringCharFilter.Escape(packet.PopString());
+            if (message.Length > 100)
+                message = message.Substring(0, 100);
 
-            int Colour = Packet.PopInt();
+            int colour = packet.PopInt();
 
-            ChatStyle Style = null;
-            if (!PlusEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out Style) || (Style.RequiredRight.Length > 0 && !Session.GetHabbo().GetPermissions().HasRight(Style.RequiredRight)))
-                Colour = 0;
+            if (!PlusEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(colour, out ChatStyle style) || style.RequiredRight.Length > 0 && !session.GetHabbo().GetPermissions().HasRight(style.RequiredRight))
+                colour = 0;
 
-            User.UnIdle();
+            user.UnIdle();
 
-            if (PlusEnvironment.GetUnixTimestamp() < Session.GetHabbo().FloodTime && Session.GetHabbo().FloodTime != 0)
+            if (PlusEnvironment.GetUnixTimestamp() < session.GetHabbo().FloodTime && session.GetHabbo().FloodTime != 0)
                 return;
 
-            if (Session.GetHabbo().TimeMuted > 0)
+            if (session.GetHabbo().TimeMuted > 0)
             {
-                Session.SendPacket(new MutedComposer(Session.GetHabbo().TimeMuted));
+                session.SendPacket(new MutedComposer(session.GetHabbo().TimeMuted));
                 return;
             }
 
-            if (!Session.GetHabbo().GetPermissions().HasRight("room_ignore_mute") && Room.CheckMute(Session))
+            if (!session.GetHabbo().GetPermissions().HasRight("room_ignore_mute") && room.CheckMute(session))
             {
-                Session.SendWhisper("Oops, you're currently muted.");
+                session.SendWhisper("Oops, you're currently muted.");
                 return;
             }
 
-            User.LastBubble = Session.GetHabbo().CustomBubbleId == 0 ? Colour : Session.GetHabbo().CustomBubbleId;
+            user.LastBubble = session.GetHabbo().CustomBubbleId == 0 ? colour : session.GetHabbo().CustomBubbleId;
 
-            if (!Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (!session.GetHabbo().GetPermissions().HasRight("mod_tool"))
             {
-                int MuteTime;
-                if (User.IncrementAndCheckFlood(out MuteTime))
+                if (user.IncrementAndCheckFlood(out int muteTime))
                 {
-                    Session.SendPacket(new FloodControlComposer(MuteTime));
+                    session.SendPacket(new FloodControlComposer(muteTime));
                     return;
                 }
             }
 
-            PlusEnvironment.GetGame().GetChatManager().GetLogs().StoreChatlog(new ChatlogEntry(Session.GetHabbo().Id, Room.Id, Message, UnixTimestamp.GetNow(), Session.GetHabbo(), Room));
+            PlusEnvironment.GetGame().GetChatManager().GetLogs().StoreChatlog(new ChatlogEntry(session.GetHabbo().Id, room.Id, message, UnixTimestamp.GetNow(), session.GetHabbo(), room));
 
-            if (Message.StartsWith(":", StringComparison.CurrentCulture) && PlusEnvironment.GetGame().GetChatManager().GetCommands().Parse(Session, Message))
+            if (message.StartsWith(":", StringComparison.CurrentCulture) && PlusEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, message))
                 return;
 
-            if (PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckBannedWords(Message))
+            if (PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckBannedWords(message))
             {
-                Session.GetHabbo().BannedPhraseCount++;
-                if (Session.GetHabbo().BannedPhraseCount >= (Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.chat.filter.banned_phrases.chances"))))
+                session.GetHabbo().BannedPhraseCount++;
+                if (session.GetHabbo().BannedPhraseCount >= Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("room.chat.filter.banned_phrases.chances")))
                 {
-                    PlusEnvironment.GetGame().GetModerationManager().BanUser("System", HabboHotel.Moderation.ModerationBanType.Username, Session.GetHabbo().Username, "Spamming banned phrases (" + Message + ")", (PlusEnvironment.GetUnixTimestamp() + 78892200));
-                    Session.Disconnect();
+                    PlusEnvironment.GetGame().GetModerationManager().BanUser("System", HabboHotel.Moderation.ModerationBanType.Username, session.GetHabbo().Username, "Spamming banned phrases (" + message + ")", PlusEnvironment.GetUnixTimestamp() + 78892200);
+                    session.Disconnect();
                     return;
                 }
 
-                Session.SendPacket(new ChatComposer(User.VirtualId, Message, 0, Colour));
+                session.SendPacket(new ChatComposer(user.VirtualId, message, 0, colour));
                 return;
             }
 
-            if (!Session.GetHabbo().GetPermissions().HasRight("word_filter_override"))
-                Message = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
+            if (!session.GetHabbo().GetPermissions().HasRight("word_filter_override"))
+                message = PlusEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
 
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialChat);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialChat);
 
-            User.OnChat(User.LastBubble, Message, false);
+            user.OnChat(user.LastBubble, message, false);
         }
     }
 }

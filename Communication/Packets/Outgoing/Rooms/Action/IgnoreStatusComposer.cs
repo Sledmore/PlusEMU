@@ -5,8 +5,8 @@
         public IgnoreStatusComposer(int Status, string Username)
             : base(ServerPacketHeader.IgnoreStatusMessageComposer)
         {
-            base.WriteInteger(Status);
-           base.WriteString(Username);
+            WriteInteger(Status);
+           WriteString(Username);
         }
     }
 }

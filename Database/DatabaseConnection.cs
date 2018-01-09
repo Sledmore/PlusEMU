@@ -7,18 +7,18 @@ using Plus.Database.Adapter;
 
 namespace Plus.Database
 {
-    public class DatabaseConnection : IDatabaseClient, IDisposable
+    public class DatabaseConnection : IDatabaseClient
     {
         private readonly IQueryAdapter _adapter;
         private readonly MySqlConnection _con;
 
         public DatabaseConnection(string connectionString)
         {
-            this._con = new MySqlConnection(connectionString);
-            this._adapter = new NormalQueryReactor(this);
+            _con = new MySqlConnection(connectionString);
+            _adapter = new NormalQueryReactor(this);
         }
 
-        public void connect()
+        public void Connect()
         {
             if (_con.State == ConnectionState.Closed)
             {
@@ -33,7 +33,7 @@ namespace Plus.Database
             }
         }
 
-        public void disconnect()
+        public void Disconnect()
         {
             if (_con.State == ConnectionState.Open)
             {
@@ -43,32 +43,22 @@ namespace Plus.Database
 
         public IQueryAdapter GetQueryReactor()
         {
-            return this._adapter;
+            return _adapter;
         }
 
-        public void prepare()
-        {
-            // nothing here
-        }
-
-        public void reportDone()
-        {
-            Dispose();
-        }
-
-        public MySqlCommand createNewCommand()
+        public MySqlCommand CreateNewCommand()
         {
             return _con.CreateCommand();
         }
 
         public void Dispose()
         {
-            if (this._con.State == ConnectionState.Open)
+            if (_con.State == ConnectionState.Open)
             {
-                this._con.Close();
+                _con.Close();
             }
 
-            this._con.Dispose();
+            _con.Dispose();
             GC.SuppressFinalize(this);
         }
     }

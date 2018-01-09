@@ -12,12 +12,12 @@ namespace Plus.HabboHotel.Users.Ignores
 
         public IgnoresComponent()
         {
-            this._ignoredUsers = new List<int>();
+            _ignoredUsers = new List<int>();
         }
 
         public bool Init(Habbo player)
         {
-            if (this._ignoredUsers.Count > 0)
+            if (_ignoredUsers.Count > 0)
                 return false;
             
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -30,7 +30,7 @@ namespace Plus.HabboHotel.Users.Ignores
                 {
                     foreach (DataRow Row in GetIgnores.Rows)
                     {
-                        this._ignoredUsers.Add(Convert.ToInt32(Row["ignore_id"]));
+                        _ignoredUsers.Add(Convert.ToInt32(Row["ignore_id"]));
                     }
                 }
             }
@@ -39,31 +39,31 @@ namespace Plus.HabboHotel.Users.Ignores
 
         public bool TryGet(int userId)
         {
-            return this._ignoredUsers.Contains(userId);
+            return _ignoredUsers.Contains(userId);
         }
 
         public bool TryAdd(int userId)
         {
-            if (this._ignoredUsers.Contains(userId))
+            if (_ignoredUsers.Contains(userId))
                 return false;
 
-            this._ignoredUsers.Add(userId);
+            _ignoredUsers.Add(userId);
             return true;
         }
 
         public bool TryRemove(int userId)
         {
-            return this._ignoredUsers.Remove(userId);
+            return _ignoredUsers.Remove(userId);
         }
 
         public ICollection<int> IgnoredUserIds()
         {
-           return this._ignoredUsers;
+           return _ignoredUsers;
         }
 
         public void Dispose()
         {
-            this._ignoredUsers.Clear();
+            _ignoredUsers.Clear();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Plus.HabboHotel.Rooms
             _model = model;
             DiagonalEnabled = true;
 
-            _dynamicModel = new DynamicRoomModel(this._model);
+            _dynamicModel = new DynamicRoomModel(_model);
             _coordinatedItems = new ConcurrentDictionary<Point, List<int>>();
             _itemHeightMap = new double[Model.MapSizeX, Model.MapSizeY];
             _userMap = new ConcurrentDictionary<Point, List<RoomUser>>();
@@ -748,7 +748,7 @@ namespace Plus.HabboHotel.Rooms
 
         public bool ItemCanMove(Item Item, Point MoveTo)
         {
-            List<ThreeDCoord> Points = Gamemap.GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, MoveTo.X, MoveTo.Y, Item.Rotation).Values.ToList();
+            List<ThreeDCoord> Points = GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, MoveTo.X, MoveTo.Y, Item.Rotation).Values.ToList();
 
             if (Points == null || Points.Count == 0)
                 return true;
@@ -1355,7 +1355,7 @@ namespace Plus.HabboHotel.Rooms
             _coordinatedItems = null;
 
             _dynamicModel = null;
-            this._room = null;
+            _room = null;
             _model = null;
         }
     }

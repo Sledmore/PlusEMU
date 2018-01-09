@@ -5,11 +5,11 @@ namespace Plus.Communication.Packets.Incoming.Quests
 {
     class GetDailyQuestEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int UsersOnline = PlusEnvironment.GetGame().GetClientManager().Count;
+            int usersOnline = PlusEnvironment.GetGame().GetClientManager().Count;
 
-            Session.SendPacket(new ConcurrentUsersGoalProgressComposer(UsersOnline));
+            session.SendPacket(new ConcurrentUsersGoalProgressComposer(usersOnline));
         }
     }
 }

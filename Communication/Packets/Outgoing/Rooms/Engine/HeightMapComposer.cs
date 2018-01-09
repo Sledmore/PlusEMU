@@ -9,8 +9,8 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
         {
             Map = Map.Replace("\n", "");
             string[] Split = Map.Split('\r');
-            base.WriteInteger(Split[0].Length);
-            base.WriteInteger((Split.Length - 1) * Split[0].Length);
+            WriteInteger(Split[0].Length);
+            WriteInteger((Split.Length - 1) * Split[0].Length);
             int x = 0;
             int y = 0;
             for (y = 0; y < Split.Length - 1; y++)
@@ -26,7 +26,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                     catch { pos = 'x'; }
 
                     if (pos == 'x')
-                        base.WriteShort(-1);
+                        WriteShort(-1);
                     else
                     {
                         int Height = 0;
@@ -38,7 +38,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                         {
                             Height = ((Convert.ToInt32(pos) - 87) * 256);
                         }
-                        base.WriteShort(Height);
+                        WriteShort(Height);
                     }
                 }
             }

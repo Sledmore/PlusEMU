@@ -23,7 +23,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             this.Instance = Instance;
             this.Item = Item;
 
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -31,12 +31,12 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int Unknown = Packet.PopInt();
             int Team = Packet.PopInt();
 
-            this.StringData = Team.ToString();
+            StringData = Team.ToString();
         }
 
         public bool Execute(params object[] Params)
         {
-            if (Params.Length == 0 || Instance == null || String.IsNullOrEmpty(this.StringData))
+            if (Params.Length == 0 || Instance == null || String.IsNullOrEmpty(StringData))
                 return false;
 
             Habbo Player = (Habbo)Params[0];
@@ -47,7 +47,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (User == null)
                 return false;
 
-            Team ToJoin = (int.Parse(this.StringData) == 1 ? Rooms.Games.Teams.Team.Red : int.Parse(this.StringData) == 2 ? Rooms.Games.Teams.Team.Green : int.Parse(this.StringData) == 3 ? Rooms.Games.Teams.Team.Blue : int.Parse(this.StringData) == 4 ? Rooms.Games.Teams.Team.Yellow : Rooms.Games.Teams.Team.None);
+            Team ToJoin = (int.Parse(StringData) == 1 ? Rooms.Games.Teams.Team.Red : int.Parse(StringData) == 2 ? Rooms.Games.Teams.Team.Green : int.Parse(StringData) == 3 ? Rooms.Games.Teams.Team.Blue : int.Parse(StringData) == 4 ? Rooms.Games.Teams.Team.Yellow : Rooms.Games.Teams.Team.None);
 
             TeamManager Team = Instance.GetTeamManagerForFreeze();
             if (Team != null)

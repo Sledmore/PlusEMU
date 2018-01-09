@@ -15,13 +15,13 @@ namespace Plus.HabboHotel.Rooms.Chat.Filter
 
         public WordFilterManager()
         {
-            this._filteredWords = new List<WordFilter>();
+            _filteredWords = new List<WordFilter>();
         }
 
         public void Init()
         {
-            if (this._filteredWords.Count > 0)
-                this._filteredWords.Clear();
+            if (_filteredWords.Count > 0)
+                _filteredWords.Clear();
 
             DataTable data = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -33,7 +33,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Filter
                 {
                     foreach (DataRow Row in data.Rows)
                     {
-                        this._filteredWords.Add(new WordFilter(Convert.ToString(Row["word"]), Convert.ToString(Row["replacement"]), PlusEnvironment.EnumToBool(Row["strict"].ToString()), PlusEnvironment.EnumToBool(Row["bannable"].ToString())));
+                        _filteredWords.Add(new WordFilter(Convert.ToString(Row["word"]), Convert.ToString(Row["replacement"]), PlusEnvironment.EnumToBool(Row["strict"].ToString()), PlusEnvironment.EnumToBool(Row["bannable"].ToString())));
                     }
                 }
             }
@@ -41,7 +41,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Filter
 
         public string CheckMessage(string message)
         {
-            foreach (WordFilter Filter in this._filteredWords.ToList())
+            foreach (WordFilter Filter in _filteredWords.ToList())
             {
                 if (message.ToLower().Contains(Filter.Word) && Filter.IsStrict || message == Filter.Word)
                 {
@@ -69,7 +69,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Filter
         {
             message = message.Replace(" ", "").Replace(".", "").Replace("_", "").ToLower();
 
-            foreach (WordFilter Filter in this._filteredWords.ToList())
+            foreach (WordFilter Filter in _filteredWords.ToList())
             {
                 if (!Filter.IsBannable)
                     continue;
@@ -82,7 +82,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Filter
 
         public bool IsFiltered(string message)
         {
-            foreach (WordFilter filter in this._filteredWords.ToList())
+            foreach (WordFilter filter in _filteredWords.ToList())
             {
                 if (message.Contains(filter.Word))
                     return true;

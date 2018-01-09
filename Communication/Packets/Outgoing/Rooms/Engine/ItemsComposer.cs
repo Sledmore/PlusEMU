@@ -9,11 +9,11 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
             : base(ServerPacketHeader.ItemsMessageComposer)
         {
 
-            base.WriteInteger(1);
-            base.WriteInteger(Room.OwnerId);
-           base.WriteString(Room.OwnerName);
+            WriteInteger(1);
+            WriteInteger(Room.OwnerId);
+           WriteString(Room.OwnerName);
 
-            base.WriteInteger(Objects.Length);
+            WriteInteger(Objects.Length);
 
             foreach (Item Item in Objects)
             {
@@ -23,23 +23,23 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 
         private void WriteWallItem(Item Item, int UserId)
         {
-           base.WriteString(Item.Id.ToString());
-            base.WriteInteger(Item.Data.SpriteId);
+           WriteString(Item.Id.ToString());
+            WriteInteger(Item.Data.SpriteId);
 
             try
             {
-               base.WriteString(Item.wallCoord);
+               WriteString(Item.wallCoord);
             }
             catch
             {
-               base.WriteString("");
+               WriteString("");
             }
 
             ItemBehaviourUtility.GenerateWallExtradata(Item, this);
 
-            base.WriteInteger(-1);
-            base.WriteInteger((Item.Data.Modes > 1) ? 1 : 0);
-            base.WriteInteger(UserId);
+            WriteInteger(-1);
+            WriteInteger((Item.Data.Modes > 1) ? 1 : 0);
+            WriteInteger(UserId);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Plus.Communication.Rcon.Commands.User
     {
         public string Description
         {
-            get { return "This command is used to disconnect a user."; }
+            get { return "This command is used to Disconnect a user."; }
         }
 
         public string Parameters

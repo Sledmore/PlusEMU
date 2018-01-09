@@ -22,7 +22,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             get { return "Removes all of the items from the room."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClient Session, Room Room, string[] Params)
         {
             if (Session.GetHabbo().Id == Room.OwnerId)
             {

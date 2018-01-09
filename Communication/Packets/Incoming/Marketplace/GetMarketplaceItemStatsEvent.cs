@@ -7,20 +7,20 @@ namespace Plus.Communication.Packets.Incoming.Marketplace
 {
     class GetMarketplaceItemStatsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            int ItemId = Packet.PopInt();
-            int SpriteId = Packet.PopInt();
+            int itemId = packet.PopInt();
+            int spriteId = packet.PopInt();
 
-            DataRow Row = null;
+            DataRow row;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `avgprice` FROM `catalog_marketplace_data` WHERE `sprite` = @SpriteId LIMIT 1");
-                dbClient.AddParameter("SpriteId", SpriteId);
-                Row = dbClient.GetRow();
+                dbClient.AddParameter("SpriteId", spriteId);
+                row = dbClient.GetRow();
             }
 
-            Session.SendPacket(new MarketplaceItemStatsComposer(ItemId, SpriteId, (Row != null ? Convert.ToInt32(Row["avgprice"]) : 0)));
+            session.SendPacket(new MarketplaceItemStatsComposer(itemId, spriteId, (row != null ? Convert.ToInt32(row["avgprice"]) : 0)));
         }
     }
 }

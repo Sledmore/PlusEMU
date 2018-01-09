@@ -19,33 +19,33 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
         }
 
         public void HandleSave(ClientPacket Packet)
         {
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int Unknown = Packet.PopInt();
             string Message = Packet.PopString();
 
-            this.StringData = Message;
+            StringData = Message;
 
             int Speed;
             if (!int.TryParse(StringData, out Speed))
             {
-                this.StringData = "";
+                StringData = "";
             }
         }
 
         public bool Execute(params object[] Params)
         {
             int Speed;
-            if (int.TryParse(this.StringData, out Speed))
+            if (int.TryParse(StringData, out Speed))
             {
                 Instance.GetRoomItemHandler().SetSpeed(Speed);
             }

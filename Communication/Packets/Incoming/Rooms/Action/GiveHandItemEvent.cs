@@ -1,4 +1,5 @@
 ﻿using System;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Quests;
 
@@ -6,32 +7,31 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class GiveHandItemEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;            
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-            if (User == null)
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+            if (user == null)
                 return;
 
-            RoomUser TargetUser = Room.GetRoomUserManager().GetRoomUserByHabbo(Packet.PopInt());
-            if (TargetUser == null)
+            RoomUser targetUser = room.GetRoomUserManager().GetRoomUserByHabbo(packet.PopInt());
+            if (targetUser == null)
                 return;
 
-            if (!((Math.Abs((User.X - TargetUser.X)) >= 3) || (Math.Abs((User.Y - TargetUser.Y)) >= 3)) || Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (!(Math.Abs(user.X - targetUser.X) >= 3 || Math.Abs(user.Y - targetUser.Y) >= 3) || session.GetHabbo().GetPermissions().HasRight("mod_tool"))
             {
-                if (User.CarryItemID > 0 && User.CarryTimer > 0)
+                if (user.CarryItemId > 0 && user.CarryTimer > 0)
                 {
-                    if (User.CarryItemID == 8)
-                        PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.GiveCoffee);
-                    TargetUser.CarryItem(User.CarryItemID);
-                    User.CarryItem(0);
-                    TargetUser.DanceId = 0;
+                    if (user.CarryItemId == 8)
+                        PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.GiveCoffee);
+                    targetUser.CarryItem(user.CarryItemId);
+                    user.CarryItem(0);
+                    targetUser.DanceId = 0;
                 }
             }
         }

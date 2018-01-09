@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
@@ -7,38 +8,35 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Stickys
 {
     class AddStickyNoteEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int itemId = Packet.PopInt();
-            string locationData = Packet.PopString();
+            int itemId = packet.PopInt();
+            string locationData = packet.PopString();
 
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session))
+            if (!room.CheckRights(session))
                 return;
 
-            Item Item = Session.GetHabbo().GetInventoryComponent().GetItem(itemId);
-            if (Item == null)
+            Item item = session.GetHabbo().GetInventoryComponent().GetItem(itemId);
+            if (item == null)
                 return;
 
             try
             {
-                string WallPossition = WallPositionCheck(":" + locationData.Split(':')[1]);
+                string wallPossition = WallPositionCheck(":" + locationData.Split(':')[1]);
 
-                Item RoomItem = new Item(Item.Id, Room.RoomId, Item.BaseItem, Item.ExtraData, 0, 0, 0, 0, Session.GetHabbo().Id, Item.GroupId, 0, 0, WallPossition, Room);
-                if (Room.GetRoomItemHandler().SetWallItem(Session, RoomItem))
-                    Session.GetHabbo().GetInventoryComponent().RemoveItem(itemId);
+                Item roomItem = new Item(item.Id, room.RoomId, item.BaseItem, item.ExtraData, 0, 0, 0, 0, session.GetHabbo().Id, item.GroupId, 0, 0, wallPossition, room);
+                if (room.GetRoomItemHandler().SetWallItem(session, roomItem))
+                    session.GetHabbo().GetInventoryComponent().RemoveItem(itemId);
             }
             catch
             {
                 //TODO: Send a packet
-                return;
             }
         }
 

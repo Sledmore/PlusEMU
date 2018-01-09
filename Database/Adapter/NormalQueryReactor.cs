@@ -4,18 +4,18 @@ using Plus.Database.Interfaces;
 
 namespace Plus.Database.Adapter
 {
-    public class NormalQueryReactor : QueryAdapter, IQueryAdapter, IRegularQueryAdapter, IDisposable
+    public class NormalQueryReactor : QueryAdapter, IQueryAdapter
     {
-        public NormalQueryReactor(IDatabaseClient Client)
-            : base(Client)
+        public NormalQueryReactor(IDatabaseClient client)
+            : base(client)
         {
-            base.command = Client.createNewCommand();
+            Command = client.CreateNewCommand();
         }
 
         public void Dispose()
         {
-            base.command.Dispose();
-            base.client.reportDone();
+            Command.Dispose();
+            Client.Dispose();
             GC.SuppressFinalize(this);
         }
     }

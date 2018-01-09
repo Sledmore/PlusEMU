@@ -1,12 +1,13 @@
 ﻿using Plus.Communication.Packets.Outgoing.Help;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Help
 {
     class SendBullyReportEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new SendBullyReportComposer());
+            session.SendPacket(new SendBullyReportComposer());
         }
     }
 }

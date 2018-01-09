@@ -7,10 +7,10 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
         public ObjectRemoveComposer(Item Item, int UserId)
             : base(ServerPacketHeader.ObjectRemoveMessageComposer)
         {
-           base.WriteString(Item.Id.ToString());
-            base.WriteBoolean(false);
-            base.WriteInteger(UserId);
-            base.WriteInteger(0);
+           WriteString(Item.Id.ToString());
+            WriteBoolean(false);
+            WriteInteger(UserId);
+            WriteInteger(0);
         }
     }
 }

@@ -7,32 +7,33 @@ using Plus.HabboHotel.Catalog.Marketplace;
 using Plus.Communication.Packets.Outgoing.Marketplace;
 
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Marketplace
 {
     class GetOffersEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int MinCost = Packet.PopInt();
-            int MaxCost = Packet.PopInt();
-            string SearchQuery = Packet.PopString();
-            int FilterMode = Packet.PopInt();
+            int minCost = packet.PopInt();
+            int maxCost = packet.PopInt();
+            string searchQuery = packet.PopString();
+            int filterMode = packet.PopInt();
 
 
-            DataTable table = null;
+            DataTable table;
             StringBuilder builder = new StringBuilder();
-            string str = "";
+            string str;
             builder.Append("WHERE `state` = '1' AND `timestamp` >= " + PlusEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestampString());
-            if (MinCost >= 0)
-                builder.Append(" AND `total_price` > " + MinCost);
+            if (minCost >= 0)
+                builder.Append(" AND `total_price` > " + minCost);
 
 
-            if (MaxCost >= 0)
-                builder.Append(" AND `total_price` < " + MaxCost);
+            if (maxCost >= 0)
+                builder.Append(" AND `total_price` < " + maxCost);
 
-            switch (FilterMode)
+            switch (filterMode)
             {
                 case 1:
                     str = "ORDER BY `asking_price` DESC";
@@ -46,9 +47,9 @@ namespace Plus.Communication.Packets.Incoming.Marketplace
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
 
-                dbClient.SetQuery("SELECT `offer_id`, `item_type`, `sprite_id`, `total_price`, `limited_number`,`limited_stack` FROM `catalog_marketplace_offers` " + builder.ToString() + " " + str + " LIMIT 500");
-                dbClient.AddParameter("search_query", "%" + SearchQuery + "%");
-                if (SearchQuery.Length >= 1)
+                dbClient.SetQuery("SELECT `offer_id`, `item_type`, `sprite_id`, `total_price`, `limited_number`,`limited_stack` FROM `catalog_marketplace_offers` " + builder + " " + str + " LIMIT 500");
+                dbClient.AddParameter("search_query", "%" + searchQuery + "%");
+                if (searchQuery.Length >= 1)
                 {
                     builder.Append(" AND `public_name` LIKE @search_query");
                 }
@@ -105,7 +106,7 @@ namespace Plus.Communication.Packets.Incoming.Marketplace
                 }
             }
 
-            Session.SendPacket(new MarketPlaceOffersComposer(dictionary, dictionary2));
+            session.SendPacket(new MarketPlaceOffersComposer(dictionary, dictionary2));
         }
     }
 }

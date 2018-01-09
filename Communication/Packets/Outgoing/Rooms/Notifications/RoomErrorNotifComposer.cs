@@ -5,7 +5,7 @@
         public RoomErrorNotifComposer(int Error)
             : base(ServerPacketHeader.RoomErrorNotifMessageComposer)
         {
-            base.WriteInteger(Error);
+            WriteInteger(Error);
         }
     }
 }

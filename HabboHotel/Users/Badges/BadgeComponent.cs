@@ -16,8 +16,8 @@ namespace Plus.HabboHotel.Users.Badges
 
         public BadgeComponent(Habbo Player, UserData.UserData data)
         {
-            this._player = Player;
-            this._badges = new Dictionary<string, Badge>();
+            _player = Player;
+            _badges = new Dictionary<string, Badge>();
 
             foreach (Badge badge in data.badges)
             {
@@ -25,8 +25,8 @@ namespace Plus.HabboHotel.Users.Badges
                 if (!PlusEnvironment.GetGame().GetBadgeManager().TryGetBadge(badge.Code, out BadgeDefinition) || BadgeDefinition.RequiredRight.Length > 0 && !Player.GetPermissions().HasRight(BadgeDefinition.RequiredRight))
                     continue;
 
-                if (!this._badges.ContainsKey(badge.Code))
-                    this._badges.Add(badge.Code, badge);
+                if (!_badges.ContainsKey(badge.Code))
+                    _badges.Add(badge.Code, badge);
             }     
         }
 
@@ -57,7 +57,7 @@ namespace Plus.HabboHotel.Users.Badges
 
         public ICollection<Badge> GetBadges()
         {
-            return this._badges.Values;
+            return _badges.Values;
         }
 
         public Badge GetBadge(string badge)
@@ -70,7 +70,7 @@ namespace Plus.HabboHotel.Users.Badges
 
         public bool TryGetBadge(string code, out Badge badge)
         {
-            return this._badges.TryGetValue(code, out badge);
+            return _badges.TryGetValue(code, out badge);
         }
 
         public bool HasBadge(string badge)

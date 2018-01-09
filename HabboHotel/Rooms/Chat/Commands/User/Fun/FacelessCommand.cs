@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User.Fun
             get { return "Allows you to go faceless!"; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
     
             RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);

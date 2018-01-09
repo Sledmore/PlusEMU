@@ -38,16 +38,16 @@ namespace Plus.HabboHotel.Rooms
 
         public RoomUserManager(Room room)
         {
-            this._room = room;
-            this._users = new ConcurrentDictionary<int, RoomUser>();
-            this._pets = new ConcurrentDictionary<int, RoomUser>();
-            this._bots = new ConcurrentDictionary<int, RoomUser>();
+            _room = room;
+            _users = new ConcurrentDictionary<int, RoomUser>();
+            _pets = new ConcurrentDictionary<int, RoomUser>();
+            _bots = new ConcurrentDictionary<int, RoomUser>();
 
-            this.primaryPrivateUserID = 0;
-            this.secondaryPrivateUserID = 0;
+            primaryPrivateUserID = 0;
+            secondaryPrivateUserID = 0;
 
-            this._petCount = 0;
-            this.userCount = 0;
+            _petCount = 0;
+            userCount = 0;
         }
 
         public RoomUser DeployBot(RoomBot bot, Pet pet)
@@ -169,7 +169,7 @@ namespace Plus.HabboHotel.Rooms
 
 
             session.GetHabbo().CurrentRoomId = _room.RoomId;
-            if (!this._users.TryAdd(PersonalID, user))
+            if (!_users.TryAdd(PersonalID, user))
                 return false;
 
             DynamicRoomModel model = _room.GetGameMap().Model;
@@ -257,7 +257,7 @@ namespace Plus.HabboHotel.Rooms
             if (session.GetHabbo().GetPermissions().HasRight("mod_tool") && !session.GetHabbo().DisableForcedEffects)
                 session.GetHabbo().Effects().ApplyEffect(102);
 
-            foreach (RoomUser bot in this._bots.Values.ToList())
+            foreach (RoomUser bot in _bots.Values.ToList())
             {
                 if (bot == null || bot.BotAI == null)
                     continue;
@@ -302,7 +302,7 @@ namespace Plus.HabboHotel.Rooms
 
                     if (User.Team != Team.None)
                     {
-                        TeamManager Team = this._room.GetTeamManagerForFreeze();
+                        TeamManager Team = _room.GetTeamManagerForFreeze();
                         if (Team != null)
                         {
                             Team.OnUserLeave(User);
@@ -424,7 +424,7 @@ namespace Plus.HabboHotel.Rooms
             _room.SendPacket(new UserRemoveComposer(user.VirtualId));
 
             RoomUser toRemove = null;
-            if (this._users.TryRemove(user.InternalRoomID, out toRemove))
+            if (_users.TryRemove(user.InternalRoomID, out toRemove))
             {
                 //uhmm, could put the below stuff in but idk.
             }
@@ -435,22 +435,22 @@ namespace Plus.HabboHotel.Rooms
 
         public bool TryGetPet(int PetId, out RoomUser Pet)
         {
-            return this._pets.TryGetValue(PetId, out Pet);
+            return _pets.TryGetValue(PetId, out Pet);
         }
 
         public bool TryGetBot(int BotId, out RoomUser Bot)
         {
-            return this._bots.TryGetValue(BotId, out Bot);
+            return _bots.TryGetValue(BotId, out Bot);
         }
 
         public RoomUser GetBotByName(string Name)
         {
-            bool FoundBot = this._bots.Count(x => x.Value.BotData != null && x.Value.BotData.Name.ToLower() == Name.ToLower()) > 0;
+            bool FoundBot = _bots.Count(x => x.Value.BotData != null && x.Value.BotData.Name.ToLower() == Name.ToLower()) > 0;
             if (FoundBot)
             {
-                int Id = this._bots.FirstOrDefault(x => x.Value.BotData != null && x.Value.BotData.Name.ToLower() == Name.ToLower()).Value.BotData.Id;
+                int Id = _bots.FirstOrDefault(x => x.Value.BotData != null && x.Value.BotData.Name.ToLower() == Name.ToLower()).Value.BotData.Id;
 
-                return this._bots[Id];
+                return _bots[Id];
             }
 
             return null;
@@ -476,7 +476,7 @@ namespace Plus.HabboHotel.Rooms
 
         public RoomUser GetRoomUserByHabbo(int Id)
         {
-            RoomUser User = this.GetUserList().Where(x => x != null && x.GetClient() != null && x.GetClient().GetHabbo() != null && x.GetClient().GetHabbo().Id == Id).FirstOrDefault();
+            RoomUser User = GetUserList().Where(x => x != null && x.GetClient() != null && x.GetClient().GetHabbo() != null && x.GetClient().GetHabbo().Id == Id).FirstOrDefault();
 
             if (User != null)
                 return User;
@@ -488,7 +488,7 @@ namespace Plus.HabboHotel.Rooms
         {
             List<RoomUser> List = new List<RoomUser>();
 
-            List = this.GetUserList().Where(x => (!x.IsBot)).ToList();
+            List = GetUserList().Where(x => (!x.IsBot)).ToList();
 
             return List;
         }
@@ -510,7 +510,7 @@ namespace Plus.HabboHotel.Rooms
 
         public RoomUser GetRoomUserByHabbo(string pName)
         {
-            RoomUser User = this.GetUserList().FirstOrDefault(x => x != null && x.GetClient() != null && x.GetClient().GetHabbo() != null && x.GetClient().GetHabbo().Username.Equals(pName, StringComparison.OrdinalIgnoreCase));
+            RoomUser User = GetUserList().FirstOrDefault(x => x != null && x.GetClient() != null && x.GetClient().GetHabbo() != null && x.GetClient().GetHabbo().Username.Equals(pName, StringComparison.OrdinalIgnoreCase));
             if (User != null)
                 return User;
 
@@ -555,7 +555,7 @@ namespace Plus.HabboHotel.Rooms
         {
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                foreach (RoomUser User in this.GetRoomUsers().ToList())
+                foreach (RoomUser User in GetRoomUsers().ToList())
                 {
                     if (User == null || !User.IsBot)
                         continue;
@@ -580,7 +580,7 @@ namespace Plus.HabboHotel.Rooms
         public List<Pet> GetPets()
         {
             List<Pet> Pets = new List<Pet>();
-            foreach (RoomUser User in this._pets.Values.ToList())
+            foreach (RoomUser User in _pets.Values.ToList())
             {
                 if (User == null || !User.IsPet)
                     continue;
@@ -675,7 +675,7 @@ namespace Plus.HabboHotel.Rooms
                         _room.SendPacket(new SleepComposer(User, true));
                     }
 
-                    if (User.CarryItemID > 0)
+                    if (User.CarryItemId > 0)
                     {
                         User.CarryTimer--;
                         if (User.CarryTimer <= 0)
@@ -758,7 +758,7 @@ namespace Plus.HabboHotel.Rooms
                         if (User.Path.Count > 1)
                             User.Path.Clear();
 
-                        User.Path = PathFinder.FindPath(User, this._room.GetGameMap().DiagonalEnabled, this._room.GetGameMap(), new Vector2D(User.X, User.Y), new Vector2D(User.GoalX, User.GoalY));
+                        User.Path = PathFinder.FindPath(User, _room.GetGameMap().DiagonalEnabled, _room.GetGameMap(), new Vector2D(User.X, User.Y), new Vector2D(User.GoalX, User.GoalY));
 
                         if (User.Path.Count > 1)
                         {
@@ -786,7 +786,7 @@ namespace Plus.HabboHotel.Rooms
 
                             if (User.IsBot && User.BotData.TargetUser > 0)
                             {
-                                if (User.CarryItemID > 0)
+                                if (User.CarryItemId > 0)
                                 {
                                     RoomUser Target = _room.GetRoomUserManager().GetRoomUserByHabbo(User.BotData.TargetUser);
 
@@ -794,7 +794,7 @@ namespace Plus.HabboHotel.Rooms
                                     {
                                         User.SetRot(Rotation.Calculate(User.X, User.Y, Target.X, Target.Y), false);
                                         Target.SetRot(Rotation.Calculate(Target.X, Target.Y, User.X, User.Y), false);
-                                        Target.CarryItem(User.CarryItemID);
+                                        Target.CarryItem(User.CarryItemId);
                                     }
                                 }
 
@@ -1267,7 +1267,7 @@ namespace Plus.HabboHotel.Rooms
                                                 User.GetClient().GetHabbo().PrepareRoom(TeleRoomId, "");
                                             }
                                         }
-                                        else if (this._room.GetRoomItemHandler().GetItem(LinkedTele) != null)
+                                        else if (_room.GetRoomItemHandler().GetItem(LinkedTele) != null)
                                         {
                                             User.SetPos(Item.GetX, Item.GetY, Item.GetZ);
                                             User.SetRot(Item.Rotation, false);
@@ -1384,31 +1384,31 @@ namespace Plus.HabboHotel.Rooms
 
         public ICollection<RoomUser> GetUserList()
         {
-            return this._users.Values;
+            return _users.Values;
         }
 
         public void Dispose()
         {
-            this.UpdatePets();
-            this.UpdateBots();
+            UpdatePets();
+            UpdateBots();
 
-            this._room.UsersNow = 0;
+            _room.UsersNow = 0;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `rooms` SET `users_now` = '0' WHERE `id` = '" + this._room.Id + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE `rooms` SET `users_now` = '0' WHERE `id` = '" + _room.Id + "' LIMIT 1");
             }
 
-            this._users.Clear();
-            this._pets.Clear();
-            this._bots.Clear();
+            _users.Clear();
+            _pets.Clear();
+            _bots.Clear();
 
-            this.userCount = 0;
-            this._petCount = 0;
+            userCount = 0;
+            _petCount = 0;
 
-            this._users = null;
-            this._pets = null;
-            this._bots = null;
-            this._room = null;
+            _users = null;
+            _pets = null;
+            _bots = null;
+            _room = null;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.AI.Bots;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms.AI.Speech;
 
 
@@ -8,37 +9,36 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Bots
 {
     class OpenBotActionEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            int BotId = Packet.PopInt();
-            int ActionId = Packet.PopInt();
+            int botId = packet.PopInt();
+            int actionId = packet.PopInt();
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            RoomUser BotUser = null;
-            if (!Room.GetRoomUserManager().TryGetBot(BotId, out BotUser))
+            if (!room.GetRoomUserManager().TryGetBot(botId, out RoomUser botUser))
                 return;
 
-            string BotSpeech = "";
-            foreach (RandomSpeech Speech in BotUser.BotData.RandomSpeech.ToList())
+            string botSpeech = "";
+            foreach (RandomSpeech speech in botUser.BotData.RandomSpeech.ToList())
             {
-                BotSpeech += (Speech.Message + "\n");
+                botSpeech += (speech.Message + "\n");
             }
 
-            BotSpeech += ";#;";
-            BotSpeech += BotUser.BotData.AutomaticChat;
-            BotSpeech += ";#;";
-            BotSpeech += BotUser.BotData.SpeakingInterval;
-            BotSpeech += ";#;";
-            BotSpeech += BotUser.BotData.MixSentences;
+            botSpeech += ";#;";
+            botSpeech += botUser.BotData.AutomaticChat;
+            botSpeech += ";#;";
+            botSpeech += botUser.BotData.SpeakingInterval;
+            botSpeech += ";#;";
+            botSpeech += botUser.BotData.MixSentences;
 
-            if (ActionId == 2 || ActionId == 5)
-                Session.SendPacket(new OpenBotActionComposer(BotUser, ActionId, BotSpeech));
+            if (actionId == 2 || actionId == 5)
+                session.SendPacket(new OpenBotActionComposer(botUser, actionId, botSpeech));
         }
     }
 }

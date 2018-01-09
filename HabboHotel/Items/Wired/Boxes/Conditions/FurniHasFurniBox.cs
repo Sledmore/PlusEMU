@@ -27,7 +27,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -35,8 +35,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             int Unknown = Packet.PopInt();
             string Unknown2 = Packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int FurniCount = Packet.PopInt();
             for (int i = 0; i < FurniCount; i++)
@@ -49,7 +49,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
 
         public bool Execute(params object[] Params)
         {
-            foreach (Item Item in this.SetItems.Values.ToList())
+            foreach (Item Item in SetItems.Values.ToList())
             {
                 if (Item == null || !Instance.GetRoomItemHandler().GetFloor.Contains(Item))
                     continue;

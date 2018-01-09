@@ -5,10 +5,10 @@
         public FurniListNotificationComposer(int Id, int Type)
             : base(ServerPacketHeader.FurniListNotificationMessageComposer)
         {
-            base.WriteInteger(1);
-            base.WriteInteger(Type);
-            base.WriteInteger(1);
-            base.WriteInteger(Id);
+            WriteInteger(1);
+            WriteInteger(Type);
+            WriteInteger(1);
+            WriteInteger(Id);
         }
     }
 }

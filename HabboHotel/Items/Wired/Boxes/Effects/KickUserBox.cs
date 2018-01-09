@@ -25,23 +25,23 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
-            this.TickCount = Delay;
-            this._toKick = new Queue();
+            SetItems = new ConcurrentDictionary<int, Item>();
+            TickCount = Delay;
+            _toKick = new Queue();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
         }
 
         public void HandleSave(ClientPacket Packet)
         {
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int Unknown = Packet.PopInt();
             string Message = Packet.PopString();
 
-            this.StringData = Message;
+            StringData = Message;
         }
 
         public bool Execute(params object[] Params)
@@ -53,23 +53,23 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Player == null)
                 return false;
 
-            if (this.TickCount <= 0)
-                this.TickCount = 3;
+            if (TickCount <= 0)
+                TickCount = 3;
 
-            if (!this._toKick.Contains(Player))
+            if (!_toKick.Contains(Player))
             {
                 RoomUser User = Instance.GetRoomUserManager().GetRoomUserByHabbo(Player.Id);
                 if (User == null)
                     return false;
 
-                if (Player.GetPermissions().HasRight("mod_tool")  || this.Instance.OwnerId == Player.Id)
+                if (Player.GetPermissions().HasRight("mod_tool")  || Instance.OwnerId == Player.Id)
                 {
                     Player.GetClient().SendPacket(new WhisperComposer(User.VirtualId, "Wired Kick Exception: Unkickable Player", 0, 0));
                     return false;
                 }
 
-                this._toKick.Enqueue(Player);
-                Player.GetClient().SendPacket(new WhisperComposer(User.VirtualId, this.StringData, 0, 0));
+                _toKick.Enqueue(Player);
+                Player.GetClient().SendPacket(new WhisperComposer(User.VirtualId, StringData, 0, 0));
             }
             return true;
         }
@@ -79,24 +79,24 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Instance == null)
                 return false;
 
-            if (this._toKick.Count == 0)
+            if (_toKick.Count == 0)
             {
-                this.TickCount = 3;
+                TickCount = 3;
                 return true;
             }
 
-            lock (this._toKick.SyncRoot)
+            lock (_toKick.SyncRoot)
             {
-                while (this._toKick.Count > 0)
+                while (_toKick.Count > 0)
                 {
-                    Habbo Player = (Habbo)this._toKick.Dequeue();
+                    Habbo Player = (Habbo)_toKick.Dequeue();
                     if (Player == null || !Player.InRoom || Player.CurrentRoom != Instance)
                         continue;
 
                     Instance.GetRoomUserManager().RemoveUserFromRoom(Player.GetClient(), true, false);
                 }
             }
-            this.TickCount = 3;
+            TickCount = 3;
             return true;
         }
     }

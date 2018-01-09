@@ -23,7 +23,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -31,8 +31,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int Unknown = Packet.PopInt();
             string BotName = Packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int FurniCount = Packet.PopInt();
             for (int i = 0; i < FurniCount; i++)
@@ -42,15 +42,15 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     SetItems.TryAdd(SelectedItem.Id, SelectedItem);
             }
 
-            this.StringData = BotName;
+            StringData = BotName;
         }
 
         public bool Execute(params object[] Params)
         {
-            if (Params == null || Params.Length == 0 || String.IsNullOrEmpty(this.StringData))
+            if (Params == null || Params.Length == 0 || String.IsNullOrEmpty(StringData))
                 return false;
 
-            RoomUser User = this.Instance.GetRoomUserManager().GetBotByName(this.StringData);
+            RoomUser User = Instance.GetRoomUserManager().GetBotByName(StringData);
             if (User == null)
                 return false;
 
@@ -80,7 +80,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     return false;
             }
 
-            if (this.Instance.GetGameMap() == null)
+            if (Instance.GetGameMap() == null)
                 return false;
 
             if (User.IsWalking)

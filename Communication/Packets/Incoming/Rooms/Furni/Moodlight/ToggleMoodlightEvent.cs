@@ -1,34 +1,33 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Moodlight
 {
     class ToggleMoodlightEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
             
-            if (!Room.CheckRights(Session, true) || Room.MoodlightData == null)
+            if (!room.CheckRights(session, true) || room.MoodlightData == null)
                 return;
 
-            Item Item = Room.GetRoomItemHandler().GetItem(Room.MoodlightData.ItemId);
-            if (Item == null || Item.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+            Item item = room.GetRoomItemHandler().GetItem(room.MoodlightData.ItemId);
+            if (item == null || item.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
                 return;
 
-            if (Room.MoodlightData.Enabled)
-                Room.MoodlightData.Disable();
+            if (room.MoodlightData.Enabled)
+                room.MoodlightData.Disable();
             else
-                Room.MoodlightData.Enable();
+                room.MoodlightData.Enable();
 
-            Item.ExtraData = Room.MoodlightData.GenerateExtraData();
-            Item.UpdateState();
+            item.ExtraData = room.MoodlightData.GenerateExtraData();
+            item.UpdateState();
         }
     }
 }

@@ -5,7 +5,7 @@
         public GnomeBoxComposer(int ItemId)
             : base(ServerPacketHeader.GnomeBoxMessageComposer)
         {
-            base.WriteInteger(ItemId);
+            WriteInteger(ItemId);
         }
     }
 }

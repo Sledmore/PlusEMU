@@ -5,8 +5,8 @@
         public BroadcastMessageAlertComposer(string Message, string URL = "")
             : base(ServerPacketHeader.BroadcastMessageAlertMessageComposer)
         {
-           base.WriteString(Message);
-           base.WriteString(URL);
+           WriteString(Message);
+           WriteString(URL);
         }
     }
 }

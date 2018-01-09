@@ -5,10 +5,10 @@
         public BuildersClubMembershipComposer()
             : base(ServerPacketHeader.BuildersClubMembershipMessageComposer)
         {
-            base.WriteInteger(int.MaxValue);
-            base.WriteInteger(100);
-            base.WriteInteger(0);
-            base.WriteInteger(int.MaxValue);
+            WriteInteger(int.MaxValue);
+            WriteInteger(100);
+            WriteInteger(0);
+            WriteInteger(int.MaxValue);
         }
     }
 }

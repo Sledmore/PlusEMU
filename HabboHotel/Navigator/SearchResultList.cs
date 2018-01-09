@@ -16,84 +16,84 @@
 
         public SearchResultList(int Id, string Category, string CategoryIdentifier, string PublicName, bool CanDoActions, int Colour, int RequiredRank, NavigatorViewMode ViewMode, string CategoryType, string SearchAllowance, int OrderId)
         {
-            this._id = Id;
-            this._category = Category;
-            this._categoryName = CategoryIdentifier;
-            this._customName = PublicName;
-            this._canDoActions = CanDoActions;
-            this._colour = Colour;
-            this._requiredRank = RequiredRank;
-            this._viewMode = ViewMode;
-            this._categoryType = NavigatorCategoryTypeUtility.GetCategoryTypeByString(CategoryType);
-            this._searchAllowance = NavigatorSearchAllowanceUtility.GetSearchAllowanceByString(SearchAllowance);
-            this._orderId = OrderId;
+            _id = Id;
+            _category = Category;
+            _categoryName = CategoryIdentifier;
+            _customName = PublicName;
+            _canDoActions = CanDoActions;
+            _colour = Colour;
+            _requiredRank = RequiredRank;
+            _viewMode = ViewMode;
+            _categoryType = NavigatorCategoryTypeUtility.GetCategoryTypeByString(CategoryType);
+            _searchAllowance = NavigatorSearchAllowanceUtility.GetSearchAllowanceByString(SearchAllowance);
+            _orderId = OrderId;
         }
 
         public int Id
         {
-            get { return this._id; }
-            set { this._id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         //TODO: Make an enum?
         public string Category
         {
-            get { return this._category; }
-            set { this._category = value; }
+            get { return _category; }
+            set { _category = value; }
         }
 
         public string CategoryIdentifier
         {
-            get { return this._categoryName; }
-            set { this._categoryName = value; }
+            get { return _categoryName; }
+            set { _categoryName = value; }
         }
 
         public string PublicName
         {
-            get { return this._customName; }
-            set { this._customName = value; }
+            get { return _customName; }
+            set { _customName = value; }
         }
 
         public bool CanDoActions
         {
-            get { return this._canDoActions; }
-            set { this._canDoActions = value; }
+            get { return _canDoActions; }
+            set { _canDoActions = value; }
         }
 
         public int Colour
         {
-            get { return this._colour; }
-            set { this._colour = value; }
+            get { return _colour; }
+            set { _colour = value; }
         }
 
         public int RequiredRank
         {
-            get { return this._requiredRank; }
-            set { this._requiredRank = value; }
+            get { return _requiredRank; }
+            set { _requiredRank = value; }
         }
 
         public NavigatorViewMode ViewMode
         {
-            get { return this._viewMode; }
-            set { this._viewMode = value; }
+            get { return _viewMode; }
+            set { _viewMode = value; }
         }
 
         public NavigatorCategoryType CategoryType
         {
-            get { return this._categoryType; }
-            set { this._categoryType = value; }
+            get { return _categoryType; }
+            set { _categoryType = value; }
         }
 
         public NavigatorSearchAllowance SearchAllowance
         {
-            get { return this._searchAllowance; }
-            set { this._searchAllowance = value; }
+            get { return _searchAllowance; }
+            set { _searchAllowance = value; }
         }
 
         public int OrderId
         {
-            get { return this._orderId; }
-            set { this._orderId = value; }
+            get { return _orderId; }
+            set { _orderId = value; }
         }
     }
 }

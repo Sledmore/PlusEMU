@@ -24,7 +24,7 @@ namespace Plus.HabboHotel.Users.UserData
             List<Badge> badges, Dictionary<int, MessengerBuddy> friends, Dictionary<int, MessengerRequest> requests, Dictionary<int, int> quests, Habbo user, 
             Dictionary<int, Relationship> Relations)
         {
-            this.UserId = userID;
+            UserId = userID;
             this.achievements = achievements;
             this.favouritedRooms = favouritedRooms;
             this.badges = badges;

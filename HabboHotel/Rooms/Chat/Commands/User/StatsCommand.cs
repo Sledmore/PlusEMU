@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             get { return "View your current statistics."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             double Minutes = Session.GetHabbo().GetStats().OnlineTime / 60;
             double Hours = Minutes / 60;

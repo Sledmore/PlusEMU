@@ -5,7 +5,7 @@
         public SetUniqueIdComposer(string Id)
             : base(ServerPacketHeader.SetUniqueIdMessageComposer)
         {
-           base.WriteString(Id);
+           WriteString(Id);
         }
     }
 }

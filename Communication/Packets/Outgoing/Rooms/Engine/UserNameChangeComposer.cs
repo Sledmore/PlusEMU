@@ -5,9 +5,9 @@
         public UserNameChangeComposer(int RoomId, int VirtualId, string Username)
             : base(ServerPacketHeader.UserNameChangeMessageComposer)
         {
-            base.WriteInteger(RoomId);
-            base.WriteInteger(VirtualId);
-           base.WriteString(Username);
+            WriteInteger(RoomId);
+            WriteInteger(VirtualId);
+           WriteString(Username);
         }
     }
 }

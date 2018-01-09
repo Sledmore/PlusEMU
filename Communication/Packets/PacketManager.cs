@@ -222,8 +222,8 @@ namespace Plus.Communication.Packets
             _incomingPackets.Add(ClientPacketHeader.GetClientVersionMessageEvent, new GetClientVersionEvent());
             _incomingPackets.Add(ClientPacketHeader.InitCryptoMessageEvent, new InitCryptoEvent());
             _incomingPackets.Add(ClientPacketHeader.GenerateSecretKeyMessageEvent, new GenerateSecretKeyEvent());
-            _incomingPackets.Add(ClientPacketHeader.UniqueIDMessageEvent, new UniqueIDEvent());
-            _incomingPackets.Add(ClientPacketHeader.SSOTicketMessageEvent, new SSOTicketEvent());
+            _incomingPackets.Add(ClientPacketHeader.UniqueIDMessageEvent, new UniqueIdEvent());
+            _incomingPackets.Add(ClientPacketHeader.SSOTicketMessageEvent, new SsoTicketEvent());
             _incomingPackets.Add(ClientPacketHeader.InfoRetrieveMessageEvent, new InfoRetrieveEvent());
             _incomingPackets.Add(ClientPacketHeader.PingMessageEvent, new PingEvent());
         }

@@ -1,43 +1,44 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Action
 {
     class MuteUserEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            int UserId = Packet.PopInt();
-            int RoomId = Packet.PopInt();
-            int Time = Packet.PopInt();
+            int userId = packet.PopInt();
+            packet.PopInt(); //roomId
+            int time = packet.PopInt();
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            if (((Room.WhoCanMute == 0 && !Room.CheckRights(Session, true) && Room.Group == null) || (Room.WhoCanMute == 1 && !Room.CheckRights(Session)) && Room.Group == null) || (Room.Group != null && !Room.CheckRights(Session, false, true)))
+            if (((room.WhoCanMute == 0 && !room.CheckRights(session, true) && room.Group == null) || (room.WhoCanMute == 1 && !room.CheckRights(session)) && room.Group == null) || (room.Group != null && !room.CheckRights(session, false, true)))
                 return;
 
-            RoomUser Target = Room.GetRoomUserManager().GetRoomUserByHabbo(PlusEnvironment.GetUsernameById(UserId));
-            if (Target == null)
+            RoomUser target = room.GetRoomUserManager().GetRoomUserByHabbo(PlusEnvironment.GetUsernameById(userId));
+            if (target == null)
                 return;
-            else if (Target.GetClient().GetHabbo().GetPermissions().HasRight("mod_tool"))
+            else if (target.GetClient().GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            if (Room.MutedUsers.ContainsKey(UserId))
+            if (room.MutedUsers.ContainsKey(userId))
             {
-                if (Room.MutedUsers[UserId] < PlusEnvironment.GetUnixTimestamp())
-                    Room.MutedUsers.Remove(UserId);
+                if (room.MutedUsers[userId] < PlusEnvironment.GetUnixTimestamp())
+                    room.MutedUsers.Remove(userId);
                 else
                     return;
             }
 
-            Room.MutedUsers.Add(UserId, (PlusEnvironment.GetUnixTimestamp() + (Time * 60)));
+            room.MutedUsers.Add(userId, (PlusEnvironment.GetUnixTimestamp() + (time * 60)));
           
-            Target.GetClient().SendWhisper("The room owner has muted you for " + Time + " minutes!");
-            PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_SelfModMuteSeen", 1);
+            target.GetClient().SendWhisper("The room owner has muted you for " + time + " minutes!");
+            PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_SelfModMuteSeen", 1);
         }
     }
 }

@@ -2,32 +2,32 @@
 using Plus.HabboHotel.Groups;
 
 using Plus.Communication.Packets.Outgoing.Groups;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class GetGroupFurniSettingsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            int ItemId = Packet.PopInt();
-            int GroupId = Packet.PopInt();
+            int itemId = packet.PopInt();
+            int groupId = packet.PopInt();
 
-            Item Item = Session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetItem(ItemId);
-            if (Item == null)
+            Item item = session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetItem(itemId);
+            if (item == null)
                 return;
 
-            if (Item.Data.InteractionType != InteractionType.GUILD_GATE)
+            if (item.Data.InteractionType != InteractionType.GUILD_GATE)
                 return;
 
-            Group Group = null;
-            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
+            if (!PlusEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group group))
                 return;
 
-            Session.SendPacket(new GroupFurniSettingsComposer(Group, ItemId, Session.GetHabbo().Id));
-            Session.SendPacket(new GroupInfoComposer(Group, Session, false));
+            session.SendPacket(new GroupFurniSettingsComposer(group, itemId, session.GetHabbo().Id));
+            session.SendPacket(new GroupInfoComposer(group, session));
         }
     }
 }

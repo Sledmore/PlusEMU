@@ -1,4 +1,5 @@
 ﻿using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
@@ -6,28 +7,27 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Stickys
 {
     class DeleteStickyNoteEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = null;
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session))
+            if (!room.CheckRights(session))
                 return;
 
-            Item Item = Room.GetRoomItemHandler().GetItem(Packet.PopInt());
-            if (Item == null)
+            Item item = room.GetRoomItemHandler().GetItem(packet.PopInt());
+            if (item == null)
                 return;
 
-            if (Item.GetBaseItem().InteractionType == InteractionType.POSTIT || Item.GetBaseItem().InteractionType == InteractionType.CAMERA_PICTURE)
+            if (item.GetBaseItem().InteractionType == InteractionType.POSTIT || item.GetBaseItem().InteractionType == InteractionType.CAMERA_PICTURE)
             {
-                Room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id);
+                room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("DELETE FROM `items` WHERE `id` = '" + Item.Id + "' LIMIT 1");
+                    dbClient.RunQuery("DELETE FROM `items` WHERE `id` = '" + item.Id + "' LIMIT 1");
                 }
             }
         }

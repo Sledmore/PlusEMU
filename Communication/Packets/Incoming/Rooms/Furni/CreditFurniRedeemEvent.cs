@@ -4,55 +4,56 @@ using Plus.Communication.Packets.Outgoing.Inventory.Purse;
 using Plus.Communication.Packets.Outgoing.Inventory.Furni;
 
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class CreditFurniRedeemEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
             
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session, true))
+            if (!room.CheckRights(session, true))
                 return;
             
             if (PlusEnvironment.GetSettingsManager().TryGetValue("room.item.exchangeables.enabled") != "1")
             {
-                Session.SendNotification("The hotel managers have temporarilly disabled exchanging!");
+                session.SendNotification("The hotel managers have temporarilly disabled exchanging!");
                 return;
             }
 
-            Item Exchange = Room.GetRoomItemHandler().GetItem(Packet.PopInt());
-            if (Exchange == null)
+            Item exchange = room.GetRoomItemHandler().GetItem(packet.PopInt());
+            if (exchange == null)
                 return;
 
-            if (Exchange.Data.InteractionType != InteractionType.EXCHANGE)
+            if (exchange.Data.InteractionType != InteractionType.EXCHANGE)
                 return;
 
 
-            int Value = Exchange.Data.BehaviourData;
+            int value = exchange.Data.BehaviourData;
 
-            if (Value > 0)
+            if (value > 0)
             {
-                Session.GetHabbo().Credits += Value;
-                Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
+                session.GetHabbo().Credits += value;
+                session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("DELETE FROM `items` WHERE `id` = @exchangeId LIMIT 1");
-                dbClient.AddParameter("exchangeId", Exchange.Id);
+                dbClient.AddParameter("exchangeId", exchange.Id);
                 dbClient.RunQuery();
             }
 
-            Session.SendPacket(new FurniListUpdateComposer());
-            Room.GetRoomItemHandler().RemoveFurniture(null, Exchange.Id);
-            Session.GetHabbo().GetInventoryComponent().RemoveItem(Exchange.Id);
+            session.SendPacket(new FurniListUpdateComposer());
+            room.GetRoomItemHandler().RemoveFurniture(null, exchange.Id);
+            session.GetHabbo().GetInventoryComponent().RemoveItem(exchange.Id);
 
         }
     }

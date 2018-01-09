@@ -5,14 +5,14 @@
         public CatalogItemDiscountComposer()
             : base(ServerPacketHeader.CatalogItemDiscountMessageComposer)
         {
-            base.WriteInteger(100);//Most you can get.
-            base.WriteInteger(6);
-            base.WriteInteger(1);
-            base.WriteInteger(1);
-            base.WriteInteger(2);//Count
+            WriteInteger(100);//Most you can get.
+            WriteInteger(6);
+            WriteInteger(1);
+            WriteInteger(1);
+            WriteInteger(2);//Count
             {
-                base.WriteInteger(40);
-                base.WriteInteger(99);
+                WriteInteger(40);
+                WriteInteger(99);
             }
         }
     }

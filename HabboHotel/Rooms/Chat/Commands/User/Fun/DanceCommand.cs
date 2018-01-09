@@ -19,7 +19,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User.Fun
             get { return "Too lazy to dance the proper way? Do it like this!"; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             RoomUser ThisUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
             if (ThisUser == null)

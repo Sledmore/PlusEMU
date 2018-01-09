@@ -31,8 +31,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             int Unknown = packet.PopInt();
             string Unknown2 = packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int FurniCount = packet.PopInt();
             for (int i = 0; i < FurniCount; i++)
@@ -53,7 +53,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             if (Item == null)
                 return false;
 
-            if (!this.SetItems.ContainsKey(Item.Id))
+            if (!SetItems.ContainsKey(Item.Id))
                 return false;
 
             ICollection<IWiredItem> Effects = Instance.GetWired().GetEffects(this);

@@ -5,7 +5,7 @@
         public RefreshFavouriteGroupComposer(int Id)
             : base(ServerPacketHeader.RefreshFavouriteGroupMessageComposer)
         {
-            base.WriteInteger(Id);
+            WriteInteger(Id);
         }
     }
 }

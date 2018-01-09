@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 
@@ -9,36 +10,36 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Furni
 {
     class SetMannequinNameEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null || !Room.CheckRights(Session, true))
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null || !room.CheckRights(session, true))
                 return;
 
-            int ItemId = Packet.PopInt();
-            string Name = Packet.PopString();
+            int itemId = packet.PopInt();
+            string name = packet.PopString();
 
-            Item Item = Session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetItem(ItemId);
-            if (Item == null)
+            Item item = session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetItem(itemId);
+            if (item == null)
                 return;
 
-            if (Item.ExtraData.Contains(Convert.ToChar(5)))
+            if (item.ExtraData.Contains(Convert.ToChar(5)))
             {
-                string[] Flags = Item.ExtraData.Split(Convert.ToChar(5));
-                Item.ExtraData = Flags[0] + Convert.ToChar(5) + Flags[1] + Convert.ToChar(5) + Name;
+                string[] flags = item.ExtraData.Split(Convert.ToChar(5));
+                item.ExtraData = flags[0] + Convert.ToChar(5) + flags[1] + Convert.ToChar(5) + name;
             }
             else
-                Item.ExtraData = "m" + Convert.ToChar(5) + ".ch-210-1321.lg-285-92" + Convert.ToChar(5) + "Default Mannequin";
+                item.ExtraData = "m" + Convert.ToChar(5) + ".ch-210-1321.lg-285-92" + Convert.ToChar(5) + "Default Mannequin";
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("UPDATE `items` SET `extra_data` = @Ed WHERE `id` = @itemId LIMIT 1");
-                dbClient.AddParameter("itemId", Item.Id);
-                dbClient.AddParameter("Ed", Item.ExtraData);
+                dbClient.AddParameter("itemId", item.Id);
+                dbClient.AddParameter("Ed", item.ExtraData);
                 dbClient.RunQuery();
             }
 
-            Item.UpdateState(true, true);
+            item.UpdateState(true, true);
         }
     }
 }

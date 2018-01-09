@@ -3,67 +3,67 @@ using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Navigator;
 using Plus.Communication.Packets.Outgoing.Rooms.Settings;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class ModerateRoomEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (!session.GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            Room Room = null;
-            if(!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Packet.PopInt(), out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(packet.PopInt(), out Room room))
                 return;
 
-            bool SetLock = Packet.PopInt() == 1;
-            bool SetName = Packet.PopInt() == 1;
-            bool KickAll = Packet.PopInt() == 1;
+            bool setLock = packet.PopInt() == 1;
+            bool setName = packet.PopInt() == 1;
+            bool kickAll = packet.PopInt() == 1;
 
-            if (SetName)
+            if (setName)
             {
-                Room.Name = "Inappropriate to Hotel Management";
-                Room.Description = "Inappropriate to Hotel Management";
+                room.Name = "Inappropriate to Hotel Management";
+                room.Description = "Inappropriate to Hotel Management";
             }
 
-            if (SetLock)
-                Room.Access = RoomAccess.Doorbell;
+            if (setLock)
+                room.Access = RoomAccess.Doorbell;
 
-            if (Room.Tags.Count > 0)
-                Room.ClearTags();
+            if (room.Tags.Count > 0)
+                room.ClearTags();
 
-            if (Room.HasActivePromotion)
-                Room.EndPromotion();
+            if (room.HasActivePromotion)
+                room.EndPromotion();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                if (SetName && SetLock)
-                    dbClient.RunQuery("UPDATE `rooms` SET `caption` = 'Inappropriate to Hotel Management', `description` = 'Inappropriate to Hotel Management', `tags` = '', `state` = '1' WHERE `id` = '" + Room.RoomId + "' LIMIT 1");
-                else if (SetName && !SetLock)
-                    dbClient.RunQuery("UPDATE `rooms` SET `caption` = 'Inappropriate to Hotel Management', `description` = 'Inappropriate to Hotel Management', `tags` = '' WHERE `id` = '" + Room.RoomId + "' LIMIT 1");
-                else if (!SetName && SetLock)
-                    dbClient.RunQuery("UPDATE `rooms` SET `state` = '1', `tags` = '' WHERE `id` = '" + Room.RoomId + "' LIMIT 1");
+                if (setName && setLock)
+                    dbClient.RunQuery("UPDATE `rooms` SET `caption` = 'Inappropriate to Hotel Management', `description` = 'Inappropriate to Hotel Management', `tags` = '', `state` = '1' WHERE `id` = '" + room.RoomId + "' LIMIT 1");
+                else if (setName)
+                    dbClient.RunQuery("UPDATE `rooms` SET `caption` = 'Inappropriate to Hotel Management', `description` = 'Inappropriate to Hotel Management', `tags` = '' WHERE `id` = '" + room.RoomId + "' LIMIT 1");
+                else if (setLock)
+                    dbClient.RunQuery("UPDATE `rooms` SET `state` = '1', `tags` = '' WHERE `id` = '" + room.RoomId + "' LIMIT 1");
             }
 
-            Room.SendPacket(new RoomSettingsSavedComposer(Room.RoomId));
-            Room.SendPacket(new RoomInfoUpdatedComposer(Room.RoomId));
+            room.SendPacket(new RoomSettingsSavedComposer(room.RoomId));
+            room.SendPacket(new RoomInfoUpdatedComposer(room.RoomId));
 
-            if (KickAll)
+            if (kickAll)
             {
-                foreach (RoomUser RoomUser in Room.GetRoomUserManager().GetUserList().ToList())
+                foreach (RoomUser roomUser in room.GetRoomUserManager().GetUserList().ToList())
                 {
-                    if (RoomUser == null || RoomUser.IsBot)
+                    if (roomUser == null || roomUser.IsBot)
                         continue;
 
-                    if (RoomUser.GetClient() == null || RoomUser.GetClient().GetHabbo() == null)
+                    if (roomUser.GetClient() == null || roomUser.GetClient().GetHabbo() == null)
                         continue;
 
-                    if (RoomUser.GetClient().GetHabbo().Rank >= Session.GetHabbo().Rank || RoomUser.GetClient().GetHabbo().Id == Session.GetHabbo().Id)
+                    if (roomUser.GetClient().GetHabbo().Rank >= session.GetHabbo().Rank || roomUser.GetClient().GetHabbo().Id == session.GetHabbo().Id)
                         continue;
 
-                    Room.GetRoomUserManager().RemoveUserFromRoom(RoomUser.GetClient(), true, false);
+                    room.GetRoomUserManager().RemoveUserFromRoom(roomUser.GetClient(), true);
                 }
             }
         }

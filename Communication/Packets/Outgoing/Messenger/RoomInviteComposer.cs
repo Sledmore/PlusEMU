@@ -5,8 +5,8 @@
         public RoomInviteComposer(int SenderId, string Text)
             : base(ServerPacketHeader.RoomInviteMessageComposer)
         {
-            base.WriteInteger(SenderId);
-           base.WriteString(Text);
+            WriteInteger(SenderId);
+           WriteString(Text);
         }
     }
 }

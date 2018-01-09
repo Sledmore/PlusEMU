@@ -1028,7 +1028,7 @@
     <Compile Include="Communication\Encryption\Keys\RSAKeys.cs" />
     <Compile Include="Utilities\Converter.cs" />
     <Compile Include="Utilities\HabboEncoding.cs" />
-    <Compile Include="Utilities\Enclosure\Algorithm\GametileUpdate.cs" />
+    <Compile Include="Utilities\Enclosure\Algorithm\FieldUpdate.cs" />
     <Compile Include="Utilities\Enclosure\GameField.cs" />
     <Compile Include="Utilities\Enclosure\PointField.cs" />
     <Compile Include="Utilities\Randomizer.cs" />

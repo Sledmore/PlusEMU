@@ -11,14 +11,14 @@ namespace Plus.HabboHotel.Rooms.Chat.Pets.Locale
 
         public PetLocale()
         {
-            this._values = new Dictionary<string, string[]>();
+            _values = new Dictionary<string, string[]>();
 
-            this.Init();
+            Init();
         }
 
         public void Init()
         {
-            this._values = new Dictionary<string, string[]>();
+            _values = new Dictionary<string, string[]>();
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT * FROM `bots_pet_responses`");
@@ -28,7 +28,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Pets.Locale
                 {
                     foreach (DataRow Row in Pets.Rows)
                     {
-                        this._values.Add(Row[0].ToString(), Row[1].ToString().Split(';'));
+                        _values.Add(Row[0].ToString(), Row[1].ToString().Split(';'));
                     }
                 }
             }
@@ -37,7 +37,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Pets.Locale
         public string[] GetValue(string key)
         {
             string[] value;
-            if (this._values.TryGetValue(key, out value))
+            if (_values.TryGetValue(key, out value))
                 return value;
             return new[] { "Unknown pet speach:" + key };
         }

@@ -5,7 +5,7 @@
         public CatalogUpdatedComposer()
             : base(ServerPacketHeader.CatalogUpdatedMessageComposer)
         {
-            base.WriteBoolean(false);
+            WriteBoolean(false);
         }
     }
 }

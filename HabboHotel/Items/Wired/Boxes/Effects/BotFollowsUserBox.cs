@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -30,10 +30,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int FollowMode = Packet.PopInt();//1 = follow, 0 = don't.
             string BotConfiguration = Packet.PopString();
        
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
-            this.StringData = FollowMode + ";" +BotConfiguration;
+            StringData = FollowMode + ";" +BotConfiguration;
         }
 
         public bool Execute(params object[] Params)
@@ -41,7 +41,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Params == null || Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData))
+            if (String.IsNullOrEmpty(StringData))
                 return false;
 
             Habbo Player = (Habbo)Params[0];
@@ -52,13 +52,13 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Human == null)
                 return false;
 
-            string[] Stuff = this.StringData.Split(';');
+            string[] Stuff = StringData.Split(';');
             if (Stuff.Length != 2)
                 return false;//This is important, incase a cunt scripts.
 
             string Username = Stuff[1];
 
-            RoomUser User = this.Instance.GetRoomUserManager().GetBotByName(Username);
+            RoomUser User = Instance.GetRoomUserManager().GetBotByName(Username);
             if (User == null)
                 return false;
 

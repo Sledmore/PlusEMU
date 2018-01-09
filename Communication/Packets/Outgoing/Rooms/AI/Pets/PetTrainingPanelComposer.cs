@@ -5,32 +5,32 @@
         public PetTrainingPanelComposer(int PetId, int Level)
             : base(ServerPacketHeader.PetTrainingPanelMessageComposer)
         {
-            base.WriteInteger(PetId);//Pet Id for sure.
+            WriteInteger(PetId);//Pet Id for sure.
 
             //Commands available to be done.
-            base.WriteInteger(8);//Count
+            WriteInteger(8);//Count
             {
-                base.WriteInteger(46);//Breed?
-                base.WriteInteger(0);//Command Id
-                base.WriteInteger(1);
-                base.WriteInteger(2);
-                base.WriteInteger(3);
-                base.WriteInteger(4);
-                base.WriteInteger(5);
-                base.WriteInteger(6);
+                WriteInteger(46);//Breed?
+                WriteInteger(0);//Command Id
+                WriteInteger(1);
+                WriteInteger(2);
+                WriteInteger(3);
+                WriteInteger(4);
+                WriteInteger(5);
+                WriteInteger(6);
             }
 
             //Commands that can be used NOW. (Level ups give you new commands etc).
-            base.WriteInteger(GetCount(Level));//Count
+            WriteInteger(GetCount(Level));//Count
             {
-                base.WriteInteger(46);//Breed?
-                base.WriteInteger(0);//Command Id
-                base.WriteInteger(1);
-                base.WriteInteger(2);
-                base.WriteInteger(3);
-                base.WriteInteger(4);
-                base.WriteInteger(5);
-                base.WriteInteger(6);
+                WriteInteger(46);//Breed?
+                WriteInteger(0);//Command Id
+                WriteInteger(1);
+                WriteInteger(2);
+                WriteInteger(3);
+                WriteInteger(4);
+                WriteInteger(5);
+                WriteInteger(6);
             }
         }
 

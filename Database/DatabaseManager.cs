@@ -11,21 +11,21 @@ namespace Plus.Database
 
         public DatabaseManager(string connectionString)
         {
-            this._connectionStr = connectionString;
+            _connectionStr = connectionString;
         }
 
         public bool IsConnected()
         {
             try
             {
-                MySqlConnection Con = new MySqlConnection(this._connectionStr);
-                Con.Open();
-                MySqlCommand CMD = Con.CreateCommand();
-                CMD.CommandText = "SELECT 1+1";
-                CMD.ExecuteNonQuery();
+                MySqlConnection con = new MySqlConnection(_connectionStr);
+                con.Open();
+                MySqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "SELECT 1+1";
+                cmd.ExecuteNonQuery();
 
-                CMD.Dispose();
-                Con.Close();
+                cmd.Dispose();
+                con.Close();
             }
             catch (MySqlException)
             {
@@ -39,11 +39,11 @@ namespace Plus.Database
         {
             try
             {
-                IDatabaseClient DbConnection = new DatabaseConnection(this._connectionStr);
+                IDatabaseClient dbConnection = new DatabaseConnection(_connectionStr);
               
-                DbConnection.connect();
+                dbConnection.Connect();
 
-                return DbConnection.GetQueryReactor();
+                return dbConnection.GetQueryReactor();
             }
             catch (Exception e)
             {

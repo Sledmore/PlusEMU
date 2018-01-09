@@ -18,10 +18,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
         }
 
         public void HandleSave(ClientPacket Packet)

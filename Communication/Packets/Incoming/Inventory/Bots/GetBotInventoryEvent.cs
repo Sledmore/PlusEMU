@@ -2,18 +2,19 @@
 
 using Plus.HabboHotel.Users.Inventory.Bots;
 using Plus.Communication.Packets.Outgoing.Inventory.Bots;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Bots
 {
     class GetBotInventoryEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session.GetHabbo().GetInventoryComponent() == null)
+            if (session.GetHabbo().GetInventoryComponent() == null)
                 return;
 
-            ICollection<Bot> Bots = Session.GetHabbo().GetInventoryComponent().GetBots();
-            Session.SendPacket(new BotInventoryComposer(Bots));
+            ICollection<Bot> bots = session.GetHabbo().GetInventoryComponent().GetBots();
+            session.SendPacket(new BotInventoryComposer(bots));
         }
     }
 }

@@ -5,9 +5,9 @@
         public FloorPlanSendDoorComposer(int DoorX, int DoorY, int DoorDirection)
             : base(ServerPacketHeader.FloorPlanSendDoorMessageComposer)
         {
-            base.WriteInteger(DoorX);
-            base.WriteInteger(DoorY);
-            base.WriteInteger(DoorDirection);
+            WriteInteger(DoorX);
+            WriteInteger(DoorY);
+            WriteInteger(DoorDirection);
         }
     }
 }

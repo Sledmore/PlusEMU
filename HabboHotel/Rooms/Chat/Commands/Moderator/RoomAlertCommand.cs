@@ -17,7 +17,7 @@
             get { return "Send a message to the users in this room."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

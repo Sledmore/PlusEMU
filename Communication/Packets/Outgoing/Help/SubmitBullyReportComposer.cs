@@ -5,7 +5,7 @@
         public SubmitBullyReportComposer(int Result)
             : base(ServerPacketHeader.SubmitBullyReportMessageComposer)
         {
-            base.WriteInteger(Result);
+            WriteInteger(Result);
         }
     }
 }

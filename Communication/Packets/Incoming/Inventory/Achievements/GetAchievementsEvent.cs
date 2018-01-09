@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using Plus.Communication.Packets.Outgoing.Inventory.Achievements;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Achievements
 {
     class GetAchievementsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new AchievementsComposer(Session, PlusEnvironment.GetGame().GetAchievementManager().Achievements.Values.ToList()));
+            session.SendPacket(new AchievementsComposer(session, PlusEnvironment.GetGame().GetAchievementManager().Achievements.Values.ToList()));
         }
     }
 }

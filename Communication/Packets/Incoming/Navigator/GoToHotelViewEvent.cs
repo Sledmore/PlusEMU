@@ -1,24 +1,23 @@
-﻿using Plus.HabboHotel.Rooms;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Incoming.Navigator
 {
     class GoToHotelViewEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
 
-            if (Session.GetHabbo().InRoom)
+            if (session.GetHabbo().InRoom)
             {
-                Room OldRoom;
-
-                if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out OldRoom))
+                if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room oldRoom))
                     return;
 
-                if (OldRoom.GetRoomUserManager() != null)
-                    OldRoom.GetRoomUserManager().RemoveUserFromRoom(Session, true, false);
+                if (oldRoom.GetRoomUserManager() != null)
+                    oldRoom.GetRoomUserManager().RemoveUserFromRoom(session, true);
             }
         }
     }

@@ -17,7 +17,7 @@
             get { return ""; }
         }
 
-        public void Execute(GameClients.GameClient session, Rooms.Room room, string[] Params)
+        public void Execute(GameClients.GameClient session, Room room, string[] Params)
         {
             if (Params.Length == 1)
             {

@@ -12,13 +12,13 @@ namespace Plus.HabboHotel.Users.Navigator.SavedSearches
 
         public SearchesComponent()
         {
-            this._savedSearches = new ConcurrentDictionary<int, SavedSearch>();
+            _savedSearches = new ConcurrentDictionary<int, SavedSearch>();
         }
 
         public bool Init(Habbo habbo)
         {
-            if (this._savedSearches.Count > 0)
-                this._savedSearches.Clear();
+            if (_savedSearches.Count > 0)
+                _savedSearches.Clear();
 
             DataTable GetSearches = null;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -31,7 +31,7 @@ namespace Plus.HabboHotel.Users.Navigator.SavedSearches
                 {
                     foreach (DataRow Row in GetSearches.Rows)
                     {
-                        this._savedSearches.TryAdd(Convert.ToInt32(Row["id"]), new SavedSearch(Convert.ToInt32(Row["id"]), Convert.ToString(Row["filter"]), Convert.ToString(Row["search_code"])));
+                        _savedSearches.TryAdd(Convert.ToInt32(Row["id"]), new SavedSearch(Convert.ToInt32(Row["id"]), Convert.ToString(Row["filter"]), Convert.ToString(Row["search_code"])));
                     }
                 }
             }
@@ -40,17 +40,17 @@ namespace Plus.HabboHotel.Users.Navigator.SavedSearches
 
         public ICollection<SavedSearch> Searches
         {
-            get { return this._savedSearches.Values; }
+            get { return _savedSearches.Values; }
         }
 
         public bool TryAdd(int Id, SavedSearch Search)
         {
-            return this._savedSearches.TryAdd(Id, Search);
+            return _savedSearches.TryAdd(Id, Search);
         }
 
         public bool TryRemove(int Id, out SavedSearch Removed)
         {
-            return this._savedSearches.TryRemove(Id, out Removed);
+            return _savedSearches.TryRemove(Id, out Removed);
         }
     }
 }

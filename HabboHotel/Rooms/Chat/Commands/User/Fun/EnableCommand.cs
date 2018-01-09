@@ -19,7 +19,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User.Fun
             get { return "Gives you the ability to set an effect on your user!"; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

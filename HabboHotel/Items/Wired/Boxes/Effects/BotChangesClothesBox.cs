@@ -22,7 +22,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -30,10 +30,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int Unknown = Packet.PopInt();
             string BotConfiguration = Packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
-            this.StringData = BotConfiguration;
+            StringData = BotConfiguration;
         }
 
         public bool Execute(params object[] Params)
@@ -41,17 +41,17 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Params == null || Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData))
+            if (String.IsNullOrEmpty(StringData))
                 return false;
 
 
-            string[] Stuff = this.StringData.Split('\t');
+            string[] Stuff = StringData.Split('\t');
             if (Stuff.Length != 2)
                 return false;//This is important, incase a cunt scripts.
 
             string Username = Stuff[0];
 
-            RoomUser User = this.Instance.GetRoomUserManager().GetBotByName(Username);
+            RoomUser User = Instance.GetRoomUserManager().GetBotByName(Username);
             if (User == null)
                 return false;      
             
@@ -63,7 +63,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             UserChangeComposer.WriteString("M");
             UserChangeComposer.WriteString(User.BotData.Motto);
             UserChangeComposer.WriteInteger(0);
-            this.Instance.SendPacket(UserChangeComposer);
+            Instance.SendPacket(UserChangeComposer);
 
             User.BotData.Look = Figure;
             User.BotData.Gender = "M";

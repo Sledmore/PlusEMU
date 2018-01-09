@@ -12,11 +12,11 @@ namespace Plus.HabboHotel.Rooms.AI
 
         public void Init(int baseId, int roomUserId, int roomId, RoomUser user, Room room)
         {
-            this.BaseId = baseId;
-            this._roomUserId = roomUserId;
-            this._roomId = roomId;
-            this._roomUser = user;
-            this._room = room;
+            BaseId = baseId;
+            _roomUserId = roomUserId;
+            _roomId = roomId;
+            _roomUser = user;
+            _room = room;
         }
 
         public Room GetRoom()

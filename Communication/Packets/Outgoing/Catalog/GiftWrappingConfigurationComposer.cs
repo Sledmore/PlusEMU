@@ -5,38 +5,38 @@
         public GiftWrappingConfigurationComposer()
             : base(ServerPacketHeader.GiftWrappingConfigurationMessageComposer)
         {
-            base.WriteBoolean(true);
-            base.WriteInteger(1);
-            base.WriteInteger(10);
+            WriteBoolean(true);
+            WriteInteger(1);
+            WriteInteger(10);
             for (int i = 3372; i < 3382;)
             {
-                base.WriteInteger(i);
+                WriteInteger(i);
                 i++;
             }
-            base.WriteInteger(7);
-            base.WriteInteger(0);
-            base.WriteInteger(1);
-            base.WriteInteger(2);
-            base.WriteInteger(3);
-            base.WriteInteger(4);
-            base.WriteInteger(5);
-            base.WriteInteger(6);
-            base.WriteInteger(11);
-            base.WriteInteger(0);
-            base.WriteInteger(1);
-            base.WriteInteger(2);
-            base.WriteInteger(3);
-            base.WriteInteger(4);
-            base.WriteInteger(5);
-            base.WriteInteger(6);
-            base.WriteInteger(7);
-            base.WriteInteger(8);
-            base.WriteInteger(9);
-            base.WriteInteger(10);
-            base.WriteInteger(7);
+            WriteInteger(7);
+            WriteInteger(0);
+            WriteInteger(1);
+            WriteInteger(2);
+            WriteInteger(3);
+            WriteInteger(4);
+            WriteInteger(5);
+            WriteInteger(6);
+            WriteInteger(11);
+            WriteInteger(0);
+            WriteInteger(1);
+            WriteInteger(2);
+            WriteInteger(3);
+            WriteInteger(4);
+            WriteInteger(5);
+            WriteInteger(6);
+            WriteInteger(7);
+            WriteInteger(8);
+            WriteInteger(9);
+            WriteInteger(10);
+            WriteInteger(7);
             for (int i = 187; i < 194;)
             {
-                base.WriteInteger(i);
+                WriteInteger(i);
                 i++;
             }
         }

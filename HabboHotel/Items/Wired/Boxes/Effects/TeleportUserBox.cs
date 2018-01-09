@@ -18,7 +18,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         public ConcurrentDictionary<int, Item> SetItems { get; set; }
         public string StringData { get; set; }
         public bool BoolData { get; set; }
-        public int Delay { get { return this._delay; } set { this._delay = value; this.TickCount = value + 1; } }
+        public int Delay { get { return _delay; } set { _delay = value; TickCount = value + 1; } }
         public int TickCount { get; set; }
         public string ItemsData { get; set; }
 
@@ -29,10 +29,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
 
-            this._queue = new Queue();
-            this.TickCount = Delay;
+            _queue = new Queue();
+            TickCount = Delay;
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -40,8 +40,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int Unknown = Packet.PopInt();
             string Unknown2 = Packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int FurniCount = Packet.PopInt();
             for (int i = 0; i < FurniCount; i++)
@@ -51,15 +51,15 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     SetItems.TryAdd(SelectedItem.Id, SelectedItem);
             }
 
-            this.Delay = Packet.PopInt();
+            Delay = Packet.PopInt();
         }
 
         public bool OnCycle()
         {
             if (_queue.Count == 0 || SetItems.Count == 0)
             {
-                this._queue.Clear();
-                this.TickCount = Delay;
+                _queue.Clear();
+                TickCount = Delay;
                 return true;
             }
 
@@ -69,10 +69,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                 if (Player == null || Player.CurrentRoom != Instance)
                     continue;
 
-                this.TeleportUser(Player);
+                TeleportUser(Player);
             }
 
-            this.TickCount = Delay;
+            TickCount = Delay;
             return true;
         }
 
@@ -89,7 +89,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             if (Player.Effects() != null)
                 Player.Effects().ApplyEffect(4);
 
-            this._queue.Enqueue(Player);
+            _queue.Enqueue(Player);
             return true;
         }
 

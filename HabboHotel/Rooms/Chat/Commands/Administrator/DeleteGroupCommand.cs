@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Administrator
             get { return "Delete a group from the database and cache."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             Room = Session.GetHabbo().CurrentRoom;
             if (Room == null)

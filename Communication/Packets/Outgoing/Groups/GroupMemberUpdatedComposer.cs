@@ -7,13 +7,13 @@ namespace Plus.Communication.Packets.Outgoing.Groups
         public GroupMemberUpdatedComposer(int GroupId, Habbo Habbo, int Type)
             : base(ServerPacketHeader.GroupMemberUpdatedMessageComposer)
         {
-            base.WriteInteger(GroupId);//GroupId
-            base.WriteInteger(Type);//Type?
+            WriteInteger(GroupId);//GroupId
+            WriteInteger(Type);//Type?
             {
-                base.WriteInteger(Habbo.Id);//UserId
-                base.WriteString(Habbo.Username);
-                base.WriteString(Habbo.Look);
-                base.WriteString(string.Empty);
+                WriteInteger(Habbo.Id);//UserId
+                WriteString(Habbo.Username);
+                WriteString(Habbo.Look);
+                WriteString(string.Empty);
             }
         }
     }

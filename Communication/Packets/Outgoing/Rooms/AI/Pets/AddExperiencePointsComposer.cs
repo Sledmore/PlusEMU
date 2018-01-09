@@ -5,9 +5,9 @@
         public AddExperiencePointsComposer(int PetId, int VirtualId, int Amount)
             : base(ServerPacketHeader.AddExperiencePointsMessageComposer)
         {
-            base.WriteInteger(PetId);
-            base.WriteInteger(VirtualId);
-            base.WriteInteger(Amount);
+            WriteInteger(PetId);
+            WriteInteger(VirtualId);
+            WriteInteger(Amount);
         }
     }
 }

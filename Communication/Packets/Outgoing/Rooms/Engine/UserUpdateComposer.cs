@@ -12,15 +12,15 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
         public UserUpdateComposer(ICollection<RoomUser> users)
             : base(ServerPacketHeader.UserUpdateMessageComposer)
         {
-            base.WriteInteger(users.Count);
+            WriteInteger(users.Count);
             foreach (RoomUser user in users.ToList())
             {
-                base.WriteInteger(user.VirtualId);
-                base.WriteInteger(user.X);
-                base.WriteInteger(user.Y);
-                base.WriteString(user.Z.ToString("0.00"));
-                base.WriteInteger(user.RotHead);
-                base.WriteInteger(user.RotBody);
+                WriteInteger(user.VirtualId);
+                WriteInteger(user.X);
+                WriteInteger(user.Y);
+                WriteString(user.Z.ToString("0.00"));
+                WriteInteger(user.RotHead);
+                WriteInteger(user.RotBody);
 
                 StringBuilder StatusComposer = new StringBuilder();
                 StatusComposer.Append("/");
@@ -39,7 +39,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                 }
 
                 StatusComposer.Append("/");
-                base.WriteString(StatusComposer.ToString());
+                WriteString(StatusComposer.ToString());
             }
         }
     }

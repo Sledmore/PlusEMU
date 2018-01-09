@@ -29,10 +29,10 @@ namespace Plus.HabboHotel.Permissions
 
         public void Init()
         {
-            this.Permissions.Clear();
-            this._commands.Clear();
-            this.PermissionGroups.Clear();
-            this.PermissionGroupRights.Clear();
+            Permissions.Clear();
+            _commands.Clear();
+            PermissionGroups.Clear();
+            PermissionGroupRights.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -43,7 +43,7 @@ namespace Plus.HabboHotel.Permissions
                 {
                     foreach (DataRow Row in GetPermissions.Rows)
                     {
-                        this.Permissions.Add(Convert.ToInt32(Row["id"]), new Permission(Convert.ToInt32(Row["id"]), Convert.ToString(Row["permission"]), Convert.ToString(Row["description"])));
+                        Permissions.Add(Convert.ToInt32(Row["id"]), new Permission(Convert.ToInt32(Row["id"]), Convert.ToString(Row["permission"]), Convert.ToString(Row["description"])));
                     }
                 }
             }
@@ -57,7 +57,7 @@ namespace Plus.HabboHotel.Permissions
                 {
                     foreach (DataRow Row in GetCommands.Rows)
                     {
-                         this._commands.Add(Convert.ToString(Row["command"]), new PermissionCommand(Convert.ToString(Row["command"]), Convert.ToInt32(Row["group_id"]), Convert.ToInt32(Row["subscription_id"])));
+                         _commands.Add(Convert.ToString(Row["command"]), new PermissionCommand(Convert.ToString(Row["command"]), Convert.ToInt32(Row["group_id"]), Convert.ToInt32(Row["subscription_id"])));
                     }
                 }
             }
@@ -71,7 +71,7 @@ namespace Plus.HabboHotel.Permissions
                 {
                     foreach (DataRow Row in GetPermissionGroups.Rows)
                     {
-                        this.PermissionGroups.Add(Convert.ToInt32(Row["id"]), new PermissionGroup(Convert.ToString("name"), Convert.ToString("description"), Convert.ToString("badge")));
+                        PermissionGroups.Add(Convert.ToInt32(Row["id"]), new PermissionGroup(Convert.ToString("name"), Convert.ToString("description"), Convert.ToString("badge")));
                     }
                 }
             }
@@ -88,21 +88,21 @@ namespace Plus.HabboHotel.Permissions
                         int GroupId = Convert.ToInt32(Row["group_id"]);
                         int PermissionId = Convert.ToInt32(Row["permission_id"]);
 
-                        if (!this.PermissionGroups.ContainsKey(GroupId))
+                        if (!PermissionGroups.ContainsKey(GroupId))
                         {
                             continue; // permission group does not exist
                         }
 
                         Permission Permission = null;
 
-                        if (!this.Permissions.TryGetValue(PermissionId, out Permission))
+                        if (!Permissions.TryGetValue(PermissionId, out Permission))
                         {
                             continue; // permission does not exist
                         }
 
                         if (PermissionGroupRights.ContainsKey(GroupId))
                         {
-                            this.PermissionGroupRights[GroupId].Add(Permission.PermissionName);
+                            PermissionGroupRights[GroupId].Add(Permission.PermissionName);
                         }
                         else
                         {
@@ -111,7 +111,7 @@ namespace Plus.HabboHotel.Permissions
                                     Permission.PermissionName
                                 };
 
-                            this.PermissionGroupRights.Add(GroupId, RightsSet);
+                            PermissionGroupRights.Add(GroupId, RightsSet);
                         }
 
                     }
@@ -131,12 +131,12 @@ namespace Plus.HabboHotel.Permissions
                         int SubscriptionId = Convert.ToInt32(Row["subscription_id"]);
 
                         Permission Permission = null;
-                        if (!this.Permissions.TryGetValue(PermissionId, out Permission))
+                        if (!Permissions.TryGetValue(PermissionId, out Permission))
                             continue; // permission does not exist
 
-                        if (this.PermissionSubscriptionRights.ContainsKey(SubscriptionId))
+                        if (PermissionSubscriptionRights.ContainsKey(SubscriptionId))
                         {
-                            this.PermissionSubscriptionRights[SubscriptionId].Add(Permission.PermissionName);
+                            PermissionSubscriptionRights[SubscriptionId].Add(Permission.PermissionName);
                         }
                         else
                         {
@@ -145,21 +145,21 @@ namespace Plus.HabboHotel.Permissions
                                     Permission.PermissionName
                                 };
 
-                            this.PermissionSubscriptionRights.Add(SubscriptionId, RightsSet);
+                            PermissionSubscriptionRights.Add(SubscriptionId, RightsSet);
                         }
                     }
                 }
             }
 
-            log.Info("Loaded " + this.Permissions.Count + " permissions.");
-            log.Info("Loaded " + this.PermissionGroups.Count + " permissions groups.");
-            log.Info("Loaded " + this.PermissionGroupRights.Count + " permissions group rights.");
-            log.Info("Loaded " + this.PermissionSubscriptionRights.Count + " permissions subscription rights.");
+            log.Info("Loaded " + Permissions.Count + " permissions.");
+            log.Info("Loaded " + PermissionGroups.Count + " permissions groups.");
+            log.Info("Loaded " + PermissionGroupRights.Count + " permissions group rights.");
+            log.Info("Loaded " + PermissionSubscriptionRights.Count + " permissions subscription rights.");
         }
 
         public bool TryGetGroup(int Id, out PermissionGroup Group)
         {
-            return this.PermissionGroups.TryGetValue(Id, out Group);
+            return PermissionGroups.TryGetValue(Id, out Group);
         }
 
         public List<string> GetPermissionsForPlayer(Habbo Player)
@@ -167,13 +167,13 @@ namespace Plus.HabboHotel.Permissions
             List<string> PermissionSet = new List<string>();
 
             List<string> PermRights = null;
-            if (this.PermissionGroupRights.TryGetValue(Player.Rank, out PermRights))
+            if (PermissionGroupRights.TryGetValue(Player.Rank, out PermRights))
             {
                 PermissionSet.AddRange(PermRights);
             }
 
             List<string> SubscriptionRights = null;
-            if (this.PermissionSubscriptionRights.TryGetValue(Player.VIPRank, out SubscriptionRights))
+            if (PermissionSubscriptionRights.TryGetValue(Player.VIPRank, out SubscriptionRights))
             {
                 PermissionSet.AddRange(SubscriptionRights);
             }
@@ -183,7 +183,7 @@ namespace Plus.HabboHotel.Permissions
 
         public List<string> GetCommandsForPlayer(Habbo Player)
         {
-            return this._commands.Where(x => Player.Rank >= x.Value.GroupId && Player.VIPRank >= x.Value.SubscriptionId).Select(x => x.Key).ToList();
+            return _commands.Where(x => Player.Rank >= x.Value.GroupId && Player.VIPRank >= x.Value.SubscriptionId).Select(x => x.Key).ToList();
         }
     }
 }

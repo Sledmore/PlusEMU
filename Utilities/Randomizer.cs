@@ -4,34 +4,26 @@ namespace Plus.Utilities
 {
     public static class Randomizer
     {
-        private static Random rand = new Random();
-
-        public static Random GetRandom
-        {
-            get
-            {
-                return rand;
-            }
-        }
+        public static Random GetRandom { get; } = new Random();
 
         public static int Next()
         {
-            return rand.Next();
+            return GetRandom.Next();
         }
 
         public static int Next(int max)
         {
-            return rand.Next(max);
+            return GetRandom.Next(max);
         }
 
         public static int Next(int min, int max)
         {
-            return rand.Next(min, max);
+            return GetRandom.Next(min, max);
         }
 
         public static double NextDouble()
         {
-            return rand.NextDouble();
+            return GetRandom.NextDouble();
         }
 
         public static byte NextByte()
@@ -53,7 +45,7 @@ namespace Plus.Utilities
 
         public static void NextBytes(byte[] toparse)
         {
-            rand.NextBytes(toparse);
+            GetRandom.NextBytes(toparse);
         }
     }
 }

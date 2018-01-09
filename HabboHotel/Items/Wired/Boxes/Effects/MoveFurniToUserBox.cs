@@ -27,11 +27,11 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 
         public int Delay
         {
-            get { return this._delay; }
+            get { return _delay; }
             set
             {
-                this._delay = value;
-                this.TickCount = value + 1;
+                _delay = value;
+                TickCount = value + 1;
             }
         }
 
@@ -45,9 +45,9 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
-            this.TickCount = Delay;
-            this.Requested = false;
+            SetItems = new ConcurrentDictionary<int, Item>();
+            TickCount = Delay;
+            Requested = false;
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -55,8 +55,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             int Unknown = Packet.PopInt();
             string Unknown2 = Packet.PopString();
 
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int FurniCount = Packet.PopInt();
             for (int i = 0; i < FurniCount; i++)
@@ -73,17 +73,17 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 
         public bool Execute(params object[] Params)
         {
-            if (this.SetItems.Count == 0)
+            if (SetItems.Count == 0)
                 return false;
 
 
-            if (this._next == 0 || this._next < PlusEnvironment.Now())
-                this._next = PlusEnvironment.Now() + this.Delay;
+            if (_next == 0 || _next < PlusEnvironment.Now())
+                _next = PlusEnvironment.Now() + Delay;
 
             if (!Requested)
             {
-                this.TickCount = this.Delay;
-                this.Requested = true;
+                TickCount = Delay;
+                Requested = true;
             }
             return true;
         }
@@ -96,7 +96,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             long Now = PlusEnvironment.Now();
             if (_next < Now)
             {
-                foreach (Item Item in this.SetItems.Values.ToList())
+                foreach (Item Item in SetItems.Values.ToList())
                 {
                     if (Item == null)
                         continue;
@@ -107,7 +107,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     Item toRemove = null;
 
                     if (Instance.GetWired().OtherBoxHasItem(this, Item.Id))
-                        this.SetItems.TryRemove(Item.Id, out toRemove);
+                        SetItems.TryRemove(Item.Id, out toRemove);
 
                     Point Point = Instance.GetGameMap().GetChaseMovement(Item);
 

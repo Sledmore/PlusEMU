@@ -5,8 +5,8 @@
         public TradingErrorComposer(int Error, string Username)
             : base(ServerPacketHeader.TradingErrorMessageComposer)
         {
-            base.WriteInteger(Error);
-           base.WriteString(Username);
+            WriteInteger(Error);
+           WriteString(Username);
         }
     }
 }

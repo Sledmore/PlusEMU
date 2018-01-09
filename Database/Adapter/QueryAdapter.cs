@@ -8,19 +8,19 @@ namespace Plus.Database.Adapter
 {
     public class QueryAdapter : IRegularQueryAdapter
     {
-        protected IDatabaseClient client;
-        protected MySqlCommand command;
+        protected IDatabaseClient Client;
+        protected MySqlCommand Command;
 
-        public bool dbEnabled = true;
+        public bool DbEnabled = true;
 
-        public QueryAdapter(IDatabaseClient Client)
+        public QueryAdapter(IDatabaseClient client)
         {
-            client = Client;
+            Client = client;
         }
 
         public void AddParameter(string parameterName, object val)
         {
-            command.Parameters.AddWithValue(parameterName, val);
+            Command.Parameters.AddWithValue(parameterName, val);
         }
 
         public bool FindsResult()
@@ -28,14 +28,14 @@ namespace Plus.Database.Adapter
             bool hasRows = false;
             try
             {
-                using (MySqlDataReader reader = command.ExecuteReader())
+                using (MySqlDataReader reader = Command.ExecuteReader())
                 {
                     hasRows = reader.HasRows;
                 }
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogQueryError(command.CommandText, exception);
+                ExceptionLogger.LogQueryError(Command.CommandText, exception);
             }
 
             return hasRows;
@@ -46,7 +46,7 @@ namespace Plus.Database.Adapter
             int result = 0;
             try
             {
-                object obj2 = command.ExecuteScalar();
+                object obj2 = Command.ExecuteScalar();
                 if (obj2 != null)
                 {
                     int.TryParse(obj2.ToString(), out result);
@@ -54,7 +54,7 @@ namespace Plus.Database.Adapter
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogQueryError(command.CommandText, exception);
+                ExceptionLogger.LogQueryError(Command.CommandText, exception);
             }
 
             return result;
@@ -67,7 +67,7 @@ namespace Plus.Database.Adapter
             try
             {
                 DataSet dataSet = new DataSet();
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(Command))
                 {
                     adapter.Fill(dataSet);
                 }
@@ -78,7 +78,7 @@ namespace Plus.Database.Adapter
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogQueryError(command.CommandText, exception);
+                ExceptionLogger.LogQueryError(Command.CommandText, exception);
             }
 
             return row;
@@ -89,7 +89,7 @@ namespace Plus.Database.Adapter
             string str = string.Empty;
             try
             {
-                object obj2 = command.ExecuteScalar();
+                object obj2 = Command.ExecuteScalar();
                 if (obj2 != null)
                 {
                     str = obj2.ToString();
@@ -97,7 +97,7 @@ namespace Plus.Database.Adapter
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogQueryError(command.CommandText, exception);
+                ExceptionLogger.LogQueryError(Command.CommandText, exception);
             }
 
             return str;
@@ -106,19 +106,19 @@ namespace Plus.Database.Adapter
         public DataTable GetTable()
         {
             var dataTable = new DataTable();
-            if (!dbEnabled)
+            if (!DbEnabled)
                 return dataTable;
 
             try
             {
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(Command))
                 {
                     adapter.Fill(dataTable);
                 }
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogQueryError(command.CommandText, exception);
+                ExceptionLogger.LogQueryError(Command.CommandText, exception);
             }
 
             return dataTable;
@@ -126,7 +126,7 @@ namespace Plus.Database.Adapter
 
         public void RunQuery(string query)
         {
-            if (!dbEnabled)
+            if (!DbEnabled)
                 return;
 
             SetQuery(query);
@@ -135,40 +135,40 @@ namespace Plus.Database.Adapter
 
         public void SetQuery(string query)
         {
-            command.Parameters.Clear();
-            command.CommandText = query;
+            Command.Parameters.Clear();
+            Command.CommandText = query;
         }
 
         public long InsertQuery()
         {
-            if (!dbEnabled)
+            if (!DbEnabled)
                 return 0;
 
             long lastInsertedId = 0L;
             try
             {
-                command.ExecuteScalar();
-                lastInsertedId = command.LastInsertedId;
+                Command.ExecuteScalar();
+                lastInsertedId = Command.LastInsertedId;
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogQueryError(command.CommandText, exception);
+                ExceptionLogger.LogQueryError(Command.CommandText, exception);
             }
             return lastInsertedId;
         }
 
         public void RunQuery()
         {
-            if (!dbEnabled)
+            if (!DbEnabled)
                 return;
 
             try
             {
-                command.ExecuteNonQuery();
+                Command.ExecuteNonQuery();
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogQueryError(command.CommandText, exception);
+                ExceptionLogger.LogQueryError(Command.CommandText, exception);
             }
         }
     }

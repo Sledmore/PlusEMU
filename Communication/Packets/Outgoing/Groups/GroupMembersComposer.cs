@@ -9,29 +9,29 @@ namespace Plus.Communication.Packets.Outgoing.Groups
         public GroupMembersComposer(Group Group, ICollection<UserCache> Members, int MembersCount, int Page, bool Admin, int ReqType, string SearchVal)
             : base(ServerPacketHeader.GroupMembersMessageComposer)
         {
-            base.WriteInteger(Group.Id);
-            base.WriteString(Group.Name);
-            base.WriteInteger(Group.RoomId);
-            base.WriteString(Group.Badge);
-            base.WriteInteger(MembersCount);
+            WriteInteger(Group.Id);
+            WriteString(Group.Name);
+            WriteInteger(Group.RoomId);
+            WriteString(Group.Badge);
+            WriteInteger(MembersCount);
 
-            base.WriteInteger(Members.Count);
+            WriteInteger(Members.Count);
             if (MembersCount > 0)
             {
                 foreach (UserCache Data in Members)
                 {
-                    base.WriteInteger(Group.CreatorId == Data.Id ? 0 : Group.IsAdmin(Data.Id) ? 1 : Group.IsMember(Data.Id) ? 2 : 3);
-                    base.WriteInteger(Data.Id);
-                    base.WriteString(Data.Username);
-                    base.WriteString(Data.Look);
-                    base.WriteString(string.Empty);
+                    WriteInteger(Group.CreatorId == Data.Id ? 0 : Group.IsAdmin(Data.Id) ? 1 : Group.IsMember(Data.Id) ? 2 : 3);
+                    WriteInteger(Data.Id);
+                    WriteString(Data.Username);
+                    WriteString(Data.Look);
+                    WriteString(string.Empty);
                 }
             }
-            base.WriteBoolean(Admin);
-            base.WriteInteger(14);
-            base.WriteInteger(Page);
-            base.WriteInteger(ReqType);
-            base.WriteString(SearchVal);
+            WriteBoolean(Admin);
+            WriteInteger(14);
+            WriteInteger(Page);
+            WriteInteger(ReqType);
+            WriteString(SearchVal);
         }
     }
 }

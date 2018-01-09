@@ -5,7 +5,7 @@
         public YouAreControllerComposer(int Setting)
             : base(ServerPacketHeader.YouAreControllerMessageComposer)
         {
-            base.WriteInteger(Setting);
+            WriteInteger(Setting);
         }
     }
 }

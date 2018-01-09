@@ -19,7 +19,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User.Fun
             get { return "Want to visit a specific user? Use this command!"; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

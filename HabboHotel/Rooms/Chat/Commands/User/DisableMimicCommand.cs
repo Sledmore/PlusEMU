@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             get { return "Allows you to disable the ability to be mimiced or to enable the ability to be mimiced."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             Session.GetHabbo().AllowMimic = !Session.GetHabbo().AllowMimic;
             Session.SendWhisper("You're " + (Session.GetHabbo().AllowMimic == true ? "now" : "no longer") + " able to be mimiced.");

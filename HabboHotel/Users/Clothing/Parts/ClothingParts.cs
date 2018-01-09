@@ -8,27 +8,27 @@
 
         public ClothingParts(int Id, int PartId, string Part)
         {
-            this._id = Id;
-            this._partId = PartId;
-            this._part = Part;
+            _id = Id;
+            _partId = PartId;
+            _part = Part;
         }
 
         public int Id
         {
-            get { return this._id; }
-            set { this._id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         public int PartId
         {
-            get { return this._partId; }
-            set { this._partId = value; }
+            get { return _partId; }
+            set { _partId = value; }
         }
 
         public string Part
         {
-            get { return this._part; }
-            set { this._part = value; }
+            get { return _part; }
+            set { _part = value; }
         }
     }
 }

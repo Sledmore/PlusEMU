@@ -10,32 +10,32 @@ namespace Plus.Communication.Packets.Outgoing.Pets
             : base(ServerPacketHeader.RespectPetNotificationMessageComposer)
         {
             //TODO: Structure
-            base.WriteInteger(Pet.VirtualId);
-            base.WriteInteger(Pet.VirtualId);
-            base.WriteInteger(Pet.PetId);//Pet Id, 100%
-           base.WriteString(Pet.Name);
-            base.WriteInteger(0);
-            base.WriteInteger(0);
-           base.WriteString(Pet.Color);
-            base.WriteInteger(0);
-            base.WriteInteger(0);//Count - 3 ints.
-            base.WriteInteger(1);
+            WriteInteger(Pet.VirtualId);
+            WriteInteger(Pet.VirtualId);
+            WriteInteger(Pet.PetId);//Pet Id, 100%
+           WriteString(Pet.Name);
+            WriteInteger(0);
+            WriteInteger(0);
+           WriteString(Pet.Color);
+            WriteInteger(0);
+            WriteInteger(0);//Count - 3 ints.
+            WriteInteger(1);
         }
 
         public RespectPetNotificationMessageComposer(Habbo Habbo, RoomUser User)
             : base(ServerPacketHeader.RespectPetNotificationMessageComposer)
         {
             //TODO: Structure
-            base.WriteInteger(User.VirtualId);
-            base.WriteInteger(User.VirtualId);
-            base.WriteInteger(Habbo.Id);//Pet Id, 100%
-           base.WriteString(Habbo.Username);
-            base.WriteInteger(0);
-            base.WriteInteger(0);
-           base.WriteString("FFFFFF");//Yeah..
-            base.WriteInteger(0);
-            base.WriteInteger(0);//Count - 3 ints.
-            base.WriteInteger(1);
+            WriteInteger(User.VirtualId);
+            WriteInteger(User.VirtualId);
+            WriteInteger(Habbo.Id);//Pet Id, 100%
+           WriteString(Habbo.Username);
+            WriteInteger(0);
+            WriteInteger(0);
+           WriteString("FFFFFF");//Yeah..
+            WriteInteger(0);
+            WriteInteger(0);//Count - 3 ints.
+            WriteInteger(1);
         }
     }
 }

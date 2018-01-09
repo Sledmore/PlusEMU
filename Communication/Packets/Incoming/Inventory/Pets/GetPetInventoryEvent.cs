@@ -2,18 +2,19 @@
 
 using Plus.HabboHotel.Rooms.AI;
 using Plus.Communication.Packets.Outgoing.Inventory.Pets;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Inventory.Pets
 {
     class GetPetInventoryEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session.GetHabbo().GetInventoryComponent() == null)
+            if (session.GetHabbo().GetInventoryComponent() == null)
                 return;
 
-            ICollection<Pet> Pets = Session.GetHabbo().GetInventoryComponent().GetPets();
-            Session.SendPacket(new PetInventoryComposer(Pets));
+            ICollection<Pet> pets = session.GetHabbo().GetInventoryComponent().GetPets();
+            session.SendPacket(new PetInventoryComposer(pets));
         }
     }
 }

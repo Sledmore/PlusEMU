@@ -7,28 +7,28 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class CloseTicketEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             if (session == null || session.GetHabbo() == null || !session.GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            int Result = packet.PopInt(); // 1 = useless, 2 = abusive, 3 = resolved
-            int Junk = packet.PopInt();
-            int TicketId = packet.PopInt();
+            int result = packet.PopInt(); // 1 = useless, 2 = abusive, 3 = resolved
+            packet.PopInt(); //junk
+            int ticketId = packet.PopInt();
             
-            if (!PlusEnvironment.GetGame().GetModerationManager().TryGetTicket(TicketId, out ModerationTicket ticket))
+            if (!PlusEnvironment.GetGame().GetModerationManager().TryGetTicket(ticketId, out ModerationTicket ticket))
                 return;
 
             if (ticket.Moderator.Id != session.GetHabbo().Id)
                 return;
 
-            GameClient Client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(ticket.Sender.Id);
-            if (Client != null)
+            GameClient client = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(ticket.Sender.Id);
+            if (client != null)
             {
-                Client.SendPacket(new ModeratorSupportTicketResponseComposer(Result));
+                client.SendPacket(new ModeratorSupportTicketResponseComposer(result));
             }
 
-            if (Result == 2)
+            if (result == 2)
             {
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {

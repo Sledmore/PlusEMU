@@ -5,7 +5,7 @@
         public RoomSettingsSavedComposer(int roomID)
             : base(ServerPacketHeader.RoomSettingsSavedMessageComposer)
         {
-            base.WriteInteger(roomID);
+            WriteInteger(roomID);
         }
     }
 }

@@ -1,24 +1,25 @@
 ﻿using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Settings;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 {
     class GetRoomRightsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Instance = Session.GetHabbo().CurrentRoom;
-            if (Instance == null)
+            Room instance = session.GetHabbo().CurrentRoom;
+            if (instance == null)
                 return;
 
-            if (!Instance.CheckRights(Session))
+            if (!instance.CheckRights(session))
                 return;
 
 
-            Session.SendPacket(new RoomRightsListComposer(Instance));
+            session.SendPacket(new RoomRightsListComposer(instance));
         }
     }
 }

@@ -10,16 +10,16 @@ namespace Plus.Communication.Packets.Outgoing.Catalog
         public SellablePetBreedsComposer(string PetType, int PetId, ICollection<PetRace> Races)
             : base(ServerPacketHeader.SellablePetBreedsMessageComposer)
         {
-           base.WriteString(PetType);
+           WriteString(PetType);
 
-            base.WriteInteger(Races.Count);
+            WriteInteger(Races.Count);
             foreach (PetRace Race in Races.ToList())
             {
-                base.WriteInteger(PetId);
-                base.WriteInteger(Race.PrimaryColour);
-                base.WriteInteger(Race.SecondaryColour);
-                base.WriteBoolean(Race.HasPrimaryColour);
-                base.WriteBoolean(Race.HasSecondaryColour);
+                WriteInteger(PetId);
+                WriteInteger(Race.PrimaryColour);
+                WriteInteger(Race.SecondaryColour);
+                WriteBoolean(Race.HasPrimaryColour);
+                WriteBoolean(Race.HasSecondaryColour);
             }
 
 

@@ -16,49 +16,49 @@ namespace Plus.Communication.Encryption.KeyExchange
 
         public DiffieHellman()
         {
-            this.Initialize();
+            Initialize();
         }
 
         public DiffieHellman(int b)
         {
-            this.BITLENGTH = b;
+            BITLENGTH = b;
 
-            this.Initialize();
+            Initialize();
         }
 
         public DiffieHellman(BigInteger prime, BigInteger generator)
         {
-            this.Prime = prime;
-            this.Generator = generator;
+            Prime = prime;
+            Generator = generator;
 
-            this.Initialize(true);
+            Initialize(true);
         }
 
         private void Initialize(bool ignoreBaseKeys = false)
         {
-            this.PublicKey = 0;
+            PublicKey = 0;
 
             Random rand = new Random();
-            while (this.PublicKey == 0)
+            while (PublicKey == 0)
             {
                 if (!ignoreBaseKeys)
                 {
-                    this.Prime = BigInteger.genPseudoPrime(BITLENGTH, 10, rand);
-                    this.Generator = BigInteger.genPseudoPrime(BITLENGTH, 10, rand);
+                    Prime = BigInteger.genPseudoPrime(BITLENGTH, 10, rand);
+                    Generator = BigInteger.genPseudoPrime(BITLENGTH, 10, rand);
                 }
 
-                byte[] bytes = new byte[this.BITLENGTH / 8];
+                byte[] bytes = new byte[BITLENGTH / 8];
                 Randomizer.NextBytes(bytes);
-                this.PrivateKey = new BigInteger(bytes);
+                PrivateKey = new BigInteger(bytes);
 
-                if (this.Generator > this.Prime)
+                if (Generator > Prime)
                 {
-                    BigInteger temp = this.Prime;
-                    this.Prime = this.Generator;
-                    this.Generator = temp;
+                    BigInteger temp = Prime;
+                    Prime = Generator;
+                    Generator = temp;
                 }
 
-                this.PublicKey = this.Generator.modPow(this.PrivateKey, this.Prime);
+                PublicKey = Generator.modPow(PrivateKey, Prime);
 
                 if (!ignoreBaseKeys)
                 {
@@ -69,7 +69,7 @@ namespace Plus.Communication.Encryption.KeyExchange
 
         public BigInteger CalculateSharedKey(BigInteger m)
         {
-            return m.modPow(this.PrivateKey, this.Prime);
+            return m.modPow(PrivateKey, Prime);
         }
     }
 }

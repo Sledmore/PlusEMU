@@ -4,29 +4,30 @@ using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Items;
 using Plus.Communication.Packets.Outgoing.Rooms.FloorPlan;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
 {
     class FloorPlanEditorRoomPropertiesEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null)
                 return;
 
-            DynamicRoomModel Model = Room.GetGameMap().Model;
-            if (Model == null)
+            DynamicRoomModel model = room.GetGameMap().Model;
+            if (model == null)
                 return;
 
-            ICollection<Item> FloorItems = Room.GetRoomItemHandler().GetFloor;
+            ICollection<Item> floorItems = room.GetRoomItemHandler().GetFloor;
 
-            Session.SendPacket(new FloorPlanFloorMapComposer(FloorItems));
-            Session.SendPacket(new FloorPlanSendDoorComposer(Model.DoorX, Model.DoorY, Model.DoorOrientation));
-            Session.SendPacket(new RoomVisualizationSettingsComposer(Room.WallThickness, Room.FloorThickness, PlusEnvironment.EnumToBool(Room.Hidewall.ToString())));
+            session.SendPacket(new FloorPlanFloorMapComposer(floorItems));
+            session.SendPacket(new FloorPlanSendDoorComposer(model.DoorX, model.DoorY, model.DoorOrientation));
+            session.SendPacket(new RoomVisualizationSettingsComposer(room.WallThickness, room.FloorThickness, PlusEnvironment.EnumToBool(room.Hidewall.ToString())));
         }
     }
 }

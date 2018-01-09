@@ -5,7 +5,7 @@
         public OpenHelpToolComposer()
             : base(ServerPacketHeader.OpenHelpToolMessageComposer)
         {
-            base.WriteInteger(0);
+            WriteInteger(0);
         }
     }
 }

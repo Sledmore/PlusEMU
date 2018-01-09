@@ -53,55 +53,55 @@ namespace Plus.HabboHotel.Rooms.Chat
         /// </summary>
         public ChatManager()
         {
-            this._emotions = new ChatEmotionsManager();
-            this._logs = new ChatlogManager();
+            _emotions = new ChatEmotionsManager();
+            _logs = new ChatlogManager();
          
-            this._filter = new WordFilterManager();
-            this._filter.Init();
+            _filter = new WordFilterManager();
+            _filter.Init();
 
-            this._commands = new CommandManager(":");
-            this._petCommands = new PetCommandManager();
-            this._petLocale = new PetLocale();
+            _commands = new CommandManager(":");
+            _petCommands = new PetCommandManager();
+            _petLocale = new PetLocale();
       
-            this._chatStyles = new ChatStyleManager();
-            this._chatStyles.Init();
+            _chatStyles = new ChatStyleManager();
+            _chatStyles.Init();
 
             log.Info("Chat Manager -> LOADED");
         }
 
         public ChatEmotionsManager GetEmotions()
         {
-            return this._emotions;
+            return _emotions;
         }
 
         public ChatlogManager GetLogs()
         {
-            return this._logs;
+            return _logs;
         }
 
         public WordFilterManager GetFilter()
         {
-            return this._filter;
+            return _filter;
         }
 
         public CommandManager GetCommands()
         {
-            return this._commands;
+            return _commands;
         }
 
         public PetCommandManager GetPetCommands()
         {
-            return this._petCommands;
+            return _petCommands;
         }
 
         public PetLocale GetPetLocale()
         {
-            return this._petLocale;
+            return _petLocale;
         }
 
         public ChatStyleManager GetChatStyles()
         {
-            return this._chatStyles;
+            return _chatStyles;
         }
     }
 }

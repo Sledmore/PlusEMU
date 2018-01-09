@@ -10,16 +10,16 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
             : base(ServerPacketHeader.CfhTopicsInitMessageComposer)
         {
 
-            base.WriteInteger(UserActionPresets.Count);
+            WriteInteger(UserActionPresets.Count);
             foreach (KeyValuePair<string, List<ModerationPresetActions>> Cat in UserActionPresets.ToList())
             {
-                base.WriteString(Cat.Key);
-                base.WriteInteger(Cat.Value.Count);
+                WriteString(Cat.Key);
+                WriteInteger(Cat.Value.Count);
                 foreach (ModerationPresetActions Preset in Cat.Value.ToList())
                 {
-                    base.WriteString(Preset.Caption);
-                    base.WriteInteger(Preset.Id);
-                    base.WriteString(Preset.Type);
+                    WriteString(Preset.Caption);
+                    WriteInteger(Preset.Id);
+                    WriteString(Preset.Type);
                 }
             }
         }

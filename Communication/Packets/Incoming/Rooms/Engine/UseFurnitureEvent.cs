@@ -6,82 +6,75 @@ using Plus.Communication.Packets.Outgoing.Rooms.Furni;
 using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Plus.Database.Interfaces;
-
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Engine
 {
     class UseFurnitureEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            int itemID = Packet.PopInt();
-            Item Item = Room.GetRoomItemHandler().GetItem(itemID);
-            if (Item == null)
+            int itemId = packet.PopInt();
+            Item item = room.GetRoomItemHandler().GetItem(itemId);
+            if (item == null)
                 return;
 
-            bool hasRights = false;
-            if (Room.CheckRights(Session, false, true))
-                hasRights = true;
+            bool hasRights = room.CheckRights(session, false, true);
 
-            if (Item.GetBaseItem().InteractionType == InteractionType.banzaitele)
+            if (item.GetBaseItem().InteractionType == InteractionType.banzaitele)
                 return;
 
-            if (Item.GetBaseItem().InteractionType == InteractionType.TONER)
+            if (item.GetBaseItem().InteractionType == InteractionType.TONER)
             {
-                if (!Room.CheckRights(Session, true))
+                if (!room.CheckRights(session, true))
                     return;
-                if (Room.TonerData.Enabled == 0)
-                    Room.TonerData.Enabled = 1;
-                else
-                    Room.TonerData.Enabled = 0;
+                
+                room.TonerData.Enabled = room.TonerData.Enabled == 0 ? 1 : 0;
 
-                Room.SendPacket(new ObjectUpdateComposer(Item, Room.OwnerId));
+                room.SendPacket(new ObjectUpdateComposer(item, room.OwnerId));
 
-                Item.UpdateState();
+                item.UpdateState();
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE `room_items_toner` SET `enabled` = '" + Room.TonerData.Enabled + "' LIMIT 1");
+                    dbClient.RunQuery("UPDATE `room_items_toner` SET `enabled` = '" + room.TonerData.Enabled + "' LIMIT 1");
                 }
                 return;
             }
 
-            if (Item.Data.InteractionType == InteractionType.GNOME_BOX && Item.UserID == Session.GetHabbo().Id)
+            if (item.Data.InteractionType == InteractionType.GNOME_BOX && item.UserID == session.GetHabbo().Id)
             {
-                Session.SendPacket(new GnomeBoxComposer(Item.Id));
+                session.SendPacket(new GnomeBoxComposer(item.Id));
             }
 
-            bool Toggle = true;
-            if (Item.GetBaseItem().InteractionType == InteractionType.WF_FLOOR_SWITCH_1 || Item.GetBaseItem().InteractionType == InteractionType.WF_FLOOR_SWITCH_2)
+            bool toggle = true;
+            if (item.GetBaseItem().InteractionType == InteractionType.WF_FLOOR_SWITCH_1 || item.GetBaseItem().InteractionType == InteractionType.WF_FLOOR_SWITCH_2)
             {
-                RoomUser User = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabbo(Session.GetHabbo().Id);
-                if (User == null)
+                RoomUser user = item.GetRoom().GetRoomUserManager().GetRoomUserByHabbo(session.GetHabbo().Id);
+                if (user == null)
                     return;
 
-                if (!Gamemap.TilesTouching(Item.GetX, Item.GetY, User.X, User.Y))
+                if (!Gamemap.TilesTouching(item.GetX, item.GetY, user.X, user.Y))
                 {
-                    Toggle = false;
+                    toggle = false;
                 }
             }
 
-            string oldData = Item.ExtraData;
-            int request = Packet.PopInt();
+            int request = packet.PopInt();
 
-            Item.Interactor.OnTrigger(Session, Item, request, hasRights);
+            item.Interactor.OnTrigger(session, item, request, hasRights);
 
-            if (Toggle)
-                Item.GetRoom().GetWired().TriggerEvent(WiredBoxType.TriggerStateChanges, Session.GetHabbo(), Item);
+            if (toggle)
+                item.GetRoom().GetWired().TriggerEvent(WiredBoxType.TriggerStateChanges, session.GetHabbo(), item);
 
-            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.ExploreFindItem, Item.GetBaseItem().Id);
+            PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ExploreFindItem, item.GetBaseItem().Id);
       
         }
     }

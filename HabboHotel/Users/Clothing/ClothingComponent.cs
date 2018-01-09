@@ -44,7 +44,7 @@ namespace Plus.HabboHotel.Users.Clothing
                 {
                     foreach (DataRow Row in GetClothing.Rows)
                     {
-                        if (this._allClothing.TryAdd(Convert.ToInt32(Row["part_id"]), new ClothingParts(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["part_id"]), Convert.ToString(Row["part"]))))
+                        if (_allClothing.TryAdd(Convert.ToInt32(Row["part_id"]), new ClothingParts(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["part_id"]), Convert.ToString(Row["part"]))))
                         {
                             //umm?
                         }
@@ -52,7 +52,7 @@ namespace Plus.HabboHotel.Users.Clothing
                 }
             }
 
-            this._habbo = Habbo;
+            _habbo = Habbo;
             return true;
         }
 
@@ -60,31 +60,31 @@ namespace Plus.HabboHotel.Users.Clothing
         {
             foreach (int PartId in PartIds.ToList())
             {
-                if (!this._allClothing.ContainsKey(PartId))
+                if (!_allClothing.ContainsKey(PartId))
                 {
                     int NewId = 0;
                     using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         dbClient.SetQuery("INSERT INTO `user_clothing` (`user_id`,`part_id`,`part`) VALUES (@UserId, @PartId, @Part)");
-                        dbClient.AddParameter("UserId", this._habbo.Id);
+                        dbClient.AddParameter("UserId", _habbo.Id);
                         dbClient.AddParameter("PartId", PartId);
                         dbClient.AddParameter("Part", ClothingName);
                         NewId = Convert.ToInt32(dbClient.InsertQuery());
                     }
 
-                    this._allClothing.TryAdd(PartId, new ClothingParts(NewId, PartId, ClothingName));
+                    _allClothing.TryAdd(PartId, new ClothingParts(NewId, PartId, ClothingName));
                 }
             }
         }
 
         public bool TryGet(int PartId, out ClothingParts ClothingPart)
         {
-            return this._allClothing.TryGetValue(PartId, out ClothingPart);
+            return _allClothing.TryGetValue(PartId, out ClothingPart);
         }
 
         public ICollection<ClothingParts> GetClothingParts
         {
-            get { return this._allClothing.Values; }
+            get { return _allClothing.Values; }
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Plus.HabboHotel.Users.Clothing
         /// </summary>
         public void Dispose()
         {
-            this._allClothing.Clear();
+            _allClothing.Clear();
         }
     }
 }

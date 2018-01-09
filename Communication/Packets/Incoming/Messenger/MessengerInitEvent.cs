@@ -4,46 +4,47 @@ using System.Collections.Generic;
 using MoreLinq;
 using Plus.HabboHotel.Users.Messenger;
 using Plus.Communication.Packets.Outgoing.Messenger;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class MessengerInitEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null)
                 return;
 
-            Session.GetHabbo().GetMessenger().OnStatusChanged(false);
+            session.GetHabbo().GetMessenger().OnStatusChanged(false);
 
-            ICollection<MessengerBuddy> Friends = new List<MessengerBuddy>();
-            foreach (MessengerBuddy Buddy in Session.GetHabbo().GetMessenger().GetFriends().ToList())
+            ICollection<MessengerBuddy> friends = new List<MessengerBuddy>();
+            foreach (MessengerBuddy buddy in session.GetHabbo().GetMessenger().GetFriends().ToList())
             {
-                if (Buddy == null || Buddy.IsOnline)
+                if (buddy == null || buddy.IsOnline)
                     continue;
 
-                Friends.Add(Buddy);
+                friends.Add(buddy);
             }
 
-            Session.SendPacket(new MessengerInitComposer());
+            session.SendPacket(new MessengerInitComposer());
 
             int page = 0;
-            if (Friends.Count() == 0)
+            if (!friends.Any())
             {
-                Session.SendPacket(new BuddyListComposer(Friends, Session.GetHabbo(), 1, 0));
+                session.SendPacket(new BuddyListComposer(friends, session.GetHabbo(), 1, 0));
             }
             else
             {
-                int pages = ((Friends.Count() - 1) / 500) + 1;
-                foreach (ICollection<MessengerBuddy> batch in Friends.Batch(500))
+                int pages = (friends.Count() - 1) / 500 + 1;
+                foreach (ICollection<MessengerBuddy> batch in friends.Batch(500))
                 {
-                    Session.SendPacket(new BuddyListComposer(batch.ToList(), Session.GetHabbo(), pages, page));
+                    session.SendPacket(new BuddyListComposer(batch.ToList(), session.GetHabbo(), pages, page));
 
                     page++;
                 }
             }
           
-            Session.GetHabbo().GetMessenger().ProcessOfflineMessages();
+            session.GetHabbo().GetMessenger().ProcessOfflineMessages();
         }
     }
 }

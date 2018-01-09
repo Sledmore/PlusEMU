@@ -7,7 +7,7 @@ namespace Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects
         public AvatarEffectExpiredComposer(AvatarEffect Effect)
             : base(ServerPacketHeader.AvatarEffectExpiredMessageComposer)
         {
-            base.WriteInteger(Effect.SpriteId);
+            WriteInteger(Effect.SpriteId);
         }
     }
 }

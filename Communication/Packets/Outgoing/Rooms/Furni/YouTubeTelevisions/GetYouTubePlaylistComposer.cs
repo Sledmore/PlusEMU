@@ -10,15 +10,15 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Furni.YouTubeTelevisions
         public GetYouTubePlaylistComposer(int ItemId, ICollection<TelevisionItem> Videos)
             : base(ServerPacketHeader.GetYouTubePlaylistMessageComposer)
         {
-            base.WriteInteger(ItemId);
-            base.WriteInteger(Videos.Count);
+            WriteInteger(ItemId);
+            WriteInteger(Videos.Count);
             foreach (TelevisionItem Video in Videos.ToList())
             {
-               base.WriteString(Video.YouTubeId);
-               base.WriteString(Video.Title);//Title
-               base.WriteString(Video.Description);//Description
+               WriteString(Video.YouTubeId);
+               WriteString(Video.Title);//Title
+               WriteString(Video.Description);//Description
             }
-           base.WriteString("");
+           WriteString("");
         }
     }
 }

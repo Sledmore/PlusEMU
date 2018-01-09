@@ -5,39 +5,39 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class ModerationMuteEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().GetPermissions().HasRight("mod_mute"))
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().GetPermissions().HasRight("mod_mute"))
                 return;
 
-            int UserId = Packet.PopInt();
-            string Message = Packet.PopString();
-            double Length = (Packet.PopInt() * 60);
-            string Unknown1 = Packet.PopString();
-            string Unknown2 = Packet.PopString();
+            int userId = packet.PopInt();
+            packet.PopString(); //message
+            double length = packet.PopInt() * 60;
+            packet.PopString(); //unk1
+            packet.PopString(); //unk2
 
-            Habbo Habbo = PlusEnvironment.GetHabboById(UserId);
-            if (Habbo == null)
+            Habbo habbo = PlusEnvironment.GetHabboById(userId);
+            if (habbo == null)
             {
-                Session.SendWhisper("An error occoured whilst finding that user in the database.");
+                session.SendWhisper("An error occoured whilst finding that user in the database.");
                 return;
             }
 
-            if (Habbo.GetPermissions().HasRight("mod_mute") && !Session.GetHabbo().GetPermissions().HasRight("mod_mute_any"))
+            if (habbo.GetPermissions().HasRight("mod_mute") && !session.GetHabbo().GetPermissions().HasRight("mod_mute_any"))
             {
-                Session.SendWhisper("Oops, you cannot mute that user.");
+                session.SendWhisper("Oops, you cannot mute that user.");
                 return;
             }
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `users` SET `time_muted` = '" + Length + "' WHERE `id` = '" + Habbo.Id + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE `users` SET `time_muted` = '" + length + "' WHERE `id` = '" + habbo.Id + "' LIMIT 1");
             }
 
-            if (Habbo.GetClient() != null)
+            if (habbo.GetClient() != null)
             {
-                Habbo.TimeMuted = Length;
-                Habbo.GetClient().SendNotification("You have been muted by a moderator for " + Length + " seconds!");
+                habbo.TimeMuted = length;
+                habbo.GetClient().SendNotification("You have been muted by a moderator for " + length + " seconds!");
             }
         }
     }

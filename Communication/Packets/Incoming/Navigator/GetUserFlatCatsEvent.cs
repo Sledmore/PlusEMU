@@ -7,14 +7,14 @@ namespace Plus.Communication.Packets.Incoming.Navigator
 {
     public class GetUserFlatCatsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null)
+            if (session == null)
                 return;
 
-            ICollection<SearchResultList> Categories = PlusEnvironment.GetGame().GetNavigator().GetFlatCategories();
+            ICollection<SearchResultList> categories = PlusEnvironment.GetGame().GetNavigator().GetFlatCategories();
 
-            Session.SendPacket(new UserFlatCatsComposer(Categories, Session.GetHabbo().Rank));
+            session.SendPacket(new UserFlatCatsComposer(categories, session.GetHabbo().Rank));
         }
     }
 }

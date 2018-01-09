@@ -23,7 +23,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             this.Instance = Instance;
             this.Item = Item;
 
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -31,12 +31,12 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             int Unknown = Packet.PopInt();
             int Unknown2 = Packet.PopInt();
 
-            this.StringData = Unknown2.ToString();
+            StringData = Unknown2.ToString();
         }
 
         public bool Execute(params object[] Params)
         {
-            if (Params.Length == 0 || Instance == null || String.IsNullOrEmpty(this.StringData))
+            if (Params.Length == 0 || Instance == null || String.IsNullOrEmpty(StringData))
                 return false;
 
             Habbo Player = (Habbo)Params[0];
@@ -47,13 +47,13 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             if (User == null)
                 return false;
 
-            if (int.Parse(this.StringData) == 1 && User.Team == Team.Red)
+            if (int.Parse(StringData) == 1 && User.Team == Team.Red)
                 return true;
-            else if (int.Parse(this.StringData) == 2 && User.Team == Team.Green)
+            else if (int.Parse(StringData) == 2 && User.Team == Team.Green)
                 return true;
-            else if (int.Parse(this.StringData) == 3 && User.Team == Team.Blue)
+            else if (int.Parse(StringData) == 3 && User.Team == Team.Blue)
                 return true;
-            else if (int.Parse(this.StringData) == 4 && User.Team == Team.Yellow)
+            else if (int.Parse(StringData) == 4 && User.Team == Team.Yellow)
                 return true;
             return false;
         }

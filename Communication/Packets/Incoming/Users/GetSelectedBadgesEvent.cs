@@ -1,18 +1,19 @@
 ﻿using Plus.HabboHotel.Users;
 using Plus.Communication.Packets.Outgoing.Users;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Users
 {
     class GetSelectedBadgesEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int UserId = Packet.PopInt();
-            Habbo Habbo = PlusEnvironment.GetHabboById(UserId);
-            if (Habbo == null)
+            int userId = packet.PopInt();
+            Habbo habbo = PlusEnvironment.GetHabboById(userId);
+            if (habbo == null)
                 return;
 
-            Session.SendPacket(new HabboUserBadgesComposer(Habbo));
+            session.SendPacket(new HabboUserBadgesComposer(habbo));
         }
     }
 }

@@ -5,7 +5,7 @@
         public BCBorrowedItemsComposer()
             : base(ServerPacketHeader.BCBorrowedItemsMessageComposer)
         {
-            base.WriteInteger(0);
+            WriteInteger(0);
         }
     }
 }

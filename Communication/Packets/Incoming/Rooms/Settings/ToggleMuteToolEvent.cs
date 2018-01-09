@@ -3,35 +3,34 @@ using System.Collections.Generic;
 
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Rooms.Settings;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 {
     class ToggleMuteToolEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room = Session.GetHabbo().CurrentRoom;
-            if (Room == null || !Room.CheckRights(Session, true))
+            Room room = session.GetHabbo().CurrentRoom;
+            if (room == null || !room.CheckRights(session, true))
                 return;
 
-            Room.RoomMuted = !Room.RoomMuted;
+            room.RoomMuted = !room.RoomMuted;
 
-            List<RoomUser> roomUsers = Room.GetRoomUserManager().GetRoomUsers();
+            List<RoomUser> roomUsers = room.GetRoomUserManager().GetRoomUsers();
             foreach (RoomUser roomUser in roomUsers.ToList())
             {
                 if (roomUser == null || roomUser.GetClient() == null)
                     continue;
 
-                if (Room.RoomMuted)
-                    roomUser.GetClient().SendWhisper("This room has been muted");
-                else
-                    roomUser.GetClient().SendWhisper("This room has been unmuted");
+                roomUser.GetClient()
+                    .SendWhisper(room.RoomMuted ? "This room has been muted" : "This room has been unmuted");
             }
 
-            Room.SendPacket(new RoomMuteSettingsComposer(Room.RoomMuted));
+            room.SendPacket(new RoomMuteSettingsComposer(room.RoomMuted));
         }
     }
 }

@@ -4,37 +4,36 @@ using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Items.Data.Moodlight;
 
 using Plus.Communication.Packets.Outgoing.Rooms.Furni.Moodlight;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Furni.Moodlight
 {
     class GetMoodlightConfigEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!session.GetHabbo().InRoom)
                 return;
 
-            Room Room;
-
-            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room))
+            if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room room))
                 return;
 
-            if (!Room.CheckRights(Session, true))
+            if (!room.CheckRights(session, true))
                 return;
 
-            if (Room.MoodlightData == null)
+            if (room.MoodlightData == null)
             {
-                foreach (Item item in Room.GetRoomItemHandler().GetWall.ToList())
+                foreach (Item item in room.GetRoomItemHandler().GetWall.ToList())
                 {
                     if (item.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
-                        Room.MoodlightData = new MoodlightData(item.Id);
+                        room.MoodlightData = new MoodlightData(item.Id);
                 }
             }
 
-            if (Room.MoodlightData == null)
+            if (room.MoodlightData == null)
                 return;
 
-            Session.SendPacket(new MoodlightConfigComposer(Room.MoodlightData));
+            session.SendPacket(new MoodlightConfigComposer(room.MoodlightData));
         }
     }
 }

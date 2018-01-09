@@ -20,9 +20,9 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
             get { return "Gives you the option to change your username."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
-            if (!this.CanChangeName(Session.GetHabbo()))
+            if (!CanChangeName(Session.GetHabbo()))
             {
                 Session.SendWhisper("Sorry, it seems you currently do not have the option to change your username!");
                 return;

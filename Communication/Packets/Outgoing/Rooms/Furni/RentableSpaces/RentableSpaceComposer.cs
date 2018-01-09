@@ -5,12 +5,12 @@
         public RentableSpaceComposer()
             : base(ServerPacketHeader.RentableSpaceMessageComposer)
         {
-            base.WriteBoolean(true); //Is rented y/n
-            base.WriteInteger(-1); //No fucking clue
-            base.WriteInteger(-1); //No fucking clue
-           base.WriteString("Tyler-Retros"); //Username of who owns.
-            base.WriteInteger(360); //Time to expire.
-            base.WriteInteger(-1); //No fucking clue
+            WriteBoolean(true); //Is rented y/n
+            WriteInteger(-1); //No fucking clue
+            WriteInteger(-1); //No fucking clue
+           WriteString("Tyler-Retros"); //Username of who owns.
+            WriteInteger(360); //Time to expire.
+            WriteInteger(-1); //No fucking clue
         }
     }
 }

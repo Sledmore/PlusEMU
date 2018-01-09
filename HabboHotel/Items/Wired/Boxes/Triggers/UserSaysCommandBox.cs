@@ -22,10 +22,10 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
 
         public UserSaysCommandBox(Room instance, Item item)
         {
-            this.Instance = instance;
-            this.Item = item;
-            this.StringData = "";
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            Instance = instance;
+            Item = item;
+            StringData = "";
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket packet)
@@ -34,8 +34,8 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             int OwnerOnly = packet.PopInt();
             string Message = packet.PopString();
 
-            this.BoolData = OwnerOnly == 1;
-            this.StringData = Message;
+            BoolData = OwnerOnly == 1;
+            StringData = Message;
         }
 
         public bool Execute(params object[] Params)
@@ -48,11 +48,11 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
             if (User == null)
                 return false;
 
-            if ((BoolData && Instance.OwnerId != Player.Id) || string.IsNullOrWhiteSpace(this.StringData))
+            if ((BoolData && Instance.OwnerId != Player.Id) || string.IsNullOrWhiteSpace(StringData))
                 return false;
 
             IChatCommand ChatCommand = null;
-            if (!PlusEnvironment.GetGame().GetChatManager().GetCommands().TryGetCommand(this.StringData.Replace(":", "").ToLower(), out ChatCommand))
+            if (!PlusEnvironment.GetGame().GetChatManager().GetCommands().TryGetCommand(StringData.Replace(":", "").ToLower(), out ChatCommand))
                 return false;
 
             if (Player.IChatCommand == ChatCommand)
@@ -69,7 +69,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Triggers
                     Instance.GetWired().OnEvent(Condition.Item);
                 }
 
-                Player.GetClient().SendPacket(new WhisperComposer(User.VirtualId, this.StringData, 0, 0));
+                Player.GetClient().SendPacket(new WhisperComposer(User.VirtualId, StringData, 0, 0));
                 //Check the ICollection to find the random addon effect.
                 bool HasRandomEffectAddon = Effects.Count(x => x.Type == WiredBoxType.AddonRandomEffect) > 0;
                 if (HasRandomEffectAddon)

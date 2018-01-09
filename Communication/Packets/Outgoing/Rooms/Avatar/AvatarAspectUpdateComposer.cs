@@ -5,8 +5,8 @@
         public AvatarAspectUpdateComposer(string Figure, string Gender)
             : base(ServerPacketHeader.AvatarAspectUpdateMessageComposer)
         {
-            base.WriteString(Figure);
-            base.WriteString(Gender);
+            WriteString(Figure);
+            WriteString(Gender);
         }
     }
 }

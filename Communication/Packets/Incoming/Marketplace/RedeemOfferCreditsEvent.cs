@@ -2,39 +2,40 @@
 using System.Data;
 using Plus.Communication.Packets.Outgoing.Inventory.Purse;
 using Plus.Database.Interfaces;
+using Plus.HabboHotel.GameClients;
 
 
 namespace Plus.Communication.Packets.Incoming.Marketplace
 {
     class RedeemOfferCreditsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            int CreditsOwed = 0;
+            int creditsOwed = 0;
 
-            DataTable Table = null;
+            DataTable table;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `asking_price` FROM `catalog_marketplace_offers` WHERE `user_id` = '" + Session.GetHabbo().Id + "' AND `state` = '2'");
-               Table = dbClient.GetTable();
+                dbClient.SetQuery("SELECT `asking_price` FROM `catalog_marketplace_offers` WHERE `user_id` = '" + session.GetHabbo().Id + "' AND `state` = '2'");
+               table = dbClient.GetTable();
             }
 
-            if (Table != null)
+            if (table != null)
             {
-                foreach (DataRow row in Table.Rows)
+                foreach (DataRow row in table.Rows)
                 {
-                    CreditsOwed += Convert.ToInt32(row["asking_price"]);
+                    creditsOwed += Convert.ToInt32(row["asking_price"]);
                 }
 
-                if (CreditsOwed >= 1)
+                if (creditsOwed >= 1)
                 {
-                    Session.GetHabbo().Credits += CreditsOwed;
-                    Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
+                    session.GetHabbo().Credits += creditsOwed;
+                    session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
                 }
 
                 using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("DELETE FROM `catalog_marketplace_offers` WHERE `user_id` = '" + Session.GetHabbo().Id + "' AND `state` = '2'");
+                    dbClient.RunQuery("DELETE FROM `catalog_marketplace_offers` WHERE `user_id` = '" + session.GetHabbo().Id + "' AND `state` = '2'");
                 }
             }
         }

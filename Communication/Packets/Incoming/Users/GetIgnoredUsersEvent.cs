@@ -2,12 +2,13 @@
 
 using Plus.HabboHotel.Users;
 using Plus.Communication.Packets.Outgoing.Users;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Users
 {
     class GetIgnoredUsersEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             List<string> ignoredUsers = new List<string>();
 

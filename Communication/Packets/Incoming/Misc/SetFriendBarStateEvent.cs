@@ -1,17 +1,18 @@
 ﻿using Plus.HabboHotel.Users.Messenger.FriendBar;
 using Plus.Communication.Packets.Outgoing.Sound;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Misc
 {
     class SetFriendBarStateEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (session == null || session.GetHabbo() == null)
                 return;
 
-            Session.GetHabbo().FriendbarState = FriendBarStateUtility.GetEnum(Packet.PopInt());
-            Session.SendPacket(new SoundSettingsComposer(Session.GetHabbo().ClientVolume, Session.GetHabbo().ChatPreference, Session.GetHabbo().AllowMessengerInvites, Session.GetHabbo().FocusPreference, FriendBarStateUtility.GetInt(Session.GetHabbo().FriendbarState)));
+            session.GetHabbo().FriendbarState = FriendBarStateUtility.GetEnum(packet.PopInt());
+            session.SendPacket(new SoundSettingsComposer(session.GetHabbo().ClientVolume, session.GetHabbo().ChatPreference, session.GetHabbo().AllowMessengerInvites, session.GetHabbo().FocusPreference, FriendBarStateUtility.GetInt(session.GetHabbo().FriendbarState)));
         }
     }
 }

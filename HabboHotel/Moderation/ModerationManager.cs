@@ -33,14 +33,14 @@ namespace Plus.HabboHotel.Moderation
 
         public void Init()
         {
-            if (this._userPresets.Count > 0)
-                this._userPresets.Clear();
-            if (this._moderationCFHTopics.Count > 0)
-                this._moderationCFHTopics.Clear();
-            if (this._moderationCFHTopicActions.Count > 0)
-                this._moderationCFHTopicActions.Clear();
-            if (this._bans.Count > 0)
-                this._bans.Clear();
+            if (_userPresets.Count > 0)
+                _userPresets.Clear();
+            if (_moderationCFHTopics.Count > 0)
+                _moderationCFHTopics.Clear();
+            if (_moderationCFHTopicActions.Count > 0)
+                _moderationCFHTopicActions.Clear();
+            if (_bans.Count > 0)
+                _bans.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -56,11 +56,11 @@ namespace Plus.HabboHotel.Moderation
                         switch (Type)
                         {
                             case "user":
-                                this._userPresets.Add(Convert.ToString(Row["message"]));
+                                _userPresets.Add(Convert.ToString(Row["message"]));
                                 break;
 
                             case "room":
-                                this._roomPresets.Add(Convert.ToString(Row["message"]));
+                                _roomPresets.Add(Convert.ToString(Row["message"]));
                                 break;
                         }
                     }
@@ -77,8 +77,8 @@ namespace Plus.HabboHotel.Moderation
                 {
                     foreach (DataRow Row in ModerationTopics.Rows)
                     {
-                        if (!this._moderationCFHTopics.ContainsKey(Convert.ToInt32(Row["id"])))
-                            this._moderationCFHTopics.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
+                        if (!_moderationCFHTopics.ContainsKey(Convert.ToInt32(Row["id"])))
+                            _moderationCFHTopics.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
                     }
                 }
             }
@@ -95,12 +95,12 @@ namespace Plus.HabboHotel.Moderation
                     {
                         int ParentId = Convert.ToInt32(Row["parent_id"]);
 
-                        if (!this._moderationCFHTopicActions.ContainsKey(ParentId))
+                        if (!_moderationCFHTopicActions.ContainsKey(ParentId))
                         {
-                            this._moderationCFHTopicActions.Add(ParentId, new List<ModerationPresetActions>());
+                            _moderationCFHTopicActions.Add(ParentId, new List<ModerationPresetActions>());
                         }
 
-                        this._moderationCFHTopicActions[ParentId].Add(new ModerationPresetActions(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["type"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
+                        _moderationCFHTopicActions[ParentId].Add(new ModerationPresetActions(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["type"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
                             Convert.ToInt32(Row["mute_time"]), Convert.ToInt32(Row["ban_time"]), Convert.ToInt32(Row["ip_time"]), Convert.ToInt32(Row["trade_lock_time"]), Convert.ToString(Row["default_sanction"])));
                     }
                 }
@@ -116,7 +116,7 @@ namespace Plus.HabboHotel.Moderation
                 {
                     foreach (DataRow Row in PresetsActionCats.Rows)
                     {
-                        this._userActionPresetCategories.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
+                        _userActionPresetCategories.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
                     }
                 }
             }
@@ -133,12 +133,12 @@ namespace Plus.HabboHotel.Moderation
                     {
                         int ParentId = Convert.ToInt32(Row["parent_id"]);
 
-                        if (!this._userActionPresetMessages.ContainsKey(ParentId))
+                        if (!_userActionPresetMessages.ContainsKey(ParentId))
                         {
-                            this._userActionPresetMessages.Add(ParentId, new List<ModerationPresetActionMessages>());
+                            _userActionPresetMessages.Add(ParentId, new List<ModerationPresetActionMessages>());
                         }
 
-                        this._userActionPresetMessages[ParentId].Add(new ModerationPresetActionMessages(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
+                        _userActionPresetMessages[ParentId].Add(new ModerationPresetActionMessages(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
                             Convert.ToInt32(Row["mute_hours"]), Convert.ToInt32(Row["ban_hours"]), Convert.ToInt32(Row["ip_ban_hours"]), Convert.ToInt32(Row["trade_lock_days"]), Convert.ToString(Row["notice"])));
                     }
                 }
@@ -164,8 +164,8 @@ namespace Plus.HabboHotel.Moderation
                         {
                             if (expires > PlusEnvironment.GetUnixTimestamp())
                             {
-                                if (!this._bans.ContainsKey(value))
-                                    this._bans.Add(value, Ban);
+                                if (!_bans.ContainsKey(value))
+                                    _bans.Add(value, Ban);
                             }
                             else
                             {
@@ -178,16 +178,16 @@ namespace Plus.HabboHotel.Moderation
                 }
             }
 
-            log.Info("Loaded " + (this._userPresets.Count + this._roomPresets.Count) + " moderation presets.");
-            log.Info("Loaded " + this._userActionPresetCategories.Count + " moderation categories.");
-            log.Info("Loaded " + this._userActionPresetMessages.Count + " moderation action preset messages.");
-            log.Info("Cached " + this._bans.Count + " username and machine bans.");
+            log.Info("Loaded " + (_userPresets.Count + _roomPresets.Count) + " moderation presets.");
+            log.Info("Loaded " + _userActionPresetCategories.Count + " moderation categories.");
+            log.Info("Loaded " + _userActionPresetMessages.Count + " moderation action preset messages.");
+            log.Info("Cached " + _bans.Count + " username and machine bans.");
         }
 
         public void ReCacheBans()
         {
-            if (this._bans.Count > 0)
-                this._bans.Clear();
+            if (_bans.Count > 0)
+                _bans.Clear();
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -209,8 +209,8 @@ namespace Plus.HabboHotel.Moderation
                         {
                             if (expires > PlusEnvironment.GetUnixTimestamp())
                             {
-                                if (!this._bans.ContainsKey(value))
-                                    this._bans.Add(value, Ban);
+                                if (!_bans.ContainsKey(value))
+                                    _bans.Add(value, Ban);
                             }
                             else
                             {
@@ -223,7 +223,7 @@ namespace Plus.HabboHotel.Moderation
                 }
             }
 
-            log.Info("Cached " + this._bans.Count + " username and machine bans.");
+            log.Info("Cached " + _bans.Count + " username and machine bans.");
         }
 
         public void BanUser(string Mod, ModerationBanType Type, string BanValue, string Reason, double ExpireTimestamp)
@@ -238,24 +238,24 @@ namespace Plus.HabboHotel.Moderation
 
             if (Type == ModerationBanType.Machine || Type == ModerationBanType.Username)
             {
-                if (!this._bans.ContainsKey(BanValue))
-                    this._bans.Add(BanValue, new ModerationBan(Type, BanValue, Reason, ExpireTimestamp));
+                if (!_bans.ContainsKey(BanValue))
+                    _bans.Add(BanValue, new ModerationBan(Type, BanValue, Reason, ExpireTimestamp));
             }
         }
 
         public ICollection<string> UserMessagePresets
         {
-            get { return this._userPresets; }
+            get { return _userPresets; }
         }
 
         public ICollection<string> RoomMessagePresets
         {
-            get { return this._roomPresets; }
+            get { return _roomPresets; }
         }
 
         public ICollection<ModerationTicket> GetTickets
         {
-            get { return this._modTickets.Values; }
+            get { return _modTickets.Values; }
         }
 
         public Dictionary<string, List<ModerationPresetActions>> UserActionPresets
@@ -263,13 +263,13 @@ namespace Plus.HabboHotel.Moderation
             get
             {
                 Dictionary<string, List<ModerationPresetActions>> Result = new Dictionary<string, List<ModerationPresetActions>>();
-                foreach (KeyValuePair<int, string> Category in this._moderationCFHTopics.ToList())
+                foreach (KeyValuePair<int, string> Category in _moderationCFHTopics.ToList())
                 {
                     Result.Add(Category.Value, new List<ModerationPresetActions>());
 
-                    if (this._moderationCFHTopicActions.ContainsKey(Category.Key))
+                    if (_moderationCFHTopicActions.ContainsKey(Category.Key))
                     {
-                        foreach (ModerationPresetActions Data in this._moderationCFHTopicActions[Category.Key])
+                        foreach (ModerationPresetActions Data in _moderationCFHTopicActions[Category.Key])
                         {
                             Result[Category.Value].Add(Data);
                         }
@@ -281,23 +281,23 @@ namespace Plus.HabboHotel.Moderation
 
         public bool TryAddTicket(ModerationTicket Ticket)
         {
-            Ticket.Id = this._ticketCount++;
-            return this._modTickets.TryAdd(Ticket.Id, Ticket);
+            Ticket.Id = _ticketCount++;
+            return _modTickets.TryAdd(Ticket.Id, Ticket);
         }
 
         public bool TryGetTicket(int TicketId, out ModerationTicket Ticket)
         {
-            return this._modTickets.TryGetValue(TicketId, out Ticket);
+            return _modTickets.TryGetValue(TicketId, out Ticket);
         }
 
         public bool UserHasTickets(int userId)
         {
-            return this._modTickets.Count(x => x.Value.Sender.Id == userId && x.Value.Answered == false) > 0;
+            return _modTickets.Count(x => x.Value.Sender.Id == userId && x.Value.Answered == false) > 0;
         }
 
         public ModerationTicket GetTicketBySenderId(int userId)
         {
-            return this._modTickets.FirstOrDefault(x => x.Value.Sender.Id == userId).Value;
+            return _modTickets.FirstOrDefault(x => x.Value.Sender.Id == userId).Value;
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Plus.HabboHotel.Moderation
         /// <returns></returns>
         public bool IsBanned(string Key, out ModerationBan Ban)
         {
-            if (this._bans.TryGetValue(Key, out Ban))
+            if (_bans.TryGetValue(Key, out Ban))
             {
                 if (!Ban.Expired)
                     return true;
@@ -322,8 +322,8 @@ namespace Plus.HabboHotel.Moderation
                 }
 
                 //And finally, let us remove the ban record from the cache.
-                if (this._bans.ContainsKey(Key))
-                    this._bans.Remove(Key);
+                if (_bans.ContainsKey(Key))
+                    _bans.Remove(Key);
                 return false;
             }
             return false;
@@ -391,7 +391,7 @@ namespace Plus.HabboHotel.Moderation
         /// <param name="Value"></param>
         public void RemoveBan(string Value)
         {
-            this._bans.Remove(Value);
+            _bans.Remove(Value);
         }
     }
 }

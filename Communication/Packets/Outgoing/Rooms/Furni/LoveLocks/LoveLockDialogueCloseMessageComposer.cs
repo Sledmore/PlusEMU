@@ -5,7 +5,7 @@
         public LoveLockDialogueCloseMessageComposer(int ItemId)
             : base(ServerPacketHeader.LoveLockDialogueCloseMessageComposer)
         {
-            base.WriteInteger(ItemId);
+            WriteInteger(ItemId);
         }
     }
 }

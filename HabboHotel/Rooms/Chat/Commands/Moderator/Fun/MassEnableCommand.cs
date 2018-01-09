@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator.Fun
             get { return "Give every user in the room a specific enable ID."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

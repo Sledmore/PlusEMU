@@ -28,11 +28,11 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 
         public int Delay
         {
-            get { return this._delay; }
+            get { return _delay; }
             set
             {
-                this._delay = value;
-                this.TickCount = value + 1;
+                _delay = value;
+                TickCount = value + 1;
             }
         }
 
@@ -46,15 +46,15 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
-            this.TickCount = Delay;
-            this.Requested = false;
+            SetItems = new ConcurrentDictionary<int, Item>();
+            TickCount = Delay;
+            Requested = false;
         }
 
         public void HandleSave(ClientPacket Packet)
         {
-            if (this.SetItems.Count > 0)
-                this.SetItems.Clear();
+            if (SetItems.Count > 0)
+                SetItems.Clear();
 
             int Unknown = Packet.PopInt();
             int Movement = Packet.PopInt();
@@ -71,22 +71,22 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     SetItems.TryAdd(SelectedItem.Id, SelectedItem);
             }
 
-            this.StringData = Movement + ";" + Rotation;
-            this.Delay = Packet.PopInt();
+            StringData = Movement + ";" + Rotation;
+            Delay = Packet.PopInt();
         }
 
         public bool Execute(params object[] Params)
         {
-            if (this.SetItems.Count == 0)
+            if (SetItems.Count == 0)
                 return false;
 
-            if (this._next == 0 || this._next < PlusEnvironment.Now())
-                this._next = PlusEnvironment.Now() + this.Delay;
+            if (_next == 0 || _next < PlusEnvironment.Now())
+                _next = PlusEnvironment.Now() + Delay;
 
             if (!Requested)
             {
-                this.TickCount = this.Delay;
-                this.Requested = true;
+                TickCount = Delay;
+                Requested = true;
             }
             return true;
         }
@@ -99,7 +99,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             long Now = PlusEnvironment.Now();
             if (_next < Now)
             {
-                foreach (Item Item in this.SetItems.Values.ToList())
+                foreach (Item Item in SetItems.Values.ToList())
                 {
                     if (Item == null)
                         continue;
@@ -110,11 +110,11 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
                     Item toRemove = null;
 
                     if (Instance.GetWired().OtherBoxHasItem(this, Item.Id))
-                        this.SetItems.TryRemove(Item.Id, out toRemove);
+                        SetItems.TryRemove(Item.Id, out toRemove);
    
 
-                    Point Point = HandleMovement(Convert.ToInt32(this.StringData.Split(';')[0]),new Point(Item.GetX, Item.GetY));
-                    int newRot = HandleRotation(Convert.ToInt32(this.StringData.Split(';')[1]), Item.Rotation);
+                    Point Point = HandleMovement(Convert.ToInt32(StringData.Split(';')[0]),new Point(Item.GetX, Item.GetY));
+                    int newRot = HandleRotation(Convert.ToInt32(StringData.Split(';')[1]), Item.Rotation);
 
                     Instance.GetWired().OnUserFurniCollision(Instance, Item);
 

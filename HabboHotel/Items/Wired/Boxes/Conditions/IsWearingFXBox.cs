@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -29,7 +29,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             int Unknown = Packet.PopInt();
             int Unknown2 = Packet.PopInt();
 
-            this.StringData = Unknown2.ToString();
+            StringData = Unknown2.ToString();
         }
 
         public bool Execute(params object[] Params)
@@ -37,14 +37,14 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             if (Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData))
+            if (String.IsNullOrEmpty(StringData))
                 return false;
 
             Habbo Player = (Habbo)Params[0];
             if (Player == null)
                 return false;
 
-            if (Player.Effects().CurrentEffect != int.Parse(this.StringData))
+            if (Player.Effects().CurrentEffect != int.Parse(StringData))
                 return false;
 
             return true;

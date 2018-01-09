@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 using Plus.HabboHotel.Users.Messenger;
 using Plus.Communication.Packets.Outgoing.Messenger;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class GetBuddyRequestsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            ICollection<MessengerRequest> Requests = Session.GetHabbo().GetMessenger().GetRequests().ToList();
+            ICollection<MessengerRequest> requests = session.GetHabbo().GetMessenger().GetRequests().ToList();
 
-            Session.SendPacket(new BuddyRequestsComposer(Requests));
+            session.SendPacket(new BuddyRequestsComposer(requests));
         }
     }
 }

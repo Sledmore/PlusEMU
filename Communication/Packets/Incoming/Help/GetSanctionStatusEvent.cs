@@ -4,7 +4,7 @@ namespace Plus.Communication.Packets.Incoming.Help
 {
     class GetSanctionStatusEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             //Session.SendMessage(new SanctionStatusComposer());
         }

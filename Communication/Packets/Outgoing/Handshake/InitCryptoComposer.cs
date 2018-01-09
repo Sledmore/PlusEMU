@@ -5,8 +5,8 @@
         public InitCryptoComposer(string Prime, string Generator)
             : base(ServerPacketHeader.InitCryptoMessageComposer)
         {
-           base.WriteString(Prime);
-           base.WriteString(Generator);
+           WriteString(Prime);
+           WriteString(Generator);
         }
     }
 }

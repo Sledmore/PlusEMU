@@ -69,31 +69,31 @@ namespace Plus.HabboHotel.Items
             {
                 this.Id = Id;
                 this.RoomId = RoomId;
-                this._room = Room;
-                this._data = data;
+                _room = Room;
+                _data = data;
                 this.BaseItem = BaseItem;
                 this.ExtraData = ExtraData;
-                this.GroupId = Group;
+                GroupId = Group;
 
-                this._coordX = X;
-                this._coordY = Y;
+                _coordX = X;
+                _coordY = Y;
                 if (!double.IsInfinity(Z))
-                    this._coordZ = Z;
-                this.Rotation = Rot;
-                this.UpdateNeeded = false;
-                this.UpdateCounter = 0;
-                this.InteractingUser = 0;
-                this.InteractingUser2 = 0;
-                this.interactingBallUser = 0;
-                this.interactionCount = 0;
-                this.value = 0;
+                    _coordZ = Z;
+                Rotation = Rot;
+                UpdateNeeded = false;
+                UpdateCounter = 0;
+                InteractingUser = 0;
+                InteractingUser2 = 0;
+                interactingBallUser = 0;
+                interactionCount = 0;
+                value = 0;
 
-                this.UserID = Userid;
-                this.Username = PlusEnvironment.GetUsernameById(Userid);
+                UserID = Userid;
+                Username = PlusEnvironment.GetUsernameById(Userid);
 
 
-                this.LimitedNo = limitedNumber;
-                this.LimitedTot = limitedStack;
+                LimitedNo = limitedNumber;
+                LimitedTot = limitedStack;
 
                 switch (GetBaseItem().InteractionType)
                 {
@@ -152,50 +152,50 @@ namespace Plus.HabboHotel.Items
                         }
                 }
 
-                this.mIsWallItem = (GetBaseItem().Type.ToString().ToLower() == "i");
-                this.mIsFloorItem = (GetBaseItem().Type.ToString().ToLower() == "s");
+                mIsWallItem = (GetBaseItem().Type.ToString().ToLower() == "i");
+                mIsFloorItem = (GetBaseItem().Type.ToString().ToLower() == "s");
 
-                if (this.mIsFloorItem)
+                if (mIsFloorItem)
                 {
-                    this._affectedPoints = Gamemap.GetAffectedTiles(GetBaseItem().Length, GetBaseItem().Width, GetX, GetY, Rot);
+                    _affectedPoints = Gamemap.GetAffectedTiles(GetBaseItem().Length, GetBaseItem().Width, GetX, GetY, Rot);
                 }
-                else if (this.mIsWallItem)
+                else if (mIsWallItem)
                 {
                     this.wallCoord = wallCoord;
-                    this.mIsWallItem = true;
-                    this.mIsFloorItem = false;
-                    this._affectedPoints = new Dictionary<int, ThreeDCoord>();
+                    mIsWallItem = true;
+                    mIsFloorItem = false;
+                    _affectedPoints = new Dictionary<int, ThreeDCoord>();
                 }
             }
         }
 
         public ItemData Data
         {
-            get { return this._data; }
-            set { this._data = value; }
+            get { return _data; }
+            set { _data = value; }
         }
 
         public Dictionary<int, ThreeDCoord> GetAffectedTiles
         {
-            get { return this._affectedPoints; }
+            get { return _affectedPoints; }
         }
 
         public int GetX
         {
             get { return _coordX; }
-            set { this._coordX = value; }
+            set { _coordX = value; }
         }
 
         public int GetY
         {
             get { return _coordY; }
-            set { this._coordY = value; }
+            set { _coordY = value; }
         }
 
         public double GetZ
         {
             get { return _coordZ; }
-            set { this._coordZ = value; }
+            set { _coordZ = value; }
         }
 
         public bool UpdateNeeded
@@ -256,14 +256,14 @@ namespace Plus.HabboHotel.Items
             {
                 double CurHeight = 0.0;
 
-                if (this.GetBaseItem().AdjustableHeights.Count > 1)
+                if (GetBaseItem().AdjustableHeights.Count > 1)
                 {
-                    if (int.TryParse(this.ExtraData, out int num2) && (this.GetBaseItem().AdjustableHeights.Count) - 1 >= num2)
-                        CurHeight = this.GetZ + this.GetBaseItem().AdjustableHeights[num2];
+                    if (int.TryParse(ExtraData, out int num2) && (GetBaseItem().AdjustableHeights.Count) - 1 >= num2)
+                        CurHeight = GetZ + GetBaseItem().AdjustableHeights[num2];
                 }
 
                 if (CurHeight <= 0.0)
-                    CurHeight = this.GetZ + this.GetBaseItem().Height;
+                    CurHeight = GetZ + GetBaseItem().Height;
 
                 return CurHeight;
             }
@@ -1225,11 +1225,11 @@ namespace Plus.HabboHotel.Items
                             {
                                 if (InteractingUser > 0)
                                 {
-                                    this.ExtraData = "11000";
-                                    this.UpdateState(false, true);
-                                    this.GetRoom().GetFreeze().onFreezeTiles(this, this.freezePowerUp);
-                                    this.InteractingUser = 0;
-                                    this.interactionCountHelper = 0;
+                                    ExtraData = "11000";
+                                    UpdateState(false, true);
+                                    GetRoom().GetFreeze().onFreezeTiles(this, freezePowerUp);
+                                    InteractingUser = 0;
+                                    interactionCountHelper = 0;
                                 }
                                 break;
                             }
@@ -1533,25 +1533,25 @@ namespace Plus.HabboHotel.Items
 
         public void ResetBaseItem()
         {
-            this._data = null;
-            this._data = this.GetBaseItem();
+            _data = null;
+            _data = GetBaseItem();
         }
 
         public ItemData GetBaseItem()
         {
-            if (this._data == null)
+            if (_data == null)
             {
-                if (PlusEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out ItemData I))
-                    this._data = I;
+                if (PlusEnvironment.GetGame().GetItemManager().GetItem(BaseItem, out ItemData I))
+                    _data = I;
             }
 
-            return this._data;
+            return _data;
         }
 
         public Room GetRoom()
         {
-            if (this._room != null)
-                return this._room;
+            if (_room != null)
+                return _room;
             
             if (PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(RoomId, out Room Room))
                 return Room;
@@ -1594,8 +1594,8 @@ namespace Plus.HabboHotel.Items
 
         public void Destroy()
         {
-            this._room = null;
-            this._data = null;
+            _room = null;
+            _data = null;
             _affectedPoints.Clear();
         }
     }

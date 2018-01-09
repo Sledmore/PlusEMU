@@ -5,7 +5,7 @@
         public PurchaseErrorComposer(int ErrorCode)
             : base(ServerPacketHeader.PurchaseErrorMessageComposer)
         {
-            base.WriteInteger(ErrorCode);
+            WriteInteger(ErrorCode);
         }
     }
 }

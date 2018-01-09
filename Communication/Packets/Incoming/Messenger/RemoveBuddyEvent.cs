@@ -8,41 +8,41 @@ namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class RemoveBuddyEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null)
                 return;
 
-            int Amount = Packet.PopInt();
-            if (Amount > 100)
-                Amount = 100;
-            else if (Amount < 0)
+            int amount = packet.PopInt();
+            if (amount > 100)
+                amount = 100;
+            else if (amount < 0)
                 return;
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                for (int i = 0; i < Amount; i++)
+                for (int i = 0; i < amount; i++)
                 {
-                    int Id = Packet.PopInt();
+                    int id = packet.PopInt();
 
-                    if (Session.GetHabbo().Relationships.Count(x => x.Value.UserId == Id) > 0)
+                    if (session.GetHabbo().Relationships.Count(x => x.Value.UserId == id) > 0)
                     {
                         dbClient.SetQuery("DELETE FROM `user_relationships` WHERE `user_id` = @id AND `target` = @target OR `target` = @id AND `user_id` = @target");
-                        dbClient.AddParameter("id", Session.GetHabbo().Id);
-                        dbClient.AddParameter("target", Id);
+                        dbClient.AddParameter("id", session.GetHabbo().Id);
+                        dbClient.AddParameter("target", id);
                         dbClient.RunQuery();
                     }
 
-                    if (Session.GetHabbo().Relationships.ContainsKey(Id))
-                        Session.GetHabbo().Relationships.Remove(Id);
+                    if (session.GetHabbo().Relationships.ContainsKey(id))
+                        session.GetHabbo().Relationships.Remove(id);
 
-                    GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Id);
-                    if (Target != null)
+                    GameClient target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(id);
+                    if (target != null)
                     {
-                        if (Target.GetHabbo().Relationships.ContainsKey(Session.GetHabbo().Id))
-                            Target.GetHabbo().Relationships.Remove(Session.GetHabbo().Id);
+                        if (target.GetHabbo().Relationships.ContainsKey(session.GetHabbo().Id))
+                            target.GetHabbo().Relationships.Remove(session.GetHabbo().Id);
                     }
 
-                    Session.GetHabbo().GetMessenger().DestroyFriendship(Id);
+                    session.GetHabbo().GetMessenger().DestroyFriendship(id);
                 }
             }
         }

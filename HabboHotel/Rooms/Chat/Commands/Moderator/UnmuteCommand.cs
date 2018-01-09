@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
             get { return "Unmute a currently muted user."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {

@@ -20,7 +20,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
         {
             this.Instance = Instance;
             this.Item = Item;
-            this.SetItems = new ConcurrentDictionary<int, Item>();
+            SetItems = new ConcurrentDictionary<int, Item>();
         }
 
         public void HandleSave(ClientPacket Packet)
@@ -29,7 +29,7 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             int CountOne = Packet.PopInt();
             int CountTwo = Packet.PopInt();
 
-            this.StringData = CountOne + ";" + CountTwo;
+            StringData = CountOne + ";" + CountTwo;
         }
 
         public bool Execute(params object[] Params)
@@ -37,13 +37,13 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Conditions
             if (Params.Length == 0)
                 return false;
 
-            if (String.IsNullOrEmpty(this.StringData))
+            if (String.IsNullOrEmpty(StringData))
                 return false;
 
-            int CountOne = this.StringData != null ? int.Parse(this.StringData.Split(';')[0]) : 1;
-            int CountTwo = this.StringData != null ? int.Parse(this.StringData.Split(';')[1]) : 50;
+            int CountOne = StringData != null ? int.Parse(StringData.Split(';')[0]) : 1;
+            int CountTwo = StringData != null ? int.Parse(StringData.Split(';')[1]) : 50;
 
-            if (this.Instance.UserCount >= CountOne && this.Instance.UserCount <= CountTwo)
+            if (Instance.UserCount >= CountOne && Instance.UserCount <= CountTwo)
                 return true;
 
             return false;

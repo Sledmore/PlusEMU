@@ -54,12 +54,12 @@ namespace Plus.HabboHotel.Rooms.AI
             this.X = X;
             this.Y = Y;
             this.Z = Z;
-            this.PlacedInRoom = false;
-            this.DBState = PetDatabaseUpdateState.Updated;
+            PlacedInRoom = false;
+            DBState = PetDatabaseUpdateState.Updated;
             this.Saddle = Saddle;
-            this.AnyoneCanRide = Anyonecanride;
-            this.PetHair = PetHer;
-            this.HairDye = Dye;
+            AnyoneCanRide = Anyonecanride;
+            PetHair = PetHer;
+            HairDye = Dye;
             this.GnomeClothing = GnomeClothing;
         }
 

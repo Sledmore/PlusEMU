@@ -1,12 +1,13 @@
 ﻿using Plus.Communication.Packets.Outgoing.Marketplace;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Marketplace
 {
     class GetOwnOffersEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new MarketPlaceOwnOffersComposer(Session.GetHabbo().Id));
+            session.SendPacket(new MarketPlaceOwnOffersComposer(session.GetHabbo().Id));
         }
     }
 }

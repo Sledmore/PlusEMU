@@ -1,16 +1,17 @@
-﻿using Plus.HabboHotel.Quests;
+﻿using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Quests;
 
 namespace Plus.Communication.Packets.Incoming.Messenger
 {
     class RequestBuddyEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null)
                 return;
 
-            if (Session.GetHabbo().GetMessenger().RequestBuddy(Packet.PopString()))
-                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SocialFriend);
+            if (session.GetHabbo().GetMessenger().RequestBuddy(packet.PopString()))
+                PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialFriend);
         }
     }
 }

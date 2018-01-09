@@ -10,16 +10,16 @@ namespace Plus.Communication.Packets.Outgoing.Messenger
         public BuddyRequestsComposer(ICollection<MessengerRequest> requests)
             : base(ServerPacketHeader.BuddyRequestsMessageComposer)
         {
-            base.WriteInteger(requests.Count);
-            base.WriteInteger(requests.Count);
+            WriteInteger(requests.Count);
+            WriteInteger(requests.Count);
 
             foreach (MessengerRequest Request in requests)
             {
-                base.WriteInteger(Request.From);
-                base.WriteString(Request.Username);
+                WriteInteger(Request.From);
+                WriteString(Request.Username);
 
                 UserCache User = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Request.From);
-                base.WriteString(User != null ? User.Look : "");
+                WriteString(User != null ? User.Look : "");
             }
         }
     }

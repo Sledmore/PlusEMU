@@ -6,47 +6,47 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class ModerationTradeLockEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(HabboHotel.GameClients.GameClient session, ClientPacket packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().GetPermissions().HasRight("mod_trade_lock"))
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().GetPermissions().HasRight("mod_trade_lock"))
                 return;
 
-            int UserId = Packet.PopInt();
-            string Message = Packet.PopString();
-            double Days = (Packet.PopInt() / 1440);
-            string Unknown1 = Packet.PopString();
-            string Unknown2 = Packet.PopString();
+            int userId = packet.PopInt();
+            string message = packet.PopString();
+            double days = packet.PopInt() / 1440.0;
+            packet.PopString(); //unk1
+            packet.PopString(); //unk2
 
-            double Length = (PlusEnvironment.GetUnixTimestamp() + (Days * 86400));
+            double length = PlusEnvironment.GetUnixTimestamp() + days * 86400;
 
-            Habbo Habbo = PlusEnvironment.GetHabboById(UserId);
-            if (Habbo == null)
+            Habbo habbo = PlusEnvironment.GetHabboById(userId);
+            if (habbo == null)
             {
-                Session.SendWhisper("An error occoured whilst finding that user in the database.");
+                session.SendWhisper("An error occoured whilst finding that user in the database.");
                 return;
             }
 
-            if (Habbo.GetPermissions().HasRight("mod_trade_lock") && !Session.GetHabbo().GetPermissions().HasRight("mod_trade_lock_any"))
+            if (habbo.GetPermissions().HasRight("mod_trade_lock") && !session.GetHabbo().GetPermissions().HasRight("mod_trade_lock_any"))
             {
-                Session.SendWhisper("Oops, you cannot trade lock another user ranked 5 or higher.");
+                session.SendWhisper("Oops, you cannot trade lock another user ranked 5 or higher.");
                 return;
             }
 
-            if (Days < 1)
-                Days = 1;
+            if (days < 1)
+                days = 1;
 
-            if (Days > 365)
-                Days = 365;
+            if (days > 365)
+                days = 365;
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `user_info` SET `trading_locked` = '" + Length + "', `trading_locks_count` = `trading_locks_count` + '1' WHERE `user_id` = '" + Habbo.Id + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE `user_info` SET `trading_locked` = '" + length + "', `trading_locks_count` = `trading_locks_count` + '1' WHERE `user_id` = '" + habbo.Id + "' LIMIT 1");
             }
 
-            if (Habbo.GetClient() != null)
+            if (habbo.GetClient() != null)
             {
-                Habbo.TradingLockExpiry = Length;
-                Habbo.GetClient().SendNotification("You have been trade banned for " + Days + " day(s)!\r\rReason:\r\r" + Message);
+                habbo.TradingLockExpiry = length;
+                habbo.GetClient().SendNotification("You have been trade banned for " + days + " day(s)!\r\rReason:\r\r" + message);
             }
         }
     }

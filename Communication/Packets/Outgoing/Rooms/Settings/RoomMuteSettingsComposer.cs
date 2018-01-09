@@ -5,7 +5,7 @@
         public RoomMuteSettingsComposer(bool Status)
             : base(ServerPacketHeader.RoomMuteSettingsMessageComposer)
         {
-            base.WriteBoolean(Status);
+            WriteBoolean(Status);
         }
     }
 }

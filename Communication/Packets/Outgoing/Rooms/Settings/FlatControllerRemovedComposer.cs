@@ -7,8 +7,8 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
         public FlatControllerRemovedComposer(Room Instance, int UserId)
             : base(ServerPacketHeader.FlatControllerRemovedMessageComposer)
         {
-            base.WriteInteger(Instance.Id);
-            base.WriteInteger(UserId);
+            WriteInteger(Instance.Id);
+            WriteInteger(UserId);
         }
     }
 }

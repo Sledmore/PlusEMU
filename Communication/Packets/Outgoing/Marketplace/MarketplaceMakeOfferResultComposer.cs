@@ -5,7 +5,7 @@
         public MarketplaceMakeOfferResultComposer(int Success)
             : base(ServerPacketHeader.MarketplaceMakeOfferResultMessageComposer)
         {
-            base.WriteInteger(Success);
+            WriteInteger(Success);
         }
     }
 }

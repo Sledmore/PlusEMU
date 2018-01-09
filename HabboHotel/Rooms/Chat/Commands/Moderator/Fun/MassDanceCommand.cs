@@ -22,7 +22,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator.Fun
             get { return "Force everyone in the room to dance to a dance of your choice."; }
         }
 
-        public void Execute(GameClients.GameClient Session, Rooms.Room Room, string[] Params)
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length == 1)
             {
@@ -45,8 +45,8 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator.Fun
                     if (U == null)
                         continue;
 
-                    if (U.CarryItemID > 0)
-                        U.CarryItemID = 0;
+                    if (U.CarryItemId > 0)
+                        U.CarryItemId = 0;
 
                     U.DanceId = DanceId;
                     Room.SendPacket(new DanceComposer(U, DanceId));

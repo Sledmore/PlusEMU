@@ -1,12 +1,13 @@
 ﻿using Plus.Communication.Packets.Outgoing.Rooms.Polls;
+using Plus.HabboHotel.GameClients;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.Polls
 {
     class PollStartEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            Session.SendPacket(new PollContentsComposer());
+            session.SendPacket(new PollContentsComposer());
         }
     }
 }

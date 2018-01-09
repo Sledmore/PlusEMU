@@ -11,39 +11,37 @@ namespace Plus.Communication.Packets.Incoming.Moderation
 {
     class GetModeratorUserRoomVisitsEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (!Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
+            if (!session.GetHabbo().GetPermissions().HasRight("mod_tool"))
                 return;
 
-            int UserId = Packet.PopInt();
-            GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(UserId);
-            if (Target == null)
+            int userId = packet.PopInt();
+            GameClient target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(userId);
+            if (target == null)
                 return;
 
-            DataTable Table = null;
-            Dictionary<double, RoomData> Visits = new Dictionary<double, RoomData>();
+            Dictionary<double, RoomData> visits = new Dictionary<double, RoomData>();
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dbClient.SetQuery("SELECT `room_id`, `entry_timestamp` FROM `user_roomvisits` WHERE `user_id` = @id ORDER BY `entry_timestamp` DESC LIMIT 50");
-                dbClient.AddParameter("id", UserId);
-                Table = dbClient.GetTable();
+                dbClient.AddParameter("id", userId);
+                DataTable table = dbClient.GetTable();
 
-                if (Table != null)
+                if (table != null)
                 {
-                    foreach (DataRow Row in Table.Rows)
+                    foreach (DataRow row in table.Rows)
                     {
-                        RoomData data = null;
-                        if (!RoomFactory.TryGetData(Convert.ToInt32(Row["room_id"]), out data))
+                        if (!RoomFactory.TryGetData(Convert.ToInt32(row["room_id"]), out RoomData data))
                             continue;
 
-                        if (!Visits.ContainsKey(Convert.ToDouble(Row["entry_timestamp"])))
-                            Visits.Add(Convert.ToDouble(Row["entry_timestamp"]), data);
+                        if (!visits.ContainsKey(Convert.ToDouble(row["entry_timestamp"])))
+                            visits.Add(Convert.ToDouble(row["entry_timestamp"]), data);
                     }
                 }
             }
 
-            Session.SendPacket(new ModeratorUserRoomVisitsComposer(Target.GetHabbo(), Visits));
+            session.SendPacket(new ModeratorUserRoomVisitsComposer(target.GetHabbo(), visits));
         }
     }
 }
