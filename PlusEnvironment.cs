@@ -110,6 +110,7 @@ namespace Plus
                     UserID = GetConfig().data["db.username"],
                     AllowZeroDateTime = true,
                     ConvertZeroDateTime = true,
+                    SslMode = MySqlSslMode.None
                 };
 
                 _manager = new DatabaseManager(connectionString.ToString());
