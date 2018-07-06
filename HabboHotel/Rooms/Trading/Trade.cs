@@ -21,7 +21,7 @@ namespace Plus.HabboHotel.Rooms.Trading
 
         public Trade(int id, RoomUser playerOne, RoomUser playerTwo, Room room)
         {
-            Id = Id;
+            Id = id;
             CanChange = true;
             Instance = room;
             Users = new TradeUser[2];
