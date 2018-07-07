@@ -19,32 +19,40 @@ namespace Plus.HabboHotel.Items.Interactor
                 return;
             }
 
-            int OldValue = 0;
+            // Request 1 - Decrease value with red button
+            // Request 2 - Increase value with green button
+            // Request 3 - Reset with UI/Wired/Double click
 
-            if (!int.TryParse(Item.ExtraData, out OldValue))
+            // Find out what number we are on right now
+            if (!int.TryParse(Item.ExtraData, out int OldValue))
             {
+                OldValue = 0;
             }
 
-
-            if (Request == 1)
+            // Decrease value with red button
+            if (OldValue >= 0 && OldValue <= 99 && Request == 1)
             {
-                if (Item.pendingReset && OldValue > 0)
-                {
+                if (OldValue > 0)
+                    OldValue--;
+                else if (OldValue == 0)
+                    OldValue = 99;
+            }
+
+            // Increase value with green button
+            if (OldValue >= 0 && OldValue <= 99 && Request == 2)
+            {
+                if (OldValue < 99)
+                    OldValue++;
+                else if (OldValue == 99)
                     OldValue = 0;
-                    Item.pendingReset = false;
-                }
-                else
-                {
-                    OldValue = OldValue + 60;
-                    Item.UpdateNeeded = false;
-                }
             }
-            else if (Request == 2)
+
+            // Reset with UI/Wired/Double click
+            if (Request == 3)
             {
-                Item.UpdateNeeded = !Item.UpdateNeeded;
+                OldValue = 0;
                 Item.pendingReset = true;
             }
-
 
             Item.ExtraData = OldValue.ToString();
             Item.UpdateState();
@@ -52,16 +60,8 @@ namespace Plus.HabboHotel.Items.Interactor
 
         public void OnWiredTrigger(Item Item)
         {
-            int OldValue = 0;
-
-            if (!int.TryParse(Item.ExtraData, out OldValue))
-            {
-            }
-
-            OldValue = OldValue + 60;
-            Item.UpdateNeeded = false;
-
-            Item.ExtraData = OldValue.ToString();
+            // Always reset scoreboard on Wired trigger
+            Item.ExtraData = "0";
             Item.UpdateState();
         }
     }
