@@ -93,7 +93,7 @@ namespace Plus
             {
                 string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
 
-                _configuration = new ConfigurationData(projectSolutionPath + "\\Config\\config.ini");
+                _configuration = new ConfigurationData(projectSolutionPath + "//Config//config.ini");
 
                 var connectionString = new MySqlConnectionStringBuilder
                 {

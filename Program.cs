@@ -27,8 +27,6 @@ namespace Plus
 
         public static void Main(string[] Args)
         {
-            DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
-
             XmlConfigurator.Configure();
 
             Console.ForegroundColor = ConsoleColor.White;

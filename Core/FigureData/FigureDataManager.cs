@@ -44,7 +44,7 @@ namespace Plus.Core.FigureData
             string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(projectSolutionPath + "\\Config\\figuredata.xml");
+            xDoc.Load(projectSolutionPath + "//Config//figuredata.xml");
 
             XmlNodeList colors = xDoc.GetElementsByTagName("colors");
             foreach (XmlNode node in colors)
