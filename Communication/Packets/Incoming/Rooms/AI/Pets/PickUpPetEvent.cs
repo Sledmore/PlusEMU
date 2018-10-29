@@ -69,9 +69,6 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
                     pet.RidingHorse = false;
             }
 
-            pet.PetData.RoomId = 0;
-            pet.PetData.PlacedInRoom = false;
-
             Pet data = pet.PetData;
             if (data != null)
             {
