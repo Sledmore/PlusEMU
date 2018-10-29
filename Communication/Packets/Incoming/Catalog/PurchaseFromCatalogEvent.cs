@@ -407,21 +407,25 @@ namespace Plus.Communication.Packets.Incoming.Catalog
                     {
                         string[] petData = extraData.Split('\n');
 
-                        Pet generatedPet = PetUtility.CreatePet(session.GetHabbo().Id, petData[0], item.Data.BehaviourData, petData[1], petData[2]);
-                        if (generatedPet != null)
+                        Pet pet = PetUtility.CreatePet(session.GetHabbo().Id, petData[0], item.Data.BehaviourData, petData[1], petData[2]);
+                        if (pet != null)
                         {
-                            session.GetHabbo().GetInventoryComponent().TryAddPet(generatedPet);
-
-                            session.SendPacket(new FurniListNotificationComposer(generatedPet.PetId, 3));
-                            session.SendPacket(new PetInventoryComposer(session.GetHabbo().GetInventoryComponent().GetPets()));
-
-                            if (PlusEnvironment.GetGame().GetItemManager().GetItem(320, out ItemData petFood))
+                            if (session.GetHabbo().GetInventoryComponent().TryAddPet(pet))
                             {
-                                Item food = ItemFactory.CreateSingleItemNullable(petFood, session.GetHabbo(), "", "");
-                                if (food != null)
+                                pet.RoomId = 0;
+                                pet.PlacedInRoom = false;
+
+                                session.SendPacket(new FurniListNotificationComposer(pet.PetId, 3));
+                                session.SendPacket(new PetInventoryComposer(session.GetHabbo().GetInventoryComponent().GetPets()));
+
+                                if (PlusEnvironment.GetGame().GetItemManager().GetItem(320, out ItemData petFood))
                                 {
-                                    session.GetHabbo().GetInventoryComponent().TryAddItem(food);
-                                    session.SendPacket(new FurniListNotificationComposer(food.Id, 1));
+                                    Item food = ItemFactory.CreateSingleItemNullable(petFood, session.GetHabbo(), "", "");
+                                    if (food != null)
+                                    {
+                                        session.GetHabbo().GetInventoryComponent().TryAddItem(food);
+                                        session.SendPacket(new FurniListNotificationComposer(food.Id, 1));
+                                    }
                                 }
                             }
                         }

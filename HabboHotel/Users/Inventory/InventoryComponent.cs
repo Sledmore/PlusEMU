@@ -243,11 +243,6 @@ namespace Plus.HabboHotel.Users.Inventory
 
         public bool TryAddPet(Pet pet)
         {
-            //TODO: Sort this mess.
-            //TODO: Give me an explanation of what you want sorted, to me this seems fine? - Dom
-            pet.RoomId = 0;
-            pet.PlacedInRoom = false;
-
             return _petsItems.TryAdd(pet.PetId, pet);
         }
 

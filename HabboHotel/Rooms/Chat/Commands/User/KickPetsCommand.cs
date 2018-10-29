@@ -35,14 +35,14 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
 
             if (Room.GetRoomUserManager().GetPets().Count > 0)
             {
-                foreach (RoomUser Pet in Room.GetRoomUserManager().GetUserList().ToList())
+                foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
                 {
-                    if (Pet == null)
+                    if (user == null)
                         continue;
 
-                    if (Pet.RidingHorse)
+                    if (user.RidingHorse)
                     {
-                        RoomUser UserRiding = Room.GetRoomUserManager().GetRoomUserByVirtualId(Pet.HorseID);
+                        RoomUser UserRiding = Room.GetRoomUserManager().GetRoomUserByVirtualId(user.HorseID);
                         if (UserRiding != null)
                         {
                             UserRiding.RidingHorse = false;
@@ -50,38 +50,48 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.User
                             UserRiding.MoveTo(new Point(UserRiding.X + 1, UserRiding.Y + 1));
                         }
                         else
-                            Pet.RidingHorse = false;
+                            user.RidingHorse = false;
                     }
 
-                    Pet.PetData.RoomId = 0;
-                    Pet.PetData.PlacedInRoom = false;
-
-                    Pet pet = Pet.PetData;
+                    Pet pet = user.PetData;
                     if (pet != null)
                     {
-                        using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            dbClient.RunQuery("UPDATE `bots` SET `room_id` = '0', `x` = '0', `Y` = '0', `Z` = '0' WHERE `id` = '" + pet.PetId + "' LIMIT 1");
-                            dbClient.RunQuery("UPDATE `bots_petdata` SET `experience` = '" + pet.experience + "', `energy` = '" + pet.Energy + "', `nutrition` = '" + pet.Nutrition + "', `respect` = '" + pet.Respect + "' WHERE `id` = '" + pet.PetId + "' LIMIT 1");
-                        }
+                        return;
                     }
+
+                    using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
+                    {
+                        dbClient.RunQuery("UPDATE `bots` SET `room_id` = '0', `x` = '0', `Y` = '0', `Z` = '0' WHERE `id` = '" + pet.PetId + "' LIMIT 1");
+                        dbClient.RunQuery("UPDATE `bots_petdata` SET `experience` = '" + pet.experience + "', `energy` = '" + pet.Energy + "', `nutrition` = '" + pet.Nutrition + "', `respect` = '" + pet.Respect + "' WHERE `id` = '" + pet.PetId + "' LIMIT 1");
+                    }
+
 
                     if (pet.OwnerId != Session.GetHabbo().Id)
                     {
                         GameClient Target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(pet.OwnerId);
                         if (Target != null)
                         {
-                            Target.GetHabbo().GetInventoryComponent().TryAddPet(Pet.PetData);
-                            Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
+                            if (Target.GetHabbo().GetInventoryComponent().TryAddPet(pet))
+                            {
+                                pet.RoomId = 0;
+                                pet.PlacedInRoom = false;
 
-                            Target.SendPacket(new PetInventoryComposer(Target.GetHabbo().GetInventoryComponent().GetPets()));
-                            return;
+                                Room.GetRoomUserManager().RemoveBot(user.VirtualId, false);
+
+                                Target.SendPacket(new PetInventoryComposer(Target.GetHabbo().GetInventoryComponent().GetPets()));
+                                return;
+                            }
                         }
                     }
 
-                    Session.GetHabbo().GetInventoryComponent().TryAddPet(Pet.PetData);
-                    Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
-                    Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));
+                    if (Session.GetHabbo().GetInventoryComponent().TryAddPet(pet))
+                    {
+                        pet.RoomId = 0;
+                        pet.PlacedInRoom = false;
+
+                        Room.GetRoomUserManager().RemoveBot(user.VirtualId, false);
+                        Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));
+                    }
                 }
                 Session.SendWhisper("Success, removed all pets.");
             }

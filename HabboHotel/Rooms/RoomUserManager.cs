@@ -401,8 +401,13 @@ namespace Plus.HabboHotel.Rooms
                     if (user.GetClient() == null || user.GetClient().GetHabbo() == null || user.GetClient().GetHabbo().GetInventoryComponent() == null)
                         continue;
 
-                    user.GetClient().GetHabbo().GetInventoryComponent().TryAddPet(toRemove.PetData);
-                    RemoveBot(toRemove.VirtualId, false);
+                    if (user.GetClient().GetHabbo().GetInventoryComponent().TryAddPet(toRemove.PetData))
+                    {
+                        toRemove.PetData.RoomId = 0;
+                        toRemove.PetData.PlacedInRoom = false;
+
+                        RemoveBot(toRemove.VirtualId, false);
+                    }
                 }
 
                 _room.GetGameMap().RemoveUserFromMap(user, new Point(user.X, user.Y));

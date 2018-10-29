@@ -87,11 +87,16 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
                 GameClient target = PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(data.OwnerId);
                 if (target != null)
                 {
-                    target.GetHabbo().GetInventoryComponent().TryAddPet(pet.PetData);
-                    room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
+                    if (target.GetHabbo().GetInventoryComponent().TryAddPet(pet.PetData))
+                    {
+                        pet.PetData.RoomId = 0;
+                        pet.PetData.PlacedInRoom = false;
 
-                    target.SendPacket(new PetInventoryComposer(target.GetHabbo().GetInventoryComponent().GetPets()));
-                    return;
+                        room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
+
+                        target.SendPacket(new PetInventoryComposer(target.GetHabbo().GetInventoryComponent().GetPets()));
+                        return;
+                    }
                 }
             }
             
