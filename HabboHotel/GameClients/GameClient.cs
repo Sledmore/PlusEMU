@@ -1,6 +1,6 @@
 ﻿using System;
+using DotNetty.Transport.Channels;
 using Plus.Core;
-using Plus.Communication.Packets.Incoming;
 using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.Users;
 using Plus.Communication.Interfaces;
@@ -13,6 +13,7 @@ using Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Plus.Communication.Packets.Outgoing.Inventory.Achievements;
 
 using Plus.Communication.Encryption.Crypto.Prng;
+using Plus.Communication.Packets.Outgoing;
 using Plus.HabboHotel.Users.Messenger.FriendBar;
 using Plus.Communication.Packets.Outgoing.BuildersClub;
 
@@ -20,9 +21,8 @@ using Plus.Database.Interfaces;
 using Plus.HabboHotel.Subscriptions;
 using Plus.HabboHotel.Permissions;
 using Plus.Communication.Packets.Outgoing.Notifications;
-using Plus.Communication.ConnectionManager;
 using Plus.HabboHotel.Users.UserData;
-using Plus.Communication;
+using Plus.Network.Codec;
 
 namespace Plus.HabboHotel.GameClients
 {
@@ -31,62 +31,12 @@ namespace Plus.HabboHotel.GameClients
         private Habbo _habbo;
         public string MachineId;
         private bool _disconnected;
-        public ARC4 Rc4Client;
-        private GamePacketParser _packetParser;
-        private ConnectionInformation _connection;
+        private IChannelHandlerContext channel;
         public int PingCount { get; set; }
 
-        public GameClient(int clientId, ConnectionInformation connection)
+        public GameClient(IChannelHandlerContext context)
         {
-            ConnectionId = clientId;
-            _connection = connection;
-            _packetParser = new GamePacketParser(this);
-
-            PingCount = 0;
-        }
-
-        private void SwitchParserRequest()
-        {
-            _packetParser.SetConnection(_connection);
-            _packetParser.OnNewPacket += Parser_onNewPacket;
-            byte[] data = (_connection.Parser as InitialPacketParser).CurrentData;
-            _connection.Parser.Dispose();
-            _connection.Parser = _packetParser;
-            _connection.Parser.HandlePacketData(data);
-        }
-
-        private void Parser_onNewPacket(ClientPacket message)
-        {
-            try
-            {
-                PlusEnvironment.GetGame().GetPacketManager().TryExecutePacket(this, message);
-            }
-            catch (Exception e)
-            {
-                ExceptionLogger.LogException(e);
-            }
-        }
-
-        private void PolicyRequest()
-        {
-            _connection.SendData(PlusEnvironment.GetDefaultEncoding().GetBytes("<?xml version=\"1.0\"?>\r\n" +
-                   "<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\r\n" +
-                   "<cross-domain-policy>\r\n" +
-                   "<allow-access-from domain=\"*\" to-ports=\"1-31111\" />\r\n" +
-                   "</cross-domain-policy>\x0"));
-        }
-
-
-        public void StartConnection()
-        {
-            if (_connection == null)
-                return;
-
-            PingCount = 0;
-
-            (_connection.Parser as InitialPacketParser).PolicyRequest += PolicyRequest;
-            (_connection.Parser as InitialPacketParser).SwitchParserRequest += SwitchParserRequest;
-            _connection.StartPacketProcessing();
+            channel = context;
         }
 
         public bool TryAuthenticate(string authTicket)
@@ -233,19 +183,14 @@ namespace Plus.HabboHotel.GameClients
             SendPacket(new BroadcastMessageAlertComposer(message));
         }
 
-        public void SendPacket(IServerPacket message)
+        public void SendPacket(ServerPacket message)
         {
-            if (GetConnection() == null)
-                return;
-            
-            GetConnection().SendData(message.GetBytes());
+            channel.WriteAndFlushAsync(message);
         }
 
-        public int ConnectionId { get; }
-
-        public ConnectionInformation GetConnection()
+        public void SendPacket(byte[] message)
         {
-            return _connection;
+            channel.WriteAndFlushAsync(message);
         }
 
         public Habbo GetHabbo()
@@ -274,8 +219,8 @@ namespace Plus.HabboHotel.GameClients
 
             if (!_disconnected)
             {
-                if (_connection != null)
-                    _connection.Dispose();
+                if (channel != null)
+                    channel.CloseAsync();
                 _disconnected = true;
             }
         }
@@ -288,9 +233,12 @@ namespace Plus.HabboHotel.GameClients
             MachineId = string.Empty;
             _disconnected = true;
             _habbo = null;
-            _connection = null;
-            Rc4Client = null;
-            _packetParser = null;
+            channel.DisconnectAsync();
+        }
+
+        public void EnableEncryption(byte[] sharedKey)
+        {
+            channel.Channel.Pipeline.AddBefore("gameDecoder", "gameCrypto", new EncryptionDecoder(sharedKey));
         }
     }
 }

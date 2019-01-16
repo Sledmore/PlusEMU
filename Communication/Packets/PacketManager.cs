@@ -133,21 +133,21 @@ namespace Plus.Communication.Packets
         {
             if (session == null)
                 return;
-
+            
             if (!_incomingPackets.TryGetValue(packet.Id, out IPacketEvent pak))
             {
                 if (System.Diagnostics.Debugger.IsAttached)
                     Log.Debug("Unhandled Packet: " + packet);
                 return;
             }
-
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
+            
+//            if (System.Diagnostics.Debugger.IsAttached)
+//            {
                 if (_packetNames.ContainsKey(packet.Id))
                     Log.Debug("Handled Packet: [" + packet.Id + "] " + _packetNames[packet.Id]);
                 else
                     Log.Debug("Handled Packet: [" + packet.Id + "] UnnamedPacketEvent");
-            }
+//            }
 
             if (!_ignoreTasks)
                 ExecutePacketAsync(session, packet, pak);

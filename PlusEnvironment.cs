@@ -22,10 +22,10 @@ using Plus.Database;
 using Plus.HabboHotel.Cache.Type;
 using Plus.HabboHotel.Users.UserData;
 using Plus.Communication.Rcon;
-using Plus.Communication.ConnectionManager;
 using Plus.Core.FigureData;
 using Plus.Core.Language;
 using Plus.Core.Settings;
+using Plus.Network;
 
 namespace Plus
 {
@@ -41,7 +41,6 @@ namespace Plus
 
         private static Game _game;
         private static ConfigurationData _configuration;
-        private static ConnectionHandling _connectionManager;
         private static LanguageManager _languageManager;
         private static SettingsManager _settingsManager;
         private static DatabaseManager _manager;
@@ -151,8 +150,10 @@ namespace Plus
                 _Rcon = new RconSocket(GetConfig().data["rcon.tcp.bindip"], int.Parse(GetConfig().data["rcon.tcp.port"]), GetConfig().data["rcon.tcp.allowedaddr"].Split(Convert.ToChar(";")));
 
                 //Accept connections.
-                _connectionManager = new ConnectionHandling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]), GetConfig().data["game.tcp.enablenagles"].ToLower() == "true");
-                _connectionManager.Init();
+                NetworkBootstrap bootstrap = new NetworkBootstrap(int.Parse(GetConfig().data["game.tcp.port"]));
+                bootstrap.Init();
+//                _connectionManager = new ConnectionHandling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]), GetConfig().data["game.tcp.enablenagles"].ToLower() == "true");
+//                _connectionManager.Init();
 
                 _game = new Game();
                 _game.StartGameLoop();
@@ -354,7 +355,6 @@ namespace Plus
             GetGame().GetClientManager().SendPacket(new BroadcastMessageAlertComposer(GetLanguageManager().TryGetValue("server.shutdown.message")));
             GetGame().StopGameLoop();
             Thread.Sleep(2500);
-            GetConnectionManager().Destroy();//Stop listening.
             GetGame().GetPacketManager().UnregisterAll();//Unregister the packets.
             GetGame().GetPacketManager().WaitForAllToComplete();
             GetGame().GetClientManager().CloseAll();//Close all connections
@@ -382,11 +382,6 @@ namespace Plus
         public static Encoding GetDefaultEncoding()
         {
             return _defaultEncoding;
-        }
-
-        public static ConnectionHandling GetConnectionManager()
-        {
-            return _connectionManager;
         }
 
         public static Game GetGame()

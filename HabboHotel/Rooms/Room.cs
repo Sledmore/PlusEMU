@@ -638,7 +638,7 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public void SendToTent(int Id, int TentId, IServerPacket Packet)
+        public void SendToTent(int Id, int TentId, ServerPacket Packet)
         {
             if (!Tents.ContainsKey(TentId))
                 return;
@@ -654,7 +654,7 @@ namespace Plus.HabboHotel.Rooms
         #endregion
 
         #region Communication (Packets)
-        public void SendPacket(IServerPacket packet, bool withRightsOnly = false)
+        public void SendPacket(ServerPacket packet, bool withRightsOnly = false)
         {
             if (packet == null)
                 return;
@@ -672,7 +672,7 @@ namespace Plus.HabboHotel.Rooms
                     if (user == null || user.IsBot)
                         continue;
 
-                    if (user.GetClient() == null || user.GetClient().GetConnection() == null)
+                    if (user.GetClient() == null)
                         continue;
 
                     if (withRightsOnly && !CheckRights(user.GetClient()))
@@ -694,10 +694,10 @@ namespace Plus.HabboHotel.Rooms
                 if (user == null || user.IsBot)
                     continue;
 
-                if (user.GetClient() == null || user.GetClient().GetConnection() == null)
+                if (user.GetClient() == null)
                     continue;
 
-                user.GetClient().GetConnection().SendData(packet);
+                user.GetClient().SendPacket(packet);
             }
         }
 
@@ -713,7 +713,7 @@ namespace Plus.HabboHotel.Rooms
 
                 foreach (ServerPacket packet in packets.ToList())
                 {
-                    byte[] ToAdd = packet.GetBytes();
+                    byte[] ToAdd = packet.Buffer.Array;
                     int NewLen = TotalBytes.Length + ToAdd.Length;
 
                     Array.Resize(ref TotalBytes, NewLen);

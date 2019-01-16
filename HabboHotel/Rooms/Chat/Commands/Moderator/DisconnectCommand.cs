@@ -40,7 +40,7 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands.Moderator
                 return;
             }
 
-            TargetClient.GetConnection().Dispose();
+            TargetClient.Disconnect();
         }
     }
 }

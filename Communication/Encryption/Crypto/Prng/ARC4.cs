@@ -1,4 +1,6 @@
-﻿namespace Plus.Communication.Encryption.Crypto.Prng
+﻿using DotNetty.Buffers;
+
+namespace Plus.Communication.Encryption.Crypto.Prng
 {
     public class ARC4
     {
@@ -65,6 +67,19 @@
         public void Decrypt(ref byte[] src)
         {
             Encrypt(ref src);
+        }
+        
+        
+
+
+        public IByteBuffer Decipher(IByteBuffer buffer)
+        {
+            IByteBuffer result = Unpooled.Buffer();
+
+            while (buffer.IsReadable())
+                result.WriteByte((byte) (buffer.ReadByte() ^ Next()));
+
+            return result;
         }
     }
 }

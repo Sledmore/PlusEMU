@@ -1,105 +1,32 @@
 ﻿using System;
-
+using System.Text;
+using DotNetty.Buffers;
 using Plus.Utilities;
 
 namespace Plus.Communication.Packets.Incoming
 {
     public class ClientPacket
     {
-        private byte[] _body;
-        private int _pointer;
+        private IByteBuffer buffer;
+        public short Id { get; }
 
-        public ClientPacket(int messageId, byte[] body)
+        public ClientPacket(IByteBuffer buf)
         {
-            Init(messageId, body);
-        }
-
-        public int Id { get; private set; }
-
-        public int RemainingLength
-        {
-            get { return _body.Length - _pointer; }
-        }
-
-        public void Init(int messageId, byte[] body)
-        {
-            if (body == null)
-                body = new byte[0];
-
-            Id = messageId;
-            _body = body;
-
-            _pointer = 0;
-        }
-
-        public override string ToString()
-        {
-            return "[" + Id + "] BODY: " + (PlusEnvironment.GetDefaultEncoding().GetString(_body).Replace(Convert.ToChar(0).ToString(), "[0]"));
-        }
-
-        public void AdvancePointer(int i)
-        {
-            _pointer += i*4;
-        }
-
-        public byte[] ReadBytes(int bytes)
-        {
-            if (bytes > RemainingLength)
-                bytes = RemainingLength;
-
-            var data = new byte[bytes];
-
-            for (int i = 0; i < bytes; i++)
-                data[i] = _body[_pointer++];
-
-            return data;
-        }
-
-        public byte[] PlainReadBytes(int bytes)
-        {
-            if (bytes > RemainingLength)
-                bytes = RemainingLength;
-
-            var data = new byte[bytes];
-
-            for (int x = 0, y = _pointer; x < bytes; x++, y++)
-            {
-                data[x] = _body[y];
-            }
-
-            return data;
-        }
-
-        public byte[] ReadFixedValue()
-        {
-            int len = HabboEncoding.DecodeInt16(ReadBytes(2));
-            return ReadBytes(len);
+            buffer = buf;
+            Id = buffer.ReadShort();
         }
 
         public string PopString()
         {
-            return PlusEnvironment.GetDefaultEncoding().GetString(ReadFixedValue());
+            int length = buffer.ReadShort();
+            IByteBuffer data = buffer.ReadBytes(length);
+            return Encoding.Default.GetString(data.Array);
         }
 
-        public bool PopBoolean()
-        {
-            return RemainingLength > 0 && _body[_pointer++] == Convert.ToChar(1);
-        }
+        public int PopInt() =>
+            buffer.ReadInt();
 
-        public int PopInt()
-        {
-            if (RemainingLength < 1)
-            {
-                return 0;
-            }
-
-            byte[] data = PlainReadBytes(4);
-
-            int i = HabboEncoding.DecodeInt32(data);
-
-            _pointer += 4;
-
-            return i;
-        }
+        public bool PopBoolean() =>
+            buffer.ReadByte() == 1;
     }
 }
