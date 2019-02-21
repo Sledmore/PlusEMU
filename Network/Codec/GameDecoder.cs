@@ -12,6 +12,7 @@ namespace Plus.Network.Codec
     {
         protected override void Decode(IChannelHandlerContext context, IByteBuffer message, List<object> output)
         {
+            message.MarkReaderIndex();
 
             if (message.ReadableBytes < 5) return;
 
