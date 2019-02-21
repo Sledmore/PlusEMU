@@ -6,6 +6,7 @@ namespace Plus.Communication.Packets.Incoming.Misc
     {
         public void Parse(GameClient session, ClientPacket packet)
         {
+            int idkYet = packet.PopInt();
             string gordanPath = packet.PopString();
             string externalVariables = packet.PopString();
         }

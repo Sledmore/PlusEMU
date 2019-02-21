@@ -12,17 +12,25 @@ namespace Plus.Network.Codec
     {
         protected override void Decode(IChannelHandlerContext context, IByteBuffer message, List<object> output)
         {
-            output.Add(message);
 
             if (message.ReadableBytes < 5) return;
 
-            message.ReadInt();
+            int length = message.ReadInt();
+
+            if (message.ReadableBytes < length)
+            {
+                message.ResetReaderIndex();
+                return;
+            }
+
             ClientPacket pkt = new ClientPacket(message);
 
             if (PlusEnvironment.GetGame().GetClientManager().TryGetClient(context.Channel.Id, out GameClient session))
             {
                 PlusEnvironment.GetGame().GetPacketManager().TryExecutePacket(session, pkt);
             }
+
+            output.Add(message);
         }
     }
 }
