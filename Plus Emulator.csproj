@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Plus</RootNamespace>
     <AssemblyName>Plus Emulator</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -1090,7 +1090,6 @@
     <Compile Include="Network\Codec\EncryptionDecoder.cs" />
     <Compile Include="Network\Codec\GameDecoder.cs" />
     <Compile Include="Network\Codec\GameEncoder.cs" />
-    <Compile Include="Network\Codec\PolicyDecoder.cs" />
     <Compile Include="Network\NetworkBootstrap.cs" />
     <Compile Include="Network\NetworkChannelHandler.cs" />
     <Compile Include="PlusEnvironment.cs" />

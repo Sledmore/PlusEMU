@@ -51,11 +51,10 @@ namespace Plus.Communication.Packets.Outgoing
         {
             get
             {
-                if (!Finalized)
-                {
-                    Buffer.SetInt(0, Length);
-                    Finalized = true;
-                }
+                if (Finalized) return Buffer;
+                
+                Buffer.SetInt(0, Length);
+                Finalized = true;
 
                 return Buffer;
             }

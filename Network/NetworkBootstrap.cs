@@ -26,7 +26,6 @@ namespace Plus.Network
                 .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
                 {
                     channel.Pipeline.AddLast("gameEncoder", new GameEncoder());
-                    channel.Pipeline.AddLast("policyDecoder", new PolicyDecoder());
                     channel.Pipeline.AddLast("gameDecoder", new GameDecoder());
                     channel.Pipeline.AddLast("clientHandler", new NetworkChannelHandler());
                 }))

@@ -9,10 +9,7 @@ namespace Plus.Network.Codec
     {
         protected override void Encode(IChannelHandlerContext context, ServerPacket message, List<object> output)
         {
-            if (context.Channel.Active)
-            {
-                output.Add(message.FinalizedBuffer);
-            }
+            output.Add(message.FinalizedBuffer);
         }
     }
 }
