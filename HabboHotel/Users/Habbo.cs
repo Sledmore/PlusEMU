@@ -1035,7 +1035,7 @@ namespace Plus.HabboHotel.Users
                 _permissions.Dispose();
 
             if (_ignores != null)
-                _permissions.Dispose();
+                _ignores.Dispose();
         }
 
         public void CheckCreditsTimer()
