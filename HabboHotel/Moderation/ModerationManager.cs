@@ -3,17 +3,13 @@ using System.Linq;
 using System.Data;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-
-using log4net;
-
 using Plus.Database.Interfaces;
+using Serilog;
 
 namespace Plus.HabboHotel.Moderation
 {
     public sealed class ModerationManager
     {
-        private static ILog log = LogManager.GetLogger("Plus.HabboHotel.Moderation.ModerationManager");
-
         private int _ticketCount = 1;
         private List<string> _userPresets = new List<string>();
         private List<string> _roomPresets = new List<string>();
@@ -178,10 +174,10 @@ namespace Plus.HabboHotel.Moderation
                 }
             }
 
-            log.Info("Loaded " + (_userPresets.Count + _roomPresets.Count) + " moderation presets.");
-            log.Info("Loaded " + _userActionPresetCategories.Count + " moderation categories.");
-            log.Info("Loaded " + _userActionPresetMessages.Count + " moderation action preset messages.");
-            log.Info("Cached " + _bans.Count + " username and machine bans.");
+            Log.Information("Loaded " + (_userPresets.Count + _roomPresets.Count) + " moderation presets.");
+            Log.Information("Loaded " + _userActionPresetCategories.Count + " moderation categories.");
+            Log.Information("Loaded " + _userActionPresetMessages.Count + " moderation action preset messages.");
+            Log.Information("Cached " + _bans.Count + " username and machine bans.");
         }
 
         public void ReCacheBans()
@@ -223,7 +219,7 @@ namespace Plus.HabboHotel.Moderation
                 }
             }
 
-            log.Info("Cached " + _bans.Count + " username and machine bans.");
+            Log.Information("Cached " + _bans.Count + " username and machine bans.");
         }
 
         public void BanUser(string Mod, ModerationBanType Type, string BanValue, string Reason, double ExpireTimestamp)

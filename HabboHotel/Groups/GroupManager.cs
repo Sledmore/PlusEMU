@@ -5,14 +5,11 @@ using Plus.HabboHotel.Users;
 using System.Collections.Concurrent;
 
 using Plus.Database.Interfaces;
-using log4net;
 
 namespace Plus.HabboHotel.Groups
 {
     public class GroupManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Groups.GroupManager");
-
         private readonly object _groupLoadingSync;
         private readonly ConcurrentDictionary<int, Group> _groups;
 

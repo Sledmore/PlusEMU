@@ -2,15 +2,13 @@
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
-using log4net;
 using Plus.Communication.ConnectionManager.Socket_Exceptions;
+using Serilog;
 
 namespace Plus.Communication.ConnectionManager
 {
     public class SocketManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.ConnectionManager");
-
         #region declares
 
         /// <summary>
@@ -86,8 +84,8 @@ namespace Plus.Communication.ConnectionManager
             _maxIpConnectionCount = connectionsPerIp;
             PrepareConnectionDetails();
             _acceptedConnections = 0;
-            Log.Info("Successfully setup GameSocketManager on port (" + portId + ")!");
-            Log.Info("Maximum connections per IP has been set to [" + connectionsPerIp + "]!");
+            Log.Information("Successfully setup GameSocketManager on port (" + portId + ")!");
+            Log.Information("Maximum connections per IP has been set to [" + connectionsPerIp + "]!");
         }
 
         /// <summary>
@@ -180,7 +178,7 @@ namespace Plus.Communication.ConnectionManager
                         }
                         else
                         {
-                            Log.Info("Connection denied from [" + replyFromComputer.RemoteEndPoint.ToString().Split(':')[0] + "]. Too many connections (" + connectionCount + ").");
+                            Log.Information("Connection denied from [" + replyFromComputer.RemoteEndPoint.ToString().Split(':')[0] + "]. Too many connections (" + connectionCount + ").");
                         }
                     }
                     catch

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using Plus.Core;
-using log4net.Config;
+using Serilog;
 
 namespace Plus
 {
@@ -25,9 +25,13 @@ namespace Plus
 
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
 
-        public static void Main(string[] Args)
+        public static void Main()
         {
-            XmlConfigurator.Configure();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("logs\\log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.CursorVisible = false;
@@ -55,7 +59,7 @@ namespace Plus
 
         private static void MyHandler(object sender, UnhandledExceptionEventArgs args)
         {
-            var e = (Exception) args.ExceptionObject;
+            _ = (Exception)args.ExceptionObject;
             //Logger.LogCriticalException("SYSTEM CRITICAL EXCEPTION: " + e);
             PlusEnvironment.PerformShutDown();
         }

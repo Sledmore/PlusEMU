@@ -3,14 +3,12 @@ using System.Data;
 using System.Collections.Generic;
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.LandingView.Promotions;
-using log4net;
+using Serilog;
 
 namespace Plus.HabboHotel.LandingView
 {
     public class LandingViewManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.LandingView.LandingViewManager");
-
         private Dictionary<int, Promotion> _promotionItems;
 
         public LandingViewManager()
@@ -38,7 +36,7 @@ namespace Plus.HabboHotel.LandingView
             }
 
 
-            log.Info("Landing View Manager -> LOADED");
+            Log.Information("Landing View Manager -> LOADED");
         }
 
         public ICollection<Promotion> GetPromotionItems()

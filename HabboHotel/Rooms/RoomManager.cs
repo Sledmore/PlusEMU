@@ -8,14 +8,12 @@ using Plus.Core;
 using Plus.HabboHotel.GameClients;
 using System.Collections.Concurrent;
 using Plus.Database.Interfaces;
-using log4net;
+using Serilog;
 
 namespace Plus.HabboHotel.Rooms
 {
     public class RoomManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Rooms.RoomManager");
-
         private readonly object _roomLoadingSync;
 
         private Dictionary<string, RoomModel> _roomModels;
@@ -323,10 +321,10 @@ namespace Plus.HabboHotel.Rooms
 
                 PlusEnvironment.GetGame().GetRoomManager().UnloadRoom(room.Id);
                 Console.Clear();
-                log.Info("<<- SERVER SHUTDOWN ->> ROOM ITEM SAVE: " + String.Format("{0:0.##}", ((double)i / length) * 100) + "%");
+                Log.Information("<<- SERVER SHUTDOWN ->> ROOM ITEM SAVE: " + String.Format("{0:0.##}", ((double)i / length) * 100) + "%");
                 i++;
             }
-            log.Info("Done disposing rooms!");
+            Log.Information("Done disposing rooms!");
         }
     }
 }

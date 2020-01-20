@@ -1,5 +1,5 @@
-﻿using log4net;
-using Plus.Database.Interfaces;
+﻿using Plus.Database.Interfaces;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,8 +8,6 @@ namespace Plus.HabboHotel.Rooms.Chat.Styles
 {
     public sealed class ChatStyleManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Rooms.Chat.Styles.ChatStyleManager");
-
         private readonly Dictionary<int, ChatStyle> _styles;
 
         public ChatStyleManager()
@@ -39,13 +37,13 @@ namespace Plus.HabboHotel.Rooms.Chat.Styles
                         }
                         catch (Exception ex)
                         {
-                            log.Error("Unable to load ChatBubble for ID [" + Convert.ToInt32(Row["id"]) + "]", ex);
+                            Log.Error("Unable to load ChatBubble for ID [" + Convert.ToInt32(Row["id"]) + "]", ex);
                         }
                     }
                 }
             }
 
-            log.Info("Loaded " + _styles.Count + " chat styles.");
+            Log.Information("Loaded " + _styles.Count + " chat styles.");
         }
 
         public bool TryGetStyle(int Id, out ChatStyle Style)

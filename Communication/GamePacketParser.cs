@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using log4net;
 using Plus.Communication.Packets.Incoming;
 using Plus.Communication.ConnectionManager;
 using Plus.HabboHotel.GameClients;
@@ -10,8 +9,6 @@ namespace Plus.Communication
 {
     public class GamePacketParser : IDataParser
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.GamePacketParser");
-
         public delegate void HandlePacket(ClientPacket message);
 
         private readonly GameClient _client;

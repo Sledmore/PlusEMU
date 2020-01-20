@@ -11,7 +11,6 @@ using Plus.HabboHotel;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Users;
 using Plus.Utilities;
-using log4net;
 using System.Collections.Concurrent;
 using Plus.Communication.Packets.Outgoing.Moderation;
 using Plus.Communication.Encryption.Keys;
@@ -26,13 +25,13 @@ using Plus.Communication.ConnectionManager;
 using Plus.Core.FigureData;
 using Plus.Core.Language;
 using Plus.Core.Settings;
+using Serilog;
+using System.Reflection;
 
 namespace Plus
 {
     public static class PlusEnvironment
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.PlusEnvironment");
-
         public const string PrettyVersion = "Plus Emulator";
         public const string PrettyBuild = "3.4.3.0";
 
@@ -60,7 +59,7 @@ namespace Plus
                 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '.'
             });
 
-        private static ConcurrentDictionary<int, Habbo> _usersCached = new ConcurrentDictionary<int, Habbo>();
+        private static readonly ConcurrentDictionary<int, Habbo> _usersCached = new ConcurrentDictionary<int, Habbo>();
 
         public static string SWFRevision = "";
 
@@ -91,9 +90,9 @@ namespace Plus
 
             try
             {
-                string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+                string projectSolutionPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-                _configuration = new ConfigurationData(projectSolutionPath + "//Config//config.ini");
+                _configuration = new ConfigurationData(projectSolutionPath + "\\Config\\config.ini");
 
                 var connectionString = new MySqlConnectionStringBuilder
                 {
@@ -117,13 +116,13 @@ namespace Plus
 
                 if (!_manager.IsConnected())
                 {
-                    log.Error("Failed to Connect to the specified MySQL server.");
+                    Log.Error("Failed to Connect to the specified MySQL server.");
                     Console.ReadKey(true);
                     Environment.Exit(1);
                     return;
                 }
 
-                log.Info("Connected to Database!");
+                Log.Information("Connected to Database!");
 
                 //Reset our statistics first.
                 using (IQueryAdapter dbClient = GetDatabaseManager().GetQueryReactor())
@@ -161,14 +160,14 @@ namespace Plus
 
                 Console.WriteLine();
 
-                log.Info("EMULATOR -> READY! (" + TimeUsed.Seconds + " s, " + TimeUsed.Milliseconds + " ms)");
+                Log.Information("EMULATOR -> READY! (" + TimeUsed.Seconds + " s, " + TimeUsed.Milliseconds + " ms)");
             }
 #pragma warning disable CS0168 // The variable 'e' is declared but never used
             catch (KeyNotFoundException e)
 #pragma warning restore CS0168 // The variable 'e' is declared but never used
             { 
-                log.Error("Please check your configuration file - some values appear to be missing.");
-                log.Error("Press any key to shut down ...");
+                Log.Error("Please check your configuration file - some values appear to be missing.");
+                Log.Error("Press any key to shut down ...");
          
                 Console.ReadKey(true);
                 Environment.Exit(1);
@@ -176,16 +175,16 @@ namespace Plus
             }
             catch (InvalidOperationException e)
             {
-                log.Error("Failed to initialize PlusEmulator: " + e.Message);
-                log.Error("Press any key to shut down ...");
+                Log.Error("Failed to initialize PlusEmulator: " + e.Message);
+                Log.Error("Press any key to shut down ...");
                 Console.ReadKey(true);
                 Environment.Exit(1);
                 return;
             }
             catch (Exception e)
             {
-                log.Error("Fatal error during startup: " + e);
-                log.Error("Press a key to exit");
+                Log.Error("Fatal error during startup: " + e);
+                Log.Error("Press a key to exit");
 
                 Console.ReadKey();
                 Environment.Exit(1);
@@ -348,7 +347,7 @@ namespace Plus
         public static void PerformShutDown()
         {
             Console.Clear();
-            log.Info("Server shutting down...");
+            Log.Information("Server shutting down...");
             Console.Title = "PLUS EMULATOR: SHUTTING DOWN!";
 
             GetGame().GetClientManager().SendPacket(new BroadcastMessageAlertComposer(GetLanguageManager().TryGetValue("server.shutdown.message")));
@@ -368,7 +367,7 @@ namespace Plus
                 dbClient.RunQuery("UPDATE `server_status` SET `users_online` = '0', `loaded_rooms` = '0'");
             }
 
-            log.Info("Plus Emulator has successfully shutdown.");
+            Log.Information("Plus Emulator has successfully shutdown.");
 
             Thread.Sleep(1000);
             Environment.Exit(0);

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-
-using log4net;
 using Plus.Database.Interfaces;
+using Serilog;
 
 namespace Plus.HabboHotel.Talents
 {
     public class TalentTrackManager
     {
-        private static ILog log = LogManager.GetLogger("Plus.HabboHotel.Talents.TalentManager");
-
         private readonly Dictionary<int, TalentTrackLevel> _citizenshipLevels;
 
         public TalentTrackManager()
@@ -35,7 +32,7 @@ namespace Plus.HabboHotel.Talents
                 }
             }
 
-            log.Info("Loaded " + _citizenshipLevels.Count + " talent track levels");
+            Log.Information("Loaded " + _citizenshipLevels.Count + " talent track levels");
         }
 
         public ICollection<TalentTrackLevel> GetLevels()

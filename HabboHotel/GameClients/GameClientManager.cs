@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Plus.Core;
 using Plus.HabboHotel.Users.Messenger;
-
 using System.Linq;
 using System.Collections.Concurrent;
 using Plus.Communication.Packets.Outgoing;
-
-using log4net;
 using System.Data;
 using Plus.Communication.Packets.Outgoing.Notifications;
 using Plus.Database.Interfaces;
@@ -16,13 +13,12 @@ using System.Collections;
 using Plus.Communication.Packets.Outgoing.Handshake;
 using System.Diagnostics;
 using Plus.Communication.ConnectionManager;
+using Serilog;
 
 namespace Plus.HabboHotel.GameClients
 {
     public class GameClientManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.GameClients.GameClientManager");
-
         private readonly ConcurrentDictionary<int, GameClient> _clients;
         private readonly ConcurrentDictionary<int, GameClient> _userIdRegister;
         private readonly ConcurrentDictionary<string, GameClient> _usernameRegister;
@@ -248,7 +244,7 @@ namespace Plus.HabboHotel.GameClients
                             dbClient.RunQuery(client.GetHabbo().GetQueryString);
                         }
                         Console.Clear();
-                        Log.Info("<<- SERVER SHUTDOWN ->> IVNENTORY IS SAVING");
+                        Log.Information("<<- SERVER SHUTDOWN ->> IVNENTORY IS SAVING");
                     }
                     catch
                     {
@@ -256,8 +252,8 @@ namespace Plus.HabboHotel.GameClients
                 }
             }
 
-            Log.Info("Done saving users inventory!");
-            Log.Info("Closing server connections...");
+            Log.Information("Done saving users inventory!");
+            Log.Information("Closing server connections...");
             try
             {
                 foreach (GameClient client in GetClients.ToList())
@@ -272,7 +268,7 @@ namespace Plus.HabboHotel.GameClients
                     catch { }
 
                     Console.Clear();
-                    Log.Info("<<- SERVER SHUTDOWN ->> CLOSING CONNECTIONS");
+                    Log.Information("<<- SERVER SHUTDOWN ->> CLOSING CONNECTIONS");
 
                 }
             }
@@ -284,7 +280,7 @@ namespace Plus.HabboHotel.GameClients
             if (_clients.Count > 0)
                 _clients.Clear();
 
-            Log.Info("Connections closed!");
+            Log.Information("Connections closed!");
         }
 
         private void TestClientConnections()

@@ -1,21 +1,17 @@
 ﻿using System.Collections.Generic;
-
 using Plus.HabboHotel.Rooms.AI;
 using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Outgoing.Inventory.Pets;
-
 using Plus.HabboHotel.Rooms.AI.Speech;
-using log4net;
 using Plus.Communication.Packets.Outgoing.Rooms.Notifications;
 using System;
 using Plus.HabboHotel.GameClients;
+using Serilog;
 
 namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
 {
     class PlacePetEvent : IPacketEvent
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.Packets.Incoming.Rooms.AI.Pets.PlacePetEvent");
-
         public void Parse(GameClient session, ClientPacket packet)
         {
             if (!session.GetHabbo().InRoom)

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using log4net;
 using Plus.Database.Interfaces;
 using System.Data;
 using Plus.HabboHotel.Users;
+using Serilog;
 
 namespace Plus.HabboHotel.Permissions
 {
     public sealed class PermissionManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Permissions.PermissionManager");
-
         private readonly Dictionary<int, Permission> Permissions = new Dictionary<int, Permission>();
 
         private readonly Dictionary<string, PermissionCommand> _commands = new Dictionary<string, PermissionCommand>();
@@ -151,10 +149,10 @@ namespace Plus.HabboHotel.Permissions
                 }
             }
 
-            log.Info("Loaded " + Permissions.Count + " permissions.");
-            log.Info("Loaded " + PermissionGroups.Count + " permissions groups.");
-            log.Info("Loaded " + PermissionGroupRights.Count + " permissions group rights.");
-            log.Info("Loaded " + PermissionSubscriptionRights.Count + " permissions subscription rights.");
+            Log.Information("Loaded " + Permissions.Count + " permissions.");
+            Log.Information("Loaded " + PermissionGroups.Count + " permissions groups.");
+            Log.Information("Loaded " + PermissionGroupRights.Count + " permissions group rights.");
+            Log.Information("Loaded " + PermissionSubscriptionRights.Count + " permissions subscription rights.");
         }
 
         public bool TryGetGroup(int Id, out PermissionGroup Group)

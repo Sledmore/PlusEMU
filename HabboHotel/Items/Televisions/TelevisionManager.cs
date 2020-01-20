@@ -2,15 +2,12 @@
 using System.Data;
 using System.Collections.Generic;
 using Plus.Database.Interfaces;
-
-using log4net;
+using Serilog;
 
 namespace Plus.HabboHotel.Items.Televisions
 {
     public class TelevisionManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Items.Televisions.TelevisionManager");
-
         public Dictionary<int, TelevisionItem> _televisions;
 
         public TelevisionManager()
@@ -39,7 +36,7 @@ namespace Plus.HabboHotel.Items.Televisions
             }
 
 
-            log.Info("Television Items -> LOADED");
+            Log.Information("Television Items -> LOADED");
         }
 
 

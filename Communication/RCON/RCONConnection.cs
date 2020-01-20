@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Net.Sockets;
-using log4net;
+using Serilog;
 
 namespace Plus.Communication.Rcon
 {
@@ -9,8 +9,6 @@ namespace Plus.Communication.Rcon
     {
         private Socket _socket;
         private byte[] _buffer = new byte[1024];
-
-        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.Rcon.RconConnection");
 
         public RconConnection(Socket socket)
         {

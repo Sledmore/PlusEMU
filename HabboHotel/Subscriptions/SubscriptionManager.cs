@@ -1,5 +1,5 @@
-﻿using log4net;
-using Plus.Database.Interfaces;
+﻿using Plus.Database.Interfaces;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,8 +8,6 @@ namespace Plus.HabboHotel.Subscriptions
 {
     public class SubscriptionManager
     {
-        private static ILog log = LogManager.GetLogger("Plus.HabboHotel.Subscriptions.SubscriptionManager");
-
         private readonly Dictionary<int, SubscriptionData> _subscriptions = new Dictionary<int, SubscriptionData>();
 
         public SubscriptionManager()
@@ -36,7 +34,7 @@ namespace Plus.HabboHotel.Subscriptions
                 }
             }
 
-            log.Info("Loaded " + _subscriptions.Count + " subscriptions.");
+            Log.Information("Loaded " + _subscriptions.Count + " subscriptions.");
         }
 
         public bool TryGetSubscriptionData(int Id, out SubscriptionData Data)

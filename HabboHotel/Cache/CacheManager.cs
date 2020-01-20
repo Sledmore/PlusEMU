@@ -1,17 +1,16 @@
-﻿using log4net;
-using Plus.Database.Interfaces;
+﻿using Plus.Database.Interfaces;
 using Plus.HabboHotel.Cache.Process;
 using Plus.HabboHotel.GameClients;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using Plus.HabboHotel.Cache.Type;
+using Serilog;
 
 namespace Plus.HabboHotel.Cache
 {
     public class CacheManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Cache.CacheManager");
         private readonly ConcurrentDictionary<int, UserCache> _usersCached;
         private readonly ProcessComponent _process;
 
@@ -20,7 +19,7 @@ namespace Plus.HabboHotel.Cache
             _usersCached = new ConcurrentDictionary<int, UserCache>();
             _process = new ProcessComponent();
             _process.Init();
-            Log.Info("Cache Manager -> LOADED");
+            Log.Information("Cache Manager -> LOADED");
         }
         public bool ContainsUser(int id)
         {

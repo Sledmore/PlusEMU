@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-
-using log4net;
-
 using Plus.HabboHotel.Items;
 using Plus.HabboHotel.Catalog.Pets;
 using Plus.HabboHotel.Catalog.Vouchers;
@@ -11,13 +8,12 @@ using Plus.HabboHotel.Catalog.Marketplace;
 using Plus.HabboHotel.Catalog.Clothing;
 
 using Plus.Database.Interfaces;
+using Serilog;
 
 namespace Plus.HabboHotel.Catalog
 {
     public class CatalogManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Catalog.CatalogManager");
-
         private MarketplaceManager _marketplace;
         private PetRaceManager _petRaceManager;
         private VoucherManager _voucherManager;
@@ -81,7 +77,7 @@ namespace Plus.HabboHotel.Catalog
                         
                         if (!ItemDataManager.GetItem(BaseId, out ItemData Data))
                         {
-                            log.Error("Couldn't load Catalog Item " + ItemId + ", no furniture record found.");
+                            Log.Error("Couldn't load Catalog Item " + ItemId + ", no furniture record found.");
                             continue;
                         }
 
@@ -159,7 +155,7 @@ namespace Plus.HabboHotel.Catalog
                 _clothingManager.Init();
             }
 
-            log.Info("Catalog Manager -> LOADED");
+            Log.Information("Catalog Manager -> LOADED");
         }
 
         public bool TryGetBot(int ItemId, out CatalogBot Bot)

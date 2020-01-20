@@ -1,16 +1,13 @@
 ﻿using System.Data;
 using System.Collections.Generic;
-
-using log4net;
 using Plus.Database.Interfaces;
+using Serilog;
 
 namespace Plus.Core.Settings
 {
     public class SettingsManager
     {
         private readonly Dictionary<string, string> _settings;
-
-        private static readonly ILog Log = LogManager.GetLogger("Plus.Core.Settings.SettingsManager");
 
         public SettingsManager()
         {
@@ -36,7 +33,7 @@ namespace Plus.Core.Settings
                 }
             }
 
-            Log.Info("Loaded " + _settings.Count + " server settings.");
+            Log.Information("Loaded " + _settings.Count + " server settings.");
         }
 
         public string TryGetValue(string value)

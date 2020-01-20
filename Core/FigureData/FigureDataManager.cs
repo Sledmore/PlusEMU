@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-
-using log4net;
 using Plus.Core.FigureData.Types;
 using System.Xml;
 using Plus.HabboHotel.Catalog.Clothing;
 using Plus.HabboHotel.Users.Clothing.Parts;
 using System.IO;
+using Serilog;
+using System.Reflection;
 
 namespace Plus.Core.FigureData
 {
     public class FigureDataManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.Core.FigureData");
-
         private readonly List<string> _requirements;
         private readonly Dictionary<int, Palette> _palettes; //pallet id, Pallet
         private readonly Dictionary<string, FigureSet> _setTypes; //type (hr, ch, etc), Set
@@ -41,10 +39,10 @@ namespace Plus.Core.FigureData
                 _setTypes.Clear();
 
 
-            string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+            string projectSolutionPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(projectSolutionPath + "//Config//figuredata.xml");
+            xDoc.Load(projectSolutionPath + "\\Config\\figuredata.xml");
 
             XmlNodeList colors = xDoc.GetElementsByTagName("colors");
             foreach (XmlNode node in colors)
@@ -86,8 +84,8 @@ namespace Plus.Core.FigureData
             //Faceless.
             _setTypes["hd"].Sets.Add(99999, new Set(99999, "U", 0, true, false, false));
 
-            Log.Info("Loaded " + _palettes.Count + " Color Palettes");
-            Log.Info("Loaded " + _setTypes.Count + " Set Types");
+            Log.Information("Loaded " + _palettes.Count + " Color Palettes");
+            Log.Information("Loaded " + _setTypes.Count + " Set Types");
         }
 
         public string ProcessFigure(string figure, string gender, ICollection<ClothingParts> clothingParts, bool hasHabboClub)

@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
-
-using log4net;
 using Plus.Database.Interfaces;
 using Plus.HabboHotel.Rooms.AI.Responses;
 using Plus.HabboHotel.Rooms.AI;
@@ -12,8 +10,6 @@ namespace Plus.HabboHotel.Bots
 {
     public class BotManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Bots.BotManager");
-
         private readonly List<BotResponse> _responses;
 
         public BotManager()

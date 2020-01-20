@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-
-using log4net;
 using Plus.Database.Interfaces;
+using Serilog;
 
 namespace Plus.HabboHotel.Badges
 {
     public class BadgeManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.HabboHotel.Badges.BadgeManager");
 
         private readonly Dictionary<string, BadgeDefinition> _badges;
 
@@ -34,7 +32,7 @@ namespace Plus.HabboHotel.Badges
                 }
             }
 
-            Log.Info("Loaded " + _badges.Count + " badge definitions.");
+            Log.Information("Loaded " + _badges.Count + " badge definitions.");
         }
    
         public bool TryGetBadge(string code, out BadgeDefinition badge)

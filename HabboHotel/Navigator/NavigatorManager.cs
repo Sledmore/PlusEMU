@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Plus.Database.Interfaces;
-
-using log4net;
+using Serilog;
 
 namespace Plus.HabboHotel.Navigator
 {
     public sealed class NavigatorManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Navigator.NavigatorManager");
-        
         private readonly Dictionary<int, FeaturedRoom> _featuredRooms;
 
         private readonly Dictionary<int, TopLevelItem> _topLevelItems;
@@ -73,7 +70,7 @@ namespace Plus.HabboHotel.Navigator
                 }
             }
 
-            log.Info("Navigator -> LOADED");
+            Log.Information("Navigator -> LOADED");
         }
 
         public List<SearchResultList> GetCategorysForSearch(string Category)

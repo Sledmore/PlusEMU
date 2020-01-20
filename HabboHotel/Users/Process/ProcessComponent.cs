@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Threading;
-using log4net;
 using Plus.Communication.Packets.Outgoing.Handshake;
 using Plus.Database.Interfaces;
+using Serilog;
 
 namespace Plus.HabboHotel.Users.Process
 {
     sealed class ProcessComponent
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Users.Process.ProcessComponent");
-
         /// <summary>
         /// Player to update, handle, change etc.
         /// </summary>
@@ -84,7 +82,7 @@ namespace Plus.HabboHotel.Users.Process
                 if (_timerRunning)
                 {
                     _timerLagging = true;
-                    log.Warn("<Player " + _player.Id + "> Server can't keep up, Player timer is lagging behind.");
+                    Log.Warning("<Player " + _player.Id + "> Server can't keep up, Player timer is lagging behind.");
                     return;
                 }
 

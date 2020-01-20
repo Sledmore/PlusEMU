@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-using log4net;
-
 using Plus.Communication.Packets.Incoming;
 using Plus.HabboHotel.GameClients;
 
@@ -52,13 +50,12 @@ using Plus.Communication.Packets.Incoming.GameCenter;
 using Plus.Communication.Packets.Incoming.Marketplace;
 using Plus.Communication.Packets.Incoming.Rooms.Furni.LoveLocks;
 using Plus.Communication.Packets.Incoming.Talents;
+using Serilog;
 
 namespace Plus.Communication.Packets
 {
     public sealed class PacketManager
     {
-        private static readonly ILog Log = LogManager.GetLogger("Plus.Communication.Packets");
-
         /// <summary>
         ///     Testing the Task code
         /// </summary>

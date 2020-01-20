@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-
-using log4net;
 using Plus.Database.Interfaces;
-
+using Serilog;
 
 namespace Plus.HabboHotel.Items
 {
     public class ItemDataManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Items.ItemDataManager");
-
         public Dictionary<int, ItemData> _items;
         public Dictionary<int, ItemData> _gifts;//<SpriteId, Item>
 
@@ -78,7 +74,7 @@ namespace Plus.HabboHotel.Items
                 }
             }
 
-            log.Info("Item Manager -> LOADED");
+            Log.Information("Item Manager -> LOADED");
         }
 
         public bool GetItem(int Id, out ItemData Item)

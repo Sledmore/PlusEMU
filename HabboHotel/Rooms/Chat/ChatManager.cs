@@ -4,15 +4,13 @@ using Plus.HabboHotel.Rooms.Chat.Emotions;
 using Plus.HabboHotel.Rooms.Chat.Commands;
 using Plus.HabboHotel.Rooms.Chat.Pets.Commands;
 using Plus.HabboHotel.Rooms.Chat.Pets.Locale;
-using log4net;
 using Plus.HabboHotel.Rooms.Chat.Styles;
+using Serilog;
 
 namespace Plus.HabboHotel.Rooms.Chat
 {
     public sealed class ChatManager
     {
-        private static readonly ILog log = LogManager.GetLogger("Plus.HabboHotel.Rooms.Chat.ChatManager");
-
         /// <summary>
         /// Chat Emoticons.
         /// </summary>
@@ -66,7 +64,7 @@ namespace Plus.HabboHotel.Rooms.Chat
             _chatStyles = new ChatStyleManager();
             _chatStyles.Init();
 
-            log.Info("Chat Manager -> LOADED");
+            Log.Information("Chat Manager -> LOADED");
         }
 
         public ChatEmotionsManager GetEmotions()
