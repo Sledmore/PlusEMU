@@ -21,6 +21,9 @@ namespace Plus.HabboHotel.Navigator
             switch (result.CategoryType)
             {
                 default:
+                case NavigatorCategoryType.MyFavourites:
+                case NavigatorCategoryType.MyHistory:
+                case NavigatorCategoryType.Featured:
                     packet.WriteInteger(0);
                     break;
 
@@ -139,11 +142,6 @@ namespace Plus.HabboHotel.Navigator
                         }
                         #endregion
 
-                        break;
-                    }
-
-                case NavigatorCategoryType.Featured:
-                    {
                         break;
                     }
 
@@ -313,12 +311,6 @@ namespace Plus.HabboHotel.Navigator
 
                         GetPopularPromotions = null;
 
-                        break;
-                    }
-
-                case NavigatorCategoryType.MyHistory:
-                    {
-                       
                         break;
                     }
 
