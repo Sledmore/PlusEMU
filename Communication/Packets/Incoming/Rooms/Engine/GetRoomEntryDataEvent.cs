@@ -18,15 +18,6 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Engine
             if (room == null)
                 return;
 
-            if (session.GetHabbo().InRoom)
-            {
-                if (!PlusEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetHabbo().CurrentRoomId, out Room oldRoom))
-                    return;
-
-                if (oldRoom.GetRoomUserManager() != null)
-                    oldRoom.GetRoomUserManager().RemoveUserFromRoom(session, false);
-            }
-
             if (!room.GetRoomUserManager().AddAvatarToRoom(session))
             {
                 room.GetRoomUserManager().RemoveUserFromRoom(session, false);
