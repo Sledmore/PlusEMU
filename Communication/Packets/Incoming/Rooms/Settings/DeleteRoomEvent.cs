@@ -70,11 +70,8 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("DELETE FROM `user_roomvisits` WHERE `room_id` = '" + roomId + "'");
-                dbClient.RunQuery("DELETE FROM `rooms` WHERE `id` = '" + roomId + "' LIMIT 1");
-                dbClient.RunQuery("DELETE FROM `user_favorites` WHERE `room_id` = '" + roomId + "'");
+                dbClient.RunQuery("DELETE rooms,user_roomvisits,user_favorites,room_rights,room_bans,room_filter,room_visits,room_promotions FROM rooms LEFT JOIN user_roomvisits ON (rooms.id = user_roomvisits.room_id) LEFT JOIN user_favorites ON (rooms.id = user_favorites.room_id) LEFT JOIN room_rights ON (rooms.id = room_rights.room_id) LEFT JOIN room_bans ON (rooms.id = room_bans.room_id) LEFT JOIN room_filter ON (rooms.id = room_filter.room_id) LEFT JOIN room_visits ON (rooms.id = room_visits.room_id) LEFT JOIN room_promotions ON (rooms.id = room_promotions.room_id) WHERE rooms.id = " + room.Id);
                 dbClient.RunQuery("DELETE FROM `items` WHERE `room_id` = '" + roomId + "'");
-                dbClient.RunQuery("DELETE FROM `room_rights` WHERE `room_id` = '" + roomId + "'");
                 dbClient.RunQuery("UPDATE `users` SET `home_room` = '0' WHERE `home_room` = '" + roomId + "'");
             }
 

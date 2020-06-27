@@ -177,22 +177,18 @@ namespace Plus.HabboHotel.Groups
             List<Group> groups = new List<Group>();
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT g.id FROM `group_memberships` AS m RIGHT JOIN `groups` AS g ON m.group_id = g.id WHERE m.user_id = @user");
+                dbClient.SetQuery("SELECT g.id FROM `group_memberships` AS m RIGHT JOIN `groups` AS g ON m.group_id = g.id WHERE m.user_id = @user ORDER BY g.id DESC");
                 dbClient.AddParameter("user", userId);
                 DataTable getGroups = dbClient.GetTable();
 
                 if (getGroups != null)
-                {
                     foreach (DataRow row in getGroups.Rows)
-                    {
                         if (TryGetGroup(Convert.ToInt32(row["id"]), out Group group))
                             groups.Add(group);
-                    }
-                }
-            }
-            return groups;
-        }
 
+                return groups;
+            }
+        }
 
         public ICollection<GroupBadgeParts> BadgeBases
         {

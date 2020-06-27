@@ -102,7 +102,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Chat
                 }
             }
  
-            List<RoomUser> toNotify = room.GetRoomUserManager().GetRoomUserByRank(2);
+            List<RoomUser> toNotify = room.GetRoomUserManager().GetRoomUserByRank(3);
             if (toNotify.Count > 0)
             {
                 foreach (RoomUser notifiable in toNotify)

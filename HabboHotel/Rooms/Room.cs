@@ -654,6 +654,24 @@ namespace Plus.HabboHotel.Rooms
         #endregion
 
         #region Communication (Packets)
+        public void SendWhisper(string Message, int Colour = 0)
+        {
+            try
+            {
+                foreach (RoomUser User in GetRoomUserManager().GetRoomUsers().ToList())
+                {
+                    if (User == null || User.IsBot || User.IsPet)
+                        continue;
+
+                    User.GetClient().SendWhisper(Message, Colour);
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionLogger.LogException(e);
+            }
+        }
+
         public void SendPacket(IServerPacket packet, bool withRightsOnly = false)
         {
             if (packet == null)
