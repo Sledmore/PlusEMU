@@ -1,4 +1,5 @@
 using DotNetty.Buffers;
+using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
@@ -25,6 +26,8 @@ namespace Plus.Network
                 .Channel<TcpServerSocketChannel>()
                 .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
                 {
+                    channel.Pipeline.AddLast("xmlDecoder", new GamePolicyDecoder());
+                    channel.Pipeline.AddLast("frameDecoder", new LengthFieldBasedFrameDecoder(500000, 0, 4, 0, 4));
                     channel.Pipeline.AddLast("gameEncoder", new GameEncoder());
                     channel.Pipeline.AddLast("gameDecoder", new GameDecoder());
                     channel.Pipeline.AddLast("clientHandler", new NetworkChannelHandler());

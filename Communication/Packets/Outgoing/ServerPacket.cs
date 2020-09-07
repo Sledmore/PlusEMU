@@ -19,6 +19,7 @@ namespace Plus.Communication.Packets.Outgoing
             Id = id;
             Buffer.WriteInt(0);
             Buffer.WriteShort(id);
+            Finalized = false;
         }
 
         public void WriteByte(byte b) =>

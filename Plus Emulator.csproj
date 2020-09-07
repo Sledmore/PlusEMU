@@ -1090,6 +1090,7 @@
     <Compile Include="Network\Codec\EncryptionDecoder.cs" />
     <Compile Include="Network\Codec\GameDecoder.cs" />
     <Compile Include="Network\Codec\GameEncoder.cs" />
+    <Compile Include="Network\Codec\GamePolicyDecoder.cs" />
     <Compile Include="Network\NetworkBootstrap.cs" />
     <Compile Include="Network\NetworkChannelHandler.cs" />
     <Compile Include="PlusEnvironment.cs" />

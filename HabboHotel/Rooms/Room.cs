@@ -97,6 +97,7 @@ namespace Plus.HabboHotel.Rooms
             _wiredComponent = new WiredComponent(this);
             _bansComponent = new BansComponent(this);
             _tradingComponent = new TradingComponent(this);
+            ActiveTrades = new ArrayList();
 
             GetRoomItemHandler().LoadFurniture();
             GetGameMap().GenerateMaps();
