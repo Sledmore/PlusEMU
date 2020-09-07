@@ -238,7 +238,7 @@ namespace Plus.HabboHotel.GameClients
 
         public void EnableEncryption(byte[] sharedKey)
         {
-            channel.Channel.Pipeline.AddBefore("gameDecoder", "gameCrypto", new EncryptionDecoder(sharedKey));
+            channel.Channel.Pipeline.AddFirst("gameCrypto", new EncryptionDecoder(sharedKey));
         }
     }
 }
