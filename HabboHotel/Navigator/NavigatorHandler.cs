@@ -21,7 +21,6 @@ namespace Plus.HabboHotel.Navigator
             switch (result.CategoryType)
             {
                 default:
-                case NavigatorCategoryType.MyFavourites:
                 case NavigatorCategoryType.MyHistory:
                 case NavigatorCategoryType.Featured:
                     packet.WriteInteger(0);
@@ -202,6 +201,27 @@ namespace Plus.HabboHotel.Navigator
 
                 case NavigatorCategoryType.MyFavourites:
                     {
+                        List<RoomData> Favourites = new List<RoomData>();
+
+                       
+                        foreach (int Id in session.GetHabbo().FavoriteRooms.ToArray())
+                        {
+                            RoomData Data = null;
+                            if (!RoomFactory.TryGetData(Id, out Data))
+                                continue;
+
+                            if (!Favourites.Contains(Data))
+                                Favourites.Add(Data);
+                        }
+                         
+
+                        packet.WriteInteger(Favourites.Count);
+                        foreach (RoomData Data in Favourites.ToList())
+                        {
+                            RoomAppender.WriteRoom(packet, Data, Data.Promotion);
+                        }
+
+                        Favourites = null;
                         break;
                     }
 
