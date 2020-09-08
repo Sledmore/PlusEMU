@@ -750,9 +750,10 @@ namespace Plus.HabboHotel.Rooms
                         ProcessTask.Dispose();
                 }
                 catch { }
-
-                if (ActiveTrades.Count > 0)
-                    ActiveTrades.Clear();
+                
+                if (ActiveTrades != null)
+                    if (ActiveTrades.Count > 0)
+                        ActiveTrades.Clear();
 
                 TonerData = null;
                 MoodlightData = null;
