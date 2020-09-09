@@ -24,6 +24,7 @@ using Plus.Communication.Packets.Outgoing.Notifications;
 using Plus.HabboHotel.Users.UserData;
 using Plus.Network.Codec;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Plus.HabboHotel.GameClients
 {
@@ -189,11 +190,11 @@ namespace Plus.HabboHotel.GameClients
             channel.WriteAndFlushAsync(message);
         }
 
-        public void SendPackets(List<MessageComposer> messages)
+        public async Task SendPackets(List<MessageComposer> messages)
         {
             foreach(MessageComposer message in messages)
             {
-                channel.WriteAsync(message);
+                await channel.WriteAsync(message);
             }
             channel.Flush();
         }

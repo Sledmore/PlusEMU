@@ -18,10 +18,9 @@ namespace Plus.Network
 
         public void Init()
         {
-            // TODO: make this configurable
-            IEventLoopGroup bossGroup = new MultithreadEventLoopGroup(1);
-            IEventLoopGroup workerGroup = new MultithreadEventLoopGroup(10);
-            IEventLoopGroup channelGroup = new MultithreadEventLoopGroup(7);
+            IEventLoopGroup bossGroup = new MultithreadEventLoopGroup(int.Parse(PlusEnvironment.GetConfig().data["game.tcp.acceptGroupThreads"]));
+            IEventLoopGroup workerGroup = new MultithreadEventLoopGroup(int.Parse(PlusEnvironment.GetConfig().data["game.tcp.ioGroupThreads"]));
+            IEventLoopGroup channelGroup = new MultithreadEventLoopGroup(int.Parse(PlusEnvironment.GetConfig().data["game.tcp.channelGroupThreads"]));
             
             ServerBootstrap server = new ServerBootstrap()
                 .Group(bossGroup, workerGroup)
