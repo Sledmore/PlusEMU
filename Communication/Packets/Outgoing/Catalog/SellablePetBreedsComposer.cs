@@ -5,24 +5,33 @@ using Plus.HabboHotel.Catalog.Pets;
 
 namespace Plus.Communication.Packets.Outgoing.Catalog
 {
-    public class SellablePetBreedsComposer : ServerPacket
+    public class SellablePetBreedsComposer : MessageComposer
     {
+        public string PetType { get; }
+        public int PetId { get; }
+        public ICollection<PetRace> Races { get; }
+
         public SellablePetBreedsComposer(string PetType, int PetId, ICollection<PetRace> Races)
             : base(ServerPacketHeader.SellablePetBreedsMessageComposer)
         {
-           WriteString(PetType);
+            this.PetType = PetType;
+            this.PetId = PetId;
+            this.Races = Races;
+        }
 
-            WriteInteger(Races.Count);
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(PetType);
+
+            packet.WriteInteger(Races.Count);
             foreach (PetRace Race in Races.ToList())
             {
-                WriteInteger(PetId);
-                WriteInteger(Race.PrimaryColour);
-                WriteInteger(Race.SecondaryColour);
-                WriteBoolean(Race.HasPrimaryColour);
-                WriteBoolean(Race.HasSecondaryColour);
+                packet.WriteInteger(PetId);
+                packet.WriteInteger(Race.PrimaryColour);
+                packet.WriteInteger(Race.SecondaryColour);
+                packet.WriteBoolean(Race.HasPrimaryColour);
+                packet.WriteBoolean(Race.HasSecondaryColour);
             }
-
-
         }
     }
 }

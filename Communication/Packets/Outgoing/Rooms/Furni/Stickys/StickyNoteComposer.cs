@@ -1,12 +1,21 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Furni.Stickys
 {
-    class StickyNoteComposer : ServerPacket
+    class StickyNoteComposer : MessageComposer
     {
+        public string ItemId { get; }
+        public string ExtraData { get; }
+
         public StickyNoteComposer(string ItemId, string Extradata)
             : base(ServerPacketHeader.StickyNoteMessageComposer)
         {
-           WriteString(ItemId);
-           WriteString(Extradata);
+            this.ItemId = ItemId;
+            this.ExtraData = Extradata;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(ItemId);
+            packet.WriteString(ExtraData);
         }
     }
 }

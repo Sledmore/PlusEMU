@@ -4,26 +4,42 @@ using Plus.HabboHotel.Groups;
 
 namespace Plus.Communication.Packets.Outgoing.Users
 {
-    class HabboGroupBadgesComposer : ServerPacket
+    class HabboGroupBadgesComposer : MessageComposer
     {
+        public Dictionary<int, string> Badges { get; }
+        public Group Group { get; }
         public HabboGroupBadgesComposer(Dictionary<int, string> badges)
             : base(ServerPacketHeader.HabboGroupBadgesMessageComposer)
         {
-            WriteInteger(badges.Count);
-            foreach (KeyValuePair<int, string> badge in badges)
-            {
-                WriteInteger(badge.Key);
-                WriteString(badge.Value);
-            }
+            this.Badges = badges;
         }
 
         public HabboGroupBadgesComposer(Group group)
             : base(ServerPacketHeader.HabboGroupBadgesMessageComposer)
         {
-            WriteInteger(1); //count
+            this.Group = group;
+        }
 
-            WriteInteger(group.Id);
-            WriteString(group.Badge);
+        public override void Compose(ServerPacket packet)
+        {
+            if(this.Badges != null)
+            {
+                packet.WriteInteger(Badges.Count);
+                foreach (KeyValuePair<int, string> badge in Badges)
+                {
+                    packet.WriteInteger(badge.Key);
+                    packet.WriteString(badge.Value);
+                }
+            } else if(Group != null)
+            {
+                packet.WriteInteger(1); //count
+
+                packet.WriteInteger(Group.Id);
+                packet.WriteString(Group.Badge);
+            } else
+            {
+                packet.WriteInteger(0);
+            }
         }
     }
 }

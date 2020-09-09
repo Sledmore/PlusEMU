@@ -1,11 +1,17 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Notifications
 {
-    class RoomErrorNotifComposer : ServerPacket
+    class RoomErrorNotifComposer : MessageComposer
     {
+        public int Error { get; }
         public RoomErrorNotifComposer(int Error)
             : base(ServerPacketHeader.RoomErrorNotifMessageComposer)
         {
-            WriteInteger(Error);
+            this.Error = Error;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Error);
         }
     }
 }

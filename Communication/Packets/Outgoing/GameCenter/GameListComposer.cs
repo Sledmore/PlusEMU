@@ -4,20 +4,27 @@ using Plus.HabboHotel.Games;
 
 namespace Plus.Communication.Packets.Outgoing.GameCenter
 {
-    class GameListComposer : ServerPacket
+    class GameListComposer : MessageComposer
     {
+        public ICollection<GameData> Games { get; }
+
         public GameListComposer(ICollection<GameData> Games)
             : base(ServerPacketHeader.GameListMessageComposer)
         {
-            WriteInteger(PlusEnvironment.GetGame().GetGameDataManager().GetCount());//Game count
+            this.Games = Games;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(PlusEnvironment.GetGame().GetGameDataManager().GetCount());//Game count
             foreach (GameData Game in Games)
             {
-                WriteInteger(Game.Id);
-               WriteString(Game.Name);
-               WriteString(Game.ColourOne);
-               WriteString(Game.ColourTwo);
-               WriteString(Game.ResourcePath);
-               WriteString(Game.StringThree);
+                packet.WriteInteger(Game.Id);
+                packet.WriteString(Game.Name);
+                packet.WriteString(Game.ColourOne);
+                packet.WriteString(Game.ColourTwo);
+                packet.WriteString(Game.ResourcePath);
+                packet.WriteString(Game.StringThree);
             }
         }
     }

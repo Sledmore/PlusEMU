@@ -1,22 +1,26 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Polls.Questions
 {
-    class QuestionParserComposer : ServerPacket
+    class QuestionParserComposer : MessageComposer
     {
         public QuestionParserComposer()
             : base(ServerPacketHeader.QuestionParserMessageComposer)
         {
-            WriteString("MATCHING_POLL");
-            WriteInteger(2686);//??
-            WriteInteger(10016);//???
-            WriteInteger(60);//Duration
-            WriteInteger(10016);
-            WriteInteger(9);
-            WriteInteger(6);
-            WriteString("MAFIA WARS: WEAPONS VOTE");
-            WriteInteger(0);
-            WriteInteger(6);
-            WriteInteger(0);
-            WriteInteger(0);
+            
+        }
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString("MATCHING_POLL");
+            packet.WriteInteger(2686);//??
+            packet.WriteInteger(10016);//???
+            packet.WriteInteger(60);//Duration
+            packet.WriteInteger(10016);
+            packet.WriteInteger(9);
+            packet.WriteInteger(6);
+            packet.WriteString("MAFIA WARS: WEAPONS VOTE");
+            packet.WriteInteger(0);
+            packet.WriteInteger(6);
+            packet.WriteInteger(0);
+            packet.WriteInteger(0);
         }
     }
 }

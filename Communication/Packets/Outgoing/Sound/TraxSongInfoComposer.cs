@@ -1,11 +1,16 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Sound
 {
-    class TraxSongInfoComposer : ServerPacket
+    class TraxSongInfoComposer : MessageComposer
     {
         public TraxSongInfoComposer()
             : base(ServerPacketHeader.TraxSongInfoMessageComposer)
         {
-            WriteInteger(0);//Count
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(0);//Count
         }
     }
 }

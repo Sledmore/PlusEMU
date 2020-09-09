@@ -47,7 +47,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
                     if (room.UsersWithRights.Contains(userId))
                         room.UsersWithRights.Remove(userId);
 
-                    session.SendPacket(new FlatControllerRemovedComposer(room, userId));
+                    session.SendPacket(new FlatControllerRemovedComposer(room.Id, userId));
                 }
             }
         }

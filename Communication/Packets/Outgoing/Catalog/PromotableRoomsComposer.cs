@@ -2,19 +2,26 @@
 using Plus.HabboHotel.Rooms;
 namespace Plus.Communication.Packets.Outgoing.Catalog
 {
-    class PromotableRoomsComposer : ServerPacket
+    class PromotableRoomsComposer : MessageComposer
     {
+        public ICollection<RoomData> Rooms { get; }
+
         public PromotableRoomsComposer(ICollection<RoomData> Rooms)
             : base(ServerPacketHeader.PromotableRoomsMessageComposer)
         {
-            WriteBoolean(true);
-            WriteInteger(Rooms.Count);//Count
+            this.Rooms = Rooms;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteBoolean(true);
+            packet.WriteInteger(Rooms.Count);//Count
 
             foreach (RoomData Data in Rooms)
             {
-                WriteInteger(Data.Id);
-               WriteString(Data.Name);
-                WriteBoolean(false);
+                packet.WriteInteger(Data.Id);
+                packet.WriteString(Data.Name);
+                packet.WriteBoolean(false);
             }
         }
     }

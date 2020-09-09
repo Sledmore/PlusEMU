@@ -1,20 +1,25 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Users
 {
-    class ScrSendUserInfoComposer : ServerPacket
+    class ScrSendUserInfoComposer : MessageComposer
     {
         public ScrSendUserInfoComposer()
             : base(ServerPacketHeader.ScrSendUserInfoMessageComposer)
         {
-            WriteString("habbo_club");
-            WriteInteger(0); //display days
-            WriteInteger(2);
-            WriteInteger(0); //display months
-            WriteInteger(1);
-            WriteBoolean(true); // hc
-            WriteBoolean(true); // vip
-            WriteInteger(0);
-            WriteInteger(0);
-            WriteInteger(495);
+           
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString("habbo_club");
+            packet.WriteInteger(0); //display days
+            packet.WriteInteger(2);
+            packet.WriteInteger(0); //display months
+            packet.WriteInteger(1);
+            packet.WriteBoolean(true); // hc
+            packet.WriteBoolean(true); // vip
+            packet.WriteInteger(0);
+            packet.WriteInteger(0);
+            packet.WriteInteger(495);
         }
     }
 }

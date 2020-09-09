@@ -2,14 +2,21 @@
 
 namespace Plus.Communication.Packets.Outgoing.Messenger
 {
-    class NewBuddyRequestComposer : ServerPacket
+    class NewBuddyRequestComposer : MessageComposer
     {
+        public UserCache UserCache { get; }
+
         public NewBuddyRequestComposer(UserCache Habbo)
             : base(ServerPacketHeader.NewBuddyRequestMessageComposer)
         {
-            WriteInteger(Habbo.Id);
-           WriteString(Habbo.Username);
-           WriteString(Habbo.Look);
+            this.UserCache = Habbo;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(UserCache.Id);
+            packet.WriteString(UserCache.Username);
+            packet.WriteString(UserCache.Look);
         }
     }
 }

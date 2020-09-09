@@ -4,19 +4,26 @@ using Plus.HabboHotel.Users.Inventory.Bots;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.Bots
 {
-    class BotInventoryComposer : ServerPacket
+    class BotInventoryComposer : MessageComposer
     {
+        public ICollection<Bot> Bots { get; }
+
         public BotInventoryComposer(ICollection<Bot> Bots)
             : base(ServerPacketHeader.BotInventoryMessageComposer)
         {
-            WriteInteger(Bots.Count);
+            this.Bots = Bots;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Bots.Count);
             foreach (Bot Bot in Bots.ToList())
             {
-                WriteInteger(Bot.Id);
-               WriteString(Bot.Name);
-               WriteString(Bot.Motto);
-               WriteString(Bot.Gender);
-               WriteString(Bot.Figure);
+                packet.WriteInteger(Bot.Id);
+                packet.WriteString(Bot.Name);
+                packet.WriteString(Bot.Motto);
+                packet.WriteString(Bot.Gender);
+                packet.WriteString(Bot.Figure);
             }
         }
     }

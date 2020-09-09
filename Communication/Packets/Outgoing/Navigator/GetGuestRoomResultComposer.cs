@@ -1,80 +1,94 @@
 ﻿using Plus.HabboHotel.Rooms;
 using Plus.HabboHotel.GameClients;
+using Plus.HabboHotel.Users;
 
 namespace Plus.Communication.Packets.Outgoing.Navigator
 {
-    class GetGuestRoomResultComposer : ServerPacket
+    class GetGuestRoomResultComposer : MessageComposer
     {
+        public Habbo Habbo { get; }
+        public RoomData Data { get; }
+        public bool IsLoading { get; }
+        public bool CheckEntry { get; }
+
         public GetGuestRoomResultComposer(GameClient session, RoomData data, bool isLoading, bool checkEntry)
             : base(ServerPacketHeader.GetGuestRoomResultMessageComposer)
         {
-            WriteBoolean(isLoading);
-            WriteInteger(data.Id);
-            WriteString(data.Name);
-            WriteInteger(data.OwnerId);
-            WriteString(data.OwnerName);
-            WriteInteger(RoomAccessUtility.GetRoomAccessPacketNum(data.Access));
-            WriteInteger(data.UsersNow);
-            WriteInteger(data.UsersMax);
-            WriteString(data.Description);
-            WriteInteger(data.TradeSettings);
-            WriteInteger(data.Score);
-            WriteInteger(0);//Top rated room rank.
-            WriteInteger(data.Category);
+            this.Habbo = session.GetHabbo();
+            this.Data = data;
+            this.IsLoading = isLoading;
+            this.CheckEntry = checkEntry;
+        }
 
-            WriteInteger(data.Tags.Count);
-            foreach (string tag in data.Tags)
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteBoolean(IsLoading);
+            packet.WriteInteger(Data.Id);
+            packet.WriteString(Data.Name);
+            packet.WriteInteger(Data.OwnerId);
+            packet.WriteString(Data.OwnerName);
+            packet.WriteInteger(RoomAccessUtility.GetRoomAccessPacketNum(Data.Access));
+            packet.WriteInteger(Data.UsersNow);
+            packet.WriteInteger(Data.UsersMax);
+            packet.WriteString(Data.Description);
+            packet.WriteInteger(Data.TradeSettings);
+            packet.WriteInteger(Data.Score);
+            packet.WriteInteger(0);//Top rated room rank.
+            packet.WriteInteger(Data.Category);
+
+            packet.WriteInteger(Data.Tags.Count);
+            foreach (string tag in Data.Tags)
             {
-                WriteString(tag);
+                packet.WriteString(tag);
             }
 
-            if (data.Group != null && data.Promotion != null)
+            if (Data.Group != null && Data.Promotion != null)
             {
-                WriteInteger(62);
+                packet.WriteInteger(62);
 
-                WriteInteger(data.Group == null ? 0 : data.Group.Id);
-                WriteString(data.Group == null ? "" : data.Group.Name);
-                WriteString(data.Group == null ? "" : data.Group.Badge);
+                packet.WriteInteger(Data.Group == null ? 0 : Data.Group.Id);
+                packet.WriteString(Data.Group == null ? "" : Data.Group.Name);
+                packet.WriteString(Data.Group == null ? "" : Data.Group.Badge);
 
-                WriteString(data.Promotion != null ? data.Promotion.Name : "");
-                WriteString(data.Promotion != null ? data.Promotion.Description : "");
-                WriteInteger(data.Promotion != null ? data.Promotion.MinutesLeft : 0);
+                packet.WriteString(Data.Promotion != null ? Data.Promotion.Name : "");
+                packet.WriteString(Data.Promotion != null ? Data.Promotion.Description : "");
+                packet.WriteInteger(Data.Promotion != null ? Data.Promotion.MinutesLeft : 0);
             }
-            else if (data.Group != null && data.Promotion == null)
+            else if (Data.Group != null && Data.Promotion == null)
             {
-                WriteInteger(58);
-                WriteInteger(data.Group == null ? 0 : data.Group.Id);
-                WriteString(data.Group == null ? "" : data.Group.Name);
-                WriteString(data.Group == null ? "" : data.Group.Badge);
+                packet.WriteInteger(58);
+                packet.WriteInteger(Data.Group == null ? 0 : Data.Group.Id);
+                packet.WriteString(Data.Group == null ? "" : Data.Group.Name);
+                packet.WriteString(Data.Group == null ? "" : Data.Group.Badge);
             }
-            else if (data.Group == null && data.Promotion != null)
+            else if (Data.Group == null && Data.Promotion != null)
             {
-                WriteInteger(60);
-                WriteString(data.Promotion != null ? data.Promotion.Name : "");
-                WriteString(data.Promotion != null ? data.Promotion.Description : "");
-                WriteInteger(data.Promotion != null ? data.Promotion.MinutesLeft : 0);
+                packet.WriteInteger(60);
+                packet.WriteString(Data.Promotion != null ? Data.Promotion.Name : "");
+                packet.WriteString(Data.Promotion != null ? Data.Promotion.Description : "");
+                packet.WriteInteger(Data.Promotion != null ? Data.Promotion.MinutesLeft : 0);
             }
             else
             {
-                WriteInteger(56);
+                packet.WriteInteger(56);
             }
 
 
-            WriteBoolean(checkEntry);
-            WriteBoolean(false);
-            WriteBoolean(false);
-            WriteBoolean(false);
+            packet.WriteBoolean(CheckEntry);
+            packet.WriteBoolean(false);
+            packet.WriteBoolean(false);
+            packet.WriteBoolean(false);
 
-            WriteInteger(data.WhoCanMute);
-            WriteInteger(data.WhoCanKick);
-            WriteInteger(data.WhoCanBan);
+            packet.WriteInteger(Data.WhoCanMute);
+            packet.WriteInteger(Data.WhoCanKick);
+            packet.WriteInteger(Data.WhoCanBan);
 
-            WriteBoolean(session.GetHabbo().GetPermissions().HasRight("mod_tool") || data.OwnerName == session.GetHabbo().Username);
-            WriteInteger(data.ChatMode);
-            WriteInteger(data.ChatSize);
-            WriteInteger(data.ChatSpeed);
-            WriteInteger(data.ExtraFlood);
-            WriteInteger(data.ChatDistance);
+            packet.WriteBoolean(Habbo.GetPermissions().HasRight("mod_tool") || Data.OwnerName == Habbo.Username);
+            packet.WriteInteger(Data.ChatMode);
+            packet.WriteInteger(Data.ChatSize);
+            packet.WriteInteger(Data.ChatSpeed);
+            packet.WriteInteger(Data.ExtraFlood);
+            packet.WriteInteger(Data.ChatDistance);
         }
     }
 }

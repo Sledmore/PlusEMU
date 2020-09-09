@@ -2,17 +2,24 @@
 
 namespace Plus.Communication.Packets.Outgoing.Navigator
 {
-    class FavouritesComposer : ServerPacket
+    class FavouritesComposer : MessageComposer
     {
+        public ArrayList FavouriteIds { get; }
+
         public FavouritesComposer(ArrayList favouriteIds)
             : base(ServerPacketHeader.FavouritesMessageComposer)
         {
-            WriteInteger(50);
-            WriteInteger(favouriteIds.Count);
+            this.FavouriteIds = favouriteIds;
+        }
 
-            foreach (int id in favouriteIds.ToArray())
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(50);
+            packet.WriteInteger(FavouriteIds.Count);
+
+            foreach (int id in FavouriteIds.ToArray())
             {
-                WriteInteger(id);
+                packet.WriteInteger(id);
             }
         }
     }

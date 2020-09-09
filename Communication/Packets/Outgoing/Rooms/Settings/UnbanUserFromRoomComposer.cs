@@ -1,12 +1,20 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
 {
-    class UnbanUserFromRoomComposer : ServerPacket
+    class UnbanUserFromRoomComposer : MessageComposer
     {
+        public int RoomId { get; }
+        public int UserId { get; }
         public UnbanUserFromRoomComposer(int RoomId, int UserId)
             : base(ServerPacketHeader.UnbanUserFromRoomMessageComposer)
         {
-            WriteInteger(RoomId);
-            WriteInteger(UserId);
+            this.RoomId = RoomId;
+            this.UserId = UserId;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(RoomId);
+            packet.WriteInteger(UserId);
         }
     }
 }

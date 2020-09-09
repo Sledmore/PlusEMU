@@ -4,22 +4,29 @@ using Plus.HabboHotel.Groups;
 
 namespace Plus.Communication.Packets.Outgoing.Catalog
 {
-    class GroupFurniConfigComposer : ServerPacket
+    class GroupFurniConfigComposer : MessageComposer
     {
+        public ICollection<Group> Groups { get; }
+
         public GroupFurniConfigComposer(ICollection<Group> groups)
             : base(ServerPacketHeader.GroupFurniConfigMessageComposer)
         {
-            WriteInteger(groups.Count);
-            foreach (Group group in groups)
+            this.Groups = groups;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Groups.Count);
+            foreach (Group group in Groups)
             {
-                WriteInteger(group.Id);
-                WriteString(group.Name);
-                WriteString(group.Badge);
-                WriteString(PlusEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
-                WriteString(PlusEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
-                WriteBoolean(false);
-                WriteInteger(group.CreatorId);
-                WriteBoolean(group.ForumEnabled);
+                packet.WriteInteger(group.Id);
+                packet.WriteString(group.Name);
+                packet.WriteString(group.Badge);
+                packet.WriteString(PlusEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
+                packet.WriteString(PlusEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
+                packet.WriteBoolean(false);
+                packet.WriteInteger(group.CreatorId);
+                packet.WriteBoolean(group.ForumEnabled);
             }
         }
     }

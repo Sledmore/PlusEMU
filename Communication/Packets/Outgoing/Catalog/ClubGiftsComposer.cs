@@ -1,42 +1,47 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Catalog
 {
-    class ClubGiftsComposer : ServerPacket
+    class ClubGiftsComposer : MessageComposer
     {
         public ClubGiftsComposer() 
             : base(ServerPacketHeader.ClubGiftsMessageComposer)
         {
-            WriteInteger(0);//Days until next gift.
-            WriteInteger(10);//Gifts available
-            WriteInteger(1);//Count?
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(0);//Days until next gift.
+            packet.WriteInteger(10);//Gifts available
+            packet.WriteInteger(1);//Count?
             {
-                WriteInteger(14689);
-                WriteString("hc_arab_chair");
-                WriteBoolean(false);
-                WriteInteger(5);
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteBoolean(true);
-                WriteInteger(1);//Count for some reason
+                packet.WriteInteger(14689);
+                packet.WriteString("hc_arab_chair");
+                packet.WriteBoolean(false);
+                packet.WriteInteger(5);
+                packet.WriteInteger(0);
+                packet.WriteInteger(0);
+                packet.WriteBoolean(true);
+                packet.WriteInteger(1);//Count for some reason
                 {
-                    WriteString("s");
-                    WriteInteger(6341);
-                    WriteString("");
-                    WriteInteger(1);
-                    WriteBoolean(false);
+                    packet.WriteString("s");
+                    packet.WriteInteger(6341);
+                    packet.WriteString("");
+                    packet.WriteInteger(1);
+                    packet.WriteBoolean(false);
                 }
-                WriteInteger(0);
-                WriteBoolean(false);
-                WriteBoolean(false);// TODO: Figure out
-                WriteString("");//previewImage -> e.g; catalogue/pet_lion.png
+                packet.WriteInteger(0);
+                packet.WriteBoolean(false);
+                packet.WriteBoolean(false);// TODO: Figure out
+                packet.WriteString("");//previewImage -> e.g; catalogue/pet_lion.png
             }
 
-            WriteInteger(1);//Count
+            packet.WriteInteger(1);//Count
             {
                 //int, bool, int, bool
-                WriteInteger(14689);//Maybe the item id?
-                WriteBoolean(true);//Can we get?
-                WriteInteger(-1);//idk
-                WriteBoolean(true);//idk
+                packet.WriteInteger(14689);//Maybe the item id?
+                packet.WriteBoolean(true);//Can we get?
+                packet.WriteInteger(-1);//idk
+                packet.WriteBoolean(true);//idk
             }
         }
     }

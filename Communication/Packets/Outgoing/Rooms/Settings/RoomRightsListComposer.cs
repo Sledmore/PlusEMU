@@ -4,26 +4,32 @@ using Plus.HabboHotel.Cache.Type;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
 {
-    class RoomRightsListComposer : ServerPacket
+    class RoomRightsListComposer : MessageComposer
     {
+        public Room Room { get; }
         public RoomRightsListComposer(Room Instance)
             : base(ServerPacketHeader.RoomRightsListMessageComposer)
         {
-            WriteInteger(Instance.Id);
+            this.Room = Instance;
+        }
 
-            WriteInteger(Instance.UsersWithRights.Count);
-            foreach (int Id in Instance.UsersWithRights.ToList())
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Room.Id);
+
+            packet.WriteInteger(Room.UsersWithRights.Count);
+            foreach (int Id in Room.UsersWithRights.ToList())
             {
                 UserCache Data = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Id);
                 if (Data == null)
                 {
-                    WriteInteger(0);
-                    WriteString("Unknown Error");
+                    packet.WriteInteger(0);
+                    packet.WriteString("Unknown Error");
                 }
                 else
                 {
-                    WriteInteger(Data.Id);
-                    WriteString(Data.Username);
+                    packet.WriteInteger(Data.Id);
+                    packet.WriteString(Data.Username);
                 }
             }
         }

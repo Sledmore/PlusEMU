@@ -2,14 +2,21 @@
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects
 {
-    class AvatarEffectActivatedComposer : ServerPacket
+    class AvatarEffectActivatedComposer : MessageComposer
     {
+        public AvatarEffect Effect { get; }
+
         public AvatarEffectActivatedComposer(AvatarEffect Effect)
             : base(ServerPacketHeader.AvatarEffectActivatedMessageComposer)
         {
-            WriteInteger(Effect.SpriteId);
-            WriteInteger((int)Effect.Duration);
-            WriteBoolean(false);//Permanent
+            this.Effect = Effect;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Effect.SpriteId);
+            packet.WriteInteger((int)Effect.Duration);
+            packet.WriteBoolean(false);//Permanent
         }
     }
 }

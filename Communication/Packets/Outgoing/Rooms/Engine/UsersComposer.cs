@@ -9,30 +9,28 @@ using Plus.HabboHotel.Rooms.AI;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class UsersComposer : ServerPacket
+    class UsersComposer : MessageComposer
     {
+        public ICollection<RoomUser> Users { get; }
+        public RoomUser User { get; }
+
         public UsersComposer(ICollection<RoomUser> Users)
             : base(ServerPacketHeader.UsersMessageComposer)
         {
-            WriteInteger(Users.Count);
-            foreach (RoomUser User in Users.ToList())
-            {
-                WriteUser(User);
-            }
+            this.Users = Users;
         }
 
         public UsersComposer(RoomUser User)
             : base(ServerPacketHeader.UsersMessageComposer)
         {
-            WriteInteger(1);//1 avatar
-            WriteUser(User);
+            this.User = User;
         }
 
-        private void WriteUser(RoomUser User)
+        private void WriteUser(RoomUser user, ServerPacket packet)
         {
-            if (!User.IsPet && !User.IsBot)
+            if (!user.IsPet && !user.IsBot)
             {
-                Habbo Habbo = User.GetClient().GetHabbo();
+                Habbo Habbo = user.GetClient().GetHabbo();
 
                 Group Group = null;
                 if (Habbo != null)
@@ -49,126 +47,126 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 
                 if (Habbo.PetId == 0)
                 {
-                    WriteInteger(Habbo.Id);
-                    WriteString(Habbo.Username);
-                    WriteString(Habbo.Motto);
-                    WriteString(Habbo.Look);
-                    WriteInteger(User.VirtualId);
-                    WriteInteger(User.X);
-                    WriteInteger(User.Y);
-                    WriteDouble(User.Z);
+                    packet.WriteInteger(Habbo.Id);
+                    packet.WriteString(Habbo.Username);
+                    packet.WriteString(Habbo.Motto);
+                    packet.WriteString(Habbo.Look);
+                    packet.WriteInteger(user.VirtualId);
+                    packet.WriteInteger(user.X);
+                    packet.WriteInteger(user.Y);
+                    packet.WriteDouble(user.Z);
 
-                    WriteInteger(0);//2 for user, 4 for bot.
-                    WriteInteger(1);//1 for user, 2 for pet, 3 for bot.
-                    WriteString(Habbo.Gender.ToLower());
+                    packet.WriteInteger(0);//2 for user, 4 for bot.
+                    packet.WriteInteger(1);//1 for user, 2 for pet, 3 for bot.
+                    packet.WriteString(Habbo.Gender.ToLower());
 
                     if (Group != null)
                     {
-                        WriteInteger(Group.Id);
-                        WriteInteger(0);
-                        WriteString(Group.Name);
+                        packet.WriteInteger(Group.Id);
+                        packet.WriteInteger(0);
+                        packet.WriteString(Group.Name);
                     }
                     else
                     {
-                        WriteInteger(0);
-                        WriteInteger(0);
-                        WriteString("");
+                        packet.WriteInteger(0);
+                        packet.WriteInteger(0);
+                        packet.WriteString("");
                     }
 
-                    WriteString("");//Whats this?
-                    WriteInteger(Habbo.GetStats().AchievementPoints);//Achievement score
-                    WriteBoolean(false);//Builders club?
+                    packet.WriteString("");//Whats this?
+                    packet.WriteInteger(Habbo.GetStats().AchievementPoints);//Achievement score
+                    packet.WriteBoolean(false);//Builders club?
                 }
                 else if (Habbo.PetId > 0 && Habbo.PetId != 100)
                 {
-                    WriteInteger(Habbo.Id);
-                    WriteString(Habbo.Username);
-                    WriteString(Habbo.Motto);
-                    WriteString(PetFigureForType(Habbo.PetId));
+                    packet.WriteInteger(Habbo.Id);
+                    packet.WriteString(Habbo.Username);
+                    packet.WriteString(Habbo.Motto);
+                    packet.WriteString(PetFigureForType(Habbo.PetId));
 
-                    WriteInteger(User.VirtualId);
-                    WriteInteger(User.X);
-                    WriteInteger(User.Y);
-                    WriteDouble(User.Z);
-                    WriteInteger(0);
-                    WriteInteger(2);//Pet.
+                    packet.WriteInteger(user.VirtualId);
+                    packet.WriteInteger(user.X);
+                    packet.WriteInteger(user.Y);
+                    packet.WriteDouble(user.Z);
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(2);//Pet.
 
-                    WriteInteger(Habbo.PetId);//pet type.
-                    WriteInteger(Habbo.Id);//UserId of the owner.
-                    WriteString(Habbo.Username);//Username of the owner.
-                    WriteInteger(1);
-                    WriteBoolean(false);//Has saddle.
-                    WriteBoolean(false);//Is someone riding this horse?
-                    WriteInteger(0);
-                    WriteInteger(0);
-                    WriteString("");
+                    packet.WriteInteger(Habbo.PetId);//pet type.
+                    packet.WriteInteger(Habbo.Id);//UserId of the owner.
+                    packet.WriteString(Habbo.Username);//Username of the owner.
+                    packet.WriteInteger(1);
+                    packet.WriteBoolean(false);//Has saddle.
+                    packet.WriteBoolean(false);//Is someone riding this horse?
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(0);
+                    packet.WriteString("");
                 }
                 else if (Habbo.PetId > 0 && Habbo.PetId == 100)
                 {
-                    WriteInteger(Habbo.Id);
-                    WriteString(Habbo.Username);
-                    WriteString(Habbo.Motto);
-                    WriteString(Habbo.Look.ToLower());
-                    WriteInteger(User.VirtualId);
-                    WriteInteger(User.X);
-                    WriteInteger(User.Y);
-                    WriteDouble(User.Z);
-                    WriteInteger(0);
-                    WriteInteger(4);
+                    packet.WriteInteger(Habbo.Id);
+                    packet.WriteString(Habbo.Username);
+                    packet.WriteString(Habbo.Motto);
+                    packet.WriteString(Habbo.Look.ToLower());
+                    packet.WriteInteger(user.VirtualId);
+                    packet.WriteInteger(user.X);
+                    packet.WriteInteger(user.Y);
+                    packet.WriteDouble(user.Z);
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(4);
 
-                    WriteString(Habbo.Gender.ToLower()); // ?
-                    WriteInteger(Habbo.Id); //Owner Id
-                    WriteString(Habbo.Username); // Owner name
-                    WriteInteger(0);//Action Count
+                    packet.WriteString(Habbo.Gender.ToLower()); // ?
+                    packet.WriteInteger(Habbo.Id); //Owner Id
+                    packet.WriteString(Habbo.Username); // Owner name
+                    packet.WriteInteger(0);//Action Count
                 }
             }
-            else if (User.IsPet)
+            else if (user.IsPet)
             {
-                WriteInteger(User.BotAI.BaseId);
-                WriteString(User.BotData.Name);
-                WriteString(User.BotData.Motto);
+                packet.WriteInteger(user.BotAI.BaseId);
+                packet.WriteString(user.BotData.Name);
+                packet.WriteString(user.BotData.Motto);
 
                 //base.WriteString("26 30 ffffff 5 3 302 4 2 201 11 1 102 12 0 -1 28 4 401 24");
-                WriteString(User.BotData.Look.ToLower() + ((User.PetData.Saddle > 0) ? " 3 2 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 3 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 4 " + User.PetData.Saddle + " 0" : " 2 2 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 3 " + User.PetData.PetHair + " " + User.PetData.HairDye + ""));
+                packet.WriteString(user.BotData.Look.ToLower() + ((user.PetData.Saddle > 0) ? " 3 2 " + user.PetData.PetHair + " " + user.PetData.HairDye + " 3 " + user.PetData.PetHair + " " + user.PetData.HairDye + " 4 " + user.PetData.Saddle + " 0" : " 2 2 " + user.PetData.PetHair + " " + user.PetData.HairDye + " 3 " + user.PetData.PetHair + " " + user.PetData.HairDye + ""));
 
-                WriteInteger(User.VirtualId);
-                WriteInteger(User.X);
-                WriteInteger(User.Y);
-                WriteDouble(User.Z);
-                WriteInteger(0);
-                WriteInteger((User.BotData.AiType == BotAIType.Pet) ? 2 : 4);
-                WriteInteger(User.PetData.Type);
-                WriteInteger(User.PetData.OwnerId); // userid
-                WriteString(User.PetData.OwnerName); // username
-                WriteInteger(1);
-                WriteBoolean(User.PetData.Saddle > 0);
-                WriteBoolean(User.RidingHorse);
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteString("");
+                packet.WriteInteger(user.VirtualId);
+                packet.WriteInteger(user.X);
+                packet.WriteInteger(user.Y);
+                packet.WriteDouble(user.Z);
+                packet.WriteInteger(0);
+                packet.WriteInteger((user.BotData.AiType == BotAIType.Pet) ? 2 : 4);
+                packet.WriteInteger(user.PetData.Type);
+                packet.WriteInteger(user.PetData.OwnerId); // userid
+                packet.WriteString(user.PetData.OwnerName); // username
+                packet.WriteInteger(1);
+                packet.WriteBoolean(user.PetData.Saddle > 0);
+                packet.WriteBoolean(user.RidingHorse);
+                packet.WriteInteger(0);
+                packet.WriteInteger(0);
+                packet.WriteString("");
             }
-            else if (User.IsBot)
+            else if (user.IsBot)
             {
-                WriteInteger(User.BotAI.BaseId);
-                WriteString(User.BotData.Name);
-                WriteString(User.BotData.Motto);
-                WriteString(User.BotData.Look.ToLower());
-                WriteInteger(User.VirtualId);
-                WriteInteger(User.X);
-                WriteInteger(User.Y);
-                WriteDouble(User.Z);
-                WriteInteger(0);
-                WriteInteger((User.BotData.AiType == BotAIType.Pet) ? 2 : 4);
+                packet.WriteInteger(user.BotAI.BaseId);
+                packet.WriteString(user.BotData.Name);
+                packet.WriteString(user.BotData.Motto);
+                packet.WriteString(user.BotData.Look.ToLower());
+                packet.WriteInteger(user.VirtualId);
+                packet.WriteInteger(user.X);
+                packet.WriteInteger(user.Y);
+                packet.WriteDouble(user.Z);
+                packet.WriteInteger(0);
+                packet.WriteInteger((user.BotData.AiType == BotAIType.Pet) ? 2 : 4);
 
-                WriteString(User.BotData.Gender.ToLower()); // ?
-                WriteInteger(User.BotData.OwnerId); //Owner Id
-                WriteString(PlusEnvironment.GetUsernameById(User.BotData.OwnerId)); // Owner name
-                WriteInteger(5);//Action Count
-                WriteShort(1);//Copy looks
-                WriteShort(2);//Setup speech
-                WriteShort(3);//Relax
-                WriteShort(4);//Dance
-                WriteShort(5);//Change name
+                packet.WriteString(user.BotData.Gender.ToLower()); // ?
+                packet.WriteInteger(user.BotData.OwnerId); //Owner Id
+                packet.WriteString(PlusEnvironment.GetUsernameById(user.BotData.OwnerId)); // Owner name
+                packet.WriteInteger(5);//Action Count
+                packet.WriteShort(1);//Copy looks
+                packet.WriteShort(2);//Setup speech
+                packet.WriteShort(3);//Relax
+                packet.WriteShort(4);//Dance
+                packet.WriteShort(5);//Change name
             }
         }
 
@@ -671,6 +669,22 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                         }
                     }
                 #endregion
+            }
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            if(this.Users != null)
+            {
+                packet.WriteInteger(Users.Count);
+                foreach (RoomUser User in Users.ToList())
+                {
+                    WriteUser(User, packet);
+                }
+            } else
+            {
+                packet.WriteInteger(1);//1 avatar
+                WriteUser(User, packet);
             }
         }
     }

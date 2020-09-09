@@ -2,21 +2,28 @@
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class ItemAddComposer : ServerPacket
+    class ItemAddComposer : MessageComposer
     {
+        public Item Item { get; }
+
         public ItemAddComposer(Item Item)
             : base(ServerPacketHeader.ItemAddMessageComposer)
         {
-           WriteString(Item.Id.ToString());
-            WriteInteger(Item.GetBaseItem().SpriteId);
-           WriteString(Item.wallCoord != null ? Item.wallCoord : string.Empty);
+            this.Item = Item;
+        }
 
-            ItemBehaviourUtility.GenerateWallExtradata(Item, this);
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(Item.Id.ToString());
+            packet.WriteInteger(Item.GetBaseItem().SpriteId);
+            packet.WriteString(Item.wallCoord != null ? Item.wallCoord : string.Empty);
 
-            WriteInteger(-1);
-            WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0); // Type New R63 ('use bottom')
-            WriteInteger(Item.UserID);
-           WriteString(Item.Username);
+            ItemBehaviourUtility.GenerateWallExtradata(Item, packet);
+
+            packet.WriteInteger(-1);
+            packet.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0); // Type New R63 ('use bottom')
+            packet.WriteInteger(Item.UserID);
+            packet.WriteString(Item.Username);
         }
     }
 }

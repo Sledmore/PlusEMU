@@ -1,12 +1,19 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Inventory.Trading
 {
-    class TradingClosedComposer : ServerPacket
+    class TradingClosedComposer : MessageComposer
     {
+        public int UserId { get; }
+
         public TradingClosedComposer(int UserId)
             : base(ServerPacketHeader.TradingClosedMessageComposer)
         {
-            WriteInteger(UserId);
-            WriteInteger(0);
+            this.UserId = UserId;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(UserId);
+            packet.WriteInteger(0);
         }
     }
 }

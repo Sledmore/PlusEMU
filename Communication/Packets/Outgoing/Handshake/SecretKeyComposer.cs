@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Handshake
 {
-    public class SecretKeyComposer : ServerPacket
+    public class SecretKeyComposer : MessageComposer
     {
+        public string PublicKey { get; }
+
         public SecretKeyComposer(string publicKey)
             : base(ServerPacketHeader.SecretKeyMessageComposer)
         {
-           WriteString(publicKey);
+            this.PublicKey = publicKey;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(PublicKey);
         }
     }
 }

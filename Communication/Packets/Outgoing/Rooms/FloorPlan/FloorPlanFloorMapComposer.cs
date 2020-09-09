@@ -5,16 +5,23 @@ using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.FloorPlan
 {
-    class FloorPlanFloorMapComposer : ServerPacket
+    class FloorPlanFloorMapComposer : MessageComposer
     {
+        public ICollection<Item> Items { get; }
+
         public FloorPlanFloorMapComposer(ICollection<Item> Items)
             : base(ServerPacketHeader.FloorPlanFloorMapMessageComposer)
         {
-            WriteInteger(Items.Count);//TODO: Figure this out, it pushes the room coords, but it iterates them, x,y|x,y|x,y|and so on.
+            this.Items = Items;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Items.Count);//TODO: Figure this out, it pushes the room coords, but it iterates them, x,y|x,y|x,y|and so on.
             foreach (Item Item in Items.ToList())
             {
-                WriteInteger(Item.GetX);
-                WriteInteger(Item.GetY);
+                packet.WriteInteger(Item.GetX);
+                packet.WriteInteger(Item.GetY);
             }
         }
     }

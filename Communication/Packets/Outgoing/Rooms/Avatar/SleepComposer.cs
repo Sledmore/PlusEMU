@@ -2,13 +2,22 @@
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Avatar
 {
-    public class SleepComposer : ServerPacket
+    public class SleepComposer : MessageComposer
     {
-        public SleepComposer(RoomUser User, bool IsSleeping)
+        public int VirtualId { get; }
+        public bool IsSleeping { get; }
+
+        public SleepComposer(int VirtualId, bool IsSleeping)
             : base(ServerPacketHeader.SleepMessageComposer)
         {
-            WriteInteger(User.VirtualId);
-            WriteBoolean(IsSleeping);
+            this.VirtualId = VirtualId;
+            this.IsSleeping = IsSleeping;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(VirtualId);
+            packet.WriteBoolean(IsSleeping);
         }
     }
 }

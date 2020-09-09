@@ -14,9 +14,8 @@ namespace Plus.Network.Codec
         {
             try
             {
-                IByteBuffer newBuf = message.ReadBytes(message.ReadableBytes);
-                short id = newBuf.ReadShort();
-                var packet = new ClientPacket(id, newBuf);
+                short id = message.ReadShort();
+                ClientPacket packet = new ClientPacket(id, message.ReadBytes(message.ReadableBytes));
                
                 output.Add(packet);
             }catch (Exception e)

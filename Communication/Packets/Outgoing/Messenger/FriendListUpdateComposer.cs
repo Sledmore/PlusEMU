@@ -3,52 +3,46 @@ using System.Linq;
 using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Users.Relationships;
 using Plus.HabboHotel.Users.Messenger;
+using Plus.HabboHotel.Users;
 
 namespace Plus.Communication.Packets.Outgoing.Messenger
 {
-    class FriendListUpdateComposer : ServerPacket
+    class FriendListUpdateComposer : MessageComposer
     {
+        public int FriendId { get; }
+        
+        public Habbo Habbo { get; }
+        public MessengerBuddy Buddy { get; }
+
         public FriendListUpdateComposer(int FriendId)
             : base(ServerPacketHeader.FriendListUpdateMessageComposer)
         {
-            WriteInteger(0);//Category Count
-            WriteInteger(1);//Updates Count
-            WriteInteger(-1);//Update
-            WriteInteger(FriendId);
+            this.FriendId = FriendId;
         }
 
-        public FriendListUpdateComposer(GameClient Session, MessengerBuddy Buddy)
+        public FriendListUpdateComposer(Habbo habbo, MessengerBuddy Buddy)
             : base(ServerPacketHeader.FriendListUpdateMessageComposer)
         {
-            WriteInteger(0);//Category Count
-            WriteInteger(1);//Updates Count
-            WriteInteger(0);//Update
+            this.Habbo = habbo;
+            this.Buddy = Buddy;
+        }
 
-            Relationship Relationship = Session.GetHabbo().Relationships.FirstOrDefault(x => x.Value.UserId == Convert.ToInt32(Buddy.UserId)).Value;
-            int y = Relationship == null ? 0 : Relationship.Type;
+        public override void Compose(ServerPacket packet)
+        {
+            if(this.Habbo != null)
+            {
+                packet.WriteInteger(0);//Category Count
+                packet.WriteInteger(1);//Updates Count
+                packet.WriteInteger(0);//Update
 
-            WriteInteger(Buddy.UserId);
-           WriteString(Buddy.mUsername);
-            WriteInteger(1);
-            if (!Buddy.mAppearOffline || Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
-                WriteBoolean(Buddy.IsOnline);
-            else
-                WriteBoolean(false);
-
-            if (!Buddy.mHideInroom || Session.GetHabbo().GetPermissions().HasRight("mod_tool"))
-                WriteBoolean(Buddy.InRoom);
-            else
-                WriteBoolean(false);
-
-           WriteString("");//Habbo.IsOnline ? Habbo.Look : "");
-            WriteInteger(0); // categoryid
-           WriteString(Buddy.mMotto);
-           WriteString(string.Empty); // Facebook username
-           WriteString(string.Empty);
-            WriteBoolean(true); // Allows offline messaging
-            WriteBoolean(false); // ?
-            WriteBoolean(false); // Uses phone
-            WriteShort(y);
+                Buddy.Serialize(packet, Habbo);
+            } else
+            {
+                packet.WriteInteger(0);//Category Count
+                packet.WriteInteger(1);//Updates Count
+                packet.WriteInteger(-1);//Update
+                packet.WriteInteger(FriendId);
+            }
         }
     }
 }

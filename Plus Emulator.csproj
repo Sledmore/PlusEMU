@@ -418,6 +418,7 @@
     <Compile Include="Communication\Packets\Outgoing\Groups\GroupMemberUpdatedComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Handshake\PongComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Help\SanctionStatusComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\MessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\AvatarEffects\FigureSetIdsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingAcceptComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingClosedComposer.cs" />
@@ -567,7 +568,6 @@
     <Compile Include="Communication\Packets\Outgoing\Pets\PetBreedingComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Quests\QuestAbortedComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Quests\QuestCompletedComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Quests\QuestCompletedCompser.cs" />
     <Compile Include="Communication\Packets\Outgoing\Quests\QuestStartedComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Action\IgnoreStatusComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\AI\Bots\OpenBotActionComposer.cs" />

@@ -3,46 +3,61 @@ using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Outgoing.Catalog
 {
-    public class PurchaseOKComposer : ServerPacket
+    public class PurchaseOKComposer : MessageComposer
     {
+        public CatalogItem Item { get; }
+        public ItemData BaseItem { get; }
+
         public PurchaseOKComposer(CatalogItem Item, ItemData BaseItem)
             : base(ServerPacketHeader.PurchaseOKMessageComposer)
         {
-            WriteInteger(BaseItem.Id);
-           WriteString(BaseItem.ItemName);
-            WriteBoolean(false);
-            WriteInteger(Item.CostCredits);
-            WriteInteger(Item.CostPixels);
-            WriteInteger(0);
-            WriteBoolean(true);
-            WriteInteger(1);
-           WriteString(BaseItem.Type.ToString().ToLower());
-            WriteInteger(BaseItem.SpriteId);
-           WriteString("");
-            WriteInteger(1);
-            WriteInteger(0);
-           WriteString("");
-            WriteInteger(1);
+            this.Item = Item;
+            this.BaseItem = BaseItem;
         }
 
         public PurchaseOKComposer()
             : base(ServerPacketHeader.PurchaseOKMessageComposer)
         {
-            WriteInteger(0);
-           WriteString("");
-            WriteBoolean(false);
-            WriteInteger(0);
-            WriteInteger(0);
-            WriteInteger(0);
-            WriteBoolean(true);
-            WriteInteger(1);
-           WriteString("s");
-            WriteInteger(0);
-           WriteString("");
-            WriteInteger(1);
-            WriteInteger(0);
-           WriteString("");
-            WriteInteger(1);
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            if(Item != null)
+            {
+                packet.WriteInteger(BaseItem.Id);
+                packet.WriteString(BaseItem.ItemName);
+                packet.WriteBoolean(false);
+                packet.WriteInteger(Item.CostCredits);
+                packet.WriteInteger(Item.CostPixels);
+                packet.WriteInteger(0);
+                packet.WriteBoolean(true);
+                packet.WriteInteger(1);
+                packet.WriteString(BaseItem.Type.ToString().ToLower());
+                packet.WriteInteger(BaseItem.SpriteId);
+                packet.WriteString("");
+                packet.WriteInteger(1);
+                packet.WriteInteger(0);
+                packet.WriteString("");
+                packet.WriteInteger(1);
+            } else
+            {
+                packet.WriteInteger(0);
+                packet.WriteString("");
+                packet.WriteBoolean(false);
+                packet.WriteInteger(0);
+                packet.WriteInteger(0);
+                packet.WriteInteger(0);
+                packet.WriteBoolean(true);
+                packet.WriteInteger(1);
+                packet.WriteString("s");
+                packet.WriteInteger(0);
+                packet.WriteString("");
+                packet.WriteInteger(1);
+                packet.WriteInteger(0);
+                packet.WriteString("");
+                packet.WriteInteger(1);
+            }
         }
     }
 }

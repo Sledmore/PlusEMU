@@ -1,11 +1,16 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class FurnitureAliasesComposer : ServerPacket
+    class FurnitureAliasesComposer : MessageComposer
     {
         public FurnitureAliasesComposer()
             : base(ServerPacketHeader.FurnitureAliasesMessageComposer)
         {
-            WriteInteger(0);          
+                      
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(0);
         }
     }
 }

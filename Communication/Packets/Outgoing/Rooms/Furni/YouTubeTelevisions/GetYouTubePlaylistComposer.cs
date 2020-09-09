@@ -5,20 +5,29 @@ using Plus.HabboHotel.Items.Televisions;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Furni.YouTubeTelevisions
 {
-    class GetYouTubePlaylistComposer : ServerPacket
+    class GetYouTubePlaylistComposer : MessageComposer
     {
+        public int ItemId { get; }
+        public ICollection<TelevisionItem> Videos { get; }
+
         public GetYouTubePlaylistComposer(int ItemId, ICollection<TelevisionItem> Videos)
             : base(ServerPacketHeader.GetYouTubePlaylistMessageComposer)
         {
-            WriteInteger(ItemId);
-            WriteInteger(Videos.Count);
+            this.ItemId = ItemId;
+            this.Videos = Videos;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(ItemId);
+            packet.WriteInteger(Videos.Count);
             foreach (TelevisionItem Video in Videos.ToList())
             {
-               WriteString(Video.YouTubeId);
-               WriteString(Video.Title);//Title
-               WriteString(Video.Description);//Description
+                packet.WriteString(Video.YouTubeId);
+                packet.WriteString(Video.Title);//Title
+                packet.WriteString(Video.Description);//Description
             }
-           WriteString("");
+            packet.WriteString("");
         }
     }
 }

@@ -6,21 +6,30 @@ using Plus.HabboHotel.Users;
 
 namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class ModeratorUserRoomVisitsComposer : ServerPacket
+    class ModeratorUserRoomVisitsComposer : MessageComposer
     {
+        public Habbo Habbo { get; }
+        public Dictionary<double, RoomData> Visits { get; }
+
         public ModeratorUserRoomVisitsComposer(Habbo Data, Dictionary<double, RoomData> Visits)
             : base(ServerPacketHeader.ModeratorUserRoomVisitsMessageComposer)
         {
-            WriteInteger(Data.Id);
-            WriteString(Data.Username);
-            WriteInteger(Visits.Count);
+            this.Habbo = Data;
+            this.Visits = Visits;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Habbo.Id);
+            packet.WriteString(Habbo.Username);
+            packet.WriteInteger(Visits.Count);
 
             foreach (KeyValuePair<double, RoomData> Visit in Visits)
             {
-                WriteInteger(Visit.Value.Id);
-                WriteString(Visit.Value.Name);
-                WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Hour);
-                WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Minute);
+                packet.WriteInteger(Visit.Value.Id);
+                packet.WriteString(Visit.Value.Name);
+                packet.WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Hour);
+                packet.WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Minute);
             }
         }
     }

@@ -107,7 +107,7 @@ namespace Plus.HabboHotel.Rooms
                 else
                     _bots.TryAdd(user.BotData.Id, user);
 
-                _room.SendPacket(new DanceComposer(user, user.BotData.DanceId));
+                _room.SendPacket(new DanceComposer(user.VirtualId, user.BotData.DanceId));
             }
             return user;
         }
@@ -677,7 +677,7 @@ namespace Plus.HabboHotel.Rooms
                     if (!User.IsBot && !User.IsAsleep && User.IdleTime >= 600)
                     {
                         User.IsAsleep = true;
-                        _room.SendPacket(new SleepComposer(User, true));
+                        _room.SendPacket(new SleepComposer(User.VirtualId, true));
                     }
 
                     if (User.CarryItemId > 0)

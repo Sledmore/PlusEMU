@@ -6,28 +6,35 @@ using Plus.HabboHotel.Users.Badges;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.Badges
 {
-    class BadgesComposer : ServerPacket
+    class BadgesComposer : MessageComposer
     {
-        public BadgesComposer(GameClient Session)
+        public ICollection<Badge> Badges { get; }
+
+        public BadgesComposer(ICollection<Badge> Badges)
             : base(ServerPacketHeader.BadgesMessageComposer)
+        {
+            this.Badges = Badges;
+        }
+
+        public override void Compose(ServerPacket packet)
         {
             List<Badge> EquippedBadges = new List<Badge>();
 
-            WriteInteger(Session.GetHabbo().GetBadgeComponent().Count);
-            foreach (Badge Badge in Session.GetHabbo().GetBadgeComponent().GetBadges().ToList())
+            packet.WriteInteger(Badges.Count);
+            foreach (Badge Badge in Badges)
             {
-                WriteInteger(1);
-                WriteString(Badge.Code);
+                packet.WriteInteger(1);
+                packet.WriteString(Badge.Code);
 
                 if (Badge.Slot > 0)
                     EquippedBadges.Add(Badge);
             }
 
-            WriteInteger(EquippedBadges.Count);
+            packet.WriteInteger(EquippedBadges.Count);
             foreach (Badge Badge in EquippedBadges)
             {
-                WriteInteger(Badge.Slot);
-                WriteString(Badge.Code);
+                packet.WriteInteger(Badge.Slot);
+                packet.WriteString(Badge.Code);
             }
         }
     }

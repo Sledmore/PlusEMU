@@ -52,17 +52,15 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Bots
                 #region Copy Looks (1)
                 case 1:
                     {
-                        ServerPacket userChangeComposer = new ServerPacket(ServerPacketHeader.UserChangeMessageComposer);
-                        userChangeComposer.WriteInteger(bot.VirtualId);
-                        userChangeComposer.WriteString(session.GetHabbo().Look);
-                        userChangeComposer.WriteString(session.GetHabbo().Gender);
-                        userChangeComposer.WriteString(bot.BotData.Motto);
-                        userChangeComposer.WriteInteger(0);
-                        room.SendPacket(userChangeComposer);
-
                         //Change the defaults
                         bot.BotData.Look = session.GetHabbo().Look;
                         bot.BotData.Gender = session.GetHabbo().Gender;
+
+                        UserChangeComposer userChangeComposer = new UserChangeComposer(bot.VirtualId, bot.BotData);
+                        
+                        room.SendPacket(userChangeComposer);
+
+                        
 
                         using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
@@ -170,7 +168,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Bots
                             bot.BotData.DanceId = randomDance.Next(1, 4);
                         }
 
-                        room.SendPacket(new DanceComposer(bot, bot.BotData.DanceId));
+                        room.SendPacket(new DanceComposer(bot.VirtualId, bot.BotData.DanceId));
                         break;
                     }
                 #endregion

@@ -5,6 +5,7 @@ using Plus.HabboHotel.Rooms;
 using Plus.Communication.Packets.Incoming;
 using Plus.Communication.Packets.Outgoing;
 using Plus.Database.Interfaces;
+using Plus.Communication.Packets.Outgoing.Rooms.Engine;
 
 namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
 {
@@ -57,16 +58,13 @@ namespace Plus.HabboHotel.Items.Wired.Boxes.Effects
             
             string Figure = Stuff[1];
 
-            ServerPacket UserChangeComposer = new ServerPacket(ServerPacketHeader.UserChangeMessageComposer);
-            UserChangeComposer.WriteInteger(User.VirtualId);
-            UserChangeComposer.WriteString(Figure);
-            UserChangeComposer.WriteString("M");
-            UserChangeComposer.WriteString(User.BotData.Motto);
-            UserChangeComposer.WriteInteger(0);
-            Instance.SendPacket(UserChangeComposer);
-
             User.BotData.Look = Figure;
             User.BotData.Gender = "M";
+
+            MessageComposer UserChangeComposer = new UserChangeComposer(User.VirtualId, User.BotData);
+            Instance.SendPacket(UserChangeComposer);
+
+            
 
             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
             {

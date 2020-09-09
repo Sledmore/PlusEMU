@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class UserRemoveComposer : ServerPacket
+    class UserRemoveComposer : MessageComposer
     {
+        public int UserId { get; }
+
         public UserRemoveComposer(int Id)
             : base(ServerPacketHeader.UserRemoveMessageComposer)
         {
-           WriteString(Id.ToString());
+            this.UserId = Id;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(UserId.ToString());
         }
     }
 }

@@ -1,11 +1,16 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Quests
 {
-    class QuestAbortedComposer : ServerPacket
+    class QuestAbortedComposer : MessageComposer
     {
         public QuestAbortedComposer()
             : base(ServerPacketHeader.QuestAbortedMessageComposer)
         {
-            WriteBoolean(false);
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteBoolean(false);
         }
     }
 }

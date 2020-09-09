@@ -5,41 +5,50 @@ using Plus.HabboHotel.Users.Messenger;
 
 namespace Plus.Communication.Packets.Outgoing.Messenger
 {
-    class HabboSearchResultComposer : ServerPacket
+    class HabboSearchResultComposer : MessageComposer
     {
+        public List<SearchResult> Friends { get; }
+        public List<SearchResult> OtherUsers { get; }
+
         public HabboSearchResultComposer(List<SearchResult> Friends, List<SearchResult> OtherUsers)
             : base(ServerPacketHeader.HabboSearchResultMessageComposer)
         {
-            WriteInteger(Friends.Count);
+            this.Friends = Friends;
+            this.OtherUsers = OtherUsers;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Friends.Count);
             foreach (SearchResult Friend in Friends.ToList())
             {
                 bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(Friend.UserId) != null);
 
-                WriteInteger(Friend.UserId);
-               WriteString(Friend.Username);
-               WriteString(Friend.Motto);
-                WriteBoolean(Online);
-                WriteBoolean(false);
-               WriteString(string.Empty);
-                WriteInteger(0);
-               WriteString(Online ? Friend.Figure : "");
-               WriteString(Friend.LastOnline);
+                packet.WriteInteger(Friend.UserId);
+                packet.WriteString(Friend.Username);
+                packet.WriteString(Friend.Motto);
+                packet.WriteBoolean(Online);
+                packet.WriteBoolean(false);
+                packet.WriteString(string.Empty);
+                packet.WriteInteger(0);
+                packet.WriteString(Online ? Friend.Figure : "");
+                packet.WriteString(Friend.LastOnline);
             }
 
-            WriteInteger(OtherUsers.Count);
+            packet.WriteInteger(OtherUsers.Count);
             foreach (SearchResult OtherUser in OtherUsers.ToList())
             {
                 bool Online = (PlusEnvironment.GetGame().GetClientManager().GetClientByUserId(OtherUser.UserId) != null);
 
-                WriteInteger(OtherUser.UserId);
-               WriteString(OtherUser.Username);
-               WriteString(OtherUser.Motto);
-                WriteBoolean(Online);
-                WriteBoolean(false);
-               WriteString(string.Empty);
-                WriteInteger(0);
-               WriteString(Online ? OtherUser.Figure : "");
-               WriteString(OtherUser.LastOnline);
+                packet.WriteInteger(OtherUser.UserId);
+                packet.WriteString(OtherUser.Username);
+                packet.WriteString(OtherUser.Motto);
+                packet.WriteBoolean(Online);
+                packet.WriteBoolean(false);
+                packet.WriteString(string.Empty);
+                packet.WriteInteger(0);
+                packet.WriteString(Online ? OtherUser.Figure : "");
+                packet.WriteString(OtherUser.LastOnline);
             }
         }
     }

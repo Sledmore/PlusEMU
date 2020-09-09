@@ -2,17 +2,28 @@
 
 namespace Plus.Communication.Packets.Outgoing.Groups
 {
-    class GroupFurniSettingsComposer : ServerPacket
+    class GroupFurniSettingsComposer : MessageComposer
     {
+        public Group Group { get; }
+        public int ItemId { get; }
+        public int UserId { get; }
+
         public GroupFurniSettingsComposer(Group Group, int ItemId, int UserId)
             : base(ServerPacketHeader.GroupFurniSettingsMessageComposer)
         {
-            WriteInteger(ItemId);//Item Id
-            WriteInteger(Group.Id);//Group Id?
-            WriteString(Group.Name);
-            WriteInteger(Group.RoomId);//RoomId
-            WriteBoolean(Group.IsMember(UserId));//Member?
-            WriteBoolean(Group.ForumEnabled);//Has a forum
+            this.Group = Group;
+            this.ItemId = ItemId;
+            this.UserId = UserId;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(ItemId);//Item Id
+            packet.WriteInteger(Group.Id);//Group Id?
+            packet.WriteString(Group.Name);
+            packet.WriteInteger(Group.RoomId);//RoomId
+            packet.WriteBoolean(Group.IsMember(UserId));//Member?
+            packet.WriteBoolean(Group.ForumEnabled);//Has a forum
         }
     }
 }

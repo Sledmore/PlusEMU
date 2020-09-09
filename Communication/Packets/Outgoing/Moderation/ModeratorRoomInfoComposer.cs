@@ -2,27 +2,36 @@
 
 namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class ModeratorRoomInfoComposer : ServerPacket
+    class ModeratorRoomInfoComposer : MessageComposer
     {
+        public RoomData Data { get; }
+        public bool OwnerInRoom { get; }
+
         public ModeratorRoomInfoComposer(RoomData Data, bool OwnerInRoom)
             : base(ServerPacketHeader.ModeratorRoomInfoMessageComposer)
         {
-            WriteInteger(Data.Id);
-            WriteInteger(Data.UsersNow);
-            WriteBoolean(OwnerInRoom); // owner in room
-            WriteInteger(Data.OwnerId);
-           WriteString(Data.OwnerName);
-            WriteBoolean(Data != null);
-           WriteString(Data.Name);
-           WriteString(Data.Description);
-           
-            WriteInteger(Data.Tags.Count);
+            this.Data = Data;
+            this.OwnerInRoom = OwnerInRoom;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Data.Id);
+            packet.WriteInteger(Data.UsersNow);
+            packet.WriteBoolean(OwnerInRoom); // owner in room
+            packet.WriteInteger(Data.OwnerId);
+            packet.WriteString(Data.OwnerName);
+            packet.WriteBoolean(Data != null);
+            packet.WriteString(Data.Name);
+            packet.WriteString(Data.Description);
+
+            packet.WriteInteger(Data.Tags.Count);
             foreach (string Tag in Data.Tags)
             {
-               WriteString(Tag);
+                packet.WriteString(Tag);
             }
 
-            WriteBoolean(false);
+            packet.WriteBoolean(false);
         }
     }
 }

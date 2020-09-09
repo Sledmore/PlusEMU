@@ -104,7 +104,7 @@ namespace Plus.HabboHotel.GameClients
             }
         }
 
-        public void StaffAlert(ServerPacket Message, int Exclude = 0)
+        public void StaffAlert(MessageComposer Message, int Exclude = 0)
         {
             foreach (GameClient client in this.GetClients.ToList())
             {
@@ -175,7 +175,7 @@ namespace Plus.HabboHotel.GameClients
         }
 
 
-        public void SendPacket(ServerPacket Packet, string fuse = "")
+        public void SendPacket(MessageComposer Packet, string fuse = "")
         {
             foreach (GameClient Client in this._clients.Values.ToList())
             {

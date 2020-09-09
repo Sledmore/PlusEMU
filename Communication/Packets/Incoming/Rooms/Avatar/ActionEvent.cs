@@ -33,7 +33,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
             if (action == 5) // idle
             {
                 user.IsAsleep = true;
-                room.SendPacket(new SleepComposer(user, true));
+                room.SendPacket(new SleepComposer(user.VirtualId, true));
             }
 
             PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialWave);

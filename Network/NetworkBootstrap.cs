@@ -18,8 +18,10 @@ namespace Plus.Network
 
         public void Init()
         {
+            // TODO: make this configurable
             IEventLoopGroup bossGroup = new MultithreadEventLoopGroup(1);
             IEventLoopGroup workerGroup = new MultithreadEventLoopGroup(10);
+            IEventLoopGroup channelGroup = new MultithreadEventLoopGroup(7);
             
             ServerBootstrap server = new ServerBootstrap()
                 .Group(bossGroup, workerGroup)
@@ -30,7 +32,7 @@ namespace Plus.Network
                     channel.Pipeline.AddLast("frameDecoder", new LengthFieldBasedFrameDecoder(500000, 0, 4, 0, 4));
                     channel.Pipeline.AddLast("gameEncoder", new GameEncoder());
                     channel.Pipeline.AddLast("gameDecoder", new GameDecoder());
-                    channel.Pipeline.AddLast("clientHandler", new NetworkChannelHandler());
+                    channel.Pipeline.AddLast(channelGroup, "clientHandler", new NetworkChannelHandler());
                 }))
                 .ChildOption(ChannelOption.TcpNodelay, true)
                 .ChildOption(ChannelOption.SoKeepalive, true)

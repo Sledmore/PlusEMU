@@ -1,12 +1,21 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Avatar
 {
-    class AvatarAspectUpdateComposer : ServerPacket
+    class AvatarAspectUpdateComposer : MessageComposer
     {
+        public string Figure { get; }
+        public string Gender { get; }
+
         public AvatarAspectUpdateComposer(string Figure, string Gender)
             : base(ServerPacketHeader.AvatarAspectUpdateMessageComposer)
         {
-            WriteString(Figure);
-            WriteString(Gender);
+            this.Figure = Figure;
+            this.Gender = Gender;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(Figure);
+            packet.WriteString(Gender);
         }
     }
 }

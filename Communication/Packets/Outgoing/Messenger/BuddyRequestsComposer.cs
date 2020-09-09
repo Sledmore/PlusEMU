@@ -5,21 +5,28 @@ using Plus.HabboHotel.Cache.Type;
 
 namespace Plus.Communication.Packets.Outgoing.Messenger
 {
-    class BuddyRequestsComposer : ServerPacket
+    class BuddyRequestsComposer : MessageComposer
     {
+        public ICollection<MessengerRequest> Requests { get; }
+
         public BuddyRequestsComposer(ICollection<MessengerRequest> requests)
             : base(ServerPacketHeader.BuddyRequestsMessageComposer)
         {
-            WriteInteger(requests.Count);
-            WriteInteger(requests.Count);
+            this.Requests = requests;
+        }
 
-            foreach (MessengerRequest Request in requests)
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Requests.Count);
+            packet.WriteInteger(Requests.Count);
+
+            foreach (MessengerRequest Request in Requests)
             {
-                WriteInteger(Request.From);
-                WriteString(Request.Username);
+                packet.WriteInteger(Request.From);
+                packet.WriteString(Request.Username);
 
                 UserCache User = PlusEnvironment.GetGame().GetCacheManager().GenerateUser(Request.From);
-                WriteString(User != null ? User.Look : "");
+                packet.WriteString(User != null ? User.Look : "");
             }
         }
     }

@@ -77,20 +77,20 @@ namespace Plus.HabboHotel.Users.Messenger
                 currentRoom = client.GetHabbo().CurrentRoom;
         }
 
-        public void Serialize(ServerPacket Message, GameClient Session)
+        public void Serialize(ServerPacket Message, Habbo Habbo)
         {
             Relationship Relationship = null;
 
-            if(Session != null && Session.GetHabbo() != null && Session.GetHabbo().Relationships != null)
-                Relationship = Session.GetHabbo().Relationships.FirstOrDefault(x => x.Value.UserId == Convert.ToInt32(UserId)).Value;
+            if(Habbo != null && Habbo.Relationships != null)
+                Relationship = Habbo.Relationships.FirstOrDefault(x => x.Value.UserId == Convert.ToInt32(UserId)).Value;
 
             int y = Relationship == null ? 0 : Relationship.Type;
 
             Message.WriteInteger(UserId);
             Message.WriteString(mUsername);
             Message.WriteInteger(1);
-            Message.WriteBoolean(!mAppearOffline || Session.GetHabbo().GetPermissions().HasRight("mod_tool") ? IsOnline : false);
-            Message.WriteBoolean(!mHideInroom || Session.GetHabbo().GetPermissions().HasRight("mod_tool") ? InRoom : false);
+            Message.WriteBoolean(!mAppearOffline || Habbo.GetPermissions().HasRight("mod_tool") ? IsOnline : false);
+            Message.WriteBoolean(!mHideInroom || Habbo.GetPermissions().HasRight("mod_tool") ? InRoom : false);
             Message.WriteString(IsOnline ? mLook : "");
             Message.WriteInteger(0); // categoryid
             Message.WriteString(mMotto);

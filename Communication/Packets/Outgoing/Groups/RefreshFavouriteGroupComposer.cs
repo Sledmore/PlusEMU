@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Groups
 {
-    class RefreshFavouriteGroupComposer : ServerPacket
+    class RefreshFavouriteGroupComposer : MessageComposer
     {
+        public int GroupId { get; }
+
         public RefreshFavouriteGroupComposer(int Id)
             : base(ServerPacketHeader.RefreshFavouriteGroupMessageComposer)
         {
-            WriteInteger(Id);
+            this.GroupId = Id;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Id);
         }
     }
 }

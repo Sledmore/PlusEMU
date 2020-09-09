@@ -2,15 +2,20 @@
 
 namespace Plus.Communication.Packets.Outgoing.Messenger
 {
-    class MessengerInitComposer : ServerPacket
+    class MessengerInitComposer : MessageComposer
     {
         public MessengerInitComposer()
             : base(ServerPacketHeader.MessengerInitMessageComposer)
         {
-            WriteInteger(Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("messenger.buddy_limit")));//Friends max.
-            WriteInteger(300);
-            WriteInteger(800);
-            WriteInteger(0); // category count
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Convert.ToInt32(PlusEnvironment.GetSettingsManager().TryGetValue("messenger.buddy_limit")));//Friends max.
+            packet.WriteInteger(300);
+            packet.WriteInteger(800);
+            packet.WriteInteger(0); // category count
         }
     }
 }

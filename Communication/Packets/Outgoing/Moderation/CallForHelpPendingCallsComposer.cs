@@ -3,16 +3,23 @@ using Plus.Utilities;
 
 namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class CallForHelpPendingCallsComposer  :ServerPacket
+    class CallForHelpPendingCallsComposer : MessageComposer
     {
+        public ModerationTicket Ticket { get; }
+
         public CallForHelpPendingCallsComposer(ModerationTicket ticket)
             : base(ServerPacketHeader.CallForHelpPendingCallsMessageComposer)
         {
-            WriteInteger(1);// Count for whatever reason?
+            this.Ticket = ticket;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(1);// Count for whatever reason?
             {
-                WriteString(ticket.Id.ToString());
-                WriteString(UnixTimestamp.FromUnixTimestamp(ticket.Timestamp).ToShortTimeString());// "11-02-2017 04:07:05";
-                WriteString(ticket.Issue);
+                packet.WriteString(Ticket.Id.ToString());
+                packet.WriteString(UnixTimestamp.FromUnixTimestamp(Ticket.Timestamp).ToShortTimeString());// "11-02-2017 04:07:05";
+                packet.WriteString(Ticket.Issue);
             }
         }
     }

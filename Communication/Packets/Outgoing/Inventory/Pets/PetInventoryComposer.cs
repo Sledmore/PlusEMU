@@ -5,24 +5,31 @@ using Plus.HabboHotel.Rooms.AI;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.Pets
 {
-    class PetInventoryComposer : ServerPacket
+    class PetInventoryComposer : MessageComposer
     {
+        public ICollection<Pet> Pets { get; }
+
         public PetInventoryComposer(ICollection<Pet> Pets)
             : base(ServerPacketHeader.PetInventoryMessageComposer)
         {
-            WriteInteger(1);
-            WriteInteger(1);
-            WriteInteger(Pets.Count);
+            this.Pets = Pets;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(1);
+            packet.WriteInteger(1);
+            packet.WriteInteger(Pets.Count);
             foreach (Pet Pet in Pets.ToList())
             {
-                WriteInteger(Pet.PetId);
-               WriteString(Pet.Name);
-                WriteInteger(Pet.Type);
-                WriteInteger(int.Parse(Pet.Race));
-               WriteString(Pet.Color);
-                WriteInteger(0);
-                WriteInteger(0);
-                WriteInteger(0);
+                packet.WriteInteger(Pet.PetId);
+                packet.WriteString(Pet.Name);
+                packet.WriteInteger(Pet.Type);
+                packet.WriteInteger(int.Parse(Pet.Race));
+                packet.WriteString(Pet.Color);
+                packet.WriteInteger(0);
+                packet.WriteInteger(0);
+                packet.WriteInteger(0);
             }
         }
     }

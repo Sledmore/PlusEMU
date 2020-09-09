@@ -5,50 +5,60 @@ using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class ObjectsComposer : ServerPacket
+    class ObjectsComposer : MessageComposer
     {
+        public Item[] Objects { get; }
+        public int OwnerId { get; }
+        public string OwnerName { get; }
+
         public ObjectsComposer(Item[] Objects, Room Room)
             : base(ServerPacketHeader.ObjectsMessageComposer)
         {
-            WriteInteger(1);
+            this.Objects = Objects;
+            this.OwnerId = Room.OwnerId;
+            this.OwnerName = Room.OwnerName;
+        }
 
-            WriteInteger(Room.OwnerId);
-           WriteString(Room.OwnerName);
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(1);
 
-            WriteInteger(Objects.Length);
+            packet.WriteInteger(OwnerId);
+            packet.WriteString(OwnerName);
+
+            packet.WriteInteger(Objects.Length);
             foreach (Item Item in Objects)
             {
-                WriteFloorItem(Item, Convert.ToInt32(Item.UserID));
+                WriteFloorItem(Item, Convert.ToInt32(Item.UserID), packet);
             }
         }
 
-        private void WriteFloorItem(Item Item, int UserID)
+        private void WriteFloorItem(Item Item, int UserID, ServerPacket packet)
         {
-
-            WriteInteger(Item.Id);
-            WriteInteger(Item.GetBaseItem().SpriteId);
-            WriteInteger(Item.GetX);
-            WriteInteger(Item.GetY);
-            WriteInteger(Item.Rotation);
-           WriteString(String.Format("{0:0.00}", TextHandling.GetString(Item.GetZ)));
-           WriteString(String.Empty);
+            packet.WriteInteger(Item.Id);
+            packet.WriteInteger(Item.GetBaseItem().SpriteId);
+            packet.WriteInteger(Item.GetX);
+            packet.WriteInteger(Item.GetY);
+            packet.WriteInteger(Item.Rotation);
+            packet.WriteString(String.Format("{0:0.00}", TextHandling.GetString(Item.GetZ)));
+            packet.WriteString(String.Empty);
 
             if (Item.LimitedNo > 0)
             {
-                WriteInteger(1);
-                WriteInteger(256);
-               WriteString(Item.ExtraData);
-                WriteInteger(Item.LimitedNo);
-                WriteInteger(Item.LimitedTot);
+                packet.WriteInteger(1);
+                packet.WriteInteger(256);
+                packet.WriteString(Item.ExtraData);
+                packet.WriteInteger(Item.LimitedNo);
+                packet.WriteInteger(Item.LimitedTot);
             }
             else
             {
-                ItemBehaviourUtility.GenerateExtradata(Item, this);
+                ItemBehaviourUtility.GenerateExtradata(Item, packet);
             }
 
-            WriteInteger(-1); // to-do: check
-            WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
-            WriteInteger(UserID);
+            packet.WriteInteger(-1); // to-do: check
+            packet.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
+            packet.WriteInteger(UserID);
         }
     }
 }

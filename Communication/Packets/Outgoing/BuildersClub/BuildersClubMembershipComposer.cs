@@ -1,14 +1,19 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.BuildersClub
 {
-    class BuildersClubMembershipComposer : ServerPacket
+    class BuildersClubMembershipComposer : MessageComposer
     {
         public BuildersClubMembershipComposer()
             : base(ServerPacketHeader.BuildersClubMembershipMessageComposer)
         {
-            WriteInteger(int.MaxValue);
-            WriteInteger(100);
-            WriteInteger(0);
-            WriteInteger(int.MaxValue);
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(int.MaxValue);
+            packet.WriteInteger(100);
+            packet.WriteInteger(0);
+            packet.WriteInteger(int.MaxValue);
         }
     }
 }

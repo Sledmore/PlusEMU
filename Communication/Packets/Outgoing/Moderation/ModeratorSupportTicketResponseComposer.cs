@@ -1,12 +1,19 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class ModeratorSupportTicketResponseComposer : ServerPacket
+    class ModeratorSupportTicketResponseComposer : MessageComposer
     {
+        public int Result { get; }
+
         public ModeratorSupportTicketResponseComposer(int result)
             : base(ServerPacketHeader.ModeratorSupportTicketResponseMessageComposer)
         {
-            WriteInteger(result);
-            WriteString("");
+            this.Result = result;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Result);
+            packet.WriteString("");
         }
     }
 }

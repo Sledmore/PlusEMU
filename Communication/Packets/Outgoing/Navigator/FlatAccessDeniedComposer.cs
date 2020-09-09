@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Navigator
 {
-    class FlatAccessDeniedComposer : ServerPacket
+    class FlatAccessDeniedComposer : MessageComposer
     {
+        public string Username { get; }
+
         public FlatAccessDeniedComposer(string username)
             : base(ServerPacketHeader.FlatAccessDeniedMessageComposer)
         {
-           WriteString(username);
+            this.Username = username;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(Username);
         }
     }
 }
