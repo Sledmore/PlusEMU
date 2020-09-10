@@ -698,7 +698,7 @@ namespace Plus.HabboHotel.Rooms
                 if (user.GetClient() == null)
                     continue;
 
-                user.GetClient().SendPackets(packets);
+                user.GetClient().SendPacketsAsync(packets);
             }
         }
 

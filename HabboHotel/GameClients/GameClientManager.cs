@@ -257,7 +257,7 @@ namespace Plus.HabboHotel.GameClients
                         }
 
                         Console.Clear();
-                        log.Info("<<- SERVER SHUTDOWN ->> IVNENTORY IS SAVING");
+                        log.Info("<<- SERVER SHUTDOWN ->> INVENTORY IS SAVING");
                     }
                     catch
                     {
@@ -281,10 +281,9 @@ namespace Plus.HabboHotel.GameClients
                     catch
                     {
                     }
-
-                    Console.Clear();
-                    log.Info("<<- SERVER SHUTDOWN ->> CLOSING CONNECTIONS");
                 }
+                Console.Clear();
+                log.Info("<<- SERVER SHUTDOWN ->> CLOSING CONNECTIONS");
             }
             catch (Exception e)
             {
