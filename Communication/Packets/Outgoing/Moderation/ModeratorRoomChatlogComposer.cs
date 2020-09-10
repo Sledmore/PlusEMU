@@ -6,22 +6,31 @@ using Plus.HabboHotel.Rooms.Chat.Logs;
 
 namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class ModeratorRoomChatlogComposer : ServerPacket
+    class ModeratorRoomChatlogComposer : MessageComposer
     {
+        public Room Room { get; }
+        public ICollection<ChatlogEntry> Chats { get; }
+
         public ModeratorRoomChatlogComposer(Room room, ICollection<ChatlogEntry> chats)
             : base(ServerPacketHeader.ModeratorRoomChatlogMessageComposer)
         {
-            WriteByte(1);
-            WriteShort(2);//Count
-            WriteString("roomName");
-            WriteByte(2);
-            WriteString(room.Name);
-            WriteString("roomId");
-            WriteByte(1);
-            WriteInteger(room.Id);
+            this.Room = room;
+            this.Chats = chats;
+        }
 
-            WriteShort(chats.Count);
-            foreach (ChatlogEntry Entry in chats)
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteByte(1);
+            packet.WriteShort(2);//Count
+            packet.WriteString("roomName");
+            packet.WriteByte(2);
+            packet.WriteString(Room.Name);
+            packet.WriteString("roomId");
+            packet.WriteByte(1);
+            packet.WriteInteger(Room.Id);
+
+            packet.WriteShort(Chats.Count);
+            foreach (ChatlogEntry Entry in Chats)
             {
                 string Username = "Unknown";
                 if (Entry.PlayerNullable() != null)
@@ -29,11 +38,11 @@ namespace Plus.Communication.Packets.Outgoing.Moderation
                     Username = Entry.PlayerNullable().Username;
                 }
 
-                WriteString(UnixTimestamp.FromUnixTimestamp(Entry.Timestamp).ToShortTimeString()); // time?
-                WriteInteger(Entry.PlayerId); // User Id
-                WriteString(Username); // Username
-                WriteString(!string.IsNullOrEmpty(Entry.Message) ? Entry.Message : "** user sent a blank message **"); // Message        
-                WriteBoolean(false); //TODO, AI's?
+                packet.WriteString(UnixTimestamp.FromUnixTimestamp(Entry.Timestamp).ToShortTimeString()); // time?
+                packet.WriteInteger(Entry.PlayerId); // User Id
+                packet.WriteString(Username); // Username
+                packet.WriteString(!string.IsNullOrEmpty(Entry.Message) ? Entry.Message : "** user sent a blank message **"); // Message        
+                packet.WriteBoolean(false); //TODO, AI's?
             }
         }
     }

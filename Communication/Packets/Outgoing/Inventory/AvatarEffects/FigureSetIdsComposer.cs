@@ -4,21 +4,28 @@ using Plus.HabboHotel.Users.Clothing.Parts;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.AvatarEffects
 {
-    class FigureSetIdsComposer : ServerPacket
+    class FigureSetIdsComposer : MessageComposer
     {
+        public ICollection<ClothingParts> ClothingParts { get; }
+
         public FigureSetIdsComposer(ICollection<ClothingParts> ClothingParts)
             : base(ServerPacketHeader.FigureSetIdsMessageComposer)
         {
-            WriteInteger(ClothingParts.Count);
+            this.ClothingParts = ClothingParts;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(ClothingParts.Count);
             foreach (ClothingParts Part in ClothingParts.ToList())
             {
-                WriteInteger(Part.PartId);
+                packet.WriteInteger(Part.PartId);
             }
 
-            WriteInteger(ClothingParts.Count);
+            packet.WriteInteger(ClothingParts.Count);
             foreach (ClothingParts Part in ClothingParts.ToList())
             {
-               WriteString(Part.Part);
+                packet.WriteString(Part.Part);
             }
         }
     }

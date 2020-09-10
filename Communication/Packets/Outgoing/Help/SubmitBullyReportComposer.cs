@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Help
 {
-    class SubmitBullyReportComposer : ServerPacket
+    class SubmitBullyReportComposer : MessageComposer
     {
+        public int Result { get; }
+
         public SubmitBullyReportComposer(int Result)
             : base(ServerPacketHeader.SubmitBullyReportMessageComposer)
         {
-            WriteInteger(Result);
+            this.Result = Result;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Result);
         }
     }
 }

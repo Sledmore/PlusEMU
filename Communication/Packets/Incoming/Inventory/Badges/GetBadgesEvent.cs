@@ -7,7 +7,7 @@ namespace Plus.Communication.Packets.Incoming.Inventory.Badges
     {
         public void Parse(GameClient session, ClientPacket packet)
         {
-            session.SendPacket(new BadgesComposer(session));
+            session.SendPacket(new BadgesComposer(session.GetHabbo().GetBadgeComponent().GetBadges()));
         }
     }
 }

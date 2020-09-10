@@ -4,47 +4,62 @@ using Plus.HabboHotel.Groups;
 
 namespace Plus.Communication.Packets.Outgoing.Groups
 {
-    class BadgeEditorPartsComposer : ServerPacket
+    class BadgeEditorPartsComposer : MessageComposer
     {
+        public ICollection<GroupBadgeParts> Bases { get; }
+        public ICollection<GroupBadgeParts> Symbols { get; }
+        public ICollection<GroupColours> BaseColours { get; }
+        public ICollection<GroupColours> SymbolColours { get; }
+        public ICollection<GroupColours> BackgroundColours { get; }
+
         public BadgeEditorPartsComposer(ICollection<GroupBadgeParts> bases, ICollection<GroupBadgeParts> symbols, ICollection<GroupColours> baseColours, ICollection<GroupColours> symbolColours,
           ICollection<GroupColours> backgroundColours)
           : base(ServerPacketHeader.BadgeEditorPartsMessageComposer)
         {
-            WriteInteger(bases.Count);
-            foreach (GroupBadgeParts part in bases)
+            this.Bases = bases;
+            this.Symbols = symbols;
+            this.BaseColours = baseColours;
+            this.SymbolColours = symbolColours;
+            this.BackgroundColours = BackgroundColours;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Bases.Count);
+            foreach (GroupBadgeParts part in Bases)
             {
-                WriteInteger(part.Id);
-                WriteString(part.AssetOne);
-                WriteString(part.AssetTwo);
+                packet.WriteInteger(part.Id);
+                packet.WriteString(part.AssetOne);
+                packet.WriteString(part.AssetTwo);
             }
 
-            WriteInteger(symbols.Count);
-            foreach (GroupBadgeParts part in symbols)
+            packet.WriteInteger(Symbols.Count);
+            foreach (GroupBadgeParts part in Symbols)
             {
-                WriteInteger(part.Id);
-                WriteString(part.AssetOne);
-                WriteString(part.AssetTwo);
+                packet.WriteInteger(part.Id);
+                packet.WriteString(part.AssetOne);
+                packet.WriteString(part.AssetTwo);
             }
 
-            WriteInteger(baseColours.Count);
-            foreach (GroupColours colour in baseColours)
+            packet.WriteInteger(BaseColours.Count);
+            foreach (GroupColours colour in BaseColours)
             {
-                WriteInteger(colour.Id);
-                WriteString(colour.Colour);
+                packet.WriteInteger(colour.Id);
+                packet.WriteString(colour.Colour);
             }
 
-            WriteInteger(symbolColours.Count);
-            foreach (GroupColours colour in symbolColours)
+            packet.WriteInteger(SymbolColours.Count);
+            foreach (GroupColours colour in SymbolColours)
             {
-                WriteInteger(colour.Id);
-                WriteString(colour.Colour);
+                packet.WriteInteger(colour.Id);
+                packet.WriteString(colour.Colour);
             }
 
-            WriteInteger(backgroundColours.Count);
-            foreach (GroupColours colour in backgroundColours)
+            packet.WriteInteger(BackgroundColours.Count);
+            foreach (GroupColours colour in BackgroundColours)
             {
-                WriteInteger(colour.Id);
-                WriteString(colour.Colour);
+                packet.WriteInteger(colour.Id);
+                packet.WriteString(colour.Colour);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
             if (!instance.CheckRights(session))
                 return;
 
-            session.SendPacket(new GetRoomFilterListComposer(instance));
+            session.SendPacket(new GetRoomFilterListComposer(instance.WordFilterList));
             PlusEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_SelfModRoomFilterSeen", 1);
         }
     }

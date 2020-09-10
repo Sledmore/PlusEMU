@@ -55,7 +55,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.AI.Pets
 
                 //Send the magic out.
                 if (room.RespectNotificationsEnabled)
-                    room.SendPacket(new RespectPetNotificationMessageComposer(targetUser.GetClient().GetHabbo(), targetUser));
+                    room.SendPacket(new RespectPetNotificationMessageComposer(targetUser));
                 room.SendPacket(new CarryObjectComposer(thisUser.VirtualId, thisUser.CarryItemId));
                 return;
             }

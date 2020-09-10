@@ -80,7 +80,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.FloorPlan
             int doorDirection = packet.PopInt();
             int wallThick = packet.PopInt();
             int floorThick = packet.PopInt();
-            int wallHeight = packet.PopInt();
+            int wallHeight = packet.RemainingLength() >= 4 ? packet.PopInt() : 0;
 
             int doorZ = 0;
 

@@ -1,11 +1,16 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Catalog
 {
-    public class RecyclerRewardsComposer : ServerPacket
+    public class RecyclerRewardsComposer : MessageComposer
     {
         public RecyclerRewardsComposer()
             : base(ServerPacketHeader.RecyclerRewardsMessageComposer)
         {
-            WriteInteger(0);// Count of items
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(0);// Count of items
         }
     }
 }

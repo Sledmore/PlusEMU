@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Handshake
 {
-    class SetUniqueIdComposer : ServerPacket
+    class SetUniqueIdComposer : MessageComposer
     {
+        public string UniqueId { get; }
+
         public SetUniqueIdComposer(string Id)
             : base(ServerPacketHeader.SetUniqueIdMessageComposer)
         {
-           WriteString(Id);
+            this.UniqueId = Id;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(UniqueId);
         }
     }
 }

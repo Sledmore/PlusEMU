@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using DotNetty.Buffers;
 using DotNetty.Codecs;
 using DotNetty.Transport.Channels;
 using Plus.Communication.Packets.Outgoing;
 
 namespace Plus.Network.Codec
 {
-    public class GameEncoder : MessageToMessageEncoder<ServerPacket>
+    public class GameEncoder : MessageToByteEncoder<MessageComposer>
     {
-        protected override void Encode(IChannelHandlerContext context, ServerPacket message, List<object> output)
+        protected override void Encode(IChannelHandlerContext context, MessageComposer message, IByteBuffer output)
         {
-            output.Add(message.FinalizedBuffer);
+            ServerPacket packet = message.WriteMessage(output);
+            packet.FinalizeBuffer();
         }
     }
 }

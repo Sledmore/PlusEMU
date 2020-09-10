@@ -36,7 +36,7 @@ namespace Plus.HabboHotel.Rooms.Trading
             playerTwo.TradePartner = playerOne.UserId;
         }
 
-        public void SendPacket(ServerPacket packet)
+        public void SendPacket(MessageComposer packet)
         {
             foreach (TradeUser user in Users)
             {

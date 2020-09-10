@@ -1,12 +1,21 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Groups
 {
-    class NewGroupInfoComposer : ServerPacket
+    class NewGroupInfoComposer : MessageComposer
     {
+        public int RoomId { get; }
+        public int GroupId { get; }
+
         public NewGroupInfoComposer(int RoomId, int GroupId)
             : base(ServerPacketHeader.NewGroupInfoMessageComposer)
         {
-            WriteInteger(RoomId);
-            WriteInteger(GroupId);
+            this.RoomId = RoomId;
+            this.GroupId = GroupId;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(RoomId);
+            packet.WriteInteger(GroupId);
         }
     }
 }

@@ -1,11 +1,17 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
 {
-    class RoomSettingsSavedComposer : ServerPacket
+    class RoomSettingsSavedComposer : MessageComposer
     {
+        public int RoomId { get; }
         public RoomSettingsSavedComposer(int roomID)
             : base(ServerPacketHeader.RoomSettingsSavedMessageComposer)
         {
-            WriteInteger(roomID);
+            this.RoomId = roomID;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(RoomId);
         }
     }
 }

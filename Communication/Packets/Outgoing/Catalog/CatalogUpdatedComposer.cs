@@ -1,11 +1,16 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Catalog
 {
-    class CatalogUpdatedComposer : ServerPacket
+    class CatalogUpdatedComposer : MessageComposer
     {
         public CatalogUpdatedComposer()
             : base(ServerPacketHeader.CatalogUpdatedMessageComposer)
         {
-            WriteBoolean(false);
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteBoolean(false);
         }
     }
 }

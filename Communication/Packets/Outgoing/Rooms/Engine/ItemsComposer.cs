@@ -3,43 +3,53 @@ using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class ItemsComposer : ServerPacket
+    class ItemsComposer : MessageComposer
     {
+        public Item[] Objects { get; }
+        public int OwnerId { get; }
+        public string OwnerName { get; }
+
         public ItemsComposer(Item[] Objects, Room Room)
             : base(ServerPacketHeader.ItemsMessageComposer)
         {
+            this.Objects = Objects;
+            this.OwnerId = Room.OwnerId;
+            this.OwnerName = Room.OwnerName;
+        }
 
-            WriteInteger(1);
-            WriteInteger(Room.OwnerId);
-           WriteString(Room.OwnerName);
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(1);
+            packet.WriteInteger(OwnerId);
+            packet.WriteString(OwnerName);
 
-            WriteInteger(Objects.Length);
+            packet.WriteInteger(Objects.Length);
 
             foreach (Item Item in Objects)
             {
-                WriteWallItem(Item, Room.OwnerId);
+                WriteWallItem(Item, OwnerId, packet);
             }
         }
 
-        private void WriteWallItem(Item Item, int UserId)
+        private void WriteWallItem(Item Item, int UserId, ServerPacket packet)
         {
-           WriteString(Item.Id.ToString());
-            WriteInteger(Item.Data.SpriteId);
+            packet.WriteString(Item.Id.ToString());
+            packet.WriteInteger(Item.Data.SpriteId);
 
             try
             {
-               WriteString(Item.wallCoord);
+                packet.WriteString(Item.wallCoord);
             }
             catch
             {
-               WriteString("");
+                packet.WriteString("");
             }
 
-            ItemBehaviourUtility.GenerateWallExtradata(Item, this);
+            ItemBehaviourUtility.GenerateWallExtradata(Item, packet);
 
-            WriteInteger(-1);
-            WriteInteger((Item.Data.Modes > 1) ? 1 : 0);
-            WriteInteger(UserId);
+            packet.WriteInteger(-1);
+            packet.WriteInteger((Item.Data.Modes > 1) ? 1 : 0);
+            packet.WriteInteger(UserId);
         }
     }
 }

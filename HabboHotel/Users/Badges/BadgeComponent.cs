@@ -101,7 +101,7 @@ namespace Plus.HabboHotel.Users.Badges
 
             if (session != null)
             {
-                session.SendPacket(new BadgesComposer(session));
+                session.SendPacket(new BadgesComposer(session.GetHabbo().GetBadgeComponent().GetBadges()));
                 session.SendPacket(new FurniListNotificationComposer(1, 4));
             }
         }

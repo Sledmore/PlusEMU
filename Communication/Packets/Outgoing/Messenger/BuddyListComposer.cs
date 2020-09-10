@@ -8,33 +8,46 @@ using Plus.HabboHotel.Users.Relationships;
 
 namespace Plus.Communication.Packets.Outgoing.Messenger
 {
-    class BuddyListComposer : ServerPacket
+    class BuddyListComposer : MessageComposer
     {
+        public ICollection<MessengerBuddy> Friends { get; }
+        public Habbo Habbo { get; }
+        public int Pages { get; }
+        public int Page { get; }
+
         public BuddyListComposer(ICollection<MessengerBuddy> friends, Habbo player, int pages, int page)
             : base(ServerPacketHeader.BuddyListMessageComposer)
         {
-            WriteInteger(pages);// Pages
-            WriteInteger(page);// Page
+            this.Friends = friends;
+            this.Pages = pages;
+            this.Habbo = player;
+            this.Page = page;
+        }
 
-            WriteInteger(friends.Count);
-            foreach (MessengerBuddy Friend in friends.ToList())
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Pages);// Pages
+            packet.WriteInteger(Page);// Page
+
+            packet.WriteInteger(Friends.Count);
+            foreach (MessengerBuddy Friend in Friends.ToList())
             {
-                Relationship Relationship = player.Relationships.FirstOrDefault(x => x.Value.UserId == Convert.ToInt32(Friend.UserId)).Value;
+                Relationship Relationship = Habbo.Relationships.FirstOrDefault(x => x.Value.UserId == Convert.ToInt32(Friend.UserId)).Value;
 
-                WriteInteger(Friend.Id);
-                WriteString(Friend.mUsername);
-                WriteInteger(1);//Gender.
-                WriteBoolean(Friend.IsOnline);
-                WriteBoolean(Friend.IsOnline && Friend.InRoom);
-                WriteString(Friend.IsOnline ? Friend.mLook : string.Empty);
-                WriteInteger(0); // category id
-                WriteString(Friend.IsOnline ? Friend.mMotto : string.Empty);
-                WriteString(string.Empty);//Alternative name?
-                WriteString(string.Empty);
-                WriteBoolean(true);
-                WriteBoolean(false);
-                WriteBoolean(false);//Pocket Habbo user.
-                WriteShort(Relationship == null ? 0 : Relationship.Type);
+                packet.WriteInteger(Friend.Id);
+                packet.WriteString(Friend.mUsername);
+                packet.WriteInteger(1);//Gender.
+                packet.WriteBoolean(Friend.IsOnline);
+                packet.WriteBoolean(Friend.IsOnline && Friend.InRoom);
+                packet.WriteString(Friend.IsOnline ? Friend.mLook : string.Empty);
+                packet.WriteInteger(0); // category id
+                packet.WriteString(Friend.IsOnline ? Friend.mMotto : string.Empty);
+                packet.WriteString(string.Empty);//Alternative name?
+                packet.WriteString(string.Empty);
+                packet.WriteBoolean(true);
+                packet.WriteBoolean(false);
+                packet.WriteBoolean(false);//Pocket Habbo user.
+                packet.WriteShort(Relationship == null ? 0 : Relationship.Type);
             }
         }
     }

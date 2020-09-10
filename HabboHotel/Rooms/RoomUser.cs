@@ -263,7 +263,7 @@ namespace Plus.HabboHotel.Rooms
             if (IsAsleep)
             {
                 IsAsleep = false;
-                GetRoom().SendPacket(new SleepComposer(this, false));
+                GetRoom().SendPacket(new SleepComposer(this.VirtualId, false));
             }
         }
 
@@ -368,7 +368,7 @@ namespace Plus.HabboHotel.Rooms
                 Message = mRoom.GetFilter().CheckMessage(Message);
             }
 
-            ServerPacket Packet = null;
+            MessageComposer Packet = null;
             if (Shout)
                 Packet = new ShoutComposer(VirtualId, Message, PlusEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Message), Colour);
             else

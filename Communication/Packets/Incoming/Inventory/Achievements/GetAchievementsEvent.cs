@@ -8,7 +8,7 @@ namespace Plus.Communication.Packets.Incoming.Inventory.Achievements
     {
         public void Parse(GameClient session, ClientPacket packet)
         {
-            session.SendPacket(new AchievementsComposer(session, PlusEnvironment.GetGame().GetAchievementManager().Achievements.Values.ToList()));
+            session.SendPacket(new AchievementsComposer(session.GetHabbo(), PlusEnvironment.GetGame().GetAchievementManager().Achievements.Values.ToList()));
         }
     }
 }

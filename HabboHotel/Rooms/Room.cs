@@ -97,6 +97,7 @@ namespace Plus.HabboHotel.Rooms
             _wiredComponent = new WiredComponent(this);
             _bansComponent = new BansComponent(this);
             _tradingComponent = new TradingComponent(this);
+            ActiveTrades = new ArrayList();
 
             GetRoomItemHandler().LoadFurniture();
             GetGameMap().GenerateMaps();
@@ -565,12 +566,12 @@ namespace Plus.HabboHotel.Rooms
                 session.SendPacket(new UsersComposer(user));
 
                 if (user.IsBot && user.BotData.DanceId > 0)
-                    session.SendPacket(new DanceComposer(user, user.BotData.DanceId));
+                    session.SendPacket(new DanceComposer(user.VirtualId, user.BotData.DanceId));
                 else if (!user.IsBot && !user.IsPet && user.IsDancing)
-                    session.SendPacket(new DanceComposer(user, user.DanceId));
+                    session.SendPacket(new DanceComposer(user.VirtualId, user.DanceId));
 
                 if (user.IsAsleep)
-                    session.SendPacket(new SleepComposer(user, true));
+                    session.SendPacket(new SleepComposer(user.VirtualId, true));
 
                 if (user.CarryItemId > 0 && user.CarryTimer > 0)
                     session.SendPacket(new CarryObjectComposer(user.VirtualId, user.CarryItemId));
@@ -638,7 +639,7 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public void SendToTent(int Id, int TentId, ServerPacket Packet)
+        public void SendToTent(int Id, int TentId, MessageComposer Packet)
         {
             if (!Tents.ContainsKey(TentId))
                 return;
@@ -654,9 +655,9 @@ namespace Plus.HabboHotel.Rooms
         #endregion
 
         #region Communication (Packets)
-        public void SendPacket(ServerPacket packet, bool withRightsOnly = false)
+        public void SendPacket(MessageComposer message, bool withRightsOnly = false)
         {
-            if (packet == null)
+            if (message == null)
                 return;
 
             try
@@ -678,7 +679,7 @@ namespace Plus.HabboHotel.Rooms
                     if (withRightsOnly && !CheckRights(user.GetClient()))
                         continue;
 
-                    user.GetClient().SendPacket(packet);
+                    user.GetClient().SendPacket(message);
                 }
             }
             catch (Exception e)
@@ -687,7 +688,7 @@ namespace Plus.HabboHotel.Rooms
             }
         }
 
-        public void BroadcastPacket(byte[] packet)
+        public void BroadcastPacket(List<MessageComposer> packets)
         {
             foreach (RoomUser user in _roomUserManager.GetUserList().ToList())
             {
@@ -697,40 +698,16 @@ namespace Plus.HabboHotel.Rooms
                 if (user.GetClient() == null)
                     continue;
 
-                user.GetClient().SendPacket(packet);
+                user.GetClient().SendPacketsAsync(packets);
             }
         }
 
-        public void SendPacket(List<ServerPacket> packets)
+        public void SendPacket(List<MessageComposer> packets)
         {
             if (packets.Count == 0)
                 return;
 
-            try
-            {
-                byte[] TotalBytes = new byte[0];
-                int Current = 0;
-
-                foreach (ServerPacket packet in packets.ToList())
-                {
-                    byte[] ToAdd = packet.Buffer.Array;
-                    int NewLen = TotalBytes.Length + ToAdd.Length;
-
-                    Array.Resize(ref TotalBytes, NewLen);
-
-                    for (int i = 0; i < ToAdd.Length; i++)
-                    {
-                        TotalBytes[Current] = ToAdd[i];
-                        Current++;
-                    }
-                }
-
-                BroadcastPacket(TotalBytes);
-            }
-            catch (Exception e)
-            {
-                ExceptionLogger.LogException(e);
-            }
+             BroadcastPacket(packets);
         }
         #endregion
 

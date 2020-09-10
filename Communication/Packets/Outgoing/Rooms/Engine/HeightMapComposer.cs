@@ -2,15 +2,21 @@
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class HeightMapComposer : ServerPacket
+    class HeightMapComposer : MessageComposer
     {
+        public string Map { get; }
+
         public HeightMapComposer(string Map)
             : base(ServerPacketHeader.HeightMapMessageComposer)
         {
-            Map = Map.Replace("\n", "");
+            this.Map = Map.Replace("\n", "");
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
             string[] Split = Map.Split('\r');
-            WriteInteger(Split[0].Length);
-            WriteInteger((Split.Length - 1) * Split[0].Length);
+            packet.WriteInteger(Split[0].Length);
+            packet.WriteInteger((Split.Length - 1) * Split[0].Length);
             int x = 0;
             int y = 0;
             for (y = 0; y < Split.Length - 1; y++)
@@ -26,7 +32,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                     catch { pos = 'x'; }
 
                     if (pos == 'x')
-                        WriteShort(-1);
+                        packet.WriteShort(-1);
                     else
                     {
                         int Height = 0;
@@ -38,7 +44,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                         {
                             Height = ((Convert.ToInt32(pos) - 87) * 256);
                         }
-                        WriteShort(Height);
+                        packet.WriteShort(Height);
                     }
                 }
             }

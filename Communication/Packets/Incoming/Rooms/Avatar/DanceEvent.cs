@@ -33,7 +33,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Avatar
 
             user.DanceId = danceId;
 
-            room.SendPacket(new DanceComposer(user, danceId));
+            room.SendPacket(new DanceComposer(user.VirtualId, danceId));
 
             PlusEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialDance);
             if (room.GetRoomUserManager().GetRoomUsers().Count > 19)

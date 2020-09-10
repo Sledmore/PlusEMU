@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.GameCenter
 {
-    class JoinQueueComposer : ServerPacket
+    class JoinQueueComposer : MessageComposer
     {
+        public int GameId { get; }
+
         public JoinQueueComposer(int GameId)
             : base(ServerPacketHeader.JoinQueueMessageComposer)
         {
-            WriteInteger(GameId);
+            this.GameId = GameId;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(GameId);
         }
     }
 }

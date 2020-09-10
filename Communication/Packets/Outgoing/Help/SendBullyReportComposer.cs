@@ -1,11 +1,16 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Help
 {
-    class SendBullyReportComposer : ServerPacket
+    class SendBullyReportComposer : MessageComposer
     {
         public SendBullyReportComposer()
             : base(ServerPacketHeader.SendBullyReportMessageComposer)
         {
-            WriteInteger(0);//0-3, sends 0 on Habbo for this purpose.
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(0);//0-3, sends 0 on Habbo for this purpose.
         }
     }
 }

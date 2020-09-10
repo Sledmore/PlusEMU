@@ -2,22 +2,36 @@
 
 namespace Plus.Communication.Packets.Outgoing.Sound
 {
-    class SoundSettingsComposer : ServerPacket
+    class SoundSettingsComposer : MessageComposer
     {
+        public IEnumerable<int> Volumes { get; }
+        public bool ChatPreference { get; }
+        public bool InviteStatus { get; }
+        public bool FocusPreference { get; }
+        public int FriendBarState { get; }
         public SoundSettingsComposer(IEnumerable<int> volumes, bool chatPreference, bool invitesStatus, bool focusPreference, int friendBarState)
             : base(ServerPacketHeader.SoundSettingsMessageComposer)
         {
-            foreach (int volume in volumes)
+            this.Volumes = volumes;
+            this.ChatPreference = chatPreference;
+            this.InviteStatus = invitesStatus;
+            this.FocusPreference = focusPreference;
+            this.FriendBarState = friendBarState;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            foreach (int volume in Volumes)
             {
-                WriteInteger(volume);
+                packet.WriteInteger(volume);
             }
 
-            WriteBoolean(chatPreference);
-            WriteBoolean(invitesStatus);
-            WriteBoolean(focusPreference);
-            WriteInteger(friendBarState);
-            WriteInteger(0);
-            WriteInteger(0);
+            packet.WriteBoolean(ChatPreference);
+            packet.WriteBoolean(InviteStatus);
+            packet.WriteBoolean(FocusPreference);
+            packet.WriteInteger(FriendBarState);
+            packet.WriteInteger(0);
+            packet.WriteInteger(0);
         }
     }
 }

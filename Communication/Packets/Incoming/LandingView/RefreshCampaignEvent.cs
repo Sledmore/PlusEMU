@@ -22,7 +22,7 @@ namespace Plus.Communication.Packets.Incoming.LandingView
                         continue;
 
                     string[] data = value.Split(',');
-                    campaingName = data[1];
+                    campaingName = data.Length > 1 ? data[1] : "";
                 }
 
                 session.SendPacket(new CampaignComposer(parseCampaings, campaingName));

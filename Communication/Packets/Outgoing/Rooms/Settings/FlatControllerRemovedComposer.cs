@@ -2,13 +2,21 @@
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Settings
 {
-    class FlatControllerRemovedComposer : ServerPacket
+    class FlatControllerRemovedComposer : MessageComposer
     {
-        public FlatControllerRemovedComposer(Room Instance, int UserId)
+        public int RoomId { get; }
+        public int UserId { get; }
+        public FlatControllerRemovedComposer(int RoomId, int UserId)
             : base(ServerPacketHeader.FlatControllerRemovedMessageComposer)
         {
-            WriteInteger(Instance.Id);
-            WriteInteger(UserId);
+            this.RoomId = RoomId;
+            this.UserId = UserId;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(RoomId);
+            packet.WriteInteger(UserId);
         }
     }
 }

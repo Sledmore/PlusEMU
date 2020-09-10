@@ -1,14 +1,20 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Users
 {
-    class UserTagsComposer : ServerPacket
+    class UserTagsComposer : MessageComposer
     {
+        public int UserId { get; }
         public UserTagsComposer(int userId)
             : base(ServerPacketHeader.UserTagsMessageComposer)
         {
-            WriteInteger(userId);
-            WriteInteger(0);//Count of the tags.
+            this.UserId = userId;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(this.UserId);
+            packet.WriteInteger(0); // tag count
             {
-                //Append a string.
+                // append each tag as a string
             }
         }
     }

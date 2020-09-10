@@ -1,12 +1,19 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Marketplace
 {
-    class MarketplaceCanMakeOfferResultComposer : ServerPacket
+    class MarketplaceCanMakeOfferResultComposer : MessageComposer
     {
+        public int Result { get; }
+
         public MarketplaceCanMakeOfferResultComposer(int Result)
             : base(ServerPacketHeader.MarketplaceCanMakeOfferResultMessageComposer)
         {
-            WriteInteger(Result);
-            WriteInteger(0);
+            this.Result = Result;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Result);
+            packet.WriteInteger(0);
         }
     }
 }

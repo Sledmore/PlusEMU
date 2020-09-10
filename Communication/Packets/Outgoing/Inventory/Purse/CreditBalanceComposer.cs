@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Inventory.Purse
 {
-    class CreditBalanceComposer : ServerPacket
+    class CreditBalanceComposer : MessageComposer
     {
+        public int CreditsBalance { get; }
+
         public CreditBalanceComposer(int creditsBalance)
             : base(ServerPacketHeader.CreditBalanceMessageComposer)
         {
-           WriteString(creditsBalance + ".0");
+            this.CreditsBalance = creditsBalance;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(CreditsBalance + ".0");
         }
     }
 }

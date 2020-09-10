@@ -117,7 +117,7 @@ namespace Plus.HabboHotel.Users.Effects
             _currentEffect = EffectId;
 
             if (User.IsDancing)
-                _habbo.CurrentRoom.SendPacket(new DanceComposer(User, 0));
+                _habbo.CurrentRoom.SendPacket(new DanceComposer(User.VirtualId, 0));
             _habbo.CurrentRoom.SendPacket(new AvatarEffectComposer(User.VirtualId, EffectId));
         }
 

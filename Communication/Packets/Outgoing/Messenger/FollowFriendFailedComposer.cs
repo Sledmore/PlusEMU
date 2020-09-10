@@ -1,11 +1,18 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Messenger
 {
-    class FollowFriendFailedComposer : ServerPacket
+    class FollowFriendFailedComposer : MessageComposer
     {
+        public int ErrorCode { get; }
+
         public FollowFriendFailedComposer(int ErrorCode)
             : base(ServerPacketHeader.FollowFriendFailedMessageComposer)
         {
-            WriteInteger(ErrorCode);
+            this.ErrorCode = ErrorCode;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(ErrorCode);
         }
     }
 }

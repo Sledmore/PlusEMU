@@ -1,8 +1,8 @@
 ﻿using Plus.Communication.Packets.Outgoing;
 using Plus.Database.Interfaces;
-using Plus.HabboHotel.GameClients;
 using Plus.HabboHotel.Groups;
 using Plus.HabboHotel.Rooms;
+using Plus.HabboHotel.Users;
 using Plus.HabboHotel.Users.Messenger;
 using System;
 using System.Collections.Generic;
@@ -13,14 +13,17 @@ namespace Plus.HabboHotel.Navigator
 {
     static class NavigatorHandler
     {
-        public static void Search(ServerPacket packet, SearchResultList result, string query, GameClient session, int limit)
+        public static void Search(ServerPacket packet, SearchResultList result, string query, Habbo habbo, int limit)
         {
-            if (session == null)
+            if (habbo == null)
                 return;
             
             switch (result.CategoryType)
             {
                 default:
+                case NavigatorCategoryType.MyFavourites:
+                case NavigatorCategoryType.MyHistory:
+                case NavigatorCategoryType.Featured:
                     packet.WriteInteger(0);
                     break;
 
@@ -142,11 +145,6 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.Featured:
-                    {
-                        break;
-                    }
-
                 case NavigatorCategoryType.Popular:
                     {
                         List<Room> PopularRooms = PlusEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, limit);
@@ -191,7 +189,7 @@ namespace Plus.HabboHotel.Navigator
 
                 case NavigatorCategoryType.MyRooms:
                     {
-                        ICollection<RoomData> rooms = RoomFactory.GetRoomsDataByOwnerSortByName(session.GetHabbo().Id).OrderByDescending(x => x.UsersNow).ToList();
+                        ICollection<RoomData> rooms = RoomFactory.GetRoomsDataByOwnerSortByName(habbo.Id).OrderByDescending(x => x.UsersNow).ToList();
 
                         packet.WriteInteger(rooms.Count);
                         foreach (RoomData Data in rooms.ToList())
@@ -202,16 +200,11 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.MyFavourites:
-                    {
-                        break;
-                    }
-
                 case NavigatorCategoryType.MyGroups:
                     {
                         List<RoomData> MyGroups = new List<RoomData>();
 
-                        foreach (Group Group in PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(session.GetHabbo().Id).ToList())
+                        foreach (Group Group in PlusEnvironment.GetGame().GetGroupManager().GetGroupsForUser(habbo.Id).ToList())
                         {
                             if (Group == null)
                                 continue;
@@ -241,12 +234,12 @@ namespace Plus.HabboHotel.Navigator
                     {
                         List<int> RoomIds = new List<int>();
 
-                        if (session == null || session.GetHabbo() == null || session.GetHabbo().GetMessenger() == null || session.GetHabbo().GetMessenger().GetFriends() == null)
+                        if (habbo == null || habbo.GetMessenger() == null || habbo.GetMessenger().GetFriends() == null)
                             return;
 
-                        foreach (MessengerBuddy buddy in session.GetHabbo().GetMessenger().GetFriends().Where(p => p.InRoom))
+                        foreach (MessengerBuddy buddy in habbo.GetMessenger().GetFriends().Where(p => p.InRoom))
                         {
-                            if (buddy == null || !buddy.InRoom || buddy.UserId == session.GetHabbo().Id)
+                            if (buddy == null || !buddy.InRoom || buddy.UserId == habbo.Id)
                                 continue;
 
                             if (!RoomIds.Contains(buddy.CurrentRoom.Id))
@@ -269,13 +262,13 @@ namespace Plus.HabboHotel.Navigator
                     {
                         List<RoomData> MyRights = new List<RoomData>();
 
-                        if (session != null)
+                        if (habbo != null)
                         {
                             DataTable GetRights = null;
                             using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
                                 dbClient.SetQuery("SELECT `room_id` FROM `room_rights` WHERE `user_id` = @UserId LIMIT @FetchLimit");
-                                dbClient.AddParameter("UserId", session.GetHabbo().Id);
+                                dbClient.AddParameter("UserId", habbo.Id);
                                 dbClient.AddParameter("FetchLimit", limit);
                                 GetRights = dbClient.GetTable();
 
@@ -316,11 +309,6 @@ namespace Plus.HabboHotel.Navigator
                         break;
                     }
 
-                case NavigatorCategoryType.MyHistory:
-                    {
-                       
-                        break;
-                    }
 
                 case NavigatorCategoryType.PromotionCategory:
                     {

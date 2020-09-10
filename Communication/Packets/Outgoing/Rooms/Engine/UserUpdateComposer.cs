@@ -7,20 +7,27 @@ using Plus.HabboHotel.Rooms;
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
 {
-    class UserUpdateComposer : ServerPacket
+    class UserUpdateComposer : MessageComposer
     {
+        public ICollection<RoomUser> Users { get; }
+
         public UserUpdateComposer(ICollection<RoomUser> users)
             : base(ServerPacketHeader.UserUpdateMessageComposer)
         {
-            WriteInteger(users.Count);
-            foreach (RoomUser user in users.ToList())
+            this.Users = users;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Users.Count);
+            foreach (RoomUser user in Users.ToList())
             {
-                WriteInteger(user.VirtualId);
-                WriteInteger(user.X);
-                WriteInteger(user.Y);
-                WriteString(user.Z.ToString("0.00"));
-                WriteInteger(user.RotHead);
-                WriteInteger(user.RotBody);
+                packet.WriteInteger(user.VirtualId);
+                packet.WriteInteger(user.X);
+                packet.WriteInteger(user.Y);
+                packet.WriteString(user.Z.ToString("0.00"));
+                packet.WriteInteger(user.RotHead);
+                packet.WriteInteger(user.RotBody);
 
                 StringBuilder StatusComposer = new StringBuilder();
                 StatusComposer.Append("/");
@@ -39,7 +46,7 @@ namespace Plus.Communication.Packets.Outgoing.Rooms.Engine
                 }
 
                 StatusComposer.Append("/");
-                WriteString(StatusComposer.ToString());
+                packet.WriteString(StatusComposer.ToString());
             }
         }
     }

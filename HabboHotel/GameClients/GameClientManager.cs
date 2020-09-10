@@ -104,7 +104,7 @@ namespace Plus.HabboHotel.GameClients
             }
         }
 
-        public void StaffAlert(ServerPacket Message, int Exclude = 0)
+        public void StaffAlert(MessageComposer Message, int Exclude = 0)
         {
             foreach (GameClient client in this.GetClients.ToList())
             {
@@ -175,7 +175,7 @@ namespace Plus.HabboHotel.GameClients
         }
 
 
-        public void SendPacket(ServerPacket Packet, string fuse = "")
+        public void SendPacket(MessageComposer Packet, string fuse = "")
         {
             foreach (GameClient Client in this._clients.Values.ToList())
             {
@@ -257,7 +257,7 @@ namespace Plus.HabboHotel.GameClients
                         }
 
                         Console.Clear();
-                        log.Info("<<- SERVER SHUTDOWN ->> IVNENTORY IS SAVING");
+                        log.Info("<<- SERVER SHUTDOWN ->> INVENTORY IS SAVING");
                     }
                     catch
                     {
@@ -281,10 +281,9 @@ namespace Plus.HabboHotel.GameClients
                     catch
                     {
                     }
-
-                    Console.Clear();
-                    log.Info("<<- SERVER SHUTDOWN ->> CLOSING CONNECTIONS");
                 }
+                Console.Clear();
+                log.Info("<<- SERVER SHUTDOWN ->> CLOSING CONNECTIONS");
             }
             catch (Exception e)
             {

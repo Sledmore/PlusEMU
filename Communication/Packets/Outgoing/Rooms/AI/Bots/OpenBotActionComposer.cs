@@ -2,17 +2,30 @@
 
 namespace Plus.Communication.Packets.Outgoing.Rooms.AI.Bots
 {
-    class OpenBotActionComposer : ServerPacket
+    class OpenBotActionComposer : MessageComposer
     {
+        public int BotId { get; }
+        public string BotName { get; }
+        public int ActionId { get; }
+        public string BotSpeech { get; }
+
         public OpenBotActionComposer(RoomUser BotUser, int ActionId, string BotSpeech)
             : base(ServerPacketHeader.OpenBotActionMessageComposer)
         {
-            WriteInteger(BotUser.BotData.Id);
-            WriteInteger(ActionId);
+            this.BotId = BotUser.BotData.Id;
+            this.BotName = BotUser.BotData.Name;
+            this.ActionId = ActionId;
+            this.BotSpeech = BotSpeech;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(BotId);
+            packet.WriteInteger(ActionId);
             if (ActionId == 2)
-               WriteString(BotSpeech);
+                packet.WriteString(BotSpeech);
             else if (ActionId == 5)
-               WriteString(BotUser.BotData.Name);
+                packet.WriteString(BotName);
         }
     }
 }

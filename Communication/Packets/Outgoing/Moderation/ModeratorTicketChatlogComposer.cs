@@ -4,33 +4,44 @@ using Plus.HabboHotel.Moderation;
 
 namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class ModeratorTicketChatlogComposer : ServerPacket
+    class ModeratorTicketChatlogComposer : MessageComposer
     {
+        public ModerationTicket ModerationTicket { get; }
+        public RoomData RoomData { get; }
+        public double Timestamp { get; }
+
         public ModeratorTicketChatlogComposer(ModerationTicket ticket, RoomData roomData, double timestamp)
               : base(ServerPacketHeader.ModeratorTicketChatlogMessageComposer)
         {
-            WriteInteger(ticket.Id);
-            WriteInteger(ticket.Sender != null ? ticket.Sender.Id : 0);
-            WriteInteger(ticket.Reported != null ? ticket.Reported.Id : 0);
-            WriteInteger(roomData.Id);
+            this.ModerationTicket = ticket;
+            this.RoomData = roomData;
+            this.Timestamp = timestamp;
+        }
 
-            WriteByte(1);
-            WriteShort(2);//Count
-            WriteString("roomName");
-            WriteByte(2);
-            WriteString(roomData.Name);
-            WriteString("roomId");
-            WriteByte(1);
-            WriteInteger(roomData.Id);
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(ModerationTicket.Id);
+            packet.WriteInteger(ModerationTicket.Sender != null ? ModerationTicket.Sender.Id : 0);
+            packet.WriteInteger(ModerationTicket.Reported != null ? ModerationTicket.Reported.Id : 0);
+            packet.WriteInteger(RoomData.Id);
 
-            WriteShort(ticket.ReportedChats.Count);
-            foreach (string Chat in ticket.ReportedChats)
+            packet.WriteByte(1);
+            packet.WriteShort(2);//Count
+            packet.WriteString("roomName");
+            packet.WriteByte(2);
+            packet.WriteString(RoomData.Name);
+            packet.WriteString("roomId");
+            packet.WriteByte(1);
+            packet.WriteInteger(RoomData.Id);
+
+            packet.WriteShort(ModerationTicket.ReportedChats.Count);
+            foreach (string Chat in ModerationTicket.ReportedChats)
             {
-                WriteString(UnixTimestamp.FromUnixTimestamp(timestamp).ToShortTimeString());
-                WriteInteger(ticket.Id);
-                WriteString(ticket.Reported != null ? ticket.Reported.Username : "No username");
-                WriteString(Chat);
-                WriteBoolean(false);
+                packet.WriteString(UnixTimestamp.FromUnixTimestamp(Timestamp).ToShortTimeString());
+                packet.WriteInteger(ModerationTicket.Id);
+                packet.WriteString(ModerationTicket.Reported != null ? ModerationTicket.Reported.Username : "No username");
+                packet.WriteString(Chat);
+                packet.WriteBoolean(false);
             }
         }
     }

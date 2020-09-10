@@ -1,12 +1,21 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Inventory.Trading
 {
-    class TradingConfirmedComposer : ServerPacket
+    class TradingConfirmedComposer : MessageComposer
     {
+        public int UserId { get; }
+        public bool Confirmed { get; }
+
         public TradingConfirmedComposer(int UserId, bool Confirmed)
             : base(ServerPacketHeader.TradingConfirmedMessageComposer)
         {
-            WriteInteger(UserId);
-            WriteInteger(Confirmed ? 1 : 0);
+            this.UserId = UserId;
+            this.Confirmed = Confirmed;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(UserId);
+            packet.WriteInteger(Confirmed ? 1 : 0);
         }
     }
 }

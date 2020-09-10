@@ -29,13 +29,13 @@ namespace Plus.Communication.Packets.Incoming.Navigator
                     categories = PlusEnvironment.GetGame().GetNavigator().GetResultByIdentifier(category);
                     if (categories.Count > 0)
                     {
-                        session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session, 2, 100));
+                        session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session.GetHabbo(), 2, 100));
                         return;
                     }
                 }
             }
 
-            session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session));
+            session.SendPacket(new NavigatorSearchResultSetComposer(category, search, categories, session.GetHabbo()));
         }
     }
 }

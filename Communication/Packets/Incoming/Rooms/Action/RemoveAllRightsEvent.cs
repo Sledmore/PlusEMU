@@ -43,7 +43,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Action
                     dbClient.RunQuery();
                 }
 
-                session.SendPacket(new FlatControllerRemovedComposer(instance, userId));
+                session.SendPacket(new FlatControllerRemovedComposer(instance.Id, userId));
                 session.SendPacket(new RoomRightsListComposer(instance));
                 session.SendPacket(new UserUpdateComposer(instance.GetRoomUserManager().GetUserList().ToList()));
             }

@@ -16,7 +16,7 @@ namespace Plus.Communication.Packets.Incoming.Rooms.Settings
                 return;
 
             if (instance.GetBans().BannedUsers().Count > 0)
-                session.SendPacket(new GetRoomBannedUsersComposer(instance));
+                session.SendPacket(new GetRoomBannedUsersComposer(instance.Id, instance.GetBans().BannedUsers()));
         }
     }
 }

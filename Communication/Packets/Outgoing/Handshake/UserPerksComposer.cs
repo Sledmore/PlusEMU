@@ -2,60 +2,67 @@
 
 namespace Plus.Communication.Packets.Outgoing.Handshake
 {
-    public class UserPerksComposer : ServerPacket
+    public class UserPerksComposer : MessageComposer
     {
+        public Habbo Habbo { get; }
+
         public UserPerksComposer(Habbo Habbo)
             : base(ServerPacketHeader.UserPerksMessageComposer)
         {
-            WriteInteger(15); // Count
-            WriteString("USE_GUIDE_TOOL");
-            WriteString("");
-            WriteBoolean(false);
-            WriteString("GIVE_GUIDE_TOURS");
-            WriteString("requirement.unfulfilled.helper_le");
-            WriteBoolean(false);
-            WriteString("JUDGE_CHAT_REVIEWS");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("VOTE_IN_COMPETITIONS");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("CALL_ON_HELPERS");
-            WriteString(""); // ??
-            WriteBoolean(false);
-            WriteString("CITIZEN");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("TRADE");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("HEIGHTMAP_EDITOR_BETA");
-            WriteString(""); // ??
-            WriteBoolean(false);
-            WriteString("EXPERIMENTAL_CHAT_BETA");
-            WriteString("requirement.unfulfilled.helper_level_2");
-            WriteBoolean(true);
-            WriteString("EXPERIMENTAL_TOOLBAR");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("BUILDER_AT_WORK");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("NAVIGATOR_PHASE_ONE_2014");
-            WriteString(""); // ??
-            WriteBoolean(false);
-            WriteString("CAMERA");
-            WriteString(""); // ??
-            WriteBoolean(false);
-            WriteString("NAVIGATOR_PHASE_TWO_2014");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("MOUSE_ZOOM");
-            WriteString(""); // ??
-            WriteBoolean(true);
-            WriteString("NAVIGATOR_ROOM_THUMBNAIL_CAMERA");
-            WriteString(""); // ??
-            WriteBoolean(false);
+            this.Habbo = Habbo;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(15); // Count
+            packet.WriteString("USE_GUIDE_TOOL");
+            packet.WriteString("");
+            packet.WriteBoolean(false);
+            packet.WriteString("GIVE_GUIDE_TOURS");
+            packet.WriteString("requirement.unfulfilled.helper_le");
+            packet.WriteBoolean(false);
+            packet.WriteString("JUDGE_CHAT_REVIEWS");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("VOTE_IN_COMPETITIONS");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("CALL_ON_HELPERS");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(false);
+            packet.WriteString("CITIZEN");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("TRADE");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("HEIGHTMAP_EDITOR_BETA");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(false);
+            packet.WriteString("EXPERIMENTAL_CHAT_BETA");
+            packet.WriteString("requirement.unfulfilled.helper_level_2");
+            packet.WriteBoolean(true);
+            packet.WriteString("EXPERIMENTAL_TOOLBAR");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("BUILDER_AT_WORK");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("NAVIGATOR_PHASE_ONE_2014");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(false);
+            packet.WriteString("CAMERA");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(false);
+            packet.WriteString("NAVIGATOR_PHASE_TWO_2014");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("MOUSE_ZOOM");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(true);
+            packet.WriteString("NAVIGATOR_ROOM_THUMBNAIL_CAMERA");
+            packet.WriteString(""); // ??
+            packet.WriteBoolean(false);
         }
     }
 }

@@ -1,11 +1,17 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Session
 {
-    class FlatAccessibleComposer : ServerPacket
+    class FlatAccessibleComposer : MessageComposer
     {
+        public string Username { get; }
         public FlatAccessibleComposer(string Username)
             : base(ServerPacketHeader.FlatAccessibleMessageComposer)
         {
-           WriteString(Username);
+            this.Username = Username;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(Username);
         }
     }
 }

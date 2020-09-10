@@ -1,36 +1,45 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.AI.Pets
 {
-    class PetTrainingPanelComposer : ServerPacket
+    class PetTrainingPanelComposer : MessageComposer
     {
+        public int PetId { get; }
+        public int Level { get; }
+
         public PetTrainingPanelComposer(int PetId, int Level)
             : base(ServerPacketHeader.PetTrainingPanelMessageComposer)
         {
-            WriteInteger(PetId);//Pet Id for sure.
+            this.PetId = PetId;
+            this.Level = Level;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(PetId);//Pet Id for sure.
 
             //Commands available to be done.
-            WriteInteger(8);//Count
+            packet.WriteInteger(8);//Count
             {
-                WriteInteger(46);//Breed?
-                WriteInteger(0);//Command Id
-                WriteInteger(1);
-                WriteInteger(2);
-                WriteInteger(3);
-                WriteInteger(4);
-                WriteInteger(5);
-                WriteInteger(6);
+                packet.WriteInteger(46);//Breed?
+                packet.WriteInteger(0);//Command Id
+                packet.WriteInteger(1);
+                packet.WriteInteger(2);
+                packet.WriteInteger(3);
+                packet.WriteInteger(4);
+                packet.WriteInteger(5);
+                packet.WriteInteger(6);
             }
 
             //Commands that can be used NOW. (Level ups give you new commands etc).
-            WriteInteger(GetCount(Level));//Count
+            packet.WriteInteger(GetCount(Level));//Count
             {
-                WriteInteger(46);//Breed?
-                WriteInteger(0);//Command Id
-                WriteInteger(1);
-                WriteInteger(2);
-                WriteInteger(3);
-                WriteInteger(4);
-                WriteInteger(5);
-                WriteInteger(6);
+                packet.WriteInteger(46);//Breed?
+                packet.WriteInteger(0);//Command Id
+                packet.WriteInteger(1);
+                packet.WriteInteger(2);
+                packet.WriteInteger(3);
+                packet.WriteInteger(4);
+                packet.WriteInteger(5);
+                packet.WriteInteger(6);
             }
         }
 

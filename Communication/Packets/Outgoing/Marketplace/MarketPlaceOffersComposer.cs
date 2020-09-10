@@ -4,33 +4,42 @@ using Plus.HabboHotel.Catalog.Marketplace;
 
 namespace Plus.Communication.Packets.Outgoing.Marketplace
 {
-    class MarketPlaceOffersComposer : ServerPacket
+    class MarketPlaceOffersComposer : MessageComposer
     {
+        public Dictionary<int, MarketOffer> Offers { get; }
+        public Dictionary<int, int> Dictionary2 { get; }
+
         public MarketPlaceOffersComposer(Dictionary<int, MarketOffer> dictionary, Dictionary<int, int> dictionary2)
             : base(ServerPacketHeader.MarketPlaceOffersMessageComposer)
         {
-            WriteInteger(dictionary.Count);
-            if (dictionary.Count > 0)
+            this.Offers = dictionary;
+            this.Dictionary2 = dictionary2;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Offers.Count);
+            if (Offers.Count > 0)
             {
-                foreach (KeyValuePair<int, MarketOffer> pair in dictionary)
+                foreach (KeyValuePair<int, MarketOffer> pair in Offers)
                 {
-                    WriteInteger(pair.Value.OfferID);
-                    WriteInteger(1);//State
-                    WriteInteger(1);
-                    WriteInteger(pair.Value.SpriteId);
+                    packet.WriteInteger(pair.Value.OfferID);
+                    packet.WriteInteger(1);//State
+                    packet.WriteInteger(1);
+                    packet.WriteInteger(pair.Value.SpriteId);
 
-                    WriteInteger(256);
-                    WriteString("");
-                    WriteInteger(pair.Value.LimitedNumber);
-                    WriteInteger(pair.Value.LimitedStack);
+                    packet.WriteInteger(256);
+                    packet.WriteString("");
+                    packet.WriteInteger(pair.Value.LimitedNumber);
+                    packet.WriteInteger(pair.Value.LimitedStack);
 
-                    WriteInteger(pair.Value.TotalPrice);
-                    WriteInteger(0);
-                    WriteInteger(PlusEnvironment.GetGame().GetCatalog().GetMarketplace().AvgPriceForSprite(pair.Value.SpriteId));
-                    WriteInteger(dictionary2[pair.Value.SpriteId]);
+                    packet.WriteInteger(pair.Value.TotalPrice);
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(PlusEnvironment.GetGame().GetCatalog().GetMarketplace().AvgPriceForSprite(pair.Value.SpriteId));
+                    packet.WriteInteger(Dictionary2[pair.Value.SpriteId]);
                 }
             }
-            WriteInteger(dictionary.Count);//Item count to show how many were found.
+            packet.WriteInteger(Offers.Count);//Item count to show how many were found.
         }
     }
 }

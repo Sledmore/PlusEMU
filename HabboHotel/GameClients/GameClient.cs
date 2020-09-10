@@ -23,6 +23,7 @@ using Plus.HabboHotel.Permissions;
 using Plus.Communication.Packets.Outgoing.Notifications;
 using Plus.HabboHotel.Users.UserData;
 using Plus.Network.Codec;
+using System.Collections.Generic;
 
 namespace Plus.HabboHotel.GameClients
 {
@@ -183,14 +184,18 @@ namespace Plus.HabboHotel.GameClients
             SendPacket(new BroadcastMessageAlertComposer(message));
         }
 
-        public void SendPacket(ServerPacket message)
+        public void SendPacket(MessageComposer message)
         {
             channel.WriteAndFlushAsync(message);
         }
 
-        public void SendPacket(byte[] message)
+        public async void SendPacketsAsync(List<MessageComposer> messages)
         {
-            channel.WriteAndFlushAsync(message);
+            foreach(MessageComposer message in messages)
+            {
+                await channel.WriteAsync(message);
+            }
+            channel.Flush();
         }
 
         public Habbo GetHabbo()
@@ -238,7 +243,7 @@ namespace Plus.HabboHotel.GameClients
 
         public void EnableEncryption(byte[] sharedKey)
         {
-            channel.Channel.Pipeline.AddBefore("gameDecoder", "gameCrypto", new EncryptionDecoder(sharedKey));
+            channel.Channel.Pipeline.AddFirst("gameCrypto", new EncryptionDecoder(sharedKey));
         }
     }
 }

@@ -10,10 +10,10 @@ namespace Plus.Communication.Packets.Incoming
         private IByteBuffer buffer;
         public short Id { get; }
 
-        public ClientPacket(IByteBuffer buf)
+        public ClientPacket(short id, IByteBuffer buf)
         {
+            Id = id;
             buffer = buf;
-            Id = buffer.ReadShort();
         }
 
         public string PopString()
@@ -28,5 +28,8 @@ namespace Plus.Communication.Packets.Incoming
 
         public bool PopBoolean() =>
             buffer.ReadByte() == 1;
+
+        public int RemainingLength() =>
+            buffer.ReadableBytes;
     }
 }

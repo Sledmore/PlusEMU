@@ -1,12 +1,20 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class BroadcastMessageAlertComposer : ServerPacket
+    class BroadcastMessageAlertComposer : MessageComposer
     {
+        public string Message { get; }
+        public string Url { get; }
         public BroadcastMessageAlertComposer(string Message, string URL = "")
             : base(ServerPacketHeader.BroadcastMessageAlertMessageComposer)
         {
-           WriteString(Message);
-           WriteString(URL);
+            this.Message = Message;
+            this.Url = URL;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteString(Message);
+            packet.WriteString(Url);
         }
     }
 }

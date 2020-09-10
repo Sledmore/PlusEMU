@@ -1,14 +1,19 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Rooms.Polls
 {
-    class PollOfferComposer : ServerPacket
+    class PollOfferComposer : MessageComposer
     {
         public PollOfferComposer()
             : base(1074)
         {
-            WriteInteger(111141);//Room Id
-           WriteString("CLIENT_NPS");
-           WriteString("Customer Satisfaction Poll");
-           WriteString("Give us your opinion!");
+            
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(111141);//Room Id
+            packet.WriteString("CLIENT_NPS");
+            packet.WriteString("Customer Satisfaction Poll");
+            packet.WriteString("Give us your opinion!");
         }
     }
 }

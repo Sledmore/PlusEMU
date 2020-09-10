@@ -46,6 +46,7 @@ namespace Plus
         private static DatabaseManager _manager;
         private static RconSocket _Rcon;
         private static FigureDataManager _figureManager;
+        private static NetworkBootstrap _bootstrap;
 
         // TODO: Get rid?
         public static bool Event = false;
@@ -149,14 +150,12 @@ namespace Plus
                 //Make sure Rcon is connected before we allow clients to Connect.
                 _Rcon = new RconSocket(GetConfig().data["rcon.tcp.bindip"], int.Parse(GetConfig().data["rcon.tcp.port"]), GetConfig().data["rcon.tcp.allowedaddr"].Split(Convert.ToChar(";")));
 
-                //Accept connections.
-                NetworkBootstrap bootstrap = new NetworkBootstrap(int.Parse(GetConfig().data["game.tcp.port"]));
-                bootstrap.Init();
-//                _connectionManager = new ConnectionHandling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]), GetConfig().data["game.tcp.enablenagles"].ToLower() == "true");
-//                _connectionManager.Init();
-
                 _game = new Game();
                 _game.StartGameLoop();
+
+                //Accept connections.
+                _bootstrap = new NetworkBootstrap(GetConfig().data["game.tcp.bindip"], int.Parse(GetConfig().data["game.tcp.port"]));
+                _bootstrap.InitAsync().Wait();
 
                 TimeSpan TimeUsed = DateTime.Now - ServerStarted;
 
@@ -358,6 +357,8 @@ namespace Plus
             GetGame().GetPacketManager().UnregisterAll();//Unregister the packets.
             GetGame().GetPacketManager().WaitForAllToComplete();
             GetGame().GetClientManager().CloseAll();//Close all connections
+            _bootstrap.Shutdown().Wait();
+            _bootstrap.ShutdownWorkers();
             GetGame().GetRoomManager().Dispose();//Stop the game loop.
 
             using (IQueryAdapter dbClient = _manager.GetQueryReactor())

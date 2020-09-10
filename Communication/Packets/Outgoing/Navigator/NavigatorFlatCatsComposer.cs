@@ -4,17 +4,24 @@ using System.Linq;
 
 namespace Plus.Communication.Packets.Outgoing.Navigator
 {
-    class NavigatorFlatCatsComposer : ServerPacket
+    class NavigatorFlatCatsComposer : MessageComposer
     {
+        public ICollection<SearchResultList> Categories { get; }
+
         public NavigatorFlatCatsComposer(ICollection<SearchResultList> categories)
             : base(ServerPacketHeader.NavigatorFlatCatsMessageComposer)
         {
-            WriteInteger(categories.Count);
-            foreach (SearchResultList category in categories.ToList())
+            Categories = categories;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(Categories.Count);
+            foreach (SearchResultList category in Categories.ToList())
             {
-                WriteInteger(category.Id);
-                WriteString(category.PublicName);
-                WriteBoolean(true); // TODO
+                packet.WriteInteger(category.Id);
+                packet.WriteString(category.PublicName);
+                packet.WriteBoolean(true); // TODO
             }
         }
     }

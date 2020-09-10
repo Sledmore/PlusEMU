@@ -86,7 +86,7 @@ namespace Plus.Communication.Packets.Incoming.Users
                     if (habbo != null)
                     {
                         if (session.GetHabbo().GetMessenger().TryGetFriend(user, out MessengerBuddy buddy))
-                            session.SendPacket(new FriendListUpdateComposer(session, buddy));
+                            session.SendPacket(new FriendListUpdateComposer(session.GetHabbo(), buddy));
                     }
                 }
             }

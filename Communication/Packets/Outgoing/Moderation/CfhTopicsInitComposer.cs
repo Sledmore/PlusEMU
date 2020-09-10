@@ -4,22 +4,29 @@ using Plus.HabboHotel.Moderation;
 
 namespace Plus.Communication.Packets.Outgoing.Moderation
 {
-    class CfhTopicsInitComposer : ServerPacket
+    class CfhTopicsInitComposer : MessageComposer
     {
+        public Dictionary<string, List<ModerationPresetActions>> UserActionPresets { get; }
+
         public CfhTopicsInitComposer(Dictionary<string, List<ModerationPresetActions>> UserActionPresets)
             : base(ServerPacketHeader.CfhTopicsInitMessageComposer)
         {
 
-            WriteInteger(UserActionPresets.Count);
+            this.UserActionPresets = UserActionPresets;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(UserActionPresets.Count);
             foreach (KeyValuePair<string, List<ModerationPresetActions>> Cat in UserActionPresets.ToList())
             {
-                WriteString(Cat.Key);
-                WriteInteger(Cat.Value.Count);
+                packet.WriteString(Cat.Key);
+                packet.WriteInteger(Cat.Value.Count);
                 foreach (ModerationPresetActions Preset in Cat.Value.ToList())
                 {
-                    WriteString(Preset.Caption);
-                    WriteInteger(Preset.Id);
-                    WriteString(Preset.Type);
+                    packet.WriteString(Preset.Caption);
+                    packet.WriteInteger(Preset.Id);
+                    packet.WriteString(Preset.Type);
                 }
             }
         }

@@ -1,58 +1,63 @@
 ﻿namespace Plus.Communication.Packets.Outgoing.Pets
 {
-    class PetBreedingComposer : ServerPacket
+    class PetBreedingComposer : MessageComposer
     {
         public PetBreedingComposer()
             : base(ServerPacketHeader.PetBreedingMessageComposer)
         {
-            WriteInteger(219005779);//An Id?
+           
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            packet.WriteInteger(219005779);//An Id?
             {
                 //Pet 1.
-                WriteInteger(2169464);//Pet Id
-                WriteString("Tes");
-                WriteInteger(69);//Level
-                WriteString("1 22 F2E5CC");//Breed/figure?
-                WriteString("Sledmore");//Owner
+                packet.WriteInteger(2169464);//Pet Id
+                packet.WriteString("Tes");
+                packet.WriteInteger(69);//Level
+                packet.WriteString("1 22 F2E5CC");//Breed/figure?
+                packet.WriteString("Sledmore");//Owner
 
                 //Pet 2.
-                WriteInteger(2169465);
-                WriteString("Testy");
-                WriteInteger(1337);
-                WriteString("1 0 D4D4D4");
-                WriteString("Sledmore");
+                packet.WriteInteger(2169465);
+                packet.WriteString("Testy");
+                packet.WriteInteger(1337);
+                packet.WriteString("1 0 D4D4D4");
+                packet.WriteString("Sledmore");
 
-                WriteInteger(4);//Count
+                packet.WriteInteger(4);//Count
                 {
-                    WriteInteger(1);
-                    WriteInteger(3);
-                    WriteInteger(18);
-                    WriteInteger(19);
-                    WriteInteger(20);
-                    WriteInteger(3);
-                    WriteInteger(6);
-                    WriteInteger(12);
-                    WriteInteger(13);
-                    WriteInteger(14);
-                    WriteInteger(15);
-                    WriteInteger(16);
-                    WriteInteger(17);
-                    WriteInteger(4);
-                    WriteInteger(5);
-                    WriteInteger(7);
-                    WriteInteger(8);
-                    WriteInteger(9);
-                    WriteInteger(10);
-                    WriteInteger(11);
-                    WriteInteger(92);
-                    WriteInteger(6);
-                    WriteInteger(1);
-                    WriteInteger(2);
-                    WriteInteger(3);
-                    WriteInteger(4);
-                    WriteInteger(5);
-                    WriteInteger(6);
+                    packet.WriteInteger(1);
+                    packet.WriteInteger(3);
+                    packet.WriteInteger(18);
+                    packet.WriteInteger(19);
+                    packet.WriteInteger(20);
+                    packet.WriteInteger(3);
+                    packet.WriteInteger(6);
+                    packet.WriteInteger(12);
+                    packet.WriteInteger(13);
+                    packet.WriteInteger(14);
+                    packet.WriteInteger(15);
+                    packet.WriteInteger(16);
+                    packet.WriteInteger(17);
+                    packet.WriteInteger(4);
+                    packet.WriteInteger(5);
+                    packet.WriteInteger(7);
+                    packet.WriteInteger(8);
+                    packet.WriteInteger(9);
+                    packet.WriteInteger(10);
+                    packet.WriteInteger(11);
+                    packet.WriteInteger(92);
+                    packet.WriteInteger(6);
+                    packet.WriteInteger(1);
+                    packet.WriteInteger(2);
+                    packet.WriteInteger(3);
+                    packet.WriteInteger(4);
+                    packet.WriteInteger(5);
+                    packet.WriteInteger(6);
                 }
-                WriteInteger(28);
+                packet.WriteInteger(28);
             }
         }
     }

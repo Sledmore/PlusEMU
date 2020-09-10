@@ -4,48 +4,55 @@ using Plus.HabboHotel.Items;
 
 namespace Plus.Communication.Packets.Outgoing.Inventory.Trading
 {
-    class TradingUpdateComposer : ServerPacket
+    class TradingUpdateComposer : MessageComposer
     {
+        public Trade Trade { get; }
+
         public TradingUpdateComposer(Trade trade)
             : base(ServerPacketHeader.TradingUpdateMessageComposer)
         {
-            foreach (TradeUser user in trade.Users.ToList())
+            this.Trade = trade;
+        }
+
+        public override void Compose(ServerPacket packet)
+        {
+            foreach (TradeUser user in Trade.Users.ToList())
             {
-                WriteInteger(user.RoomUser.UserId);
-                WriteInteger(user.OfferedItems.Count);
+                packet.WriteInteger(user.RoomUser.UserId);
+                packet.WriteInteger(user.OfferedItems.Count);
 
                 foreach (Item item in user.OfferedItems.Values)
                 {
-                    WriteInteger(item.Id);
-                    WriteString(item.GetBaseItem().Type.ToString().ToLower());
-                    WriteInteger(item.Id);
-                    WriteInteger(item.Data.SpriteId);
-                    WriteInteger(0);//Not sure.
+                    packet.WriteInteger(item.Id);
+                    packet.WriteString(item.GetBaseItem().Type.ToString().ToLower());
+                    packet.WriteInteger(item.Id);
+                    packet.WriteInteger(item.Data.SpriteId);
+                    packet.WriteInteger(0);//Not sure.
                     if (item.LimitedNo > 0)
                     {
-                        WriteBoolean(false);//Stackable
-                        WriteInteger(256);
-                        WriteString("");
-                        WriteInteger(item.LimitedNo);
-                        WriteInteger(item.LimitedTot);
+                        packet.WriteBoolean(false);//Stackable
+                        packet.WriteInteger(256);
+                        packet.WriteString("");
+                        packet.WriteInteger(item.LimitedNo);
+                        packet.WriteInteger(item.LimitedTot);
                     }
                     else
                     {
-                        WriteBoolean(true);//Stackable
-                        WriteInteger(0);
-                        WriteString("");
+                        packet.WriteBoolean(true);//Stackable
+                        packet.WriteInteger(0);
+                        packet.WriteString("");
                     }
 
-                    WriteInteger(0);
-                    WriteInteger(0);
-                    WriteInteger(0);
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(0);
+                    packet.WriteInteger(0);
 
                     if (item.GetBaseItem().Type == 's')
-                        WriteInteger(0);
+                        packet.WriteInteger(0);
                 }
 
-                WriteInteger(user.OfferedItems.Count);//Item Count
-                WriteInteger(user.OfferedItems.Values.Where(x => x.Data.InteractionType == InteractionType.EXCHANGE).Sum(t => t.Data.BehaviourData));
+                packet.WriteInteger(user.OfferedItems.Count);//Item Count
+                packet.WriteInteger(user.OfferedItems.Values.Where(x => x.Data.InteractionType == InteractionType.EXCHANGE).Sum(t => t.Data.BehaviourData));
             }
         }
     }
