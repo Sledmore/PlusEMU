@@ -42,7 +42,6 @@ namespace Plus.HabboHotel.Rooms
         public DateTime lastRegeneration;
 
         public Task ProcessTask;
-        public ArrayList ActiveTrades;
 
         public TonerData TonerData;
         public MoodlightData MoodlightData;
@@ -750,10 +749,6 @@ namespace Plus.HabboHotel.Rooms
                         ProcessTask.Dispose();
                 }
                 catch { }
-                
-                if (ActiveTrades != null)
-                    if (ActiveTrades.Count > 0)
-                        ActiveTrades.Clear();
 
                 TonerData = null;
                 MoodlightData = null;
