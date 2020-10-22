@@ -163,9 +163,7 @@ namespace Plus
 
                 log.Info("EMULATOR -> READY! (" + TimeUsed.Seconds + " s, " + TimeUsed.Milliseconds + " ms)");
             }
-#pragma warning disable CS0168 // The variable 'e' is declared but never used
-            catch (KeyNotFoundException e)
-#pragma warning restore CS0168 // The variable 'e' is declared but never used
+            catch (KeyNotFoundException)
             { 
                 log.Error("Please check your configuration file - some values appear to be missing.");
                 log.Error("Press any key to shut down ...");
@@ -240,17 +238,11 @@ namespace Plus
         {
             inputStr = inputStr.ToLower();
             if (string.IsNullOrEmpty(inputStr))
-            {
                 return false;
-            }
 
             for (int i = 0; i < inputStr.Length; i++)
-            {
                 if (!IsValid(inputStr[i]))
-                {
                     return false;
-                }
-            }
 
             return true;
         }
@@ -271,11 +263,10 @@ namespace Plus
             {
                 dbClient.SetQuery("SELECT `username` FROM `users` WHERE `id` = @id LIMIT 1");
                 dbClient.AddParameter("id", UserId);
-                Name = dbClient.GetString();
-            }
 
-            if (string.IsNullOrEmpty(Name))
-                Name = "Unknown User";
+                if (!string.IsNullOrEmpty(Name))
+                    Name = dbClient.GetString();
+            }
 
             return Name;
         }
@@ -301,18 +292,16 @@ namespace Plus
                     {
                         if (_usersCached.ContainsKey(UserId))
                             return _usersCached[UserId];
-                        else
+
+                        UserData data = UserDataFactory.GetUserData(UserId);
+                        if (data != null)
                         {
-                            UserData data = UserDataFactory.GetUserData(UserId);
-                            if (data != null)
+                            Habbo Generated = data.user;
+                            if (Generated != null)
                             {
-                                Habbo Generated = data.user;
-                                if (Generated != null)
-                                {
-                                    Generated.InitInformation(data);
-                                    _usersCached.TryAdd(UserId, Generated);
-                                    return Generated;
-                                }
+                                Generated.InitInformation(data);
+                                _usersCached.TryAdd(UserId, Generated);
+                                return Generated;
                             }
                         }
                     }
@@ -342,8 +331,6 @@ namespace Plus
             }
             catch { return null; }
         }
-
-
 
         public static void PerformShutDown()
         {

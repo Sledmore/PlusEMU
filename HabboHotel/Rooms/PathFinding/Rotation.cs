@@ -1,4 +1,6 @@
-﻿namespace Plus.HabboHotel.Rooms.PathFinding
+﻿using System;
+
+namespace Plus.HabboHotel.Rooms.PathFinding
 {
     public static class Rotation
     {
@@ -6,29 +8,17 @@
         {
             int Rotation = 0;
 
-            if (X1 > X2 && Y1 > Y2)
-                Rotation = 7;
+            int dx = X2 - X1;
+            int dy = Y2 - Y1;
 
-            else if (X1 < X2 && Y1 < Y2)
-                Rotation = 3;
+            // Calculate the angle between the two points
+            double angle = Math.Atan2(dy, dx);
 
-            else if (X1 > X2 && Y1 < Y2)
-                Rotation = 5;
+            // Convert to a number 0-7
+            double octant = Math.Round(8 * angle / (2 * Math.PI)) + 8;
 
-            else if (X1 < X2 && Y1 > Y2)
-                Rotation = 1;
-
-            else if (X1 > X2)
-                Rotation = 6;
-
-            else if (X1 < X2)
-                Rotation = 2;
-
-            else if (Y1 < Y2)
-                Rotation = 4;
-
-            else if (Y1 > Y2)
-                Rotation = 0;
+            // We add 2 to align with existing orientation, as the above calculation is 90deg off.
+            Rotation = ((int)octant + 2) % 8;
 
             return Rotation;
         }
