@@ -39,49 +39,28 @@ namespace Plus.HabboHotel.Users.Inventory
 
         public void Init()
         {
-            if (_floorItems.Count > 0)
-                _floorItems.Clear();
-            if (_wallItems.Count > 0)
-                _wallItems.Clear();
-            if (_petsItems.Count > 0)
-                _petsItems.Clear();
-            if (_botItems.Count > 0)
-                _botItems.Clear();
+            if (_floorItems.Count > 0) _floorItems.Clear();
+            if (_wallItems.Count > 0) _wallItems.Clear();
+            if (_petsItems.Count > 0) _petsItems.Clear();
+            if (_botItems.Count > 0) _botItems.Clear();
 
             List<Item> items = ItemLoader.GetItemsForUser(_userId);
             foreach (Item item in items.ToList())
             {
-                if (item.IsFloorItem)
-                {
-                    if (!_floorItems.TryAdd(item.Id, item))
-                        continue;
-                }
-                else if (item.IsWallItem)
-                {
-                    if (!_wallItems.TryAdd(item.Id, item))
-                        continue;
-                }
-                else
-                    continue;
+                if (item.IsFloorItem && !_floorItems.TryAdd(item.Id, item)) continue;
+                else if (item.IsWallItem && !_wallItems.TryAdd(item.Id, item)) continue;
+                else continue;
             }
 
             List<Pet> pets = PetLoader.GetPetsForUser(Convert.ToInt32(_userId));
             foreach (Pet pet in pets)
-            {
                 if (!_petsItems.TryAdd(pet.PetId, pet))
-                {
                     Console.WriteLine("Error whilst loading pet x1: " + pet.PetId);
-                }
-            }
 
             List<Bot> bots = BotLoader.GetBotsForUser(Convert.ToInt32(_userId));
             foreach (Bot bot in bots)
-            {
                 if (!_botItems.TryAdd(bot.Id, bot))
-                {
                     Console.WriteLine("Error whilst loading bot x1: " + bot.Id);
-                }
-            }
         }
 
         public void ClearItems()
@@ -306,17 +285,12 @@ namespace Plus.HabboHotel.Users.Inventory
         public bool TryAddItem(Item item)
         {
             if (item.Data.Type.ToString().ToLower() == "s")// ItemType.FLOOR)
-            {
                 return _floorItems.TryAdd(item.Id, item);
-            }
-            else if (item.Data.Type.ToString().ToLower() == "i")//ItemType.WALL)
-            {
+
+            if (item.Data.Type.ToString().ToLower() == "i")//ItemType.WALL)
                 return _wallItems.TryAdd(item.Id, item);
-            }
-            else
-            {
-                throw new InvalidOperationException("Item did not match neither floor or wall item");
-            }
+
+            throw new InvalidOperationException("Item did not match neither floor or wall item");
         }
 
         public bool TryAddFloorItem(int itemId, Item item)

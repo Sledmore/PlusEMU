@@ -60,20 +60,20 @@ namespace Plus.HabboHotel.Users.Clothing
         {
             foreach (int PartId in PartIds.ToList())
             {
-                if (!_allClothing.ContainsKey(PartId))
-                {
-                    int NewId = 0;
-                    using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        dbClient.SetQuery("INSERT INTO `user_clothing` (`user_id`,`part_id`,`part`) VALUES (@UserId, @PartId, @Part)");
-                        dbClient.AddParameter("UserId", _habbo.Id);
-                        dbClient.AddParameter("PartId", PartId);
-                        dbClient.AddParameter("Part", ClothingName);
-                        NewId = Convert.ToInt32(dbClient.InsertQuery());
-                    }
+                if (_allClothing.ContainsKey(PartId))
+                    return;
 
-                    _allClothing.TryAdd(PartId, new ClothingParts(NewId, PartId, ClothingName));
+                int NewId = 0;
+                using (IQueryAdapter dbClient = PlusEnvironment.GetDatabaseManager().GetQueryReactor())
+                {
+                    dbClient.SetQuery("INSERT INTO `user_clothing` (`user_id`,`part_id`,`part`) VALUES (@UserId, @PartId, @Part)");
+                    dbClient.AddParameter("UserId", _habbo.Id);
+                    dbClient.AddParameter("PartId", PartId);
+                    dbClient.AddParameter("Part", ClothingName);
+                    NewId = Convert.ToInt32(dbClient.InsertQuery());
                 }
+
+                _allClothing.TryAdd(PartId, new ClothingParts(NewId, PartId, ClothingName));
             }
         }
 

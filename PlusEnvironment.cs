@@ -221,10 +221,8 @@ namespace Plus
         public static string FilterFigure(string figure)
         {
             foreach (char character in figure)
-            {
                 if (!IsValid(character))
                     return "sh-3338-93.ea-1406-62.hr-831-49.ha-3331-92.hd-180-7.ch-3334-93-1408.lg-3337-92.ca-1813-62";
-            }
 
             return figure;
         }
@@ -279,40 +277,31 @@ namespace Plus
                 if (Client != null)
                 {
                     Habbo User = Client.GetHabbo();
-                    if (User != null && User.Id > 0)
-                    {
-                        if (_usersCached.ContainsKey(UserId))
-                            _usersCached.TryRemove(UserId, out User);
-                        return User;
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        if (_usersCached.ContainsKey(UserId))
-                            return _usersCached[UserId];
+                    if (User == null || User.Id <= 0)
+                        return null;
 
-                        UserData data = UserDataFactory.GetUserData(UserId);
-                        if (data != null)
-                        {
-                            Habbo Generated = data.user;
-                            if (Generated != null)
-                            {
-                                Generated.InitInformation(data);
-                                _usersCached.TryAdd(UserId, Generated);
-                                return Generated;
-                            }
-                        }
-                    }
-                    catch { return null; }
+                    if (_usersCached.ContainsKey(UserId))
+                        _usersCached.TryRemove(UserId, out User);
+
+                    return User;
                 }
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
+
+                if (_usersCached.ContainsKey(UserId))
+                    return _usersCached[UserId];
+
+                UserData data = UserDataFactory.GetUserData(UserId);
+                if (data == null)
+                    return null;
+
+                Habbo Generated = data.user;
+                if (Generated == null)
+                    return null;
+
+                Generated.InitInformation(data);
+                _usersCached.TryAdd(UserId, Generated);
+
+                return Generated;
+            } catch { return null; }
         }
 
         public static Habbo GetHabboByUsername(String UserName)
