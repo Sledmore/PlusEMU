@@ -91,9 +91,10 @@ namespace Plus
 
             try
             {
-                string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+                // Directory in which the EXE file is located
+                string projectSolutionPath = Directory.GetCurrentDirectory();
 
-                _configuration = new ConfigurationData(projectSolutionPath + "//Config//config.ini");
+                _configuration = new ConfigurationData(projectSolutionPath + "//config.ini");
 
                 var connectionString = new MySqlConnectionStringBuilder
                 {
@@ -262,8 +263,10 @@ namespace Plus
                 dbClient.SetQuery("SELECT `username` FROM `users` WHERE `id` = @id LIMIT 1");
                 dbClient.AddParameter("id", UserId);
 
-                if (!string.IsNullOrEmpty(Name))
-                    Name = dbClient.GetString();
+                string getName = dbClient.GetString();
+
+                if (!string.IsNullOrEmpty(getName))
+                    Name = getName;
             }
 
             return Name;
