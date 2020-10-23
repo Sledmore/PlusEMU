@@ -137,7 +137,7 @@ namespace Plus.Communication.Packets
             if (!_incomingPackets.TryGetValue(packet.Id, out IPacketEvent pak))
             {
                 if (System.Diagnostics.Debugger.IsAttached)
-                    Log.Debug("Unhandled Packet: " + packet);
+                    Log.Debug("Unhandled Packet: " + packet.Id);
                 return;
             }
 

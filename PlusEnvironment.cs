@@ -91,9 +91,10 @@ namespace Plus
 
             try
             {
-                string projectSolutionPath = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+                // Directory in which the EXE file is located
+                string projectSolutionPath = Directory.GetCurrentDirectory();
 
-                _configuration = new ConfigurationData(projectSolutionPath + "//Config//config.ini");
+                _configuration = new ConfigurationData(projectSolutionPath + "//config.ini");
 
                 var connectionString = new MySqlConnectionStringBuilder
                 {
@@ -163,9 +164,7 @@ namespace Plus
 
                 log.Info("EMULATOR -> READY! (" + TimeUsed.Seconds + " s, " + TimeUsed.Milliseconds + " ms)");
             }
-#pragma warning disable CS0168 // The variable 'e' is declared but never used
-            catch (KeyNotFoundException e)
-#pragma warning restore CS0168 // The variable 'e' is declared but never used
+            catch (KeyNotFoundException)
             { 
                 log.Error("Please check your configuration file - some values appear to be missing.");
                 log.Error("Press any key to shut down ...");
@@ -223,10 +222,8 @@ namespace Plus
         public static string FilterFigure(string figure)
         {
             foreach (char character in figure)
-            {
                 if (!IsValid(character))
                     return "sh-3338-93.ea-1406-62.hr-831-49.ha-3331-92.hd-180-7.ch-3334-93-1408.lg-3337-92.ca-1813-62";
-            }
 
             return figure;
         }
@@ -240,17 +237,11 @@ namespace Plus
         {
             inputStr = inputStr.ToLower();
             if (string.IsNullOrEmpty(inputStr))
-            {
                 return false;
-            }
 
             for (int i = 0; i < inputStr.Length; i++)
-            {
                 if (!IsValid(inputStr[i]))
-                {
                     return false;
-                }
-            }
 
             return true;
         }
@@ -271,11 +262,12 @@ namespace Plus
             {
                 dbClient.SetQuery("SELECT `username` FROM `users` WHERE `id` = @id LIMIT 1");
                 dbClient.AddParameter("id", UserId);
-                Name = dbClient.GetString();
-            }
 
-            if (string.IsNullOrEmpty(Name))
-                Name = "Unknown User";
+                string getName = dbClient.GetString();
+
+                if (!string.IsNullOrEmpty(getName))
+                    Name = getName;
+            }
 
             return Name;
         }
@@ -288,42 +280,31 @@ namespace Plus
                 if (Client != null)
                 {
                     Habbo User = Client.GetHabbo();
-                    if (User != null && User.Id > 0)
-                    {
-                        if (_usersCached.ContainsKey(UserId))
-                            _usersCached.TryRemove(UserId, out User);
-                        return User;
-                    }
+                    if (User == null || User.Id <= 0)
+                        return null;
+
+                    if (_usersCached.ContainsKey(UserId))
+                        _usersCached.TryRemove(UserId, out User);
+
+                    return User;
                 }
-                else
-                {
-                    try
-                    {
-                        if (_usersCached.ContainsKey(UserId))
-                            return _usersCached[UserId];
-                        else
-                        {
-                            UserData data = UserDataFactory.GetUserData(UserId);
-                            if (data != null)
-                            {
-                                Habbo Generated = data.user;
-                                if (Generated != null)
-                                {
-                                    Generated.InitInformation(data);
-                                    _usersCached.TryAdd(UserId, Generated);
-                                    return Generated;
-                                }
-                            }
-                        }
-                    }
-                    catch { return null; }
-                }
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
+
+                if (_usersCached.ContainsKey(UserId))
+                    return _usersCached[UserId];
+
+                UserData data = UserDataFactory.GetUserData(UserId);
+                if (data == null)
+                    return null;
+
+                Habbo Generated = data.user;
+                if (Generated == null)
+                    return null;
+
+                Generated.InitInformation(data);
+                _usersCached.TryAdd(UserId, Generated);
+
+                return Generated;
+            } catch { return null; }
         }
 
         public static Habbo GetHabboByUsername(String UserName)
@@ -342,8 +323,6 @@ namespace Plus
             }
             catch { return null; }
         }
-
-
 
         public static void PerformShutDown()
         {

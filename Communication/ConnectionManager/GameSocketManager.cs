@@ -140,9 +140,7 @@ namespace Plus.Communication.ConnectionManager
         {
             _acceptConnections = false;
             try { _connectionListener.Close(); }
-            catch {
-                //ignored
-            }
+            catch { } //ignored
             _connectionListener = null;
         }
 
@@ -175,17 +173,17 @@ namespace Plus.Communication.ConnectionManager
                             ReportUserLogin(ip);
                             c.ConnectionChanged += OnConnectionChanged;
 
-                            if (OnConnectionEvent != null)
-                                OnConnectionEvent(c);
+                            /*if (OnConnectionEvent != null)
+                                OnConnectionEvent(c);*/
+
+                            OnConnectionEvent?.Invoke(c);
                         }
                         else
                         {
                             Log.Info("Connection denied from [" + replyFromComputer.RemoteEndPoint.ToString().Split(':')[0] + "]. Too many connections (" + connectionCount + ").");
                         }
                     }
-                    catch
-                    {
-                    }
+                    catch { }
                     finally
                     {
                         _connectionListener.BeginAccept(NewConnectionRequest, _connectionListener);
@@ -197,9 +195,7 @@ namespace Plus.Communication.ConnectionManager
         private void OnConnectionChanged(ConnectionInformation information, ConnectionState state)
         {
             if (state == ConnectionState.Closed)
-            {
                 ReportDisconnect(information);
-            }
         }
 
         #endregion
@@ -247,9 +243,8 @@ namespace Plus.Communication.ConnectionManager
         private void AlterIpConnectionCount(string ip, int amount)
         {
             if (_ipConnectionsCount.ContainsKey(ip))
-            {
                 _ipConnectionsCount.TryRemove(ip, out int _);
-            }
+
             _ipConnectionsCount.TryAdd(ip, amount);
         }
 
@@ -260,10 +255,7 @@ namespace Plus.Communication.ConnectionManager
         /// <returns>The amount of connections from the given ip address</returns>
         private int GetAmountOfConnectionFromIp(string ip)
         {
-            if (_ipConnectionsCount.ContainsKey(ip))
-            {
-                return _ipConnectionsCount[ip];
-            }
+            if (_ipConnectionsCount.ContainsKey(ip)) return _ipConnectionsCount[ip];
 
             return 0;
         }
