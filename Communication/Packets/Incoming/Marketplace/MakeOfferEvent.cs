@@ -28,7 +28,7 @@ namespace Plus.Communication.Packets.Incoming.Marketplace
                 return;
             }
 
-            if (sellingPrice > 70000000 || sellingPrice == 0)
+            if (sellingPrice > 70000000 || sellingPrice <= 0)
             {
                 session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
                 return;
