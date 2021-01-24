@@ -561,7 +561,8 @@ namespace Plus.HabboHotel.Rooms
                 if (user == null)
                     continue;
 
-                session.SendPacket(new UsersComposer(user));
+                if(!user.GetClient().GetHabbo().IsInvisible)
+                    session.SendPacket(new UsersComposer(user));
 
                 if (user.IsBot && user.BotData.DanceId > 0)
                     session.SendPacket(new DanceComposer(user, user.BotData.DanceId));

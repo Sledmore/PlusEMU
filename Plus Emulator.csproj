@@ -721,6 +721,7 @@
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\MakeSayCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\Fun\SuperFastwalkCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\GOTOCommand.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Moderator\SetInvisibleCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\DisableMimicCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Fun\PetCommand.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Administrator\UpdateCommand.cs" />

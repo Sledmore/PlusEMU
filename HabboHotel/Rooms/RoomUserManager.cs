@@ -89,7 +89,8 @@ namespace Plus.HabboHotel.Rooms
             
             user.UpdateNeeded = true;
 
-            _room.SendPacket(new UsersComposer(user));
+            if(!user.GetClient().GetHabbo().IsInvisible)
+                _room.SendPacket(new UsersComposer(user));
 
             if (user.IsPet)
             {
@@ -169,6 +170,7 @@ namespace Plus.HabboHotel.Rooms
 
 
             session.GetHabbo().CurrentRoomId = _room.RoomId;
+
             if (!_users.TryAdd(PersonalID, user))
                 return false;
 
@@ -231,7 +233,8 @@ namespace Plus.HabboHotel.Rooms
                 }
             }
 
-            _room.SendPacket(new UsersComposer(user));
+            if(!user.GetClient().GetHabbo().IsInvisible)
+                _room.SendPacket(new UsersComposer(user));
             
             if (_room.CheckRights(session, true))
             {
