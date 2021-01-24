@@ -196,9 +196,6 @@ namespace Plus.HabboHotel.Rooms.Chat.Commands
             Register("hal", new HALCommand());
             Register("give", new GiveCommand());
             Register("givebadge", new GiveBadgeCommand());
-
-            Register("invisible", new SetInvisibleCommand());
-
             Register("dc", new DisconnectCommand());
             Register("kill", new DisconnectCommand());
             Register("Disconnect", new DisconnectCommand());
